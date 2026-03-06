@@ -1,4 +1,4 @@
-# job_search_automation_n8n
+# job_search_automation
 
 An end-to-end autonomous qualification pipeline designed to identify high-signal career opportunities. This system transforms high-volume raw data into a curated High/Rare match bucket (Top 7%) using hybrid semantic scoring, state-machine logic, and zero-maintenance parsing.
 
