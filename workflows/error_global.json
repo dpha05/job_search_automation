@@ -1,0 +1,148 @@
+{
+  "updatedAt": "2026-02-25T07:33:33.736Z",
+  "createdAt": "2026-01-23T08:13:19.648Z",
+  "id": "Zj1I7MhBC-OsOLt6D4Qyg",
+  "name": "error_global",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d7020324-9fed-4b7a-9230-1f01f57dc6fe",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "userKey": "uwqc63pi9waxvzmeqiehrbtfix2f6p",
+        "message": "=There was a problem with the run {{ $json.execution.id }} in workflow {{ $workflow.name }} at {{ $json.execution.lastNodeExecuted }}. Error message: {{ $json.execution.error.message }}.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.pushover",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "44fbea09-3e55-441e-8cad-c15d23e89834",
+      "name": "Push a message",
+      "credentials": {
+        "pushoverApi": {
+          "id": "Nxz7AYYEKlVYdoD1",
+          "name": "Pushover account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Push a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "Europe/Prague",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "27e564cf-97f0-4b5a-8d2b-aa90e293e65e",
+  "activeVersionId": "27e564cf-97f0-4b5a-8d2b-aa90e293e65e",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-23T08:13:19.650Z",
+      "createdAt": "2026-01-23T08:13:19.650Z",
+      "role": "workflow:owner",
+      "workflowId": "Zj1I7MhBC-OsOLt6D4Qyg",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-01-23T08:27:04.000Z",
+    "createdAt": "2026-01-23T08:27:02.350Z",
+    "versionId": "27e564cf-97f0-4b5a-8d2b-aa90e293e65e",
+    "workflowId": "Zj1I7MhBC-OsOLt6D4Qyg",
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.errorTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "d7020324-9fed-4b7a-9230-1f01f57dc6fe",
+        "name": "Error Trigger"
+      },
+      {
+        "parameters": {
+          "userKey": "uwqc63pi9waxvzmeqiehrbtfix2f6p",
+          "message": "=There was a problem with the run {{ $json.execution.id }} in workflow {{ $workflow.name }} at {{ $json.execution.lastNodeExecuted }}. Error message: {{ $json.execution.error.message }}.",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.pushover",
+        "typeVersion": 1,
+        "position": [
+          224,
+          0
+        ],
+        "id": "44fbea09-3e55-441e-8cad-c15d23e89834",
+        "name": "Push a message",
+        "credentials": {
+          "pushoverApi": {
+            "id": "Nxz7AYYEKlVYdoD1",
+            "name": "Pushover account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Error Trigger": {
+        "main": [
+          [
+            {
+              "node": "Push a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "d d",
+    "name": "Version 27e564cf",
+    "description": "",
+    "autosaved": false
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-01-23T08:14:56.591Z",
+      "createdAt": "2026-01-23T08:14:56.591Z",
+      "id": "njToIjdC5AFyF6WP",
+      "name": "error"
+    }
+  ]
+}
