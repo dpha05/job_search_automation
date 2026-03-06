@@ -1,0 +1,743 @@
+{
+  "updatedAt": "2026-03-05T09:48:59.000Z",
+  "createdAt": "2026-02-20T08:07:13.307Z",
+  "id": "dUEmo_M32IfoZKkfbbQYA",
+  "name": "0x_jobscz",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8,
+              "triggerAtMinute": 15
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "846478e9-ed24-48c6-aa01-2abfcce0738e",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "urlset.url",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        640,
+        0
+      ],
+      "id": "f2f8d25e-4201-4acd-ba89-b695bcd0d25d",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const html = $input.item.json.data;\n\nconst idMatch      = html.match(/nabidka\\/(\\d+)/);\nconst titleMatch   = html.match(/<title>(.*?) \\|/i);\nconst companyMatch = html.match(/\"hiringOrganization\":\\s?\\{.*?\"name\":\\s?\"(.*?)\"/i);\nconst logoMatch    = html.match(/\"logo\":\\s?\"(.*?)\"/i);\n\nconst canonicalMatch = html.match(/link href=\"(https:\\/\\/www\\.startupjobs\\.cz\\/nabidka\\/.*?)\"/i);\nconst companyUrl   = html.match(/\"hiringOrganization\":\\s?\\{.*?\"url\":\\s?\"(.*?)\"/i);\nconst dateMatch    = html.match(/\"datePosted\":\\s?\"(.*?)\"/i);\n\nconst jobId = idMatch ? idMatch[1] : null; \nconst applyUrl = jobId ? `https://www.startupjobs.cz/nabidka/${jobId}/prihlasit#application` : null;\n\nlet cleanTitle = titleMatch ? titleMatch[1] : \"Other\";\ncleanTitle = cleanTitle.replace(/&#x2F;/g, '/').replace(/&amp;/g, '&').trim();\nlet cleanLogo = logoMatch ? logoMatch[1] : \"Other\";\ncleanLogo = cleanLogo.replace(/\\\\/g, '');\nlet cleanJobUrl = (canonicalMatch && canonicalMatch[1]) ? canonicalMatch[1].split('\"')[0] : \"Other\";\n\nreturn {\n    jobId:       idMatch ? idMatch[1] : \"Other\",\n    jobTitle:    cleanTitle,\n    jobUrl:      cleanJobUrl,\n    companyName: companyMatch ? companyMatch[1] : \"Other\",\n    companyUrl:  companyUrl ? companyUrl[1] : \"Other\",\n    companyLogo: cleanLogo,\n    publishedAt: dateMatch ? dateMatch[1] : \"Other\",\n    applyUrl:    applyUrl ? applyUrl : \"Other\"\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        256
+      ],
+      "id": "8aa6434a-1918-427d-9e6a-96889b839555",
+      "name": "HTML parser job indicators"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const raw = $input.item.json.data;\nconst cleanHtml = raw.replace(/\\\\\"/g, '\"').replace(/\\\\n/g, '\\n');\n\nconst match = cleanHtml.match(/<div class=\"output-content\">(.*?)<\\/div>/s);\n\nif (!match) return { jobDescription: \"Description section not found.\" };\n\nlet text = match[1];\n\ntext = text\n    .replace(/<\\/p>/g, '\\n\\n')       // Add double spacing after paragraphs\n    .replace(/<\\/div>/g, '\\n')       // Single space for div blocks\n    .replace(/<\\/li>/g, '\\n')         // Add a new line after list items\n    .replace(/<li>/g, '• ')           // Add a bullet point symbol\n    .replace(/<[^>]+>/g, '')          // Remove all other remaining HTML tags\n    .replace(/&nbsp;/g, ' ')          // Fix non-breaking spaces\n    .replace(/&amp;/g, '&')           // Fix ampersands\n    .trim();                          // Remove extra space at start/end\n\nreturn {\n    jobDescription: text\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        608
+      ],
+      "id": "75cd6708-d6b4-4581-8aef-9568f31cb87c",
+      "name": "HTML parser job description"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "job_leads",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "={{ $json.loc }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        0
+      ],
+      "id": "cf8f0f10-7232-40b1-9234-ff616f81ec97",
+      "name": "Check for dupes",
+      "alwaysOutputData": false,
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
+              "leftValue": "={{ $json.loc }}",
+              "rightValue": ".*(\\bai\\b|gen-?ai|agent|low-code|workflow|automation|implementation|solution-architect|ops).*",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            },
+            {
+              "id": "6f924664-fa20-4947-af03-df2841af8012",
+              "leftValue": "={{ $json.loc }}",
+              "rightValue": ".*(sales|marketing|asistent|manual|legal|qa-engineer|obchodni|akvizicni|prodejni|account-manager|customer-success|qa-automation|test-automation|devops|lead|head|director|reditel|vedouci|full-stack|java|kotlin|swift|android|php|react-native).*",
+              "operator": {
+                "type": "string",
+                "operation": "notRegex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        832,
+        0
+      ],
+      "id": "b198eaa6-6fc2-441a-a6e0-9e7127ba1a12",
+      "name": "Filter positive and negative"
+    },
+    {
+      "parameters": {
+        "url": "https://www.startupjobs.cz/sitemap/offers.xml",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        256,
+        0
+      ],
+      "id": "1e6eb143-d08a-4212-a44a-023d21907356",
+      "name": "Fetch startupjobs.cz XML",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [
+        464,
+        0
+      ],
+      "id": "48135b16-f5de-41d1-a0a8-85d404ec37c7",
+      "name": "XML to JSON"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "job_url",
+              "field2": "loc"
+            }
+          ]
+        },
+        "joinMode": "keepNonMatches",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1280,
+        208
+      ],
+      "id": "3b214120-8a7c-4645-8354-03054abfcdc4",
+      "name": "Keep non-dupes",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.loc }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1520,
+        416
+      ],
+      "id": "20b1a527-758b-4dc1-9ebb-86b92b43f641",
+      "name": "Fetch raw job html",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/{{ $json.job_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Return-Format",
+              "value": "text"
+            },
+            {
+              "name": "X-Target-Selector",
+              "value": "article"
+            },
+            {
+              "name": "X-Remove-Selector",
+              "value": ".sm\\:hidden, footer, nav, .sidebar, script, style, .similar-jobs, header, aside, [role=\"navigation\"], .mt-20, #newsletter-box, .cookie-consent"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1520,
+        208
+      ],
+      "id": "4a036b20-4633-4030-a2d7-a1e49463dff5",
+      "name": "Jina fetch job text",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "tftPtYpIkTcp1FKo",
+          "name": "Jina Reader API"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NBCVFrfmAz4h6S1a",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NBCVFrfmAz4h6S1a",
+          "cachedResultName": "dedupe_upsert"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        3152,
+        480
+      ],
+      "id": "51defbf7-7b21-44cb-a47f-460de17dd6f2",
+      "name": "Call 'p1_lead_scrape_dedupe_upsert'",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2320,
+        464
+      ],
+      "id": "f2c20daa-101a-48e0-b642-8e4567d4cd72",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2656,
+        272
+      ],
+      "id": "866e69d3-ef72-4c52-b9c8-c2988744f38c",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "jsCode": "const platformName = \"startupjobscz\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2896,
+        480
+      ],
+      "id": "4f5ac4fd-780e-4fb6-bce2-e3fd28dbeebe",
+      "name": "add source"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const raw = JSON.stringify($input.item.json.data).toLowerCase();\n\nconst getInfo = (options, isLocation = false) => {\n    let found = options.filter(opt => raw.includes(opt.toLowerCase()));\n    found = found.map(word => word.replace(/_/g, ' '));\n    if (isLocation && (found.includes(\"Praha\") || found.includes(\"Prague\"))) {\n        return \"Prague\";\n    }\n    return found.length > 0 ? found.join(\", \") : \"Other\";\n};\n\nconst locationOptions = [\"Praha\", \"Prague\"]; \nconst experienceLevelOptions = [\"Junior\", \"Medior\", \"Senior\"];\nconst contractOptions = [\"Full-time\", \"Part-time\"];\nconst employmentOptions = [\"Freelance\", \"Work_Contract\"];\nconst workModeOptions = [\"Remote\", \"Hybrid\", \"On-site\"];\n\nreturn {\n    workMode: getInfo(workModeOptions),\n    location: getInfo(locationOptions, true),\n    contractType: getInfo(contractOptions),\n    employmentType: getInfo(employmentOptions),\n    experienceLevel: getInfo(experienceLevelOptions)\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        432
+      ],
+      "id": "309bccb5-ff7c-43f9-bc67-c98303731958",
+      "name": "HTML parser sidebar indicators"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2064,
+        464
+      ],
+      "id": "4b41c856-2547-4d3f-8f2b-670c1571d575",
+      "name": "Merge data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
+              "name": "jobId",
+              "value": "={{ $json.jobId }}",
+              "type": "string"
+            },
+            {
+              "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
+              "name": "jobTitle",
+              "value": "={{ $json.jobTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
+              "name": "jobUrl",
+              "value": "={{ $json.jobUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "a7609c01-4e31-43a0-940d-b97171f0123a",
+              "name": "companyName",
+              "value": "={{ $json.companyName }}",
+              "type": "string"
+            },
+            {
+              "id": "51e71c18-177a-4370-a63d-25f8001fce8e",
+              "name": "companyUrl",
+              "value": "={{ $json.companyUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "ce6bae6a-2e69-4671-b2d3-08f6ff27fd81",
+              "name": "companyLogo",
+              "value": "={{ $json.companyLogo }}",
+              "type": "string"
+            },
+            {
+              "id": "0103b2e7-89df-48b2-a1dc-4b91932b8495",
+              "name": "publishedAt",
+              "value": "={{ $json.publishedAt }}",
+              "type": "string"
+            },
+            {
+              "id": "b8611d60-09ec-409e-a0c0-8a6d7da87ea0",
+              "name": "applyUrl",
+              "value": "={{ $json.applyUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "008246ee-3829-4a26-af95-544f914e1fe9",
+              "name": "location",
+              "value": "={{ $json.location }}",
+              "type": "string"
+            },
+            {
+              "id": "949e43c8-0db8-420e-a39d-6be73d8c5efc",
+              "name": "contractType",
+              "value": "={{ $json.contractType }}",
+              "type": "string"
+            },
+            {
+              "id": "7e313d83-31bb-455f-83df-1c2bb8ef992d",
+              "name": "experienceLevel",
+              "value": "={{ $json.experienceLevel }}",
+              "type": "string"
+            },
+            {
+              "id": "30f4be42-bf3a-459d-bbb3-5000af3a21de",
+              "name": "jobDescription",
+              "value": "={{ $json.jobDescription }}",
+              "type": "string"
+            },
+            {
+              "id": "64980d27-ab7a-4a79-936f-49df553b6d2d",
+              "name": "salaryInfo",
+              "value": "={{ $json.salaryInfo }}",
+              "type": "array"
+            },
+            {
+              "id": "87782311-7ad5-4821-aea4-7d293c6b4f59",
+              "name": "posterFullName",
+              "value": "={{ $json.posterFullName }}",
+              "type": "string"
+            },
+            {
+              "id": "160cbda5-0d12-4d1a-a654-13a3e1ad720f",
+              "name": "posterProfileUrl",
+              "value": "={{ $json.posterProfileUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "1e0e0a25-7bb2-443e-be17-220d44d95d92",
+              "name": "sector",
+              "value": "={{ $json.sector }}",
+              "type": "string"
+            },
+            {
+              "id": "d7ecf8bd-46b7-414c-8862-41811f709f0a",
+              "name": "workMode",
+              "value": "={{ $json.workMode }}",
+              "type": "string"
+            },
+            {
+              "id": "a43ad1be-2936-4dd3-ba10-fd613008347d",
+              "name": "employmentType",
+              "value": "={{ $json.employmentType }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2640,
+        480
+      ],
+      "id": "504a6eb9-5ae0-4abd-b799-d70cc1323f52",
+      "name": "Standardize output (**adjust fields**)"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch startupjobs.cz XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter positive and negative",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML parser job indicators": {
+      "main": [
+        [
+          {
+            "node": "Merge data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML parser job description": {
+      "main": [
+        [
+          {
+            "node": "Merge data",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Check for dupes": {
+      "main": [
+        [
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter positive and negative": {
+      "main": [
+        [
+          {
+            "node": "Check for dupes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Fetch startupjobs.cz XML": {
+      "main": [
+        [
+          {
+            "node": "XML to JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "XML to JSON": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep non-dupes": {
+      "main": [
+        [
+          {
+            "node": "Jina fetch job text",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch raw job html",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch raw job html": {
+      "main": [
+        [
+          {
+            "node": "HTML parser job description",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTML parser job indicators",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTML parser sidebar indicators",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'p1_lead_scrape_dedupe_upsert'": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Standardize output (**adjust fields**)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add source": {
+      "main": [
+        [
+          {
+            "node": "Call 'p1_lead_scrape_dedupe_upsert'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML parser sidebar indicators": {
+      "main": [
+        [
+          {
+            "node": "Merge data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge data": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Standardize output (**adjust fields**)": {
+      "main": [
+        [
+          {
+            "node": "add source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-02-05T08:41:59.292+01:00",
+          "Readable date": "February 5th 2026, 8:41:59 am",
+          "Readable time": "8:41:59 am",
+          "Day of week": "Thursday",
+          "Year": "2026",
+          "Month": "February",
+          "Day of month": "05",
+          "Hour": "08",
+          "Minute": "41",
+          "Second": "59",
+          "Timezone": "Europe/Prague (UTC+01:00)"
+        }
+      }
+    ]
+  },
+  "versionId": "7e862e75-4348-41c2-97eb-5ab6d3abe496",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-02-20T08:07:13.312Z",
+      "createdAt": "2026-02-20T08:07:13.312Z",
+      "role": "workflow:owner",
+      "workflowId": "dUEmo_M32IfoZKkfbbQYA",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": null,
+  "tags": [
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-01-22T12:40:37.040Z",
+      "createdAt": "2026-01-22T12:40:37.040Z",
+      "id": "mcS1gLAfDII7yoGe",
+      "name": "lead_scrape"
+    }
+  ]
+}
