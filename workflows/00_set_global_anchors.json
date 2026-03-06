@@ -1,0 +1,381 @@
+{
+  "updatedAt": "2026-02-25T07:34:58.926Z",
+  "createdAt": "2026-02-10T14:42:57.756Z",
+  "id": "i3QgrY7vkqg-HIWnhXspI",
+  "name": "00_set_global_anchors",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "03ddcda0-4d36-4722-88cb-953fab590be1",
+              "name": "anchor_text",
+              "value": "Systems Programming & Low-Level Architecture: Principal Systems Engineer required to architect high-performance distributed state machines and manage low-level integration using memory-unmanaged or strictly typed languages such as C++, Rust, or Zig. Core focus is on performance primitives: asynchronous I/O, lock-free data structures, and cache-coherent algorithms. Deep knowledge of language internals, including garbage collection tuning, memory safety lifetimes, and compiler-level optimizations is mandatory. Candidates must handle complex concurrency primitives, debugging race conditions and distributed deadlocks in high-throughput environments where performance is measured in microseconds.  Infrastructure, Networking & Container Orchestration: Manage massive-scale container orchestration via Kubernetes, involving the development of custom CRDs and operators. Oversee service mesh architectures (Istio/Envoy) focusing on mTLS, circuit breaking, and complex traffic routing. Infrastructure is managed strictly through code (Terraform, Pulumi, HCL), ensuring 99.999% availability across multi-region VPC deployments. Deep dive into networking layers, handling BGP routing, load-balancing algorithms, and implementing eBPF-based observability for kernel-level performance monitoring. Knowledge of bare-metal hypervisors and hardware resource isolation is essential.  Distributed Data, Database Internals & State: Perform deep-dive PostgreSQL performance tuning, including Write-Ahead Log (WAL) analysis, index bloat management, and query plan optimization. Implement distributed consensus protocols (Raft, Paxos) for maintaining state across sharded database clusters. Design low-latency data pipelines requiring expert-level knowledge of partitioning, ACID compliance at scale, and custom binary serialization formats (Protobuf, Avro) for high-efficiency data transit. Focus on internal storage engine mechanics and physical data layout.  SRE, Security Hardening & Systems Observability: Execute rigorous Site Reliability Engineering (SRE) and Zero Trust security frameworks. Manage SOPS/KMS for secret management and CI/CD security hardening to prevent supply chain attacks. Daily tasks involve pprof profiling, assembly-level debugging, and kernel-level trace analysis to resolve production bottlenecks. This is a strictly technical, hands-on role focused on the mechanical sympathy between software and hardware. No business-facing project management or high-level strategic integration is involved; the focus is entirely on the foundational engineering plumbing. Including experience with Node.js, TypeScript, Python, and SQL. Understanding of cloud environments (AWS/Azure), API management, and security protocols like OAuth2. Familiarity with modern data stacks, CI/CD pipelines, and containerization.",
+              "type": "string"
+            },
+            {
+              "id": "8ba1daaf-b70f-44b3-87d4-525e6a87794e",
+              "name": "anchor_key",
+              "value": "technical_anchor",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -496,
+        -64
+      ],
+      "id": "7d5cbcd3-06bb-4a8d-8790-53b127f9635e",
+      "name": "Set technical anchor",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googlePalmApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": {\n    \"parts\": [\n      {\n        \"text\": {{ JSON.stringify($json.anchor_text) }}\n      }\n    ]\n  },\n\"outputDimensionality\": 1536\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -48,
+        32
+      ],
+      "id": "35bba4b7-7af7-458b-9f76-ad94782acd08",
+      "name": "Vectorize anchor",
+      "executeOnce": false,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "vmrqCM7rVU8xOXMr",
+          "name": "Google Gemini(PaLM) Api account_rag"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "global_settings",
+          "mode": "list",
+          "cachedResultName": "global_settings"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "key": "={{ $json.key }}",
+            "value_text": "={{ $json.value_text }}",
+            "value_vector": "={{ $json.value_vector }}",
+            "processed_at": "={{ $now.toISO() }}"
+          },
+          "matchingColumns": [
+            "key"
+          ],
+          "schema": [
+            {
+              "id": "key",
+              "displayName": "key",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "value_text",
+              "displayName": "value_text",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "value_vector",
+              "displayName": "value_vector",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "processed_at",
+              "displayName": "processed_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        400,
+        32
+      ],
+      "id": "e3e2a618-68ac-4fea-a4e9-a46b345e346b",
+      "name": "Insert or update rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b0a8f2bb-9107-4e36-b572-b118535e9561",
+              "name": "key",
+              "value": "={{ $('Merge').item.json.anchor_key }}",
+              "type": "string"
+            },
+            {
+              "id": "43bbb865-67d3-4d6d-a739-baeadbd7fc66",
+              "name": "value_text",
+              "value": "={{ $('Merge').item.json.anchor_text }}",
+              "type": "string"
+            },
+            {
+              "id": "78ae37c9-61fa-4c9c-9ceb-c87a8562f646",
+              "name": "value_vector",
+              "value": "=[ {{ $json.embedding.values }} ]",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        32
+      ],
+      "id": "a3eb8d4b-56d5-4f6c-8921-3bc73007bcfb",
+      "name": "Format output"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "03ddcda0-4d36-4722-88cb-953fab590be1",
+              "name": "anchor_text",
+              "value": "Role: AI Implementation Architect & Workflow Systems Lead Core Objective: To architect the \"Intelligent Layer\" of the organization by bridging the gap between stakeholder intent and autonomous execution. This role focuses on the Discovery, Orchestration, and Validation of AI systems, prioritizing high-leverage tools and AI-assisted development over low-level manual systems programming.  Responsibilities & Systems Orchestration:  Discovery & Strategy: Lead the discovery phase with C-suite and department heads to identify high-ROI AI opportunities. Translate abstract business requirements into technical workflow specifications.  Workflow Architecture: Design and deploy production-grade automation via n8n or similar visual orchestration platforms like Make. Manage API integrations, webhooks, and complex logic branches to create seamless data flow between frontier models (Gemini 3, GPT-5) and open source models (Groq llama 4) and enterprise systems.  State Management & Data: Implement and maintain state-sync architectures using Supabase or PostgreSQL. Oversee the storage, retrieval, and quality of data used in RAG (Retrieval-Augmented Generation) pipelines.  QA & Compliance: Establish \"Human-in-the-Loop\" checkpoints to ensure AI-generated outputs meet legal, ethical, and quality standards. Perform debugging and performance monitoring of deployed agents, automations and/or workflows.  Technical Requirements & Methodologies:  AI-Assisted Development: Expert-level proficiency in leveraging LLMs for code generation, syntax debugging, and script optimization (Python/JavaScript).  Tooling: Hands-on experience with the \"Bridge Stack\": n8n, Supabase, and API-first architectures. Familiarity with agentic frameworks (CrewAI, LangChain, OpenAI SDK, MCP) is preferred but must be applied through the lens of orchestration.  Sector Preference: Strong interest in Open Source ecosystems, NGOs, or Educational technology, focusing on high-priority social or environmental impact or transparent, community-driven development.  The Non-Technical Constraint: This role specifically avoids low-level kernel work, memory management (C++/Rust), and bare-metal infrastructure. The focus is on Application-Level Intelligence.",
+              "type": "string"
+            },
+            {
+              "id": "add36601-117f-4161-9942-de0e0d24f155",
+              "name": "anchor_key",
+              "value": "ideal_anchor",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -496,
+        128
+      ],
+      "id": "4f8e3fec-d245-40e8-98b4-219d087dcb74",
+      "name": "Set ideal anchor",
+      "executeOnce": false,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {
+          "includeUnpaired": true
+        }
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -272,
+        32
+      ],
+      "id": "cd1b4944-eb01-48f0-9cfc-7cf5aa9c6e90",
+      "name": "Merge"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        32
+      ],
+      "id": "1a532c3b-14d5-4234-94c7-1fa52f176b2e",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "connections": {
+    "Set technical anchor": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vectorize anchor": {
+      "main": [
+        [
+          {
+            "node": "Format output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format output": {
+      "main": [
+        [
+          {
+            "node": "Insert or update rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set ideal anchor": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Vectorize anchor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set technical anchor",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set ideal anchor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg",
+    "timezone": "Europe/Prague"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Set technical anchor": [
+      {
+        "json": {
+          "anchor_text": "Systems Programming & Low-Level Architecture: Principal Systems Engineer required to architect high-performance distributed state machines and manage low-level integration using memory-unmanaged or strictly typed languages such as C++, Rust, or Zig. Core focus is on performance primitives: asynchronous I/O, lock-free data structures, and cache-coherent algorithms. Deep knowledge of language internals, including garbage collection tuning, memory safety lifetimes, and compiler-level optimizations is mandatory. Candidates must handle complex concurrency primitives, debugging race conditions and distributed deadlocks in high-throughput environments where performance is measured in microseconds.  Infrastructure, Networking & Container Orchestration: Manage massive-scale container orchestration via Kubernetes, involving the development of custom CRDs and operators. Oversee service mesh architectures (Istio/Envoy) focusing on mTLS, circuit breaking, and complex traffic routing. Infrastructure is managed strictly through code (Terraform, Pulumi, HCL), ensuring 99.999% availability across multi-region VPC deployments. Deep dive into networking layers, handling BGP routing, load-balancing algorithms, and implementing eBPF-based observability for kernel-level performance monitoring. Knowledge of bare-metal hypervisors and hardware resource isolation is essential.  Distributed Data, Database Internals & State: Perform deep-dive PostgreSQL performance tuning, including Write-Ahead Log (WAL) analysis, index bloat management, and query plan optimization. Implement distributed consensus protocols (Raft, Paxos) for maintaining state across sharded database clusters. Design low-latency data pipelines requiring expert-level knowledge of partitioning, ACID compliance at scale, and custom binary serialization formats (Protobuf, Avro) for high-efficiency data transit. Focus on internal storage engine mechanics and physical data layout.  SRE, Security Hardening & Systems Observability: Execute rigorous Site Reliability Engineering (SRE) and Zero Trust security frameworks. Manage SOPS/KMS for secret management and CI/CD security hardening to prevent supply chain attacks. Daily tasks involve pprof profiling, assembly-level debugging, and kernel-level trace analysis to resolve production bottlenecks. This is a strictly technical, hands-on role focused on the mechanical sympathy between software and hardware. No business-facing project management or high-level strategic integration is involved; the focus is entirely on the foundational engineering plumbing. Including experience with Node.js, TypeScript, Python, and SQL. Understanding of cloud environments (AWS/Azure), API management, and security protocols like OAuth2. Familiarity with modern data stacks, CI/CD pipelines, and containerization.",
+          "anchor_key": "technical_anchor"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Set ideal anchor": [
+      {
+        "json": {
+          "anchor_text": "Role: AI Implementation Architect & Workflow Systems Lead Core Objective: To architect the \"Intelligent Layer\" of the organization by bridging the gap between stakeholder intent and autonomous execution. This role focuses on the Discovery, Orchestration, and Validation of AI systems, prioritizing high-leverage tools and AI-assisted development over low-level manual systems programming.  Responsibilities & Systems Orchestration:  Discovery & Strategy: Lead the discovery phase with C-suite and department heads to identify high-ROI AI opportunities. Translate abstract business requirements into technical workflow specifications.  Workflow Architecture: Design and deploy production-grade automation via n8n or similar visual orchestration platforms like Make. Manage API integrations, webhooks, and complex logic branches to create seamless data flow between frontier models (Gemini 3, GPT-5) and open source models (Groq llama 4) and enterprise systems.  State Management & Data: Implement and maintain state-sync architectures using Supabase or PostgreSQL. Oversee the storage, retrieval, and quality of data used in RAG (Retrieval-Augmented Generation) pipelines.  QA & Compliance: Establish \"Human-in-the-Loop\" checkpoints to ensure AI-generated outputs meet legal, ethical, and quality standards. Perform debugging and performance monitoring of deployed agents, automations and/or workflows.  Technical Requirements & Methodologies:  AI-Assisted Development: Expert-level proficiency in leveraging LLMs for code generation, syntax debugging, and script optimization (Python/JavaScript).  Tooling: Hands-on experience with the \"Bridge Stack\": n8n, Supabase, and API-first architectures. Familiarity with agentic frameworks (CrewAI, LangChain, OpenAI SDK, MCP) is preferred but must be applied through the lens of orchestration.  Sector Preference: Strong interest in Open Source ecosystems, NGOs, or Educational technology, focusing on high-priority social or environmental impact or transparent, community-driven development.  The Non-Technical Constraint: This role specifically avoids low-level kernel work, memory management (C++/Rust), and bare-metal infrastructure. The focus is on Application-Level Intelligence.",
+          "anchor_key": "ideal_anchor"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "86d2b9d6-ef11-43b6-bf40-352d37d82e85",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-02-10T14:42:57.760Z",
+      "createdAt": "2026-02-10T14:42:57.760Z",
+      "role": "workflow:owner",
+      "workflowId": "i3QgrY7vkqg-HIWnhXspI",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": null,
+  "tags": [
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-01-26T08:43:12.205Z",
+      "createdAt": "2026-01-26T08:43:12.205Z",
+      "id": "q3Jm1TtyectpAeLG",
+      "name": "lead_score"
+    }
+  ]
+}
