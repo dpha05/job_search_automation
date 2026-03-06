@@ -1,0 +1,1257 @@
+{
+  "updatedAt": "2026-03-06T12:30:21.445Z",
+  "createdAt": "2026-01-23T07:30:24.776Z",
+  "id": "NBCVFrfmAz4h6S1a",
+  "name": "03_dedupe_upsert",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1904,
+        832
+      ],
+      "id": "43100e07-e3b6-46ff-9fd5-d9aee3165dc5",
+      "name": "Merge",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "12aab632-6a30-4d45-af69-629e385a7a98",
+              "leftValue": "={{ $json.similarity }}",
+              "rightValue": 0.95,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            },
+            {
+              "id": "b3f9d5f0-9e85-42d0-bb68-5632e54f91b8",
+              "leftValue": "={{ $json.similarity }}",
+              "rightValue": 1,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1440,
+        832
+      ],
+      "id": "e9731f1f-bb36-45b6-9879-614017e4319b",
+      "name": "Is similar?"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -1232,
+        736
+      ],
+      "id": "0d18f417-1cff-4c6a-b3fa-be817da36ca3",
+      "name": "No Operation, do nothing1"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM match_jobs(\n  ARRAY[{{ $json.embedding.values }}]::vector(1536), \n  '{{ $json.jobUrl }}',\n  1 \n);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1680,
+        832
+      ],
+      "id": "d2f07c8b-e6ac-4d72-8b8f-fe1b4d4bf077",
+      "name": "Check description similarity",
+      "alwaysOutputData": false,
+      "retryOnFail": true,
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "job_leads",
+          "mode": "list",
+          "cachedResultName": "job_leads"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "job_url": "={{ $('Merge').item.json.jobUrl }}",
+            "published_at": "={{ $('Merge').item.json.publishedAt }}",
+            "company_name": "={{ $('Merge').item.json.companyName }}",
+            "job_title": "={{ $('Merge').item.json.jobTitle }}",
+            "job_description": "={{ $('Merge').item.json.jobDescription }}",
+            "job_location": "={{ $('Merge').item.json.location }}",
+            "external_id": "={{ $('Merge').item.json.jobId }}",
+            "job_salary": "={{ $('Merge').item.json.salaryInfo }}",
+            "job_sector": "={{ $('Merge').item.json.sector }}",
+            "company_department": "={{ $('Merge').item.json.workType }}",
+            "contract_type": "={{ $('Merge').item.json.contractType }}",
+            "status": "new",
+            "processed_at": "={{ $now.toISO() }}",
+            "company_url": "={{ $('Merge').item.json.companyUrl }}",
+            "poster_name": "={{ $('Merge').item.json.posterFullName }}",
+            "poster_linkedin": "={{ $('Merge').item.json.posterProfileUrl }}",
+            "company_logo": "={{ $('Merge').item.json.companyLogo }}",
+            "experience_level": "={{ $('Merge').item.json.experienceLevel }}",
+            "apply_url": "={{ $('Merge').item.json.applyUrl }}",
+            "match_score": 0,
+            "description_vector": "={{ $('Merge').item.json.embedding.values }}",
+            "source": "={{ $('Merge').item.json.source }}",
+            "employment_type": "={{ $('Merge').item.json.employmentType }}",
+            "work_mode": "={{ $('Merge').item.json.workMode}}",
+            "tech_score": 0
+          },
+          "matchingColumns": [
+            "job_url"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "published_at",
+              "displayName": "published_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "company_name",
+              "displayName": "company_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "job_title",
+              "displayName": "job_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "job_url",
+              "displayName": "job_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "match_score",
+              "displayName": "match_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "job_description",
+              "displayName": "job_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "job_location",
+              "displayName": "job_location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "external_id",
+              "displayName": "external_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "job_salary",
+              "displayName": "job_salary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "company_department",
+              "displayName": "company_department",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "job_sector",
+              "displayName": "job_sector",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "contract_type",
+              "displayName": "contract_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "signal_tier",
+              "displayName": "signal_tier",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "processed_at",
+              "displayName": "processed_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "company_url",
+              "displayName": "company_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "poster_name",
+              "displayName": "poster_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "poster_linkedin",
+              "displayName": "poster_linkedin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "company_logo",
+              "displayName": "company_logo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "experience_level",
+              "displayName": "experience_level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "apply_url",
+              "displayName": "apply_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "description_vector",
+              "displayName": "description_vector",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "employment_type",
+              "displayName": "employment_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "work_mode",
+              "displayName": "work_mode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "metadata",
+              "displayName": "metadata",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "tech_score",
+              "displayName": "tech_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1232,
+        1040
+      ],
+      "id": "8f1cdc43-7257-4363-8577-b4e4ed62feb0",
+      "name": "Upsert rows",
+      "retryOnFail": true,
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -2368,
+        816
+      ],
+      "id": "2491de5d-9dd8-4b55-b874-f1664388d992",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "content": "## Expects standardized job JSON\nsee Upsert node"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2464,
+        1136
+      ],
+      "id": "efe780a1-bb73-4e23-bbb1-7c33de6b292c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googlePalmApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": {\n    \"parts\": [\n      {\n        \"text\": {{ JSON.stringify($json.jobDescription) }}\n      }\n    ]\n  },\n\"outputDimensionality\": 1536\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2144,
+        960
+      ],
+      "id": "ed986c05-e980-4cc9-893f-3f634476edcb",
+      "name": "Vectorize job description",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "vmrqCM7rVU8xOXMr",
+          "name": "Google Gemini(PaLM) Api account_rag"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "fShvCbZRgCtLGec8",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/fShvCbZRgCtLGec8",
+          "cachedResultName": "01_reject_technical"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -992,
+        1040
+      ],
+      "id": "b7d593f2-2513-4176-a972-91229b5a9eb9",
+      "name": "Call '01_reject_technical'"
+    }
+  ],
+  "connections": {
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Check description similarity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is similar?": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Upsert rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing1": {
+      "main": [
+        []
+      ]
+    },
+    "Check description similarity": {
+      "main": [
+        [
+          {
+            "node": "Is similar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert rows": {
+      "main": [
+        [
+          {
+            "node": "Call '01_reject_technical'",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Vectorize job description",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vectorize job description": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Call '01_reject_technical'": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "Europe/Prague",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "0f34977d-771f-4e2a-a5a1-ff278c7284ce",
+  "activeVersionId": "0f34977d-771f-4e2a-a5a1-ff278c7284ce",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-23T07:30:24.778Z",
+      "createdAt": "2026-01-23T07:30:24.778Z",
+      "role": "workflow:owner",
+      "workflowId": "NBCVFrfmAz4h6S1a",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-03-06T12:30:23.000Z",
+    "createdAt": "2026-03-06T12:30:21.446Z",
+    "versionId": "0f34977d-771f-4e2a-a5a1-ff278c7284ce",
+    "workflowId": "NBCVFrfmAz4h6S1a",
+    "nodes": [
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -1904,
+          832
+        ],
+        "id": "43100e07-e3b6-46ff-9fd5-d9aee3165dc5",
+        "name": "Merge",
+        "executeOnce": false
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "12aab632-6a30-4d45-af69-629e385a7a98",
+                "leftValue": "={{ $json.similarity }}",
+                "rightValue": 0.95,
+                "operator": {
+                  "type": "number",
+                  "operation": "gte"
+                }
+              },
+              {
+                "id": "b3f9d5f0-9e85-42d0-bb68-5632e54f91b8",
+                "leftValue": "={{ $json.similarity }}",
+                "rightValue": 1,
+                "operator": {
+                  "type": "number",
+                  "operation": "lte"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -1440,
+          832
+        ],
+        "id": "e9731f1f-bb36-45b6-9879-614017e4319b",
+        "name": "Is similar?"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          -1232,
+          736
+        ],
+        "id": "0d18f417-1cff-4c6a-b3fa-be817da36ca3",
+        "name": "No Operation, do nothing1"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT * FROM match_jobs(\n  ARRAY[{{ $json.embedding.values }}]::vector(1536), \n  '{{ $json.jobUrl }}',\n  1 \n);",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -1680,
+          832
+        ],
+        "id": "d2f07c8b-e6ac-4d72-8b8f-fe1b4d4bf077",
+        "name": "Check description similarity",
+        "alwaysOutputData": false,
+        "retryOnFail": true,
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "value": "public",
+            "mode": "list",
+            "cachedResultName": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "job_leads",
+            "mode": "list",
+            "cachedResultName": "job_leads"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "job_url": "={{ $('Merge').item.json.jobUrl }}",
+              "published_at": "={{ $('Merge').item.json.publishedAt }}",
+              "company_name": "={{ $('Merge').item.json.companyName }}",
+              "job_title": "={{ $('Merge').item.json.jobTitle }}",
+              "job_description": "={{ $('Merge').item.json.jobDescription }}",
+              "job_location": "={{ $('Merge').item.json.location }}",
+              "external_id": "={{ $('Merge').item.json.jobId }}",
+              "job_salary": "={{ $('Merge').item.json.salaryInfo }}",
+              "job_sector": "={{ $('Merge').item.json.sector }}",
+              "company_department": "={{ $('Merge').item.json.workType }}",
+              "contract_type": "={{ $('Merge').item.json.contractType }}",
+              "status": "new",
+              "processed_at": "={{ $now.toISO() }}",
+              "company_url": "={{ $('Merge').item.json.companyUrl }}",
+              "poster_name": "={{ $('Merge').item.json.posterFullName }}",
+              "poster_linkedin": "={{ $('Merge').item.json.posterProfileUrl }}",
+              "company_logo": "={{ $('Merge').item.json.companyLogo }}",
+              "experience_level": "={{ $('Merge').item.json.experienceLevel }}",
+              "apply_url": "={{ $('Merge').item.json.applyUrl }}",
+              "match_score": 0,
+              "description_vector": "={{ $('Merge').item.json.embedding.values }}",
+              "source": "={{ $('Merge').item.json.source }}",
+              "employment_type": "={{ $('Merge').item.json.employmentType }}",
+              "work_mode": "={{ $('Merge').item.json.workMode}}",
+              "tech_score": 0
+            },
+            "matchingColumns": [
+              "job_url"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "published_at",
+                "displayName": "published_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "company_name",
+                "displayName": "company_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "job_title",
+                "displayName": "job_title",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "job_url",
+                "displayName": "job_url",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "match_score",
+                "displayName": "match_score",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "job_description",
+                "displayName": "job_description",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "job_location",
+                "displayName": "job_location",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "external_id",
+                "displayName": "external_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "job_salary",
+                "displayName": "job_salary",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "company_department",
+                "displayName": "company_department",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "job_sector",
+                "displayName": "job_sector",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "contract_type",
+                "displayName": "contract_type",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "signal_tier",
+                "displayName": "signal_tier",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "processed_at",
+                "displayName": "processed_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "company_url",
+                "displayName": "company_url",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "poster_name",
+                "displayName": "poster_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "poster_linkedin",
+                "displayName": "poster_linkedin",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "company_logo",
+                "displayName": "company_logo",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "experience_level",
+                "displayName": "experience_level",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "apply_url",
+                "displayName": "apply_url",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "source",
+                "displayName": "source",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "description_vector",
+                "displayName": "description_vector",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "employment_type",
+                "displayName": "employment_type",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "work_mode",
+                "displayName": "work_mode",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "metadata",
+                "displayName": "metadata",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "object",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "tech_score",
+                "displayName": "tech_score",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -1232,
+          1040
+        ],
+        "id": "8f1cdc43-7257-4363-8577-b4e4ed62feb0",
+        "name": "Upsert rows",
+        "retryOnFail": true,
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -2368,
+          816
+        ],
+        "id": "2491de5d-9dd8-4b55-b874-f1664388d992",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "content": "## Expects standardized job JSON\nsee Upsert node"
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -2464,
+          1136
+        ],
+        "id": "efe780a1-bb73-4e23-bbb1-7c33de6b292c",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "googlePalmApi",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"content\": {\n    \"parts\": [\n      {\n        \"text\": {{ JSON.stringify($json.jobDescription) }}\n      }\n    ]\n  },\n\"outputDimensionality\": 1536\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -2144,
+          960
+        ],
+        "id": "ed986c05-e980-4cc9-893f-3f634476edcb",
+        "name": "Vectorize job description",
+        "executeOnce": false,
+        "retryOnFail": true,
+        "credentials": {
+          "googlePalmApi": {
+            "id": "vmrqCM7rVU8xOXMr",
+            "name": "Google Gemini(PaLM) Api account_rag"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "fShvCbZRgCtLGec8",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/fShvCbZRgCtLGec8",
+            "cachedResultName": "01_reject_technical"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -992,
+          1040
+        ],
+        "id": "b7d593f2-2513-4176-a972-91229b5a9eb9",
+        "name": "Call '01_reject_technical'"
+      }
+    ],
+    "connections": {
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Check description similarity",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Is similar?": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Upsert rows",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "No Operation, do nothing1": {
+        "main": [
+          []
+        ]
+      },
+      "Check description similarity": {
+        "main": [
+          [
+            {
+              "node": "Is similar?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Upsert rows": {
+        "main": [
+          [
+            {
+              "node": "Call '01_reject_technical'",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Vectorize job description",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Vectorize job description": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Call '01_reject_technical'": {
+        "main": [
+          []
+        ]
+      }
+    },
+    "authors": "d d",
+    "name": "Version 0f34977d",
+    "description": "",
+    "autosaved": false
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-01-22T12:40:37.040Z",
+      "createdAt": "2026-01-22T12:40:37.040Z",
+      "id": "mcS1gLAfDII7yoGe",
+      "name": "lead_scrape"
+    }
+  ]
+}
