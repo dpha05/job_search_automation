@@ -1,0 +1,401 @@
+{
+  "updatedAt": "2026-03-05T09:49:04.000Z",
+  "createdAt": "2026-02-20T08:10:09.321Z",
+  "id": "xRpL7e5BFJar9tJPBfKyr",
+  "name": "0x_wellfound",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8,
+              "triggerAtMinute": 20
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1296,
+        208
+      ],
+      "id": "2443d65a-d40f-4149-8f54-31e9e83d7854",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "2rJKkhh7vjpX7pvjg",
+          "mode": "list",
+          "cachedResultName": "LinkedIn Jobs Scraper | Remove Duplicate Jobs | Pay Per Result (cheap_scraper/linkedin-job-scraper)",
+          "cachedResultUrl": "https://console.apify.com/actors/2rJKkhh7vjpX7pvjg/input"
+        },
+        "customBody": "={\n  \"keyword\": [\"AI engineer\", \"AI operator\", \"AI automation specialist\", \"AI solutions architect\", \"AI workflow designer\", \"Agentic AI\", \"AI implementation\", \"low-code AI\", \"AI specialist\", \"AI Ops\" ],\n  \"location\": \"Prague, Czechia\",\n  \"distance\": \"50\",\n  \"publishedAt\": \"{{ $json.publishedAtString }}\",\n  \"jobType\": [\"full-time\", \"part-time\" ],\n  \"experienceLevel\": [\"associate\", \"mid-senior\"],\n  \"saveOnlyUniqueItems\": true\n}"
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        208
+      ],
+      "id": "e6a3e4e7-e637-4d7d-beec-5021a98834c0",
+      "name": "Scrape linkedin jobs",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "apifyApi": {
+          "id": "i5PH9MrmLNn1QJba",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NBCVFrfmAz4h6S1a",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NBCVFrfmAz4h6S1a",
+          "cachedResultName": "03_dedupe_upsert"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        288,
+        240
+      ],
+      "id": "6677ad21-4a13-4f48-a80d-fe70a4b5cd20",
+      "name": "Call 'p1_lead_scrape_dedupe_upsert'",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -544,
+        224
+      ],
+      "id": "26232ade-dd11-41ff-baa6-4c148492c96b",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        32
+      ],
+      "id": "d1953e49-6894-449b-88ae-1f9e3e4a7880",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "jsCode": "const platformName = \"linkedin\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        32,
+        240
+      ],
+      "id": "85d43d58-6e2f-4002-bb9e-ff8bdf7d9473",
+      "name": "add source"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
+              "name": "jobId",
+              "value": "={{ $json.jobId }}",
+              "type": "string"
+            },
+            {
+              "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
+              "name": "jobTitle",
+              "value": "={{ $json.jobTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
+              "name": "jobUrl",
+              "value": "={{ $json.jobUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "a7609c01-4e31-43a0-940d-b97171f0123a",
+              "name": "companyName",
+              "value": "={{ $json.companyName }}",
+              "type": "string"
+            },
+            {
+              "id": "51e71c18-177a-4370-a63d-25f8001fce8e",
+              "name": "companyUrl",
+              "value": "={{ $json.companyUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "ce6bae6a-2e69-4671-b2d3-08f6ff27fd81",
+              "name": "companyLogo",
+              "value": "={{ $json.companyLogo }}",
+              "type": "string"
+            },
+            {
+              "id": "0103b2e7-89df-48b2-a1dc-4b91932b8495",
+              "name": "publishedAt",
+              "value": "={{ $json.publishedAt }}",
+              "type": "string"
+            },
+            {
+              "id": "b8611d60-09ec-409e-a0c0-8a6d7da87ea0",
+              "name": "applyUrl",
+              "value": "={{ $json.applyUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "008246ee-3829-4a26-af95-544f914e1fe9",
+              "name": "location",
+              "value": "={{ $json.location }}",
+              "type": "string"
+            },
+            {
+              "id": "949e43c8-0db8-420e-a39d-6be73d8c5efc",
+              "name": "contractType",
+              "value": "={{ $json.contractType }}",
+              "type": "string"
+            },
+            {
+              "id": "7e313d83-31bb-455f-83df-1c2bb8ef992d",
+              "name": "experienceLevel",
+              "value": "={{ $json.experienceLevel }}",
+              "type": "string"
+            },
+            {
+              "id": "30f4be42-bf3a-459d-bbb3-5000af3a21de",
+              "name": "jobDescription",
+              "value": "={{ $json.jobDescription }}",
+              "type": "string"
+            },
+            {
+              "id": "64980d27-ab7a-4a79-936f-49df553b6d2d",
+              "name": "salaryInfo",
+              "value": "={{ $json.salaryInfo }}",
+              "type": "array"
+            },
+            {
+              "id": "87782311-7ad5-4821-aea4-7d293c6b4f59",
+              "name": "posterFullName",
+              "value": "={{ $json.posterFullName }}",
+              "type": "string"
+            },
+            {
+              "id": "160cbda5-0d12-4d1a-a654-13a3e1ad720f",
+              "name": "posterProfileUrl",
+              "value": "={{ $json.posterProfileUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "1e0e0a25-7bb2-443e-be17-220d44d95d92",
+              "name": "sector",
+              "value": "={{ $json.sector }}",
+              "type": "string"
+            },
+            {
+              "id": "d7ecf8bd-46b7-414c-8862-41811f709f0a",
+              "name": "workMode",
+              "value": "={{ $json.workMode }}",
+              "type": "string"
+            },
+            {
+              "id": "a43ad1be-2936-4dd3-ba10-fd613008347d",
+              "name": "employmentType",
+              "value": "={{ $json.employmentType }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        240
+      ],
+      "id": "59f10e53-b0a6-47cf-b13d-56c1849ed49e",
+      "name": "Standardize output (**adjust fields**)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const today = new Date().getDay();\nlet publishedAtString = \"r86400\"; \n\nif (today === 1) { \n  publishedAtString = \"r604800\"; \n}\n\nreturn {\n  publishedAtString\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1088,
+        208
+      ],
+      "id": "279596ad-c5f1-479b-b589-adc4dfcec498",
+      "name": "Calculate Time Range"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Calculate Time Range",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape linkedin jobs": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'p1_lead_scrape_dedupe_upsert'": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Standardize output (**adjust fields**)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add source": {
+      "main": [
+        [
+          {
+            "node": "Call 'p1_lead_scrape_dedupe_upsert'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Standardize output (**adjust fields**)": {
+      "main": [
+        [
+          {
+            "node": "add source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Time Range": {
+      "main": [
+        [
+          {
+            "node": "Scrape linkedin jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-02-05T08:25:45.017+01:00",
+          "Readable date": "February 5th 2026, 8:25:45 am",
+          "Readable time": "8:25:45 am",
+          "Day of week": "Thursday",
+          "Year": "2026",
+          "Month": "February",
+          "Day of month": "05",
+          "Hour": "08",
+          "Minute": "25",
+          "Second": "45",
+          "Timezone": "Europe/Prague (UTC+01:00)"
+        }
+      }
+    ]
+  },
+  "versionId": "0c4bf02d-d901-444b-a535-57c978e39d80",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-02-20T08:10:09.325Z",
+      "createdAt": "2026-02-20T08:10:09.325Z",
+      "role": "workflow:owner",
+      "workflowId": "xRpL7e5BFJar9tJPBfKyr",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": null,
+  "tags": [
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-01-22T12:40:37.040Z",
+      "createdAt": "2026-01-22T12:40:37.040Z",
+      "id": "mcS1gLAfDII7yoGe",
+      "name": "lead_scrape"
+    }
+  ]
+}
