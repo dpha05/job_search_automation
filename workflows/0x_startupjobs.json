@@ -1,0 +1,1021 @@
+{
+  "updatedAt": "2026-03-05T09:49:01.000Z",
+  "createdAt": "2026-02-20T08:12:42.292Z",
+  "id": "UwFW9NXeFnukaI5o",
+  "name": "0x_startupjobs",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8,
+              "triggerAtMinute": 20
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1584,
+        608
+      ],
+      "id": "64a70093-6840-4671-9af9-6bc284c5b233",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NBCVFrfmAz4h6S1a",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NBCVFrfmAz4h6S1a",
+          "cachedResultName": "03_dedupe_upsert"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        528,
+        608
+      ],
+      "id": "62585480-c77d-4fbc-90da-82ecb2161f17",
+      "name": "Call 'p1_lead_scrape_dedupe_upsert'",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -144,
+        608
+      ],
+      "id": "99cd7676-ff6a-4feb-acf9-b6287ad7ce2f",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        80,
+        416
+      ],
+      "id": "e7fa9197-f561-4b72-bedb-50b9fc513190",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "jsCode": "const platformName = \"startupjobs\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        608
+      ],
+      "id": "c7329816-a023-4aab-bc53-57930c1ef24a",
+      "name": "add source"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
+              "name": "jobId",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
+              "name": "jobTitle",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
+              "name": "jobUrl",
+              "value": "={{ $json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "a7609c01-4e31-43a0-940d-b97171f0123a",
+              "name": "companyName",
+              "value": "={{ $json.company }}",
+              "type": "string"
+            },
+            {
+              "id": "51e71c18-177a-4370-a63d-25f8001fce8e",
+              "name": "companyUrl",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "ce6bae6a-2e69-4671-b2d3-08f6ff27fd81",
+              "name": "companyLogo",
+              "value": "={{ $json.company_logo }}",
+              "type": "string"
+            },
+            {
+              "id": "0103b2e7-89df-48b2-a1dc-4b91932b8495",
+              "name": "publishedAt",
+              "value": "={{ $json.posted_at }}",
+              "type": "string"
+            },
+            {
+              "id": "b8611d60-09ec-409e-a0c0-8a6d7da87ea0",
+              "name": "applyUrl",
+              "value": "={{ $json.apply_link }}",
+              "type": "string"
+            },
+            {
+              "id": "008246ee-3829-4a26-af95-544f914e1fe9",
+              "name": "location",
+              "value": "={{ $json.country }}, {{ $json.city }}",
+              "type": "string"
+            },
+            {
+              "id": "949e43c8-0db8-420e-a39d-6be73d8c5efc",
+              "name": "contractType",
+              "value": "={{ $json.employment_type }}",
+              "type": "string"
+            },
+            {
+              "id": "7e313d83-31bb-455f-83df-1c2bb8ef992d",
+              "name": "experienceLevel",
+              "value": "={{ $json.experience_bucket }}",
+              "type": "string"
+            },
+            {
+              "id": "30f4be42-bf3a-459d-bbb3-5000af3a21de",
+              "name": "jobDescription",
+              "value": "={{ $json.description_text }}",
+              "type": "string"
+            },
+            {
+              "id": "64980d27-ab7a-4a79-936f-49df553b6d2d",
+              "name": "salaryInfo",
+              "value": "={{ $json.salary }}",
+              "type": "array"
+            },
+            {
+              "id": "87782311-7ad5-4821-aea4-7d293c6b4f59",
+              "name": "posterFullName",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "160cbda5-0d12-4d1a-a654-13a3e1ad720f",
+              "name": "posterProfileUrl",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "1e0e0a25-7bb2-443e-be17-220d44d95d92",
+              "name": "sector",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "d7ecf8bd-46b7-414c-8862-41811f709f0a",
+              "name": "workMode",
+              "value": "={{ $json.workplace_type }}",
+              "type": "string"
+            },
+            {
+              "id": "a43ad1be-2936-4dd3-ba10-fd613008347d",
+              "name": "employmentType",
+              "value": "=",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        608
+      ],
+      "id": "436f0cd7-e55e-4930-b922-c3dd43b46ec3",
+      "name": "Standardize output (**adjust fields**)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const today = new Date().getDay();\nlet publishedAtString = \"r86400\"; \n\nif (today === 1) { \n  publishedAtString = \"r604800\"; \n}\n\nreturn {\n  publishedAtString\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1360,
+        608
+      ],
+      "id": "82806628-70cf-4930-a112-cde9ed2422dd",
+      "name": "Calculate Time Range",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "um0bnQecEAF6BVpYw",
+          "mode": "list",
+          "cachedResultName": "Startup.jobs Scraper (shahidirfan/Startup-Jobs-Scraper)",
+          "cachedResultUrl": "https://console.apify.com/actors/um0bnQecEAF6BVpYw/input"
+        },
+        "customBody": "={\n    \"collectDetails\": true,\n    \"maxConcurrency\": 2,\n    \"max_pages\": 20,\n    \"results_wanted\": 1,\n    \"startUrl\": \"https://startup.jobs/?q=AI+automation&w=remote&c=full-time%2Ccontractor&since=30d\"\n}",
+        "timeout": {}
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        32
+      ],
+      "id": "4dc67c4d-9ae7-47d1-b680-4ce559832e9b",
+      "name": "Scrape startupjobs",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "apifyApi": {
+          "id": "i5PH9MrmLNn1QJba",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "um0bnQecEAF6BVpYw",
+          "mode": "list",
+          "cachedResultName": "Startup.jobs Scraper (shahidirfan/Startup-Jobs-Scraper)",
+          "cachedResultUrl": "https://console.apify.com/actors/um0bnQecEAF6BVpYw/input"
+        },
+        "customBody": "={\n    \"collectDetails\": true,\n    \"maxConcurrency\": 2,\n    \"max_pages\": 20,\n    \"results_wanted\": 1,\n    \"startUrl\": \"https://startup.jobs/?q=AI+solution&w=remote&c=full-time%2Ccontractor&since=30d\"\n}",
+        "timeout": {}
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        224
+      ],
+      "id": "2d2395e1-16fb-40c5-b8c4-89be51099d26",
+      "name": "Scrape startupjobs1",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "apifyApi": {
+          "id": "i5PH9MrmLNn1QJba",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 7
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -784,
+        528
+      ],
+      "id": "df052a23-6588-4fab-aa4c-51cbb9573863",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "content": "## todo\n\nintegrate google translate api throught http request node to check language. accept only english, czech and german\n\n",
+        "height": 272
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1584,
+        864
+      ],
+      "id": "5b5cc72f-eb7d-49fb-91bb-6eaad1f2731a",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "um0bnQecEAF6BVpYw",
+          "mode": "list",
+          "cachedResultName": "Startup.jobs Scraper (shahidirfan/Startup-Jobs-Scraper)",
+          "cachedResultUrl": "https://console.apify.com/actors/um0bnQecEAF6BVpYw/input"
+        },
+        "customBody": "={\n    \"collectDetails\": true,\n    \"maxConcurrency\": 2,\n    \"max_pages\": 20,\n    \"results_wanted\": 1,\n    \"startUrl\": \"https://startup.jobs/?q=AI+op&w=remote&c=full-time%2Ccontractor&since=30d\"\n}",
+        "timeout": {}
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        416
+      ],
+      "id": "6bc9b99c-9723-4e68-9c94-79246d8d12e5",
+      "name": "Scrape startupjobs2",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "apifyApi": {
+          "id": "i5PH9MrmLNn1QJba",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "um0bnQecEAF6BVpYw",
+          "mode": "list",
+          "cachedResultName": "Startup.jobs Scraper (shahidirfan/Startup-Jobs-Scraper)",
+          "cachedResultUrl": "https://console.apify.com/actors/um0bnQecEAF6BVpYw/input"
+        },
+        "customBody": "={\n    \"collectDetails\": true,\n    \"maxConcurrency\": 2,\n    \"max_pages\": 20,\n    \"results_wanted\": 1,\n    \"startUrl\": \"https://startup.jobs/?q=AI+engineer&w=remote&c=full-time%2Ccontractor&since=30d\"\n}",
+        "timeout": {}
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        608
+      ],
+      "id": "499d8691-431a-44a7-a1d4-12a7962c3721",
+      "name": "Scrape startupjobs3",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "apifyApi": {
+          "id": "i5PH9MrmLNn1QJba",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "um0bnQecEAF6BVpYw",
+          "mode": "list",
+          "cachedResultName": "Startup.jobs Scraper (shahidirfan/Startup-Jobs-Scraper)",
+          "cachedResultUrl": "https://console.apify.com/actors/um0bnQecEAF6BVpYw/input"
+        },
+        "customBody": "={\n    \"collectDetails\": true,\n    \"maxConcurrency\": 2,\n    \"max_pages\": 20,\n    \"results_wanted\": 1,\n    \"startUrl\": \"https://startup.jobs/?q=AI+agent&w=remote&c=full-time%2Ccontractor&since=30d\"\n}",
+        "timeout": {}
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        800
+      ],
+      "id": "b76a82b9-6492-46bc-9f45-64a8631c9eb0",
+      "name": "Scrape startupjobs4",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "apifyApi": {
+          "id": "i5PH9MrmLNn1QJba",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "um0bnQecEAF6BVpYw",
+          "mode": "list",
+          "cachedResultName": "Startup.jobs Scraper (shahidirfan/Startup-Jobs-Scraper)",
+          "cachedResultUrl": "https://console.apify.com/actors/um0bnQecEAF6BVpYw/input"
+        },
+        "customBody": "={\n    \"collectDetails\": true,\n    \"maxConcurrency\": 2,\n    \"max_pages\": 20,\n    \"results_wanted\": 1,\n    \"startUrl\": \"https://startup.jobs/?q=AI+consult&w=remote&c=full-time%2Ccontractor&since=30d\"\n}",
+        "timeout": {}
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        992
+      ],
+      "id": "1b7d1d94-e0d3-4544-893e-664d620db948",
+      "name": "Scrape startupjobs5",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "apifyApi": {
+          "id": "i5PH9MrmLNn1QJba",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "um0bnQecEAF6BVpYw",
+          "mode": "list",
+          "cachedResultName": "Startup.jobs Scraper (shahidirfan/Startup-Jobs-Scraper)",
+          "cachedResultUrl": "https://console.apify.com/actors/um0bnQecEAF6BVpYw/input"
+        },
+        "customBody": "={\n    \"collectDetails\": true,\n    \"maxConcurrency\": 2,\n    \"max_pages\": 20,\n    \"results_wanted\": 1,\n    \"startUrl\": \"https://startup.jobs/?q=AI+special&w=remote&c=full-time%2Ccontractor&since=30d\"\n}",
+        "timeout": {}
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        1184
+      ],
+      "id": "2c4d609e-8cd6-4b66-a99d-5eea6ead328c",
+      "name": "Scrape startupjobs6",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "apifyApi": {
+          "id": "i5PH9MrmLNn1QJba",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "compare": "selectedFields",
+        "fieldsToCompare": "url",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        -592,
+        608
+      ],
+      "id": "2fe9b902-7a14-472b-8ed3-65828b525610",
+      "name": "Remove Duplicates"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  const jd = item.json.description_text;\n\n  const japaneseRegex = /[\\u3040-\\u309F\\u30A0-\\u30FF]/;\n  \n  item.json.isJapanese = japaneseRegex.test(jd);\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -384,
+        608
+      ],
+      "id": "af6780b8-5cee-4c97-9f2f-f50df648e205",
+      "name": "detect japanese",
+      "disabled": true
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Calculate Time Range",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'p1_lead_scrape_dedupe_upsert'": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Standardize output (**adjust fields**)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add source": {
+      "main": [
+        [
+          {
+            "node": "Call 'p1_lead_scrape_dedupe_upsert'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Standardize output (**adjust fields**)": {
+      "main": [
+        [
+          {
+            "node": "add source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Time Range": {
+      "main": [
+        [
+          {
+            "node": "Scrape startupjobs",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Scrape startupjobs1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Scrape startupjobs2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Scrape startupjobs3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Scrape startupjobs4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Scrape startupjobs5",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Scrape startupjobs6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape startupjobs": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape startupjobs1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape startupjobs2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Scrape startupjobs3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Scrape startupjobs4": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Scrape startupjobs5": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "Scrape startupjobs6": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 6
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates": {
+      "main": [
+        [
+          {
+            "node": "detect japanese",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "detect japanese": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-02-05T08:25:45.017+01:00",
+          "Readable date": "February 5th 2026, 8:25:45 am",
+          "Readable time": "8:25:45 am",
+          "Day of week": "Thursday",
+          "Year": "2026",
+          "Month": "February",
+          "Day of month": "05",
+          "Hour": "08",
+          "Minute": "25",
+          "Second": "45",
+          "Timezone": "Europe/Prague (UTC+01:00)"
+        }
+      }
+    ],
+    "Scrape startupjobs": [
+      {
+        "json": {
+          "id": "7763166",
+          "title": "AI & Automation Specialist",
+          "company": "UpGuard",
+          "location": "Remote",
+          "job_type": "Full Time",
+          "salary": null,
+          "posted_at": "2026-02-18T11:01:39Z",
+          "description_text": "Who are we? UpGuard’s mission is to make life easier for security teams. We meticulously create robust solutions that enable our customers to identify, assess, and remediate cybersecurity risk across their attack surface, vendor ecosystem, workforce, and trust relationships. Our integrated cyber risk posture management platform combines comprehensive security ratings, instant risk assessments, templated security questionnaires, threat intelligence capabilities, and agentic AI to give organizations a holistic view of their risk surface. Our Analytics team at UpGuard supports all of our teams to extract key insights from the data that we collect. We extract data from multiple sources and build insightful dashboards to display key metrics and support leaders to make decisions. We also build integrations between systems to seamlessly collect required data.  Why are we hiring for this role? We’re looking for an AI & Automation Specialist to help drive the next stage of UpGuard’s growth. In this role, you’ll bridge the gap between business strategy and technical execution, transforming complex manual workflows into scalable, AI-powered solutions that streamline operations and unlock new efficiencies across the organisation. You’ll work closely with the Lead of AI & Automation (A3: Automation, AI & Analytics) and collaborate across teams to identify opportunities where automation and AI can deliver measurable business impact. This is a hands-on role with the chance to influence how our internal processes evolve as we scale, ensuring our technology keeps pace with our expanding operations and strategic ambitions. What will you do? Operational Deep-Dives & Process Design - Conduct deep-dive sessions with cross-functional teams (Finance, Sales, CS, Legal, Security) and create detailed As-Is and To-Be process maps to identify bottlenecks and logic gaps Technical Translation & Specification - Write highly detailed Product Requirement Documents, design test cases and define success parameters Build automations and integrate AI powered tools: Be hands-on with creating n8n workflows, automation and as required, also be able to integrate new AI-powered tools with existing business processes Execution & Sprint Management - Maintain a healthy, prioritized backlog of tasks and ensure the team is working on high impact tasks. Monitor daily progress against project milestones and proactively flag any risks to the timeline.  Adoption & Change Management - Create \"How-To\" guides for every new automation launched, drive training sessions for the teams using these new tools to ensure high adoption rates and establish a system for users to report bugs or suggest improvements post-launch  What you'll bring? 2-4 years of experience in process analysis, automation, or a related field Process analysis: Ability to map end-to-end workflows, identify inefficiencies, and design optimised processes API & systems integration knowledge : Strong understanding of API and systems integration, including proficiency with APIs, webhooks, and connecting various systems Workflow orchestration : hands-on with n8n, Airflow, Zapier, or similar automation platforms.  AI/LLM experience : functional understanding of how LLMs work (prompting, tokens, context windows)  Clear communicator : Experience in translating technical concepts for non-technical stakeholders and gathering business requirements Training mindset : Experience in generating documentation, tutorials, or enabled others to use technical tools SQL : Experience in querying databases and an understanding of data schemas What's in it for you? Monthly Lifestyle subsidy: Use this for financial, physical, and mental well-being  WFH set-up allowance: To ensure you have the right environment to work in, we will help you get set up within your first 3 months at UpGuard  $1500 USD annual Learning & Development allowance: To support your career development, all team members will be able to expense development opportunities against this allowance  Annual leave: PTO plus two additional UpGuardian leave days to give you time to recharge your batteries. 18 weeks paid Parental Leave: Irrespective of parenting role Personal Leave Allowance: This includes sick & carer’s leave  Fully remote working environment: While we have physical offices in Sydney & Hobart, we do not mandate compulsory attendance Top-spec hardware: All team members will be provided with top-spec laptops for their role  Generative AI subsidy: UpGuard provides paid subscriptions for all team members to access generative AI tools to support their work  #LI-SR1 UpGuard is a Certified Great Place to Work® in the US, Australia, UK and India, establishing its position as a leading global technology employer. 99% of team members agree that UpGuard is a great place to work, apply now to find out why! As an Equal Employment Opportunity and Affirmative Action Employer, qualified applicants will receive consideration for employment without regard to race, color, religion, sex, sexual orientation, gender perception or identity, national origin, age, marital status, protected veteran status, or disability status. For applications to positions in the United States, please note, at this time we can only support hiring in the following US states: CA, MD, MA, IL, OR, WA, CO, TX, FL, PA, LA, MO, or DC .   Before starting work with us, you will need to undertake a national police history check and reference checks. Also please note that at this time, we cannot support candidates requiring visa sponsorship or relocation.",
+          "description_html": "<div class=\"trix-content\">\n  Who are we?\nUpGuard’s mission is to make life easier for security teams. We meticulously create robust solutions that enable our customers to identify, assess, and remediate cybersecurity risk across their attack surface, vendor ecosystem, workforce, and trust relationships. Our integrated cyber risk posture management platform combines comprehensive security ratings, instant risk assessments, templated security questionnaires, threat intelligence capabilities, and agentic AI to give organizations a holistic view of their risk surface.\n\nOur Analytics team at UpGuard supports all of our teams to extract key insights from the data that we collect. We extract data from multiple sources and build insightful dashboards to display key metrics and support leaders to make decisions. We also build integrations between systems to seamlessly collect required data.&nbsp;\n\n\nWhy are we hiring for this role?\nWe’re looking for an AI &amp; Automation Specialist to help drive the next stage of UpGuard’s growth. In this role, you’ll bridge the gap between business strategy and technical execution, transforming complex manual workflows into scalable, AI-powered solutions that streamline operations and unlock new efficiencies across the organisation.\n\nYou’ll work closely with the Lead of AI &amp; Automation (A3: Automation, AI &amp; Analytics) and collaborate across teams to identify opportunities where automation and AI can deliver measurable business impact. This is a hands-on role with the chance to influence how our internal processes evolve as we scale, ensuring our technology keeps pace with our expanding operations and strategic ambitions.\n\n\nWhat will you do?\n<li><b>Operational Deep-Dives &amp; Process Design </b>- Conduct deep-dive sessions with cross-functional teams (Finance, Sales, CS, Legal, Security) and create detailed <b>As-Is</b> and <b>To-Be</b> process maps to identify bottlenecks and logic gaps</li><li><b>Technical Translation &amp; Specification</b>- Write highly detailed Product Requirement Documents, design test cases and define success parameters</li><li><b>Build automations and integrate AI powered tools: </b>Be hands-on with creating n8n workflows, automation and as required, also be able to integrate new AI-powered tools with existing business processes</li><li><b>Execution &amp; Sprint Management </b>- Maintain a healthy, prioritized backlog of tasks and ensure the team is working on high impact tasks. Monitor daily progress against project milestones and proactively flag any risks to the timeline.&nbsp;</li><li><b>Adoption &amp; Change Management - Create \"How-To\" guides for every new automation launched, drive training sessions for the teams using these new tools to ensure high adoption rates and establish a system for users to report bugs or suggest improvements post-launch&nbsp;</b></li>\n\nWhat you'll bring?\n<li>2-4 years of experience in process analysis, automation, or a related field</li><li><b>Process analysis: </b>Ability to map end-to-end workflows, identify inefficiencies, and design optimised processes</li><li><b>API &amp; systems integration knowledge</b>: Strong understanding of API and systems integration, including proficiency with APIs, webhooks, and connecting various systems</li><li><b>Workflow orchestration</b>: hands-on with n8n, Airflow, Zapier, or similar automation platforms.&nbsp;</li><li><b>AI/LLM experience</b>: functional understanding of how LLMs work (prompting, tokens, context windows)&nbsp;</li><li><b>Clear communicator</b>: Experience in translating technical concepts for non-technical stakeholders and gathering business requirements</li><li><b>Training mindset</b>: Experience in generating documentation, tutorials, or enabled others to use technical tools</li><li><b>SQL</b>: Experience in querying databases and an understanding of data schemas</li>\n\nWhat's in it for you?\n<li><b>Monthly Lifestyle subsidy:</b> Use this for financial, physical, and mental well-being&nbsp;</li><li><b>WFH set-up allowance:</b> To ensure you have the right environment to work in, we will help you get set up within your first 3 months at UpGuard&nbsp;</li><li><b>$1500 USD annual Learning &amp; Development allowance: </b>To support your career development, all team members will be able to expense development opportunities against this allowance&nbsp;</li><li><b>Annual leave:</b> PTO plus two additional UpGuardian leave days to give you time to recharge your batteries.</li><li><b>18 weeks paid Parental Leave: </b>Irrespective of parenting role</li><li><b>Personal Leave Allowance: </b>This includes sick &amp; carer’s leave&nbsp;</li><li><b>Fully remote working environment: </b>While we have physical offices in Sydney &amp; Hobart, we do not mandate compulsory attendance</li><li><b>Top-spec hardware: </b>All team members will be provided with top-spec laptops for their role&nbsp;</li><li><b>Generative AI subsidy: </b>UpGuard provides paid subscriptions for all team members to access generative AI tools to support their work&nbsp;</li>\n\n<div><span>#LI-SR1</span></div><div><br></div><div><span>UpGuard is a Certified Great Place to Work® in the US, Australia, UK and India, establishing its position as a leading global technology employer. 99% of team members agree that UpGuard is a great place to work, apply now to find out why!</span></div><div><br></div><div><span>As an Equal Employment Opportunity and Affirmative Action Employer, qualified applicants will receive consideration for employment without regard to race, color, religion, sex, sexual orientation, gender perception or identity, national origin, age, marital status, protected veteran status, or disability status.</span></div><div><br></div><div><span>For applications to positions in the United States, please note, at this time we can only support hiring in the following US states: </span><b>CA, MD, MA, IL, OR, WA, CO, TX, FL, PA, LA, MO, or DC</b><span>.&nbsp;&nbsp;</span></div><div><br></div><div><span>Before starting work with us, you will need to undertake a national police history check and reference checks. Also please note that at this time, we cannot support candidates requiring visa sponsorship or relocation.</span></div>\n</div>\n",
+          "company_logo": "https://startup.jobs/logos/5093",
+          "apply_link": "https://startup.jobs/apply/44b4b644-a303-4ff2-8cac-609bb517b053",
+          "url": "https://startup.jobs/ai-automation-specialist-upguard-7763166",
+          "source": "algolia+http-jsonld",
+          "fetched_at": "2026-02-20T11:52:14.228Z",
+          "tags": [
+            "Artificial Intelligence"
+          ],
+          "workplace_type": "remote",
+          "employment_type": "full-time",
+          "experience_bucket": "1-3",
+          "salary_min": null,
+          "salary_max": null,
+          "salary_currency": "USD",
+          "city": "Sydney",
+          "country": "Australia",
+          "company_slug": "upguard"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Scrape startupjobs1": [
+      {
+        "json": {
+          "id": "7697021",
+          "title": "AI Solution Architect",
+          "company": "T-Rex Solutions",
+          "location": "Remote",
+          "job_type": "Full Time",
+          "salary": "USD 160000 - 210000",
+          "posted_at": "2026-01-29T22:40:06Z",
+          "description_text": "T-Rex Solutions is seeking an experienced and driven AI Solution Architect to play a crucial role in our Business Development and Growth efforts, with a primary focus on technical solution architecture design and buildout, as well as Federal proposal and solution writing. In this dynamic position, you will work closely with clients to identify their technical pain points and needs, creating comprehensive end-to-end Enterprise solutions that lead to successful sales closures and long-term partnerships. Responsibilities: Develop tailored end-to-end AI/ML solutions to address client needs. Spearhead technical solutioning for proposals, collaborating with cross-functional teams to deliver comprehensive solutions aligned with customer requirements. Design, implement, and support AI/ML-driven solutions, including generative AI, predictive analytics, and automation workflows. Advise customers on AI solution architectures, model selection, data readiness, and integration with existing cloud environments. Develop proof‑of‑concepts (POCs) showcasing AI capabilities such as LLMs, chatbots, intelligent search, and automated decision systems. Craft compelling responses to requests for proposals (RFPs) and requests for information (RFIs) from prospects and customers. Deliver customized product demonstrations for potential customers and partners (virtually and in-person). Offer in-depth technical support to the business development team and clients throughout the sales cycle. Assess customers' technical challenges and needs, devising customized selling strategies. Create and present internal AI solution materials for stakeholders, customers, and senior executives. Collaborate with clients to identify problems and suggest appropriate solutions. Analyze competing products and provide competitor insights to marketing and development teams. Generate, qualify, manage, and offer technical assistance to facilitate deal closures. Requirements: Familiarity with AI platforms and tools (e.g., Amazon Bedrock, Azure OpenAI, Google Vertex AI, Hugging Face, LangChain). Hands-on experience implementing AI/ML solutions in production environments, including model deployment, monitoring, and optimization. Experience translating business problems into AI use cases and delivering measurable outcomes. Technical writing experience in proposals and white papers (samples requested). Prior experience in a technical, customer-oriented position, preferably as a consultant for multiple clients. Experience working with Federal customers and agencies (e.g. DOD, FedCiv, Intel, etc) BS Degree in a technical field and 10+ years of professional experience. Excellent presentation skills and experience delivering complex technical and sales-oriented presentations. Strong time management skills, able to juggle multiple initiatives and deadline-driven workloads while consistently providing outstanding customer service. Desired Skills: Certification and/or Specialty Certifications in AI. Active Secret Clearance or higher. Master's Degree in a technical field T-Rex Overview Established in 1999, T-Rex Solutions, LLC is a proven mid-tier business providing data-centric mission services to the Federal government as it increasingly tries to secure and leverage the power of data. We design, integrate, secure, and deploy advanced technical solutions for our customers so they can efficiently fulfill their critical objectives. T-Rex offers both IT and professional services to numerous Federal agencies and is a leader in providing high quality and innovative solutions in the areas of Cloud and Infrastructure Services, Cyber Security, and Big Data Engineering. T-Rex is constantly seeking qualified people to join our growing team. We have built a broad client base through our devotion to delivering quality products and customer service, and to do that we need quality individuals. But more than that, we at T-Rex are committed to creating a culture that supports the development of every employee's personal and professional lives. T-Rex has made a commitment to maintain the status of an industry leader in compensation packages and benefits which includes competitive salaries, performance bonuses, training and educational reimbursement, Transamerica 401(k) and Cigna healthcare benefits. T-Rex is an Equal Opportunity Employer. All qualified applicants will receive consideration for employment without regard to race, religion, color, sex (including pregnancy and sexual orientation), parental status, national origin, age, disability, family medical history or genetic information, political affiliation, military service, or other non-merit based factors. In compliance with pay transparency guidelines, the annual base salary range for this position is $160,000 - $210,000. Please note that the salary information is a general guideline only. T-Rex considers factors such as (but not limited to) scope and responsibilities of the position, candidate’s work experience, education/training, key skills, internal peer equity, as well as market and business considerations when extending an offer. T-Rex offers a diverse and collaborative work environment, exciting opportunities for professional growth, and generous benefits, including: PTO available to use immediately upon joining (prorated based on start date), paid parental leave, individual and family health, vision, and dental benefits, annual budget for training, professional development and tuition reimbursement, and a 401(k) plan with company match fully vested after 60 days of employment among other benefits.  ",
+          "description_html": "<div class=\"trix-content\">\n  <p>T-Rex Solutions is seeking an experienced and driven AI Solution Architect to play a crucial role in our Business Development and Growth efforts, with a primary focus on technical solution architecture design and buildout, as well as Federal proposal and solution writing. In this dynamic position, you will work closely with clients to identify their technical pain points and needs, creating comprehensive end-to-end Enterprise solutions that lead to successful sales closures and long-term partnerships.<br></p>\n<p><strong>Responsibilities:</strong></p>\n<ul>\n<li>Develop tailored end-to-end AI/ML solutions to address client needs.</li>\n<li>Spearhead technical solutioning for proposals, collaborating with cross-functional teams to deliver comprehensive solutions aligned with customer requirements.</li>\n<li>Design, implement, and support AI/ML-driven solutions, including generative AI, predictive analytics, and automation workflows.</li>\n<li>Advise customers on AI solution architectures, model selection, data readiness, and integration with existing cloud environments.</li>\n<li>Develop proof‑of‑concepts (POCs) showcasing AI capabilities such as LLMs, chatbots, intelligent search, and automated decision systems.</li>\n<li>Craft compelling responses to requests for proposals (RFPs) and requests for information (RFIs) from prospects and customers.</li>\n<li>Deliver customized product demonstrations for potential customers and partners (virtually and in-person).</li>\n<li>Offer in-depth technical support to the business development team and clients throughout the sales cycle.</li>\n<li>Assess customers' technical challenges and needs, devising customized selling strategies.</li>\n<li>Create and present internal AI solution materials for stakeholders, customers, and senior executives.</li>\n<li>Collaborate with clients to identify problems and suggest appropriate solutions.</li>\n<li>Analyze competing products and provide competitor insights to marketing and development teams.</li>\n<li>Generate, qualify, manage, and offer technical assistance to facilitate deal closures.</li>\n</ul>\n<p><strong>Requirements:</strong></p>\n<ul>\n<li>Familiarity with AI platforms and tools (e.g., Amazon Bedrock, Azure OpenAI, Google Vertex AI, Hugging Face, LangChain).</li>\n<li>Hands-on experience implementing AI/ML solutions in production environments, including model deployment, monitoring, and optimization.</li>\n<li>Experience translating business problems into AI use cases and delivering measurable outcomes.</li>\n<li>Technical writing experience in proposals and white papers (samples requested).</li>\n<li>Prior experience in a technical, customer-oriented position, preferably as a consultant for multiple clients.</li>\n<li>Experience working with Federal customers and agencies (e.g. DOD, FedCiv, Intel, etc)</li>\n<li>BS Degree in a technical field and 10+ years of professional experience.</li>\n<li>Excellent presentation skills and experience delivering complex technical and sales-oriented presentations.</li>\n<li>Strong time management skills, able to juggle multiple initiatives and deadline-driven workloads while consistently providing outstanding customer service.</li>\n</ul>\n<p><strong>Desired Skills:</strong></p>\n<ul>\n<li>Certification and/or Specialty Certifications in AI.</li>\n<li>Active Secret Clearance or higher.</li>\n<li>Master's Degree in a technical field</li>\n</ul>\n<p><strong>T-Rex Overview</strong></p>\n<p>Established in 1999, T-Rex Solutions, LLC is a proven mid-tier business providing data-centric mission services to the Federal government as it increasingly tries to secure and leverage the power of data. We design, integrate, secure, and deploy advanced technical solutions for our customers so they can efficiently fulfill their critical objectives. T-Rex offers both IT and professional services to numerous Federal agencies and is a leader in providing high quality and innovative solutions in the areas of Cloud and Infrastructure Services, Cyber Security, and Big Data Engineering.</p>\n<p>T-Rex is constantly seeking qualified people to join our growing team. We have built a broad client base through our devotion to delivering quality products and customer service, and to do that we need quality individuals. But more than that, we at T-Rex are committed to creating a culture that supports the development of every employee's personal and professional lives. T-Rex has made a commitment to maintain the status of an industry leader in compensation packages and benefits which includes competitive salaries, performance bonuses, training and educational reimbursement, Transamerica 401(k) and Cigna healthcare benefits.</p>\n<p>T-Rex is an Equal Opportunity Employer. All qualified applicants will receive consideration for employment without regard to race, religion, color, sex (including pregnancy and sexual orientation), parental status, national origin, age, disability, family medical history or genetic information, political affiliation, military service, or other non-merit based factors.</p>\n<p>In compliance with pay transparency guidelines, the annual base salary range for this position is $160,000 - $210,000. Please note that the salary information is a general guideline only. T-Rex considers factors such as (but not limited to) scope and responsibilities of the position, candidate’s work experience, education/training, key skills, internal peer equity, as well as market and business considerations when extending an offer.</p>\n<p><span><span class=\"ui-provider a b c d e f g h i j k l m n o p q r s t u v w x y z ab ac ae af ag ah ai aj ak\">T-Rex offers a diverse and collaborative work environment, exciting opportunities for professional growth, and generous benefits, including: PTO available to use immediately upon joining (prorated based on start date), paid parental leave, individual and family health, vision, and dental benefits, annual budget for training, professional development and tuition reimbursement, and a 401(k) plan with company match fully vested after 60 days of employment among other benefits.&nbsp;&nbsp;</span></span></p>\n</div>\n",
+          "company_logo": "https://startup.jobs/logos/30738",
+          "apply_link": "https://startup.jobs/apply/117c0eed-ec94-44a7-ae03-71a7a8eddc9d",
+          "url": "https://startup.jobs/ai-solution-architect-t-rex-solutions-7697021",
+          "source": "algolia+http-jsonld",
+          "fetched_at": "2026-02-20T11:52:26.282Z",
+          "tags": [
+            "Architecture",
+            "Artificial Intelligence"
+          ],
+          "workplace_type": "remote",
+          "employment_type": "full-time",
+          "experience_bucket": "6+",
+          "salary_min": 160000,
+          "salary_max": 210000,
+          "salary_currency": "USD",
+          "city": "Bethesda",
+          "country": "United States",
+          "company_slug": "t-rex-solutions"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Scrape startupjobs2": [
+      {
+        "json": {
+          "id": "7755489",
+          "title": "AI Operations Team Lead - Scaled Prospecting",
+          "company": "Databricks",
+          "location": "Remote",
+          "job_type": "Full Time",
+          "salary": "USD 100000 - 171950",
+          "posted_at": "2026-02-18T00:37:16Z",
+          "description_text": "SLSQ127R198 We are reimagining GTM at Databricks and are seeking an AI Operations Team Lead to drive execution excellence across our AI agent portfolio. This is not a traditional program management role. You'll scope, design, and ship AI agent workflows, with the balance of your time dedicated to field enablement and delivery management across agents and business segments. The ideal candidate combines strong program management and leadership skills with executive communication excellence, deep technical acumen, and a proven track record of scaling operations in fast-paced environments. Key Responsibilities: Operational Leadership Maintain and communicate product roadmap to stakeholders across Sales, Marketing, and IT organizations Drive prioritization decisions and manage competing demands across regions (AMER, EMEA, APJ) Own team JIRA board management, sprint planning, and delivery tracking across AI agent deployments Establish and track team KPIs, ensuring alignment with business objectives Build and iterate on agent workflows hands-on-prompt engineering, logic flows, integration design. This is a keyboards-on role. Strategic Communication & Delivery Create high-impact presentations for senior leadership Translate technical AI capabilities into compelling business transformation narratives Present quarterly business reviews and program performance updates to leadership Design and deliver comprehensive enablement programs for ~2,000 global users Partner with Seller Enablement teams to drive adoption and confident usage of AI tools Program Management Lead end-to-end lifecycle management for AI agent deployments from ideation through launch Manage phased rollouts, UAT/QA processes, and technical troubleshooting Coordinate deliverables amongst cross-functional teams including Technical Program Managers, Business Intelligence, and Engineering Analyze conversion metrics, reply rates, and time-savings data to identify optimization opportunities Drive continuous improvement through prompt refinement and workflow optimization What We Look For: Experience: 7+ years in sales operations, program management, or related field 3+ years leading teams or managing complex, cross-functional programs Experience with AI/automation tools and sales technology stacks Desired Skills: Strong proficiency with JIRA, project management tools, and roadmap planning Advanced data analysis capabilities (SOQL/SQL preferred) Experience with sales systems (Salesforce, marketing automation platforms) Familiarity with AI agent platforms and low-code/no-code solutions a plus Exceptional executive presence with proven ability to create compelling slide decks and narratives Strong stakeholder management skills with ability to influence without authority Experience managing competing priorities across geographies and business units Track record of translating technical concepts for non-technical audiences Core Competencies: Passion for AI innovation and GTM transformation Strategic thinking with execution excellence Data-driven decision making and analytical rigor Proactive problem-solving with a continuous improvement mindset Adaptability in fast-moving, ambiguous environments This role is pivotal in scaling AI Operations at Databricks and transforming how our GTM organization operates. If you're a strategic leader who excels at both executive communication and operational excellence, we encourage you to apply.   Pay Range Transparency Databricks is committed to fair and equitable compensation practices. The pay range(s) for this role is listed below and represents the expected base salary range for non-commissionable roles or on-target earnings for commissionable roles.  Actual compensation packages are based on several factors that are unique to each candidate, including but not limited to job-related skills, depth of experience, relevant certifications and training, and specific work location. Based on the factors above, Databricks anticipated utilizing the full width of the range. The total compensation package for this position may also include eligibility for annual performance bonus, equity, and the benefits listed above. For more information regarding which range your location is in visit our page here .   Zone 1 Pay Range $125,000 — $171,950 USD Zone 2 Pay Range $112,600 — $154,750 USD Zone 3 Pay Range $106,300 — $146,200 USD Zone 4 Pay Range $100,000 — $137,500 USD About Databricks Databricks is the data and AI company. More than 10,000 organizations worldwide — including Comcast, Condé Nast, Grammarly, and over 50% of the Fortune 500 — rely on the Databricks Data Intelligence Platform to unify and democratize data, analytics and AI. Databricks is headquartered in San Francisco, with offices around the globe and was founded by the original creators of Lakehouse, Apache Spark™, Delta Lake and MLflow. To learn more, follow Databricks on  Twitter ,  LinkedIn   and   Facebook . Benefits At Databricks, we strive to provide comprehensive benefits and perks that meet the needs of all of our employees. For specific details on the benefits offered in your region, please visit  https://www.mybenefitsnow.com/databricks .  Our Commitment to Diversity and Inclusion At Databricks, we are committed to fostering a diverse and inclusive culture where everyone can excel. We take great care to ensure that our hiring practices are inclusive and meet equal employment opportunity standards. Individuals looking for employment at Databricks are considered without regard to age, color, disability, ethnicity, family or marital status, gender identity or expression, language, national origin, physical and mental ability, political affiliation, race, religion, sexual orientation, socio-economic status, veteran status, and other protected characteristics. Compliance If access to export-controlled technology or source code is required for performance of job duties, it is within Employer's discretion whether to apply for a U.S. government license for such positions, and Employer may decline to proceed with an applicant on this basis alone.",
+          "description_html": "<div class=\"trix-content\">\n  <p>SLSQ127R198</p>\n<p>We are reimagining GTM at Databricks and are seeking an AI Operations Team Lead to drive execution excellence across our AI agent portfolio. This is not a traditional program management role. You'll scope, design, and ship AI agent workflows, with the balance of your time dedicated to field enablement and delivery management across agents and business segments.</p>\n<p>The ideal candidate combines strong program management and leadership skills with executive communication excellence, deep technical acumen, and a proven track record of scaling operations in fast-paced environments.<br><br><strong>Key Responsibilities:<br></strong><strong>Operational Leadership</strong></p>\n<ul>\n<li>Maintain and communicate product roadmap to stakeholders across Sales, Marketing, and IT organizations</li>\n<li>Drive prioritization decisions and manage competing demands across regions (AMER, EMEA, APJ)</li>\n<li>Own team JIRA board management, sprint planning, and delivery tracking across AI agent deployments</li>\n<li>Establish and track team KPIs, ensuring alignment with business objectives</li>\n<li>Build and iterate on agent workflows hands-on-prompt engineering, logic flows, integration design. This is a keyboards-on role.</li>\n<li>Strategic Communication &amp; Delivery</li>\n<li>Create high-impact presentations for senior leadership</li>\n<li>Translate technical AI capabilities into compelling business transformation narratives</li>\n<li>Present quarterly business reviews and program performance updates to leadership</li>\n<li>Design and deliver comprehensive enablement programs for ~2,000 global users</li>\n<li>Partner with Seller Enablement teams to drive adoption and confident usage of AI tools</li>\n</ul>\n<p><strong>Program Management</strong></p>\n<ul>\n<li>Lead end-to-end lifecycle management for AI agent deployments from ideation through launch</li>\n<li>Manage phased rollouts, UAT/QA processes, and technical troubleshooting</li>\n<li>Coordinate deliverables amongst cross-functional teams including Technical Program Managers, Business Intelligence, and Engineering</li>\n<li>Analyze conversion metrics, reply rates, and time-savings data to identify optimization opportunities</li>\n<li>Drive continuous improvement through prompt refinement and workflow optimization</li>\n</ul>\n<p><strong>What We Look For:</strong><br><strong>Experience:</strong></p>\n<ul>\n<li>7+ years in sales operations, program management, or related field</li>\n<li>3+ years leading teams or managing complex, cross-functional programs</li>\n<li>Experience with AI/automation tools and sales technology stacks</li>\n</ul>\n<p><strong>Desired Skills:</strong></p>\n<ul>\n<li>Strong proficiency with JIRA, project management tools, and roadmap planning</li>\n<li>Advanced data analysis capabilities (SOQL/SQL preferred)</li>\n<li>Experience with sales systems (Salesforce, marketing automation platforms)</li>\n<li>Familiarity with AI agent platforms and low-code/no-code solutions a plus</li>\n<li>Exceptional executive presence with proven ability to create compelling slide decks and narratives</li>\n<li>Strong stakeholder management skills with ability to influence without authority</li>\n<li>Experience managing competing priorities across geographies and business units</li>\n<li>Track record of translating technical concepts for non-technical audiences</li>\n</ul>\n<p><strong>Core Competencies:</strong></p>\n<ul>\n<li>Passion for AI innovation and GTM transformation</li>\n<li>Strategic thinking with execution excellence</li>\n<li>Data-driven decision making and analytical rigor</li>\n<li>Proactive problem-solving with a continuous improvement mindset</li>\n<li>Adaptability in fast-moving, ambiguous environments</li>\n<li>This role is pivotal in scaling AI Operations at Databricks and transforming how our GTM organization operates. If you're a strategic leader who excels at both executive communication and operational excellence, we encourage you to apply.</li>\n</ul><div class=\"content-pay-transparency\"><div class=\"pay-input\"><div class=\"description\"><p>&nbsp;</p>\n<p><strong>Pay Range Transparency</strong></p>\n<p><span>Databricks is committed to fair and equitable compensation practices. The pay range(s) for this role is listed below and represents the expected base salary range for non-commissionable roles or on-target earnings for commissionable roles.&nbsp; Actual compensation packages are based on several factors that are unique to each candidate, including but not limited to job-related skills, depth of experience, relevant certifications and training, and specific work location. Based on the factors above, Databricks anticipated utilizing the full width of the range. The total compensation package for this position may also include eligibility for annual performance bonus, equity, and the benefits listed above. For more information regarding which range your location is in visit our page <a href=\"https://www.databricks.com/sites/default/files/2024-08/us-pay-zone-mapping.pdf\">here</a>.<br></span></p>\n<p>&nbsp;</p></div><div class=\"title\">Zone 1 Pay Range</div><div class=\"pay-range\"><span>$125,000</span><span class=\"divider\">—</span><span>$171,950 USD</span></div></div><div class=\"pay-input\"><div class=\"title\">Zone 2 Pay Range</div><div class=\"pay-range\"><span>$112,600</span><span class=\"divider\">—</span><span>$154,750 USD</span></div></div><div class=\"pay-input\"><div class=\"title\">Zone 3 Pay Range</div><div class=\"pay-range\"><span>$106,300</span><span class=\"divider\">—</span><span>$146,200 USD</span></div></div><div class=\"pay-input\"><div class=\"title\">Zone 4 Pay Range</div><div class=\"pay-range\"><span>$100,000</span><span class=\"divider\">—</span><span>$137,500 USD</span></div></div></div><div class=\"content-conclusion\"><p><strong>About Databricks</strong></p>\n<p><span>Databricks is the data and AI company. More than 10,000 organizations worldwide — including Comcast, Condé Nast, Grammarly, and over 50% of the Fortune 500 — rely on the Databricks Data Intelligence Platform to unify and democratize data, analytics and AI. Databricks is headquartered in San Francisco, with offices around the globe and was founded by the original creators of Lakehouse, Apache Spark™, Delta Lake and MLflow. To learn more, follow Databricks on&nbsp;<span><a href=\"https://twitter.com/databricks\">Twitter</a>,&nbsp;<a href=\"https://www.linkedin.com/company/databricks\">LinkedIn</a>&nbsp;<span>and</span>&nbsp;<a href=\"https://www.facebook.com/databricksinc\">Facebook</a></span>.<br><br><strong>Benefits<br><br></strong></span>At Databricks, we strive to provide comprehensive benefits and perks that meet the needs of all of our employees. For specific details on the benefits offered in your region, please visit&nbsp;<a href=\"https://www.mybenefitsnow.com/databricks\">https://www.mybenefitsnow.com/databricks</a>.&nbsp;<br><br></p>\n<p><strong>Our Commitment to Diversity and Inclusion</strong></p>\n<p>At Databricks, we are committed to fostering a diverse and inclusive culture where everyone can excel. We take great care to ensure that our hiring practices are inclusive and meet equal employment opportunity standards. Individuals looking for employment at Databricks are considered without regard to age, color, disability, ethnicity, family or marital status, gender identity or expression, language, national origin, physical and mental ability, political affiliation, race, religion, sexual orientation, socio-economic status, veteran status, and other protected characteristics.</p>\n<p><strong>Compliance</strong></p>\n<p><strong><span>If access to export-controlled technology or source code is required for performance of job duties, it is within Employer's discretion whether to apply for a U.S. government license for such positions, and Employer may decline to proceed with an applicant on this basis alone.</span></strong></p></div>\n</div>\n",
+          "company_logo": "https://startup.jobs/logos/713",
+          "apply_link": "https://startup.jobs/apply/9858efb2-f0b7-4558-9cb1-6703ec0ef462",
+          "url": "https://startup.jobs/ai-operations-team-lead-scaled-prospecting-databricks-7755489",
+          "source": "algolia+http-jsonld",
+          "fetched_at": "2026-02-20T11:58:14.788Z",
+          "tags": [
+            "Artificial Intelligence",
+            "Ops"
+          ],
+          "workplace_type": "remote",
+          "employment_type": "full-time",
+          "experience_bucket": "6+",
+          "salary_min": 100000,
+          "salary_max": 171950,
+          "salary_currency": "USD",
+          "city": "Aiken",
+          "country": "United States",
+          "company_slug": "databricks"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Scrape startupjobs3": [
+      {
+        "json": {
+          "id": "7765072",
+          "title": "AI Engineer, Quality",
+          "company": "Fieldguide",
+          "location": "Remote",
+          "job_type": "Full Time",
+          "salary": "USD 170000 - 220000",
+          "posted_at": "2026-02-19T15:59:44Z",
+          "description_text": "About Us Fieldguide is establishing a new state of trust for global commerce and capital markets through automating and streamlining the work of assurance and audit practitioners specifically within cybersecurity, privacy, and financial audit. Put simply, we build software for the people who enable trust between businesses. We’re based in San Francisco, CA, but built as a remote-first company that enables you to do your best work from anywhere. We're backed by top investors including Growth Equity at Goldman Sachs Alternatives, Bessemer Venture Partners, 8VC, Floodgate, Y Combinator, DNX Ventures, Global Founders Capital, Justin Kan, Elad Gil, and more. We value diversity — in backgrounds and in experiences. We need people from all backgrounds and walks of life to help build the future of audit and advisory. Fieldguide’s team is inclusive, driven, humble and supportive. We are deliberate and self-reflective about the kind of team and culture that we are building, seeking teammates that are not only strong in their own aptitudes but care deeply about supporting each other's growth. As an early stage start-up employee, you’ll have the opportunity to build out the future of business trust. We make audit practitioners’ lives easier by bringing together up to 50% of their work and giving them better work-life balance. If you share our values and enthusiasm for building a great culture and product, you will find a home at Fieldguide. About the Role Fieldguide is building AI agents for the most complex audit and advisory workflows. We're a San Francisco-based Vertical AI company building in a $100B+ market undergoing rapid transformation. Over 50 of the top 100 accounting and consulting firms trust us to power their most mission-critical work. We're backed by Bessemer Venture Partners, 8VC, Floodgate, Y Combinator, Elad Gil, and other top-tier investors. As an AI Engineer, Quality , you will own the evaluation infrastructure that ensures our AI agents perform reliably at enterprise scale. This role is 100% focused on making evaluations a first-class engineering capability: building the unified platform, automated pipelines, and production feedback loops that let us evaluate any new model against all critical workflows within hours. You'll work at the intersection of ML engineering, observability, and quality assurance to ensure our agents meet the rigorous standards our customers demand. We're hiring across all levels. We'll calibrate seniority during interviews based on your background and what you're looking to own. This role is for engineers who value in-person collaboration at our San Francisco, CA office. What You'll Own Measurable AI Agents Design and build a unified evaluation platform that serves as the single source of truth for all of our agentic systems and audit workflows Build observability systems that surface agent behavior, trace execution, and failure modes in production, and feedback loops that turn production failures into first-class evaluation cases Own the evaluation infrastructure stack including integration with LangSmith and LangGraph. Translate customer problems into concrete agent behaviors and workflows Integrate and orchestrate LLMs, tools, retrieval systems, and logic into cohesive, reliable agent experiences Rapid Model Evaluation Build automated pipelines that evaluate new models against all critical workflows within hours of release Design evaluation harnesses for our most complex Agentic systems and workflows Implement comparison frameworks that measure effectiveness, consistency, latency, and cost across model versions Design guardrails and monitoring systems that catch quality regressions before they reach customers AI-native engineering execution Use AI as core leverage in how you design, build, test, and iterate Prototype quickly to resolve uncertainty, then harden systems for enterprise-grade reliability Build evaluations, feedback mechanisms, and guardrails so agents improve over time Work with SMEs and ML Engineers to create evaluation datasets by curating production traces. Design prompts, retrieval pipelines, and agent orchestration systems that perform reliably at scale Ownership of Quality and Large Product Areas Define and document evaluation standards, best practices, and processes for the engineering organization Advocate for evaluation-driven development and make it easy for the team to write and run evals Partner with product and ML engineers to integrate evaluation requirements into agent development from day one Take full ownership of large product areas rather than executing on narrow tasks Who You Are You are an engineer who believes that evaluations are foundational to building reliable AI systems, not a nice-to-have. The following operating principles should resonate with you: Evaluation-first mindset: You understand that for an AI company, not being able to evaluate a new model quickly is unacceptable AI-native instincts: You treat LLMs, agents, and automation as fundamental building blocks and parts of the craft of engineering Data-driven rigor: You make decisions based on metrics and are obsessed with measuring what matters Production-oriented: You understand that evaluations must work on real production behavior, not just offline datasets Strong product judgment: You can decide what matters and why, without waiting for guidance, not just how to implement it Bias to building: You move fast and build working systems rather than perfect specifications Experience We care more about capability and trajectory than years on a resume, but most strong candidates will have: Multiple years of experience shipping production software in complex, real-world systems Experience with TypeScript, React, Python, and Postgres Built and deployed LLM-powered features serving production traffic Implemented evaluation frameworks for model outputs and agent behaviors Designed observability or tracing infrastructure for AI/ML systems Worked with vector databases, embedding models, and RAG architectures Experience with evaluation platforms (LangSmith, Langfuse, or similar) Comfort operating in ambiguity and taking responsibility for outcomes Deep empathy for professional-grade, mission-critical software (experience with audit and accounting workflows are not required) What Should Excite You Agent reliability at enterprise scale: Building systems that professionals depend on Balancing automation with human oversight: Knowing when to automate and when to surface decisions to experts Production feedback loops: Turning real-world agent failures into systematic improvements Explaining AI decisions: Making all forms of AI outputs and agent reasoning transparent and trustworthy Evaluation for nuanced domains: Structuring data and feedback for workflows where ground truth requires expert judgment High-impact visibility: Your work directly enables leadership to confidently communicate AI quality to the board and customers More about Fieldguide: Fieldguide is a values-based company. Our values are: Fearless - Inspire & break down seemingly impossible walls. Fast - Launch fast with excellence, iterate to perfection. Lovable - Deliver happiness & 11 star experiences. Owners - Execute & run the business with ownership. Win-win - Create mutual value & earn trust for life. Inclusive - Scale the best ideas with inclusive teams. Some of our benefits include: Competitive compensation packages with meaningful ownership Flexible PTO 401k Wellness benefits, including a bundle of free therapy sessions Technology & Work from Home reimbursement Flexible work schedules",
+          "description_html": "<div class=\"trix-content\">\n  <h1><strong>About Us</strong></h1><p>Fieldguide is establishing a new state of trust for global commerce and capital markets through automating and streamlining the work of assurance and audit practitioners specifically within cybersecurity, privacy, and financial audit. Put simply, we build software for the people who enable trust between businesses.</p><p><br>We’re based in San Francisco, CA, but built as a remote-first company that enables you to do your best work from anywhere. We're backed by top investors including Growth Equity at Goldman Sachs Alternatives, Bessemer Venture Partners, 8VC, Floodgate, Y Combinator, DNX Ventures, Global Founders Capital, Justin Kan, Elad Gil, and more.</p><p><br>We value diversity — in backgrounds and in experiences. We need people from all backgrounds and walks of life to help build the future of audit and advisory. Fieldguide’s team is inclusive, driven, humble and supportive. We are deliberate and self-reflective about the kind of team and culture that we are building, seeking teammates that are not only strong in their own aptitudes but care deeply about supporting each other's growth.</p><p><br>As an early stage start-up employee, you’ll have the opportunity to build out the future of business trust. We make audit practitioners’ lives easier by bringing together up to 50% of their work and giving them better work-life balance. If you share our values and enthusiasm for building a great culture and product, you will find a home at Fieldguide.</p><p></p><h1><strong>About the Role</strong></h1><p>Fieldguide is building AI agents for the most complex audit and advisory workflows. We're a San Francisco-based Vertical AI company building in a $100B+ market undergoing rapid transformation. Over 50 of the top 100 accounting and consulting firms trust us to power their most mission-critical work. We're backed by Bessemer Venture Partners, 8VC, Floodgate, Y Combinator, Elad Gil, and other top-tier investors.</p><p>As an <strong>AI Engineer, Quality</strong>, you will own the evaluation infrastructure that ensures our AI agents perform reliably at enterprise scale. This role is 100% focused on making evaluations a first-class engineering capability: building the unified platform, automated pipelines, and production feedback loops that let us evaluate any new model against all critical workflows within hours. You'll work at the intersection of ML engineering, observability, and quality assurance to ensure our agents meet the rigorous standards our customers demand.</p><p><em>We're hiring across all levels. We'll calibrate seniority during interviews based on your background and what you're looking to own. This role is for engineers who value in-person collaboration at our San Francisco, CA office.</em></p><p></p><h1><strong>What You'll Own</strong></h1><h2><strong>Measurable AI Agents</strong></h2><ul><li><p>Design and build a unified evaluation platform that serves as the single source of truth for all of our agentic systems and audit workflows</p></li><li><p>Build observability systems that surface agent behavior, trace execution, and failure modes in production, and feedback loops that turn production failures into first-class evaluation cases</p></li><li><p>Own the evaluation infrastructure stack including integration with LangSmith and LangGraph.</p></li><li><p>Translate customer problems into concrete agent behaviors and workflows</p></li><li><p>Integrate and orchestrate LLMs, tools, retrieval systems, and logic into cohesive, reliable agent experiences</p></li></ul><h2>Rapid Model Evaluation</h2><ul><li><p>Build automated pipelines that evaluate new models against all critical workflows within hours of release</p></li><li><p>Design evaluation harnesses for our most complex Agentic systems and workflows</p></li><li><p>Implement comparison frameworks that measure effectiveness, consistency, latency, and cost across model versions</p></li><li><p>Design guardrails and monitoring systems that catch quality regressions before they reach customers</p></li></ul><h2><strong>AI-native engineering execution</strong></h2><ul><li><p>Use AI as core leverage in how you design, build, test, and iterate</p></li><li><p>Prototype quickly to resolve uncertainty, then harden systems for enterprise-grade reliability</p></li><li><p>Build evaluations, feedback mechanisms, and guardrails so agents improve over time</p></li><li><p>Work with SMEs and ML Engineers to create evaluation datasets by curating production traces.</p></li><li><p>Design prompts, retrieval pipelines, and agent orchestration systems that perform reliably at scale</p></li></ul><h2><strong>Ownership of Quality and Large Product Areas</strong></h2><ul><li><p>Define and document evaluation standards, best practices, and processes for the engineering organization</p></li><li><p>Advocate for evaluation-driven development and make it easy for the team to write and run evals</p></li><li><p>Partner with product and ML engineers to integrate evaluation requirements into agent development from day one</p></li><li><p>Take full ownership of large product areas rather than executing on narrow tasks</p></li></ul><h1><strong>Who You Are</strong></h1><p>You are an engineer who believes that evaluations are foundational to building reliable AI systems, not a nice-to-have. The following operating principles should resonate with you:</p><ul><li><p><strong>Evaluation-first mindset:</strong> You understand that for an AI company, not being able to evaluate a new model quickly is unacceptable</p></li><li><p><strong>AI-native instincts:</strong> You treat LLMs, agents, and automation as fundamental building blocks and parts of the craft of engineering</p></li><li><p><strong>Data-driven rigor:</strong> You make decisions based on metrics and are obsessed with measuring what matters</p></li><li><p><strong>Production-oriented:</strong> You understand that evaluations must work on real production behavior, not just offline datasets</p></li><li><p><strong>Strong product judgment:</strong> You can decide what matters and why, without waiting for guidance, not just how to implement it</p></li><li><p><strong>Bias to building:</strong> You move fast and build working systems rather than perfect specifications</p></li></ul><h1><strong>Experience</strong></h1><p>We care more about capability and trajectory than years on a resume, but most strong candidates will have:</p><ul><li><p>Multiple years of experience shipping production software in complex, real-world systems</p></li><li><p>Experience with TypeScript, React, Python, and Postgres</p></li><li><p>Built and deployed LLM-powered features serving production traffic</p></li><li><p>Implemented evaluation frameworks for model outputs and agent behaviors</p></li><li><p>Designed observability or tracing infrastructure for AI/ML systems</p></li><li><p>Worked with vector databases, embedding models, and RAG architectures</p></li><li><p>Experience with evaluation platforms (LangSmith, Langfuse, or similar)</p></li><li><p>Comfort operating in ambiguity and taking responsibility for outcomes</p></li><li><p>Deep empathy for professional-grade, mission-critical software (experience with audit and accounting workflows are not required)</p></li></ul><h1><strong>What Should Excite You</strong></h1><ul><li><p><strong>Agent reliability at enterprise scale:</strong> Building systems that professionals depend on</p></li><li><p><strong>Balancing automation with human oversight:</strong> Knowing when to automate and when to surface decisions to experts</p></li><li><p><strong>Production feedback loops:</strong> Turning real-world agent failures into systematic improvements</p></li><li><p><strong>Explaining AI decisions:</strong> Making all forms of AI outputs and agent reasoning transparent and trustworthy</p></li><li><p><strong>Evaluation for nuanced domains:</strong> Structuring data and feedback for workflows where ground truth requires expert judgment</p></li><li><p><strong>High-impact visibility:</strong> Your work directly enables leadership to confidently communicate AI quality to the board and customers</p></li></ul><p><strong>More about Fieldguide:</strong></p><p>Fieldguide is a values-based company. Our values are:</p><ul><li><p>Fearless - Inspire &amp; break down seemingly impossible walls.</p></li><li><p>Fast - Launch fast with excellence, iterate to perfection.</p></li><li><p>Lovable - Deliver happiness &amp; 11 star experiences.</p></li><li><p>Owners - Execute &amp; run the business with ownership.</p></li><li><p>Win-win - Create mutual value &amp; earn trust for life.</p></li><li><p>Inclusive - Scale the best ideas with inclusive teams.</p></li></ul><p><strong>Some of our benefits include:</strong></p><ul><li><p>Competitive compensation packages with meaningful ownership</p></li><li><p>Flexible PTO</p></li><li><p>401k</p></li><li><p>Wellness benefits, including a bundle of free therapy sessions</p></li><li><p>Technology &amp; Work from Home reimbursement</p></li><li><p>Flexible work schedules</p></li></ul>\n</div>\n",
+          "company_logo": "https://startup.jobs/logos/25919",
+          "apply_link": "https://startup.jobs/apply/0129742d-7314-4d2b-8101-d8c8b6985d56",
+          "url": "https://startup.jobs/ai-engineer-quality-fieldguide-7765072",
+          "source": "algolia+http-jsonld",
+          "fetched_at": "2026-02-20T11:58:25.355Z",
+          "tags": [
+            "Artificial Intelligence",
+            "Engineer"
+          ],
+          "workplace_type": "remote",
+          "employment_type": "full-time",
+          "experience_bucket": null,
+          "salary_min": 170000,
+          "salary_max": 220000,
+          "salary_currency": "USD",
+          "city": "San Francisco",
+          "country": "United States",
+          "company_slug": "fieldguide"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Scrape startupjobs4": [
+      {
+        "json": {
+          "id": "7723340",
+          "title": "【AI Agent】Forward Deployed Engineer（社内DX・生産性革新担当）",
+          "company": "PayPay",
+          "location": "Remote",
+          "job_type": "Full Time",
+          "salary": null,
+          "posted_at": "2026-02-06T06:56:33Z",
+          "description_text": "PayPayについて 2018年にサービスを開始してから約7年でユーザー数7000万人を突破したフィンテック企業であるPayPayは約50の国と地域から集まった多様なメンバーで構成されています。 AIを含む最新技術とデータを駆使し、圧倒的なスピードでサービス開発と事業成長を実現します。 日本のキャッシュレス決済、またそれを使用した金融ライフプラットフォームとしての普及を一気に推進することにプロフェッショナルとして情熱を持って取り組み、ユーザーの為に新しい価値創出を共に推進する仲間を募集します。 OUR VISION IS UNLIMITED_ 我々は自分たちの想像を超える未来を創るためにあえて明確なビジョンは必要ないと考えています。常にDay1であるスタンスを忘れずに、誰もが想像できないようなビジョン（未来）を実現していくのがPayPayです。 この壮大なビジョンに前向きに取り組み、他社に真似できない圧倒的なスピードでプロダクトを磨き上げ、日本のキャッシュレス決済、またそれを使用した金融ライフプラットフォームとしての普及を一気に推進することにプロフェッショナルとして情熱を持って取り組み、自ら課題発見し、周囲と協力して新しい価値創出を共に推進する仲間を募集します。   PayPayのコーポレートエンジニアリング 急速なサービス成長や、それに伴う組織拡大には、業務フロー・システムのスピーディーなアップデートが必要不可欠です。PayPayのコーポレートエンジニアは、マーチャント領域、カスタマー領域、オーソリティ領域に広がるPayPayの全領域を支える業務システムの内製開発を担っています。「技術で会社の成長に貢献する」をMissionに掲げ、圧倒的なスピード感で開発と業務効率化を推し進めます。本部署にはIT戦略の策定からフルスクラッチのアプリ開発、インフラエンジニアまで、内製開発に関わる様々な職種のメンバーが在籍し、Oneチームで仕事をしています。 システム本部 Recruiting FACT BOOK   業務について ▼AI Utilization Officeの紹介 私たち AI Utilization Office のミッションは、「さらなる業務生産性向上を目指し、 AI 技術を使って業務を再定義する。」ことです。現在は、 AI や Web アプリケーションの開発に精通したソフトウェアエンジニア、プロジェクトマネージャーなど、バックグラウンドの異なるメンバーが、技術的な知見を尊重し合いながら、アジャイルかつフラットに議論・開発を進める組織文化を持っています。   ▼ 募集背景 私たち AI Utilization Office のミッションは、「さらなる業務生産性向上を目指し、 AI 技術を使って業務を再定義する。」ことです。現在は、 AI や Web アプリケーションの開発に精通したソフトウェアエンジニア、プロジェクトマネージャーなど、バックグラウンドの異なるメンバーが、技術的な知見を尊重し合いながら、アジャイルかつフラットに議論・開発を進める組織文化を持っています。   【 具体的には 】 本ポジションは、当社の中核業務に深く入りこみ、ビジネス課題の抽象化から、アーキテクチャ設計、PoC実装、組織展開までを一貫してリードします。その上で、技術選定やアプローチについても自律的に意思決定する役割を担います。 以下のプロセスを一気通貫で担当いただきます。 現場への Deep Dive と課題特定 : 業務部門の現場に入り込み、ヒアリングや業務フローの観察を通じて「AIで解決すべき本質的な課題」を特定します。 プロトタイプ（PoC）開発 : 特定した課題に対し、LLM（大規模言語モデル）や各種 AI API を活用し、クイックに「動く解決策」を構築して現場に提示します。 要求仕様の定義と技術ブリッジング : 現場のフィードバックをもとに、本番実装に向けた要求仕様を策定。重要なコンポーネントは自ら実装または監修を行いながら、開発部門のエンジニアへ技術的な文脈とビジネスの背景を繋いで橋渡しを行います。 プロダクトマネジメント : AI Agent ツールのリリースから定着、継続的な改善までをプロダクトオーナー的な立場でリードします。   ▼本ポジションの魅力 日本屈指のキャッシュレスサービスの業務基盤を支える : セキュリティ・ガバナンスと、スピードを両立しながら、日本の多くのお客様が利用するサービスの業務基盤を支えるシステム開発に携わることができます。 全社の生産性への影響度 : あなたが関わった AI Agent が、多くの社員の働き方を劇的に変える影響力を発揮できるチャンスがあります。 最先端技術の実装 : 「技術のための技術」ではなく、ビジネス価値を生むための AI 活用をフルクラウド環境で追求できます。   過去の主なプロジェクト これらは生成 AI を活用した一例であり、ご自身が現場に入り込み、新たなユースケースを発掘・提案していくことを期待しています。 社内ナレッジ活用 Agent: これまで総務担当やITサポート担当者に直接聞くことが多かった質問を、 RAG を活用した Slack チャットボットを通じて回答する仕組みを構築。 申請業務自動化 Agent: 各種部門から発生する申請を AI Agent が前捌きをし、作業実行直前までの準備まで行う仕組みを構築。 社内知識 Dashbord: これまで直接プロダクトマネージャーに確認していた社内の開発ナレッジを Snowflake Intelligence を用いて検索し、新規開発や改善のための基礎情報として簡単に参照できる。   開発環境 / Tech Stack Infrastructure: AWS, Google Cloud, Snowflake Languages: Python, Java など Frameworks: LangChain, Amazon Bedrock AgentCore SDK など CI/CD & Ops: GitHub Actions, Atlantis など Collaboration: Slack, Jira, Confluence   必要な経験/スキル ソフトウェア開発における実務経験（5年以上） システム全体のアーキテクチャ設計や技術選定を、実プロジェクトの中でリードしてきた経験 顧客または社内業務部門と直接やり取りし、要求仕様定義やプロダクトマネジメントを行った経験 API（特にLLM関連）を活用したアプリケーションの開発経験、または強い学習意欲 ビジネスレベルの日本語会話・読解・記述能力（JLPT N1またはそれ相当）   あると望ましい経験/スキル クラウドネイティブなITインフラ（AWS/Azure/GCP）の設計・構築経験 アジャイル開発（Scrum等）のプラクティス実践経験 非機能要件（セキュリティ、スケーラビリティ、運用）を考慮した設計経験 業務プロセスコンサルティングやBPR（業務改革）の経験 日常会話レベルの英会話・読解・記述能力   期待する人物像 PayPay 5 senses に当てはまる             待遇・条件 雇用形態 正社員 勤務地 Hybrid Workstyle（オフィス、自宅またはサテライトオフィスにてリモートワーク） ※プロダクト統括本部では必須出社日は設けておりません。個人の裁量に基づき出社と在宅を選択していただけます。 ※サテライトオフィス使用については所属部署のルールに順じます。   勤務時間 スーパーフレックス制（コアタイム無し） 原則：午前9時～午後5時45分（実働7時間45分＋休憩時間 1時間） 休日 土日祝日、年末年始および会社指定日 休暇（法定 休暇 および会社 福利厚生） 年次有給休暇(初年度14日間、入社月に応じて按分付与。入社日から使用可） パーソナル休暇（毎年度５日間、（毎年度５日間付与/初年度入社月により3日間もしくは5日間付与）  ※PayPay独自の特別有給休暇制度で、本人/家族/ペットなどの病気/ケガ/通院付き添い等にご使用頂けます。 給与 年俸制（一部固定残業代含む） 経験、スキル、業績、貢献度に応じ当社規定により決定 毎年1回見直し 会社業績および個人貢献度により特別一時金（インセンティブ）を支給（年1回） 時間外勤務手当、深夜勤務手当有 ※給与支給について、一部をPayPayアカウントで受け取ることが可能です（給与デジタル支払いに対応） ベネフィット 社会保険（健康保険、厚生年金、雇用保険、労災保険） 企業型確定拠出年金制度 Other Information: PayPay Inside-Out (Corporate Blog) /JP PayPay Inside-out (Corporate Blog) /ENG PayPay Product Blog /JP PayPay Product Blog /ENG",
+          "description_html": "<div class=\"trix-content\">\n  <h2><span><strong><img src=\"https://i.imgur.com/JpxQeLu.jpg\" alt=\"\" width=\"300\"></strong></span></h2>\n<h2><span><strong>PayPayについて</strong></span></h2>\n<p>2018年にサービスを開始してから約7年でユーザー数7000万人を突破したフィンテック企業であるPayPayは約50の国と地域から集まった多様なメンバーで構成されています。</p>\n<p>AIを含む最新技術とデータを駆使し、圧倒的なスピードでサービス開発と事業成長を実現します。 日本のキャッシュレス決済、またそれを使用した金融ライフプラットフォームとしての普及を一気に推進することにプロフェッショナルとして情熱を持って取り組み、ユーザーの為に新しい価値創出を共に推進する仲間を募集します。</p>\n<p><strong>OUR VISION IS UNLIMITED_</strong></p>\n<p>我々は自分たちの想像を超える未来を創るためにあえて明確なビジョンは必要ないと考えています。常にDay1であるスタンスを忘れずに、誰もが想像できないようなビジョン（未来）を実現していくのがPayPayです。<br>この壮大なビジョンに前向きに取り組み、他社に真似できない圧倒的なスピードでプロダクトを磨き上げ、日本のキャッシュレス決済、またそれを使用した金融ライフプラットフォームとしての普及を一気に推進することにプロフェッショナルとして情熱を持って取り組み、自ら課題発見し、周囲と協力して新しい価値創出を共に推進する仲間を募集します。</p>\n<p>&nbsp;</p>\n<p></p>\n<h2><span><strong>PayPayのコーポレートエンジニアリング</strong></span></h2>\n<p>急速なサービス成長や、それに伴う組織拡大には、業務フロー・システムのスピーディーなアップデートが必要不可欠です。PayPayのコーポレートエンジニアは、マーチャント領域、カスタマー領域、オーソリティ領域に広がるPayPayの全領域を支える業務システムの内製開発を担っています。「技術で会社の成長に貢献する」をMissionに掲げ、圧倒的なスピード感で開発と業務効率化を推し進めます。本部署にはIT戦略の策定からフルスクラッチのアプリ開発、インフラエンジニアまで、内製開発に関わる様々な職種のメンバーが在籍し、Oneチームで仕事をしています。</p>\n<ul>\n<li><strong><a href=\"https://speakerdeck.com/paypaycorporation/syst-div-recruiting-factbook\">システム本部 Recruiting FACT BOOK</a>&nbsp;</strong></li>\n</ul>\n<h2><span><strong>業務について</strong></span></h2>\n<p><strong>▼AI Utilization Officeの紹介</strong></p>\n<p>私たち AI Utilization Office のミッションは、「さらなる業務生産性向上を目指し、 AI 技術を使って業務を再定義する。」ことです。現在は、 AI や Web アプリケーションの開発に精通したソフトウェアエンジニア、プロジェクトマネージャーなど、バックグラウンドの異なるメンバーが、技術的な知見を尊重し合いながら、アジャイルかつフラットに議論・開発を進める組織文化を持っています。</p>\n<p>&nbsp;</p>\n<p>▼<strong>募集背景</strong></p>\n<p>私たち AI Utilization Office のミッションは、「さらなる業務生産性向上を目指し、 AI 技術を使って業務を再定義する。」ことです。現在は、 AI や Web アプリケーションの開発に精通したソフトウェアエンジニア、プロジェクトマネージャーなど、バックグラウンドの異なるメンバーが、技術的な知見を尊重し合いながら、アジャイルかつフラットに議論・開発を進める組織文化を持っています。</p>\n<p>&nbsp;</p>\n<p>【<strong>具体的には</strong>】</p>\n<p>本ポジションは、当社の中核業務に深く入りこみ、ビジネス課題の抽象化から、アーキテクチャ設計、PoC実装、組織展開までを一貫してリードします。その上で、技術選定やアプローチについても自律的に意思決定する役割を担います。</p>\n<p>以下のプロセスを一気通貫で担当いただきます。</p>\n<ol>\n<li><strong>現場への Deep Dive と課題特定</strong>: 業務部門の現場に入り込み、ヒアリングや業務フローの観察を通じて「AIで解決すべき本質的な課題」を特定します。</li>\n<li><strong>プロトタイプ（PoC）開発</strong>: 特定した課題に対し、LLM（大規模言語モデル）や各種 AI API を活用し、クイックに「動く解決策」を構築して現場に提示します。</li>\n<li><strong>要求仕様の定義と技術ブリッジング</strong>: 現場のフィードバックをもとに、本番実装に向けた要求仕様を策定。重要なコンポーネントは自ら実装または監修を行いながら、開発部門のエンジニアへ技術的な文脈とビジネスの背景を繋いで橋渡しを行います。</li>\n<li><strong>プロダクトマネジメント</strong>: AI Agent ツールのリリースから定着、継続的な改善までをプロダクトオーナー的な立場でリードします。</li>\n</ol>\n<p>&nbsp;</p>\n<p><strong>▼本ポジションの魅力</strong></p>\n<ul>\n<li><strong>日本屈指のキャッシュレスサービスの業務基盤を支える</strong>: セキュリティ・ガバナンスと、スピードを両立しながら、日本の多くのお客様が利用するサービスの業務基盤を支えるシステム開発に携わることができます。</li>\n<li><strong>全社の生産性への影響度</strong>: あなたが関わった AI Agent が、多くの社員の働き方を劇的に変える影響力を発揮できるチャンスがあります。</li>\n<li><strong>最先端技術の実装</strong>: 「技術のための技術」ではなく、ビジネス価値を生むための AI 活用をフルクラウド環境で追求できます。</li>\n</ul>\n<p>&nbsp;</p>\n<h2><span><strong>過去の主なプロジェクト</strong></span></h2>\n<p>これらは生成 AI を活用した一例であり、ご自身が現場に入り込み、新たなユースケースを発掘・提案していくことを期待しています。</p>\n<ul>\n<li><strong>社内ナレッジ活用 Agent:</strong> これまで総務担当やITサポート担当者に直接聞くことが多かった質問を、 RAG を活用した Slack チャットボットを通じて回答する仕組みを構築。</li>\n<li><strong>申請業務自動化 Agent:</strong> 各種部門から発生する申請を AI Agent が前捌きをし、作業実行直前までの準備まで行う仕組みを構築。</li>\n<li><strong>社内知識 Dashbord:</strong> これまで直接プロダクトマネージャーに確認していた社内の開発ナレッジを Snowflake Intelligence を用いて検索し、新規開発や改善のための基礎情報として簡単に参照できる。</li>\n</ul>\n<h2>&nbsp;</h2>\n<h2><span>開発環境 / Tech Stack</span></h2>\n<ul>\n<li><strong>Infrastructure:</strong> AWS, Google Cloud, Snowflake</li>\n<li><strong>Languages:</strong> Python, Java など</li>\n<li><strong>Frameworks:</strong> LangChain, Amazon Bedrock AgentCore SDK など</li>\n<li><strong>CI/CD &amp; Ops:</strong> GitHub Actions, Atlantis など</li>\n<li><strong>Collaboration: </strong>Slack, Jira, Confluence</li>\n</ul>\n<p>&nbsp;</p>\n<h3>必要な経験/スキル</h3>\n<ul>\n<li>ソフトウェア開発における実務経験（5年以上）</li>\n<li>システム全体のアーキテクチャ設計や技術選定を、実プロジェクトの中でリードしてきた経験</li>\n<li>顧客または社内業務部門と直接やり取りし、要求仕様定義やプロダクトマネジメントを行った経験</li>\n<li>API（特にLLM関連）を活用したアプリケーションの開発経験、または強い学習意欲</li>\n<li>ビジネスレベルの日本語会話・読解・記述能力（JLPT N1またはそれ相当）</li>\n</ul>\n<p>&nbsp;</p>\n<h3>あると望ましい経験/スキル</h3>\n<ul>\n<li>クラウドネイティブなITインフラ（AWS/Azure/GCP）の設計・構築経験</li>\n<li>アジャイル開発（Scrum等）のプラクティス実践経験</li>\n<li>非機能要件（セキュリティ、スケーラビリティ、運用）を考慮した設計経験</li>\n<li>業務プロセスコンサルティングやBPR（業務改革）の経験</li>\n<li>日常会話レベルの英会話・読解・記述能力</li>\n</ul>\n<p>&nbsp;</p>\n<h3>期待する人物像</h3>\n<ul>\n<li><a href=\"https://speakerdeck.com/paypaycorporation/6deed4120e21c6e72efdbff49ea3c077\">PayPay 5 senses</a>に当てはまる</li>\n</ul>\n<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>\n<hr>\n<h2><span><strong>待遇・条件</strong></span></h2>\n<h4>雇用形態</h4>\n<ul>\n<li>正社員</li>\n</ul>\n<h4>勤務地</h4>\n<ul>\n<li>Hybrid Workstyle（オフィス、自宅またはサテライトオフィスにてリモートワーク）<br>※プロダクト統括本部では必須出社日は設けておりません。個人の裁量に基づき出社と在宅を選択していただけます。<br>※サテライトオフィス使用については所属部署のルールに順じます。</li>\n</ul>\n<p>&nbsp;</p>\n<h4>勤務時間</h4>\n<ul>\n<li>スーパーフレックス制（コアタイム無し）</li>\n<li>原則：午前9時～午後5時45分（実働7時間45分＋休憩時間 1時間）</li>\n</ul>\n<h4>休日</h4>\n<ul>\n<li>\n<p>土日祝日、年末年始および会社指定日</p>\n</li>\n</ul>\n<p><strong>休暇（法定</strong><strong>休暇</strong><strong>および会社</strong><strong>福利厚生）</strong></p>\n<ul>\n<li>年次有給休暇(初年度14日間、入社月に応じて按分付与。入社日から使用可）</li>\n<li>パーソナル休暇（毎年度５日間、（毎年度５日間付与/初年度入社月により3日間もしくは5日間付与）<br>&nbsp;※PayPay独自の特別有給休暇制度で、本人/家族/ペットなどの病気/ケガ/通院付き添い等にご使用頂けます。</li>\n</ul>\n<h4>給与</h4>\n<ul>\n<li>年俸制（一部固定残業代含む）</li>\n<li>経験、スキル、業績、貢献度に応じ当社規定により決定</li>\n<li>毎年1回見直し</li>\n<li>会社業績および個人貢献度により特別一時金（インセンティブ）を支給（年1回）</li>\n<li>時間外勤務手当、深夜勤務手当有<br><br>※給与支給について、一部をPayPayアカウントで受け取ることが可能です（給与デジタル支払いに対応）</li>\n</ul>\n<h4>ベネフィット</h4>\n<ul>\n<li>社会保険（健康保険、厚生年金、雇用保険、労災保険）</li>\n<li>企業型確定拠出年金制度</li>\n</ul><div class=\"content-conclusion\"><hr>\n<p><strong>Other Information:</strong></p>\n<ul>\n<li><a href=\"https://insideout.paypay.ne.jp/\">PayPay Inside-Out (Corporate Blog) /JP</a></li>\n<li><a href=\"https://insideout.paypay.ne.jp/en/\">PayPay Inside-out (Corporate Blog) /ENG</a></li>\n<li><a href=\"https://blog.paypay.ne.jp/\">PayPay Product Blog&nbsp;/JP</a></li>\n<li><a href=\"https://blog.paypay.ne.jp/en/\">PayPay Product Blog /ENG</a></li>\n</ul></div>\n</div>\n",
+          "company_logo": "https://startup.jobs/logos/14482",
+          "apply_link": "https://startup.jobs/apply/8d414de0-77c9-4a2c-96d0-6c40d99f3b38",
+          "url": "https://startup.jobs/ai-agentforward-deployed-engineer%E7%A4%BE%E5%86%85dx%E7%94%9F%E7%94%A3%E6%80%A7%E9%9D%A9%E6%96%B0%E6%8B%85%E5%BD%93-paypay-7723340",
+          "source": "algolia+http-jsonld",
+          "fetched_at": "2026-02-20T11:58:34.174Z",
+          "tags": [
+            "Artificial Intelligence",
+            "Engineer"
+          ],
+          "workplace_type": "remote",
+          "employment_type": "full-time",
+          "experience_bucket": "3-6",
+          "salary_min": null,
+          "salary_max": null,
+          "salary_currency": "USD",
+          "city": null,
+          "country": null,
+          "company_slug": "paypay"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Scrape startupjobs5": [
+      {
+        "json": {
+          "id": "7716846",
+          "title": "Senior AI Consultant (CoE Enablement & Adoption)",
+          "company": "NICE",
+          "location": "Remote",
+          "job_type": "Full Time",
+          "salary": null,
+          "posted_at": "2026-02-05T19:58:04Z",
+          "description_text": "At NiCE, we don’t limit our challenges. We challenge our limits. Always. We’re ambitious. We’re game changers. And we play to win. We set the highest standards and execute beyond them. And if you’re like us, we can offer you the ultimate career opportunity that will light a fire within you. Senior Consultant, AI CoE Enablement & Adoption Systems (US-Based)     Role Summary   The Senior Consultant, AI CoE Enablement & Adoption Systems is responsible for designing and maintaining the standards, frameworks, and enablement mechanisms that ensure AI solutions are consistently adopted, trusted, and sustained across enterprise contact center environments.   This role does not own individual customer accounts. Instead, it defines how AI adoption and enablement are executed across customers, partners, and internal teams, ensuring consistency, quality, and measurable outcomes at scale.   This role is best suited for experienced consultants who combine AI fluency, operational understanding, and system-level thinking, and who want to build enablement structures that are used repeatedly, not once.     Key Responsibilities     Define Adoption and Enablement Standards   Define and maintain standards for AI readiness, adoption, stabilization, and sustained usage.   Establish clear criteria for what constitutes effective AI usage, trust, and operational fit.   Define behavioral and operational validation requirements tied to AI deployment.   Build Scalable Enablement Assets   Create reusable enablement assets including playbooks, validation checklists, supervisor guides, prompt standards, and reinforcement tools.   Define prompt and interaction standards that drive consistent generative AI performance across environments.   Ensure enablement assets are practical, field-tested, and directly usable by delivery and customer-facing teams.   Embed Enablement into AI Delivery   Define how enablement is integrated into AI rollout, stabilization, and post-launch activities.   Partner with delivery and training teams to ensure enablement is executed as part of AI delivery, not as a parallel effort.   Define role-based enablement expectations for agents, supervisors, and operations leaders.   Drive Consistency Across Teams and Partners   Establish internal and partner enablement standards to reduce variance and rework.   Ensure adoption and enablement standards are consistently applied across regions and delivery models.   Act as a point of alignment across product, delivery, training, and AI leadership.   Translate Adoption Signals into Improvement   Analyze adoption, usage, and enablement signals across customers to identify systemic gaps and patterns.   Translate insights into actionable recommendations for product, engineering, and delivery teams.   Support leadership with clear, data-backed views of adoption and enablement health.     What Makes This Role Compelling   Ownership of enablement and adoption standards used globally   Direct influence on how AI is implemented and sustained at scale   High visibility across product, delivery, and AI leadership   Work focused on building durable systems, not one-off engagements   Strong path to principal-level consulting or broader AI leadership roles     Required Experience   6+ years of experience in AI adoption, enablement, CX transformation, or enterprise consulting   Strong understanding of contact center operations and AI-driven self-service environments   Demonstrated experience designing scalable enablement frameworks, playbooks, or standards   Practical familiarity with generative AI behavior, prompt design, and adoption challenges   Experience embedding enablement into delivery motions rather than running standalone change programs   Ability to influence cross-functional teams without formal authority   Strong analytical, communication, and documentation skills     About NiCE NICE Ltd. (NASDAQ: NICE) software products are used by 25,000+ global businesses, including 85 of the Fortune 100 corporations, to deliver extraordinary customer experiences, fight financial crime and ensure public safety. Every day, NiCE software manages more than 120 million customer interactions and monitors 3+ billion financial transactions. Known as an innovation powerhouse that excels in AI, cloud and digital, NiCE is consistently recognized as the market leader in its domains, with over 8,500 employees across 30+ countries. NiCE is proud to be an equal opportunity employer. All qualified applicants will receive consideration for employment without regard to race, color, religion, national origin, age, sex, marital status, ancestry, neurotype, physical or mental disability, veteran status, gender identity, sexual orientation or any other category protected by law.  ",
+          "description_html": "<div class=\"trix-content\">\n  <div class=\"content-intro\"><p>At NiCE, we don’t limit our challenges. We challenge our limits. Always. We’re ambitious. We’re game changers. And we play to win. We set the highest standards and execute beyond them. And if you’re like us, we can offer you the ultimate career opportunity that will light a fire within you.</p></div><p><strong><span>Senior Consultant, AI&nbsp;CoE&nbsp;Enablement &amp; Adoption Systems&nbsp;(US-Based)</span></strong><span>&nbsp;</span></p>\n<p><span>&nbsp;</span></p>\n<p><strong><span>Role Summary</span></strong><span>&nbsp;</span></p>\n<p><span>The Senior Consultant, AI&nbsp;CoE&nbsp;Enablement &amp; Adoption Systems is responsible for designing and maintaining&nbsp;the standards, frameworks, and enablement mechanisms that ensure AI solutions are consistently adopted, trusted, and sustained across enterprise contact center environments.</span><span>&nbsp;</span></p>\n<p><span>This role does not own individual customer accounts. Instead, it defines how AI adoption and enablement are executed across customers, partners, and internal teams, ensuring consistency, quality, and measurable outcomes at scale.</span><span>&nbsp;</span></p>\n<p><span>This role is best suited for experienced consultants who combine AI fluency, operational understanding, and system-level thinking, and who want to build enablement structures that are used repeatedly, not once.</span><span>&nbsp;</span></p>\n<p><span>&nbsp;</span></p>\n<p><strong><span>Key Responsibilities</span></strong><span>&nbsp;</span></p>\n<p><span>&nbsp;</span></p>\n<p><strong><span>Define Adoption and Enablement Standards</span></strong><span>&nbsp;</span></p>\n<ul>\n<li><span>Define and maintain standards for AI readiness, adoption, stabilization, and sustained usage.</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Establish clear criteria for what constitutes effective AI usage, trust, and operational fit.</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Define behavioral and operational validation requirements tied to AI deployment.</span><span>&nbsp;</span></li>\n</ul>\n<p><strong><span>Build Scalable Enablement Assets</span></strong><span>&nbsp;</span></p>\n<ul>\n<li><span>Create reusable enablement assets including playbooks, validation checklists, supervisor guides, prompt standards, and reinforcement tools.</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Define prompt and interaction standards that drive consistent generative AI performance across environments.</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Ensure enablement assets are practical, field-tested, and directly usable by delivery and customer-facing teams.</span><span>&nbsp;</span></li>\n</ul>\n<p><strong><span>Embed Enablement into AI Delivery</span></strong><span>&nbsp;</span></p>\n<ul>\n<li><span>Define how enablement is integrated into AI rollout, stabilization, and post-launch activities.</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Partner&nbsp;with delivery and training teams to ensure enablement is executed as part of AI delivery, not as a parallel effort.</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Define role-based enablement expectations for agents, supervisors, and operations leaders.</span><span>&nbsp;</span></li>\n</ul>\n<p><strong><span>Drive Consistency Across Teams and Partners</span></strong><span>&nbsp;</span></p>\n<ul>\n<li><span>Establish internal and partner enablement standards to reduce variance and rework.</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Ensure adoption and enablement standards are consistently applied across regions and delivery models.</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Act as a point of alignment across product, delivery, training, and AI leadership.</span><span>&nbsp;</span></li>\n</ul>\n<p><strong><span>Translate&nbsp;Adoption Signals into Improvement</span></strong><span>&nbsp;</span></p>\n<ul>\n<li><span>Analyze adoption, usage, and enablement signals across customers to identify systemic gaps and patterns.</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Translate insights into actionable recommendations for product, engineering, and delivery teams.</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Support leadership with clear, data-backed views of adoption and enablement health.</span><span>&nbsp;</span></li>\n</ul>\n<p><span>&nbsp;</span></p>\n<p><strong><span>What Makes This Role Compelling</span></strong><span>&nbsp;</span></p>\n<ul>\n<li><span>Ownership of enablement and adoption standards used globally</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Direct influence on how AI is implemented and sustained at scale</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>High visibility across product, delivery, and AI leadership</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Work focused on building durable systems, not one-off engagements</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Strong path to principal-level consulting or broader AI leadership roles</span><span>&nbsp;</span></li>\n</ul>\n<p><span>&nbsp;</span></p>\n<p><strong><span>Required Experience</span></strong><span>&nbsp;</span></p>\n<ul>\n<li><span>6+ years of experience in AI adoption, enablement, CX transformation, or enterprise consulting</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Strong understanding of contact center operations and AI-driven self-service environments</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Demonstrated experience designing scalable enablement frameworks, playbooks, or standards</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Practical familiarity with generative AI behavior, prompt design, and adoption challenges</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Experience embedding enablement into delivery motions rather than running standalone change programs</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Ability to influence cross-functional teams without formal authority</span><span>&nbsp;</span></li>\n</ul>\n<ul>\n<li><span>Strong analytical, communication, and documentation skills</span><span>&nbsp;</span></li>\n</ul>\n<p><span>&nbsp;</span></p><div class=\"content-conclusion\"><p><em><strong>About NiCE </strong></em></p>\n<p><em>NICE Ltd. (NASDAQ: NICE) software products are used by 25,000+ global businesses, including 85 of the Fortune 100 corporations, to deliver extraordinary customer experiences, fight financial crime and ensure public safety. Every day, NiCE software manages more than 120 million customer interactions and monitors 3+ billion financial transactions. </em></p>\n<p><em>Known as an innovation powerhouse that excels in AI, cloud and digital, NiCE is consistently recognized as the market leader in its domains, with over 8,500 employees across 30+ countries. </em></p>\n<p><em>NiCE is proud to be an equal opportunity employer. All qualified applicants will receive consideration for employment without regard to race, color, religion, national origin, age, sex, marital status, ancestry, neurotype, physical or mental disability, veteran status, gender identity, sexual orientation or any other category protected by law.</em></p>\n<p>&nbsp;</p></div>\n</div>\n",
+          "company_logo": "https://startup.jobs/logos/30144",
+          "apply_link": "https://startup.jobs/apply/cb2db90b-ddba-4dae-9ff9-c99c06d55cb3",
+          "url": "https://startup.jobs/senior-ai-consultant-coe-enablement-adoption-nice-7716846",
+          "source": "algolia+http-jsonld",
+          "fetched_at": "2026-02-20T11:58:56.673Z",
+          "tags": [
+            "Artificial Intelligence",
+            "Consulting",
+            "Senior"
+          ],
+          "workplace_type": "remote",
+          "employment_type": "full-time",
+          "experience_bucket": "3-6",
+          "salary_min": null,
+          "salary_max": null,
+          "salary_currency": "USD",
+          "city": null,
+          "country": "United States",
+          "company_slug": "nice"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Scrape startupjobs6": [
+      {
+        "json": {
+          "id": "7731840",
+          "title": "AI Specialist",
+          "company": "LaunchDarkly",
+          "location": "Remote",
+          "job_type": "Full Time",
+          "salary": "USD 163000 - 263000",
+          "posted_at": "2026-02-09T20:18:12Z",
+          "description_text": "About the Job: LaunchDarkly’s AI Specialist will be at the forefront of revolutionizing how AI engineers think about, release, monitor, and optimize their agents, scaling up our LaunchDarkly for AI from initial market validation to an industry-leading product. You will represent deep, specialized LD4AI product knowledge, sharing your expertise with prospects and customers, gathering critical feedback that shapes product development, and driving early-stage adoption. Your expertise will be instrumental in establishing the Solutions Engineering frameworks that will guide our future success. This is a role for builders and storytellers who thrive in undefined spaces. You will be expected to build – meaning the construction of integrations, technical content, whitepapers, and tutorials, all alongside attractive demos of our product customized to strategic engagements. You'll work with the innovation coming out of LaunchDarkly's Product team and make a significant impact on how companies build and deploy AI applications. Responsibilities: Expert-Level Solutions/Sales Engineering   Represent the trustworthiness and confidence of serious expertise in practical AI applications in customer conversations (especially as an escalation point above an SE SME) Spearhead the early-stage implementation and adoption of LD4AI at scale, working closely with existing customers to ensure activation and churn prevention (alongside feedback) Develop and document Solutions Engineering playbooks and best practices that scale beyond our first customers Function as a tremendous partner to the LD4AI Chief of Staff, surfacing revenue-related insights with respect to the maturation of the product accordingly Support LD4AI POVs ran by on-the-ground SEs Collect and Propagate Product Feedback Collaborate extensively with product and engineering teams to ensure product concepts are technically feasible and align with LaunchDarkly's strategic goals Drive continuous improvement by monitoring product performance, user experience, and market response, iterating based on actionable data and insights Confirm that LD4AI’s roadmap adheres to market demand and deliver exceptional user experiences, especially for the AI developer persona – vocalizing objections with data Build LD4AI Into The World Deliver integrations against common, quantified customer requests in the form of code contributions, architecture diagrams, and whitepapers Function as a key technical asset in (with the Head of AI and the partnership team) technical partnerships with advantageous potential partners (like Anthropic, DataBricks, etc…) Publicly evangelize LD4AI at mainstream industry conferences, webinars, partner engagements, and strategic meetings Technical Leadership & Communication Function as the primary owner of the disbursement of enablement material to the SE team, particularly to the designated by team/region SE LD4AI SMEs (for which you have partial, dotted-line accountability) Co-own Revenue Enablement of LD4AI along with the Head of AI and the LD4AI tetrad Work with the AI Researcher, the PMM team, and the Head of AI to build and maintain competitor playbooks Qualifications:  AI & Technical Expertise This role requires a minimum of 12 years of related technical experience Extensive experience with AI applications—building, implementing, or selling AI solutions at scale Experience building multi-agent systems using frameworks like LangGraph, AgentBuilder, or AgentCore Hands-on experience evaluating AI agent performance at scale using automated evaluation methods Deep understanding of LLM mechanics (you've read 'Attention is All You Need' and can explain transformer architecture in detail) Experience building or interfacing with MCP (Model Context Protocol) servers Strong Python skills with experience building in PyTorch or TensorFlow Strong foundation in software engineering principles and current market trends Mindset & Approach Strong but loosely-held opinions about AI—you have a point of view but update it based on evidence Ability to anticipate where the AI landscape is heading and position products accordingly Deep curiosity about how AI changes software development, with an obsession for staying current on new AI technology Natural storyteller who can take new technology and craft compelling narratives that resonate with technical audiences Thrive in ambiguity—you love figuring it out, building new processes, and working in undefined spaces Pay: Target pay ranges based on Geographic Zones* for Level 5:  Zone 1: San Francisco/Bay Area or NYC Metropolitan Area, Boston, Seattle - $ 191,000 - $263,000* * Zone 2: Irvine, LA, Monterey, Santa Barbara, Santa Rosa, Austin, Portland, Philadelphia, Chicago - $ 172,000 - $237,000 ** Zone 3: All other US locations - $ 163,000 - $224,000 ** LaunchDarkly operates from a place of high trust and transparency; we are happy to state the pay range for our open roles to best align with your needs. Exact compensation may vary based on skills, experience, and location. *Within the United States, our geographic pay zones are defined by counties surrounding major metropolitan areas. **Restricted Stock Units (RSUs), health, vision, and dental insurance, and mental health benefits in addition to salary. About LaunchDarkly: Modern software delivery was supposed to be the foundation for a thriving digital business but reality has proven otherwise. Slow, inefficient development cycles, costly outages, and fragmented customer experiences are preventing developers from building their best software. The LaunchDarkly platform helps developers innovate on new features faster while protecting them with a safety valve to instantly rewind when things go wrong. Developers can target product experiences to any customer segment and maximize the business impact of every feature. And by gradually rolling out new application components, they escape nightmare \"big-bang\" technology migrations.  The LaunchDarkly platform was built to guide engineers to the next frontier of DevOps by: Improving the velocity and stability of software releases, without the fear of end customer outages Delivering targeted experiences by easily personalizing features to customer cohorts Maximizing the business impact of every feature through the ability to experiment and optimize Coordinating the release and optimization of software to provide consistent experiences across mobile platforms and device types Improving the effectiveness and productivity of engineering teams, by providing insights into engineering cadence and stability At LaunchDarkly, we believe in the power of teams. We're building a team that is humble, open, collaborative, respectful and kind. We are an equal opportunity employer and value diversity at our company. We do not discriminate on the basis of race, religion, color, national origin, gender, gender identity, sexual orientation, age, marital status, veteran status, or disability status. LD invites any applicant to review our written Affirmative Action Plan. To do so, contact People Ops at hr@launchdarkly.com .  Do you need a disability accommodation? Fill out this  accommodations request form  and someone from our People Operations team will contact you for assistance. ",
+          "description_html": "<div class=\"trix-content\">\n  <p><strong>About the Job: </strong></p>\n<p>LaunchDarkly’s AI Specialist will be at the forefront of revolutionizing how AI engineers think about, release, monitor, and optimize their agents, scaling up our LaunchDarkly for AI from initial market validation to an industry-leading product.</p>\n<p>You will represent deep, specialized LD4AI product knowledge, sharing your expertise with prospects and customers, gathering critical feedback that shapes product development, and driving early-stage adoption. Your expertise will be instrumental in establishing the Solutions Engineering frameworks that will guide our future success.</p>\n<p>This is a role for builders and storytellers who thrive in undefined spaces. You will be expected to <em>build – </em>meaning the construction of integrations, technical content, whitepapers, and tutorials, all alongside attractive demos of our product customized to strategic engagements. You'll work with the innovation coming out of LaunchDarkly's Product team and make a significant impact on how companies build and deploy AI applications.</p>\n<h4>Responsibilities:</h4>\n<h4><strong>Expert-Level Solutions/Sales Engineering</strong>&nbsp;</h4>\n<ul>\n<li>Represent the trustworthiness and confidence of serious expertise in practical AI applications in customer conversations (especially as an escalation point above an SE SME)</li>\n<li>Spearhead the early-stage implementation and adoption of LD4AI at scale, working closely with existing customers to ensure activation and churn prevention (alongside feedback)</li>\n<li>Develop and document Solutions Engineering playbooks and best practices that scale beyond our first customers</li>\n<li>Function as a tremendous partner to the LD4AI Chief of Staff, surfacing revenue-related insights with respect to the maturation of the product accordingly</li>\n<li>Support LD4AI POVs ran by on-the-ground SEs</li>\n</ul>\n<h4><strong>Collect and Propagate Product Feedback</strong></h4>\n<ul>\n<li>Collaborate extensively with product and engineering teams to ensure product concepts are technically feasible and align with LaunchDarkly's strategic goals</li>\n<li>Drive continuous improvement by monitoring product performance, user experience, and market response, iterating based on actionable data and insights</li>\n<li>Confirm that LD4AI’s roadmap adheres to market demand and deliver exceptional user experiences, especially for the AI developer persona – vocalizing objections with data</li>\n</ul>\n<h4><strong>Build LD4AI Into The World</strong></h4>\n<ul>\n<li>Deliver integrations against common, quantified customer requests in the form of code contributions, architecture diagrams, and whitepapers</li>\n<li>Function as a key technical asset in (with the Head of AI and the partnership team) technical partnerships with advantageous potential partners (like Anthropic, DataBricks, etc…)</li>\n<li>Publicly evangelize LD4AI at mainstream industry conferences, webinars, partner engagements, and strategic meetings</li>\n</ul>\n<h4><strong>Technical Leadership &amp; Communication</strong></h4>\n<ul>\n<li>Function as the primary owner of the disbursement of enablement material to the SE team, particularly to the designated by team/region SE LD4AI SMEs (for which you have partial, dotted-line accountability)</li>\n<li>Co-own Revenue Enablement of LD4AI along with the Head of AI and the LD4AI tetrad</li>\n<li>Work with the AI Researcher, the PMM team, and the Head of AI to build and maintain competitor playbooks</li>\n</ul>\n<h4>Qualifications:&nbsp;</h4>\n<h4><strong>AI &amp; Technical Expertise</strong></h4>\n<ul>\n<li>This role requires a minimum of 12 years of related technical experience</li>\n<li>Extensive experience with AI applications—building, implementing, or selling AI solutions at scale</li>\n<li>Experience building multi-agent systems using frameworks like LangGraph, AgentBuilder, or AgentCore</li>\n<li>Hands-on experience evaluating AI agent performance at scale using automated evaluation methods</li>\n<li>Deep understanding of LLM mechanics (you've read 'Attention is All You Need' and can explain transformer architecture in detail)</li>\n<li>Experience building or interfacing with MCP (Model Context Protocol) servers</li>\n<li>Strong Python skills with experience building in PyTorch or TensorFlow</li>\n<li>Strong foundation in software engineering principles and current market trends</li>\n</ul>\n<h4><strong>Mindset &amp; Approach</strong></h4>\n<ul>\n<li>Strong but loosely-held opinions about AI—you have a point of view but update it based on evidence</li>\n<li>Ability to anticipate where the AI landscape is heading and position products accordingly</li>\n<li>Deep curiosity about how AI changes software development, with an obsession for staying current on new AI technology</li>\n<li>Natural storyteller who can take new technology and craft compelling narratives that resonate with technical audiences</li>\n<li>Thrive in ambiguity—you love figuring it out, building new processes, and working in undefined spaces</li>\n</ul>\n<p class=\"p1\"><strong>Pay:</strong></p>\n<p class=\"p1\"><em>Target pay ranges based on Geographic Zones* for Level 5:&nbsp;</em></p>\n<ul class=\"ul1\">\n<li class=\"li1\">Zone 1: <em>San Francisco/Bay Area or NYC Metropolitan Area, Boston, Seattle</em> - $<em><span class=\"collapsed-field-text\">191,000 - $263,000*</span></em>*</li>\n<li class=\"li1\">Zone 2:<em> Irvine, LA, Monterey, Santa Barbara, Santa Rosa, Austin, Portland, Philadelphia, Chicago - </em>$<em><span class=\"collapsed-field-text\">172,000 - $237,000</span></em>**</li>\n<li class=\"li1\">Zone 3: <em>All other US locations - </em>$<em><span class=\"collapsed-field-text\">163,000 - $224,000</span></em>**</li>\n</ul>\n<p class=\"p1\"><em>LaunchDarkly operates from a place of high trust and transparency; we are happy to state the pay range for our open roles to best align with your needs. Exact compensation may vary based on skills, experience, and location.</em></p>\n<p class=\"p1\"><em>*Within the United States, our geographic pay zones are defined by counties surrounding major metropolitan areas.</em><br><em>**Restricted Stock Units (RSUs), health, vision, and dental insurance, and mental health benefits in addition to salary.</em></p>\n<p><strong>About LaunchDarkly:</strong></p>\n<p>Modern software delivery was supposed to be the foundation for a thriving digital business but reality has proven otherwise. Slow, inefficient development cycles, costly outages, and fragmented customer experiences are preventing developers from building their best software. The LaunchDarkly platform helps developers innovate on new features faster while protecting them with a safety valve to instantly rewind when things go wrong. Developers can target product experiences to any customer segment and maximize the business impact of every feature. And by gradually rolling out new application components, they escape nightmare \"big-bang\" technology migrations.&nbsp;</p>\n<p>The LaunchDarkly platform was built to guide engineers to the next frontier of DevOps by:</p>\n<ul>\n<li>Improving the velocity and stability of software releases, without the fear of end customer outages</li>\n<li>Delivering targeted experiences by easily personalizing features to customer cohorts</li>\n<li>Maximizing the business impact of every feature through the ability to experiment and optimize</li>\n<li>Coordinating the release and optimization of software to provide consistent experiences across mobile platforms and device types</li>\n<li>Improving the effectiveness and productivity of engineering teams, by providing insights into engineering cadence and stability</li>\n</ul>\n<p>At LaunchDarkly, we believe in the power of teams. We're building a team that is humble, open, collaborative, respectful and kind. We are an equal opportunity employer and value diversity at our company. We do not discriminate on the basis of race, religion, color, national origin, gender, gender identity, sexual orientation, age, marital status, veteran status, or disability status. LD invites any applicant to review our written Affirmative Action Plan. To do so, contact People Ops at <a class=\"notion-link-token notion-focusable-token notion-enable-hover\" href=\"mailto:hr@launchdarkly.com\"><span class=\"link-annotation-unknown-block-id--893544457\">hr@launchdarkly.com</span></a>.&nbsp;</p>\n<p class=\"p1\"><span class=\"s1\"><strong>Do you need a disability accommodation?</strong></span></p>\n<p class=\"p1\">Fill out this&nbsp;<a href=\"https://docs.google.com/forms/d/e/1FAIpQLSdYb_7upYMtdRVXzvXGHGfQw0pU2FNma-6Rwp-I6NjKm7SYNw/viewform\"><span class=\"s2\">accommodations request form</span></a>&nbsp;and someone from our People Operations team will contact you for assistance.&nbsp;</p>\n</div>\n",
+          "company_logo": "https://startup.jobs/logos/1895",
+          "apply_link": "https://startup.jobs/apply/cc9e3239-3ca9-4bf5-98aa-94382f189670",
+          "url": "https://startup.jobs/ai-specialist-launchdarkly-7731840",
+          "source": "algolia+http-jsonld",
+          "fetched_at": "2026-02-20T11:59:12.867Z",
+          "tags": [
+            "Artificial Intelligence"
+          ],
+          "workplace_type": "remote",
+          "employment_type": "full-time",
+          "experience_bucket": "6+",
+          "salary_min": 163000,
+          "salary_max": 263000,
+          "salary_currency": "USD",
+          "city": null,
+          "country": "United States",
+          "company_slug": "launchdarkly"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "ad0c280b-d1d3-4efc-b99d-99fa72f25d1e",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-02-20T08:12:42.293Z",
+      "createdAt": "2026-02-20T08:12:42.293Z",
+      "role": "workflow:owner",
+      "workflowId": "UwFW9NXeFnukaI5o",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": null,
+  "tags": [
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-01-22T12:40:37.040Z",
+      "createdAt": "2026-01-22T12:40:37.040Z",
+      "id": "mcS1gLAfDII7yoGe",
+      "name": "lead_scrape"
+    }
+  ]
+}
