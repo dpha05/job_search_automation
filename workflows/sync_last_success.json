@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-06T13:20:25.611Z",
+  "updatedAt": "2026-03-11T08:07:01.607Z",
   "createdAt": "2026-03-06T12:22:00.641Z",
   "id": "K2KfZFVuadrrWDTC",
   "name": "sync_last_success",
@@ -20,7 +20,7 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.3,
       "position": [
-        -336,
+        -720,
         -224
       ],
       "id": "7efd436e-ae82-4b3c-9e32-76b3518006da",
@@ -53,8 +53,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        560,
-        -208
+        -112,
+        -224
       ],
       "id": "1c58d2d3-b925-4888-819a-71d5bbb181c8",
       "name": "If"
@@ -82,8 +82,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1008,
-        -272
+        688,
+        -224
       ],
       "id": "2d40bc7c-4556-407e-a8d3-3a98602fed04",
       "name": "Get Id"
@@ -97,8 +97,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        112,
-        -208
+        -528,
+        -224
       ],
       "id": "e7463151-0147-43e1-8ab9-4bdce324ee8f",
       "name": "Get workflow status",
@@ -120,7 +120,7 @@
           "parameters": [
             {
               "name": "tags",
-              "value": "=dev,  {{ $json.workflowTag }}"
+              "value": "=prod,  {{ $json.workflowTag }}"
             }
           ]
         },
@@ -129,8 +129,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        784,
-        -272
+        464,
+        -224
       ],
       "id": "ed7962c5-2562-4040-9c54-fd2bf7cda4c2",
       "name": "Get workflow details",
@@ -153,8 +153,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        336,
-        -208
+        -336,
+        -224
       ],
       "id": "870a9da5-e7e1-4213-86bf-a85fa613a7ec",
       "name": "Check shouldRun?"
@@ -179,22 +179,11 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        1232,
-        -272
+        912,
+        -224
       ],
       "id": "74204f86-599d-4efb-81a9-a8fa02239260",
       "name": "Execute Workflow"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [
-        1456,
-        -128
-      ],
-      "id": "3ef80d69-1606-48e9-9dce-14abfd76586b",
-      "name": "No Operation, do nothing2"
     },
     {
       "parameters": {
@@ -203,7 +192,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -112,
+        160,
         -224
       ],
       "id": "b72dda7b-306e-4e9e-860b-45726406f628",
@@ -214,8 +203,8 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        112,
-        -400
+        336,
+        -464
       ],
       "id": "754bf3b9-ed6d-442b-a761-cd874e68cb8b",
       "name": "No Operation, do nothing"
@@ -226,7 +215,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items",
+            "node": "Get workflow status",
             "type": "main",
             "index": 0
           }
@@ -237,14 +226,14 @@
       "main": [
         [
           {
-            "node": "Get workflow details",
+            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "No Operation, do nothing2",
+            "node": "No Operation, do nothing",
             "type": "main",
             "index": 0
           }
@@ -306,7 +295,7 @@
         ],
         [
           {
-            "node": "Get workflow status",
+            "node": "Get workflow details",
             "type": "main",
             "index": 0
           }
@@ -314,17 +303,6 @@
       ]
     },
     "Execute Workflow": {
-      "main": [
-        [
-          {
-            "node": "No Operation, do nothing2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "No Operation, do nothing2": {
       "main": [
         [
           {
@@ -352,9 +330,30 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "375792e5-f8ad-48ba-bcbf-337c7b46b02f",
-  "activeVersionId": "375792e5-f8ad-48ba-bcbf-337c7b46b02f",
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-03-09T08:45:00.020+01:00",
+          "Readable date": "March 9th 2026, 8:45:00 am",
+          "Readable time": "8:45:00 am",
+          "Day of week": "Monday",
+          "Year": "2026",
+          "Month": "March",
+          "Day of month": "09",
+          "Hour": "08",
+          "Minute": "45",
+          "Second": "00",
+          "Timezone": "Europe/Prague (UTC+01:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "65378cf1-c121-4d1b-afe3-94e3563a3da9",
+  "activeVersionId": "65378cf1-c121-4d1b-afe3-94e3563a3da9",
   "triggerCount": 1,
   "shared": [
     {
@@ -366,9 +365,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-06T12:25:48.000Z",
-    "createdAt": "2026-03-06T12:25:46.752Z",
-    "versionId": "375792e5-f8ad-48ba-bcbf-337c7b46b02f",
+    "updatedAt": "2026-03-11T08:08:47.000Z",
+    "createdAt": "2026-03-11T08:07:01.608Z",
+    "versionId": "65378cf1-c121-4d1b-afe3-94e3563a3da9",
     "workflowId": "K2KfZFVuadrrWDTC",
     "nodes": [
       {
@@ -385,7 +384,7 @@
         "type": "n8n-nodes-base.scheduleTrigger",
         "typeVersion": 1.3,
         "position": [
-          -336,
+          -720,
           -224
         ],
         "id": "7efd436e-ae82-4b3c-9e32-76b3518006da",
@@ -418,8 +417,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          560,
-          -208
+          -112,
+          -224
         ],
         "id": "1c58d2d3-b925-4888-819a-71d5bbb181c8",
         "name": "If"
@@ -447,8 +446,8 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          1008,
-          -272
+          688,
+          -224
         ],
         "id": "2d40bc7c-4556-407e-a8d3-3a98602fed04",
         "name": "Get Id"
@@ -462,8 +461,8 @@
         "type": "n8n-nodes-base.supabase",
         "typeVersion": 1,
         "position": [
-          112,
-          -208
+          -528,
+          -224
         ],
         "id": "e7463151-0147-43e1-8ab9-4bdce324ee8f",
         "name": "Get workflow status",
@@ -485,7 +484,7 @@
             "parameters": [
               {
                 "name": "tags",
-                "value": "=dev,  {{ $json.workflowTag }}"
+                "value": "=prod,  {{ $json.workflowTag }}"
               }
             ]
           },
@@ -494,8 +493,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          784,
-          -272
+          464,
+          -224
         ],
         "id": "ed7962c5-2562-4040-9c54-fd2bf7cda4c2",
         "name": "Get workflow details",
@@ -518,8 +517,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          336,
-          -208
+          -336,
+          -224
         ],
         "id": "870a9da5-e7e1-4213-86bf-a85fa613a7ec",
         "name": "Check shouldRun?"
@@ -544,22 +543,11 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          1232,
-          -272
+          912,
+          -224
         ],
         "id": "74204f86-599d-4efb-81a9-a8fa02239260",
         "name": "Execute Workflow"
-      },
-      {
-        "parameters": {},
-        "type": "n8n-nodes-base.noOp",
-        "typeVersion": 1,
-        "position": [
-          1456,
-          -128
-        ],
-        "id": "3ef80d69-1606-48e9-9dce-14abfd76586b",
-        "name": "No Operation, do nothing2"
       },
       {
         "parameters": {
@@ -568,7 +556,7 @@
         "type": "n8n-nodes-base.splitInBatches",
         "typeVersion": 3,
         "position": [
-          -112,
+          160,
           -224
         ],
         "id": "b72dda7b-306e-4e9e-860b-45726406f628",
@@ -579,8 +567,8 @@
         "type": "n8n-nodes-base.noOp",
         "typeVersion": 1,
         "position": [
-          112,
-          -400
+          336,
+          -464
         ],
         "id": "754bf3b9-ed6d-442b-a761-cd874e68cb8b",
         "name": "No Operation, do nothing"
@@ -591,7 +579,7 @@
         "main": [
           [
             {
-              "node": "Loop Over Items",
+              "node": "Get workflow status",
               "type": "main",
               "index": 0
             }
@@ -602,14 +590,14 @@
         "main": [
           [
             {
-              "node": "Get workflow details",
+              "node": "Loop Over Items",
               "type": "main",
               "index": 0
             }
           ],
           [
             {
-              "node": "No Operation, do nothing2",
+              "node": "No Operation, do nothing",
               "type": "main",
               "index": 0
             }
@@ -671,7 +659,7 @@
           ],
           [
             {
-              "node": "Get workflow status",
+              "node": "Get workflow details",
               "type": "main",
               "index": 0
             }
@@ -679,17 +667,6 @@
         ]
       },
       "Execute Workflow": {
-        "main": [
-          [
-            {
-              "node": "No Operation, do nothing2",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "No Operation, do nothing2": {
         "main": [
           [
             {
@@ -702,7 +679,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 375792e5",
+    "name": "Version 65378cf1",
     "description": "",
     "autosaved": false
   },
