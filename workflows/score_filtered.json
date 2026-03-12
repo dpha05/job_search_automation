@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-06T13:19:35.421Z",
+  "updatedAt": "2026-03-09T09:31:13.053Z",
   "createdAt": "2026-03-05T09:43:45.214Z",
   "id": "gHdlEKX8TSjpy2ON",
   "name": "score_filtered",
@@ -843,7 +843,7 @@
     ]
   },
   "versionId": "07bb6665-0564-4ade-a506-284fc419d7aa",
-  "activeVersionId": "29765079-1cf9-45c3-ba25-fcd45077eae9",
+  "activeVersionId": "07bb6665-0564-4ade-a506-284fc419d7aa",
   "triggerCount": 0,
   "shared": [
     {
@@ -855,9 +855,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-05T09:47:32.000Z",
-    "createdAt": "2026-03-05T09:43:54.348Z",
-    "versionId": "29765079-1cf9-45c3-ba25-fcd45077eae9",
+    "updatedAt": "2026-03-09T09:31:17.000Z",
+    "createdAt": "2026-03-05T09:47:39.952Z",
+    "versionId": "07bb6665-0564-4ade-a506-284fc419d7aa",
     "workflowId": "gHdlEKX8TSjpy2ON",
     "nodes": [
       {
@@ -1131,8 +1131,7 @@
           -704
         ],
         "id": "d4ad9d65-ce41-45fb-b67e-26b181984452",
-        "name": "Call 'research_high_rare'",
-        "disabled": true
+        "name": "Call 'research_high_rare'"
       },
       {
         "parameters": {
@@ -1643,7 +1642,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 29765079",
+    "name": "Version 07bb6665",
     "description": "",
     "autosaved": false
   },
