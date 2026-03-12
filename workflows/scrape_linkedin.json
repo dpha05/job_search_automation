@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-06T13:10:07.366Z",
+  "updatedAt": "2026-03-09T08:01:37.794Z",
   "createdAt": "2026-03-06T12:06:20.463Z",
   "id": "R9D0hoi99OqinBsn",
   "name": "scrape_linkedin",
@@ -200,8 +200,7 @@
           "cachedResultName": "LinkedIn Jobs Scraper | Remove Duplicate Jobs | Pay Per Result (cheap_scraper/linkedin-job-scraper)",
           "cachedResultUrl": "https://console.apify.com/actors/2rJKkhh7vjpX7pvjg/input"
         },
-        "customBody": "={\n  \"keyword\": [\"AI engineer\", \"AI operator\", \"AI automation specialist\", \"AI solutions architect\", \"AI workflow designer\", \"Agentic AI\", \"AI implementation\", \"low-code AI\", \"AI specialist\", \"AI Ops\" ],\n  \"location\": \"Prague, Czechia\",\n  \"distance\": \"50\",\n  \"publishedAt\": \"{{ $json.publishedAtString }}\",\n  \"jobType\": [\"full-time\", \"contract\" ],\n  \"experienceLevel\": [\"associate\", \"mid-senior\"],\n  \"saveOnlyUniqueItems\": true\n}",
-        "timeout": {}
+        "customBody": "={\n  \"keyword\": [\"AI engineer\", \"AI operator\", \"AI automation specialist\", \"AI solutions architect\", \"AI workflow designer\", \"Agentic AI\", \"AI implementation\", \"low-code AI\", \"AI specialist\", \"AI Ops\" ],\n  \"location\": \"Prague, Czechia\",\n  \"distance\": \"50\",\n  \"publishedAt\": \"{{ $json.publishedAtString }}\",\n  \"jobType\": [\"full-time\", \"contract\" ],\n  \"experienceLevel\": [\"associate\", \"mid-senior\"],\n  \"saveOnlyUniqueItems\": true\n}"
       },
       "type": "@apify/n8n-nodes-apify.apify",
       "typeVersion": 1,
@@ -9671,8 +9670,8 @@
       }
     ]
   },
-  "versionId": "b05d1efd-cd46-4211-b052-51383ce262fb",
-  "activeVersionId": "0a341aa4-15fc-4568-b120-32877720a23b",
+  "versionId": "b7392b49-3a8b-4640-805d-81eca262dc6f",
+  "activeVersionId": "b7392b49-3a8b-4640-805d-81eca262dc6f",
   "triggerCount": 1,
   "shared": [
     {
@@ -9684,9 +9683,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-06T12:15:22.000Z",
-    "createdAt": "2026-03-06T12:15:18.812Z",
-    "versionId": "0a341aa4-15fc-4568-b120-32877720a23b",
+    "updatedAt": "2026-03-09T08:01:41.000Z",
+    "createdAt": "2026-03-09T08:01:37.795Z",
+    "versionId": "b7392b49-3a8b-4640-805d-81eca262dc6f",
     "workflowId": "R9D0hoi99OqinBsn",
     "nodes": [
       {
@@ -9704,7 +9703,7 @@
         "typeVersion": 1.3,
         "position": [
           -4240,
-          1512
+          1520
         ],
         "id": "fb368319-3197-4024-9fed-e5d34aff8e5f",
         "name": "Schedule Trigger"
@@ -9730,7 +9729,7 @@
         "typeVersion": 2,
         "position": [
           -2224,
-          1608
+          1616
         ],
         "id": "10a366e7-88e0-41eb-815e-1dbc99cbb22c",
         "name": "add source"
@@ -9855,7 +9854,7 @@
         "typeVersion": 3.4,
         "position": [
           -2448,
-          1608
+          1616
         ],
         "id": "6cd4d652-5b98-4857-a51f-2828eb15985e",
         "name": "Standardize output (**adjust fields**)"
@@ -9868,7 +9867,7 @@
         "typeVersion": 2,
         "position": [
           -3792,
-          1608
+          1616
         ],
         "id": "3847c7b2-572f-49be-aa80-31d9c59633e2",
         "name": "Calculate Time Range"
@@ -9883,8 +9882,7 @@
             "cachedResultName": "LinkedIn Jobs Scraper | Remove Duplicate Jobs | Pay Per Result (cheap_scraper/linkedin-job-scraper)",
             "cachedResultUrl": "https://console.apify.com/actors/2rJKkhh7vjpX7pvjg/input"
           },
-          "customBody": "={\n  \"keyword\": [\"AI engineer\", \"AI operator\", \"AI automation specialist\", \"AI solutions architect\", \"AI workflow designer\", \"Agentic AI\", \"AI implementation\", \"low-code AI\", \"AI specialist\", \"AI Ops\" ],\n  \"location\": \"Prague, Czechia\",\n  \"distance\": \"50\",\n  \"publishedAt\": \"{{ $json.publishedAtString }}\",\n  \"jobType\": [\"full-time\", \"contract\" ],\n  \"experienceLevel\": [\"associate\", \"mid-senior\"],\n  \"saveOnlyUniqueItems\": true\n}",
-          "timeout": {}
+          "customBody": "={\n  \"keyword\": [\"AI engineer\", \"AI operator\", \"AI automation specialist\", \"AI solutions architect\", \"AI workflow designer\", \"Agentic AI\", \"AI implementation\", \"low-code AI\", \"AI specialist\", \"AI Ops\" ],\n  \"location\": \"Prague, Czechia\",\n  \"distance\": \"50\",\n  \"publishedAt\": \"{{ $json.publishedAtString }}\",\n  \"jobType\": [\"full-time\", \"contract\" ],\n  \"experienceLevel\": [\"associate\", \"mid-senior\"],\n  \"saveOnlyUniqueItems\": true\n}"
         },
         "type": "@apify/n8n-nodes-apify.apify",
         "typeVersion": 1,
@@ -10194,7 +10192,7 @@
         "typeVersion": 2.6,
         "position": [
           -4016,
-          1608
+          1616
         ],
         "id": "ca1ae7b8-4d4a-4ffe-91b9-407d6fd74dfe",
         "name": "update running status",
@@ -10269,7 +10267,7 @@
         "typeVersion": 2.6,
         "position": [
           -2448,
-          1416
+          1424
         ],
         "id": "186ba750-d956-48de-a64e-c53c31ad4862",
         "name": "update success status",
@@ -10288,7 +10286,7 @@
         "typeVersion": 1.1,
         "position": [
           -4240,
-          1704
+          1712
         ],
         "id": "8dec2d45-2caf-4d55-b175-6c3de331f40f",
         "name": "When Executed by Another Workflow"
@@ -10551,7 +10549,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 0a341aa4",
+    "name": "Version b7392b49",
     "description": "",
     "autosaved": false
   },
