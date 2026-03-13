@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-06T13:20:09.655Z",
+  "updatedAt": "2026-03-13T10:18:36.020Z",
   "createdAt": "2026-03-06T12:17:00.099Z",
   "id": "f8XfKM6wxcwHySTx",
   "name": "sync_clean_inactive",
@@ -21,31 +21,10 @@
       "typeVersion": 1.3,
       "position": [
         384,
-        -272
+        -264
       ],
       "id": "25ce5313-9c27-4238-a95b-e4edeee25aa2",
       "name": "Schedule Trigger"
-    },
-    {
-      "parameters": {
-        "operation": "executeQuery",
-        "query": "SELECT id, job_url \nFROM job_leads\nWHERE is_active = true \nAND (\n  (published_at > NOW() - INTERVAL '7 days' AND last_checked < NOW() - INTERVAL '2 days')\n  OR \n  (published_at BETWEEN NOW() - INTERVAL '21 days' AND NOW() - INTERVAL '7 days' AND last_checked < NOW() - INTERVAL '4 days')\n  OR\n  (published_at < NOW() - INTERVAL '21 days' AND last_checked < NOW() - INTERVAL '7 days')\n  OR\n  last_checked IS NULL\n)\nLIMIT 100;",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        832,
-        -144
-      ],
-      "id": "5b80d1fc-acf1-4570-aa66-b060642c6174",
-      "name": "Get Inactive Rows",
-      "credentials": {
-        "postgres": {
-          "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres account"
-        }
-      }
     },
     {
       "parameters": {
@@ -93,7 +72,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1952,
+        2176,
         -48
       ],
       "id": "01b30b26-05c7-468e-9e3e-23eb8490cb54",
@@ -130,7 +109,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1952,
+        2176,
         -240
       ],
       "id": "73a25cbd-b8ad-4774-9a90-8cc320439cb9",
@@ -147,8 +126,8 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        2176,
-        -80
+        2400,
+        -72
       ],
       "id": "0bc53246-6f0e-4d2c-9a10-e721945920f6",
       "name": "No Operation, do nothing1"
@@ -161,7 +140,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1504,
+        1728,
         -144
       ],
       "id": "65e993d9-d1c5-49d2-826d-522b03179157",
@@ -191,7 +170,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1280,
+        1504,
         -144
       ],
       "id": "70de704e-e99d-4253-8c44-40bb17f6b478",
@@ -227,7 +206,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1728,
+        1952,
         -144
       ],
       "id": "0b0532dc-7bf4-43ac-a42b-d79c460965ad",
@@ -303,7 +282,7 @@
       "credentials": {
         "postgres": {
           "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres account"
+          "name": "Postgres careerops"
         }
       }
     },
@@ -378,7 +357,7 @@
       "credentials": {
         "postgres": {
           "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres account"
+          "name": "Postgres careerops"
         }
       }
     },
@@ -390,10 +369,45 @@
       "typeVersion": 1.1,
       "position": [
         384,
-        -80
+        -72
       ],
       "id": "ea07511b-367b-4a46-ad21-396888e51cb5",
       "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, job_url \nFROM job_leads\nWHERE is_active = true \nAND status = 'scored'\nAND (\n  (published_at > NOW() - INTERVAL '7 days' AND last_checked < NOW() - INTERVAL '2 days')\n  OR \n  (published_at BETWEEN NOW() - INTERVAL '21 days' AND NOW() - INTERVAL '7 days' AND last_checked < NOW() - INTERVAL '4 days')\n  OR\n  (published_at < NOW() - INTERVAL '21 days' AND last_checked < NOW() - INTERVAL '7 days')\n  OR\n  last_checked IS NULL\n)\nLIMIT 100;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        832,
+        -144
+      ],
+      "id": "5b80d1fc-acf1-4570-aa66-b060642c6174",
+      "name": "Get Due Rows",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1280,
+        -144
+      ],
+      "id": "b9f06dd6-8b8b-4d93-b554-4ea4ea9ec15c",
+      "name": "Wait",
+      "webhookId": "4f1a640c-f2ca-4e2b-a2d6-336b5d629223"
     }
   ],
   "connections": {
@@ -402,17 +416,6 @@
         [
           {
             "node": "update running status",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get Inactive Rows": {
-      "main": [
-        [
-          {
-            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
@@ -430,7 +433,7 @@
         ],
         [
           {
-            "node": "Get Raw HTML",
+            "node": "Wait",
             "type": "main",
             "index": 0
           }
@@ -514,7 +517,7 @@
       "main": [
         [
           {
-            "node": "Get Inactive Rows",
+            "node": "Get Due Rows",
             "type": "main",
             "index": 0
           }
@@ -526,6 +529,28 @@
         [
           {
             "node": "update running status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Due Rows": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get Raw HTML",
             "type": "main",
             "index": 0
           }
@@ -549,9 +574,30 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "052b81d9-ddc0-41af-8973-75010b0a2ded",
-  "activeVersionId": "052b81d9-ddc0-41af-8973-75010b0a2ded",
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-03-13T09:10:00.027+01:00",
+          "Readable date": "March 13th 2026, 9:10:00 am",
+          "Readable time": "9:10:00 am",
+          "Day of week": "Friday",
+          "Year": "2026",
+          "Month": "March",
+          "Day of month": "13",
+          "Hour": "09",
+          "Minute": "10",
+          "Second": "00",
+          "Timezone": "Europe/Prague (UTC+01:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "8a001b48-8d4a-47f0-bb43-6929acdb063f",
+  "activeVersionId": "8a001b48-8d4a-47f0-bb43-6929acdb063f",
   "triggerCount": 1,
   "shared": [
     {
@@ -563,9 +609,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-06T12:25:32.000Z",
-    "createdAt": "2026-03-06T12:25:30.415Z",
-    "versionId": "052b81d9-ddc0-41af-8973-75010b0a2ded",
+    "updatedAt": "2026-03-13T10:19:44.000Z",
+    "createdAt": "2026-03-13T10:18:36.021Z",
+    "versionId": "8a001b48-8d4a-47f0-bb43-6929acdb063f",
     "workflowId": "f8XfKM6wxcwHySTx",
     "nodes": [
       {
@@ -583,31 +629,10 @@
         "typeVersion": 1.3,
         "position": [
           384,
-          -272
+          -264
         ],
         "id": "25ce5313-9c27-4238-a95b-e4edeee25aa2",
         "name": "Schedule Trigger"
-      },
-      {
-        "parameters": {
-          "operation": "executeQuery",
-          "query": "SELECT id, job_url \nFROM job_leads\nWHERE is_active = true \nAND (\n  (published_at > NOW() - INTERVAL '7 days' AND last_checked < NOW() - INTERVAL '2 days')\n  OR \n  (published_at BETWEEN NOW() - INTERVAL '21 days' AND NOW() - INTERVAL '7 days' AND last_checked < NOW() - INTERVAL '4 days')\n  OR\n  (published_at < NOW() - INTERVAL '21 days' AND last_checked < NOW() - INTERVAL '7 days')\n  OR\n  last_checked IS NULL\n)\nLIMIT 100;",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.postgres",
-        "typeVersion": 2.6,
-        "position": [
-          832,
-          -144
-        ],
-        "id": "5b80d1fc-acf1-4570-aa66-b060642c6174",
-        "name": "Get Inactive Rows",
-        "credentials": {
-          "postgres": {
-            "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres account"
-          }
-        }
       },
       {
         "parameters": {
@@ -655,7 +680,7 @@
         "type": "n8n-nodes-base.supabase",
         "typeVersion": 1,
         "position": [
-          1952,
+          2176,
           -48
         ],
         "id": "01b30b26-05c7-468e-9e3e-23eb8490cb54",
@@ -692,7 +717,7 @@
         "type": "n8n-nodes-base.supabase",
         "typeVersion": 1,
         "position": [
-          1952,
+          2176,
           -240
         ],
         "id": "73a25cbd-b8ad-4774-9a90-8cc320439cb9",
@@ -709,8 +734,8 @@
         "type": "n8n-nodes-base.noOp",
         "typeVersion": 1,
         "position": [
-          2176,
-          -80
+          2400,
+          -72
         ],
         "id": "0bc53246-6f0e-4d2c-9a10-e721945920f6",
         "name": "No Operation, do nothing1"
@@ -723,7 +748,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          1504,
+          1728,
           -144
         ],
         "id": "65e993d9-d1c5-49d2-826d-522b03179157",
@@ -753,7 +778,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          1280,
+          1504,
           -144
         ],
         "id": "70de704e-e99d-4253-8c44-40bb17f6b478",
@@ -789,7 +814,7 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          1728,
+          1952,
           -144
         ],
         "id": "0b0532dc-7bf4-43ac-a42b-d79c460965ad",
@@ -865,7 +890,7 @@
         "credentials": {
           "postgres": {
             "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres account"
+            "name": "Postgres careerops"
           }
         }
       },
@@ -940,7 +965,7 @@
         "credentials": {
           "postgres": {
             "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres account"
+            "name": "Postgres careerops"
           }
         }
       },
@@ -952,10 +977,45 @@
         "typeVersion": 1.1,
         "position": [
           384,
-          -80
+          -72
         ],
         "id": "ea07511b-367b-4a46-ad21-396888e51cb5",
         "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT id, job_url \nFROM job_leads\nWHERE is_active = true \nAND status = 'scored'\nAND (\n  (published_at > NOW() - INTERVAL '7 days' AND last_checked < NOW() - INTERVAL '2 days')\n  OR \n  (published_at BETWEEN NOW() - INTERVAL '21 days' AND NOW() - INTERVAL '7 days' AND last_checked < NOW() - INTERVAL '4 days')\n  OR\n  (published_at < NOW() - INTERVAL '21 days' AND last_checked < NOW() - INTERVAL '7 days')\n  OR\n  last_checked IS NULL\n)\nLIMIT 100;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          832,
+          -144
+        ],
+        "id": "5b80d1fc-acf1-4570-aa66-b060642c6174",
+        "name": "Get Due Rows",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1280,
+          -144
+        ],
+        "id": "b9f06dd6-8b8b-4d93-b554-4ea4ea9ec15c",
+        "name": "Wait",
+        "webhookId": "4f1a640c-f2ca-4e2b-a2d6-336b5d629223"
       }
     ],
     "connections": {
@@ -964,17 +1024,6 @@
           [
             {
               "node": "update running status",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Get Inactive Rows": {
-        "main": [
-          [
-            {
-              "node": "Loop Over Items",
               "type": "main",
               "index": 0
             }
@@ -992,7 +1041,7 @@
           ],
           [
             {
-              "node": "Get Raw HTML",
+              "node": "Wait",
               "type": "main",
               "index": 0
             }
@@ -1076,7 +1125,7 @@
         "main": [
           [
             {
-              "node": "Get Inactive Rows",
+              "node": "Get Due Rows",
               "type": "main",
               "index": 0
             }
@@ -1093,10 +1142,32 @@
             }
           ]
         ]
+      },
+      "Get Due Rows": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Get Raw HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "d d",
-    "name": "Version 052b81d9",
+    "name": "Version 8a001b48",
     "description": "",
     "autosaved": false
   },
