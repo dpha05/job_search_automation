@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-06T13:18:19.505Z",
+  "updatedAt": "2026-03-20T07:57:45.928Z",
   "createdAt": "2026-03-05T09:46:11.745Z",
   "id": "bhlGPoZTR6B1MQhp",
   "name": "score_reject_nonAI",
@@ -358,7 +358,7 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT * FROM check_vibe(\n  '{{ $json.description_vector }}'::vector(1536),\n  'ideal_anchor'\n) AS ideal_score_cosine;",
+        "query": "SELECT * FROM check_vibe(\n  '{{ $json.description_vector }}'::extensions.vector(1536),\n  'ideal_anchor'\n) AS ideal_score_cosine;",
         "options": {}
       },
       "type": "n8n-nodes-base.postgres",
@@ -374,7 +374,7 @@
       "credentials": {
         "postgres": {
           "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres account"
+          "name": "Postgres careerops"
         }
       }
     },
@@ -756,8 +756,8 @@
       }
     ]
   },
-  "versionId": "fc353745-fca0-424d-99d7-9624e3f0ebcc",
-  "activeVersionId": "fc353745-fca0-424d-99d7-9624e3f0ebcc",
+  "versionId": "856667e4-5a3e-4776-ba61-92002a94293d",
+  "activeVersionId": "856667e4-5a3e-4776-ba61-92002a94293d",
   "triggerCount": 0,
   "shared": [
     {
@@ -769,9 +769,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-06T12:30:00.000Z",
-    "createdAt": "2026-03-06T12:29:58.410Z",
-    "versionId": "fc353745-fca0-424d-99d7-9624e3f0ebcc",
+    "updatedAt": "2026-03-20T07:57:48.000Z",
+    "createdAt": "2026-03-20T07:57:45.930Z",
+    "versionId": "856667e4-5a3e-4776-ba61-92002a94293d",
     "workflowId": "bhlGPoZTR6B1MQhp",
     "nodes": [
       {
@@ -1126,7 +1126,7 @@
       {
         "parameters": {
           "operation": "executeQuery",
-          "query": "SELECT * FROM check_vibe(\n  '{{ $json.description_vector }}'::vector(1536),\n  'ideal_anchor'\n) AS ideal_score_cosine;",
+          "query": "SELECT * FROM check_vibe(\n  '{{ $json.description_vector }}'::extensions.vector(1536),\n  'ideal_anchor'\n) AS ideal_score_cosine;",
           "options": {}
         },
         "type": "n8n-nodes-base.postgres",
@@ -1142,7 +1142,7 @@
         "credentials": {
           "postgres": {
             "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres account"
+            "name": "Postgres careerops"
           }
         }
       },
@@ -1443,9 +1443,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version fc353745",
+    "name": "Version 856667e4",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": [
     {
