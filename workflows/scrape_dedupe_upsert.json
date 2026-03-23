@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-06T13:10:38.525Z",
+  "updatedAt": "2026-03-20T07:57:05.837Z",
   "createdAt": "2026-01-23T07:30:24.776Z",
   "id": "NBCVFrfmAz4h6S1a",
   "name": "scrape_dedupe_upsert",
@@ -78,7 +78,7 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT * FROM match_jobs(\n  ARRAY[{{ $json.embedding.values }}]::vector(1536), \n  '{{ $json.jobUrl }}',\n  1 \n);",
+        "query": "SELECT * FROM match_jobs(\n  ARRAY[{{ $json.embedding.values }}]::extensions.vector(1536), \n  '{{ $json.jobUrl }}',\n  1 \n);",
         "options": {}
       },
       "type": "n8n-nodes-base.postgres",
@@ -94,7 +94,7 @@
       "credentials": {
         "postgres": {
           "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres account"
+          "name": "Postgres careerops"
         }
       }
     },
@@ -426,7 +426,7 @@
       "credentials": {
         "postgres": {
           "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres account"
+          "name": "Postgres careerops"
         }
       }
     },
@@ -617,9 +617,38 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "0f34977d-771f-4e2a-a5a1-ff278c7284ce",
-  "activeVersionId": "0f34977d-771f-4e2a-a5a1-ff278c7284ce",
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "jobId": "102071",
+          "jobTitle": "Solution Architect",
+          "jobUrl": "https://www.startupjobs.cz/nabidka/102071/solution-architect",
+          "companyName": "Direct Fidoo",
+          "companyUrl": "https://www.startupjobs.cz/startup/direct-fidoo-a-s",
+          "companyLogo": "https://images-assets.startupjobs.cz/LOGO/8737/2fb2d2a89e2d7ced4909d43ec56f0fce.png",
+          "publishedAt": "2026-03-06T10:46:14.000Z",
+          "applyUrl": "https://www.startupjobs.cz/nabidka/102071/prihlasit#application",
+          "location": "Prague",
+          "contractType": "Full-time",
+          "experienceLevel": "Medior, Senior",
+          "jobDescription": "Backstory a co bude obsahem tvé práce\n\nVe Fidoo stavíme B2B fintech platformu, která firmám ve střední Evropě pomáhá lépe řídit finance. Jsme scale-up, součást skupiny Direct, a naše produkty se pohybují v regulovaném světě financí, kde architektura, bezpečnost a spolehlivost nejsou „nice to have“, ale nutnost.\n\nJako Solution Architect budeš stát hodně blízko jádru produktu – tam, kde se potkává business, technologie, regulace a dlouhodobá udržitelnost řešení.\n\nKonkrétně tě čeká hlavně:\n\n• návrh cloud-native architektury a komponent s ohledem na bezpečnost, audit, compliance a regulatorní požadavky finančního sektoru\n\n\n• převod business požadavků do technického návrhu, který dává smysl vývojářům i stakeholderům\n\n\n• rozhodování o vhodném stylu komunikace mezi službami (REST API, messaging, event-driven přístup) podle latence, dostupnosti, konzistence a charakteru domény\n\n\n• návrh práce s dokumentovými databázemi – datové modely bez SQL, řešení konzistence, verzování dokumentů a validace dat v aplikační logice\n\n\n• úzká spolupráce s analytiky a business týmy při tvorbě specifikací, user stories a akceptačních kritérií\n\n\n• technický dohled nad vývojem – kontrola architektonických principů, bezpečnostních patternů, compliance a schopnost číst a validovat kód v TypeScriptu\n\n\n• návrh aplikací a komponent tak, aby byly dobře monitorovatelné, logovatelné a automatizovaně nasaditelné v Azure\n\n\nJob Fit a koho hledáme\n\nHledáme někoho, kdo má silnou zkušenost s cloud-native architekturou a umí se pohybovat v prostředí, kde nejde jen o technologii, ale i o regulace, audit a zodpovědnost vůči klientům. Zkušenost z fintechu nebo banky je pro nás velká výhoda – ne proto, že bychom si hráli na „korporát“, ale proto, že víš, co znamená navrhovat systémy, které musí obstát dlouhodobě, bezpečně a pod dohledem regulátora.\n\nMěl bys umět přemýšlet v doménách, chápat dopady architektonických rozhodnutí do businessu a zároveň být partnerem pro vývojáře – někdo, kdo architekturu nejen navrhne, ale dokáže ji obhájit, vysvětlit a uhlídat v praxi. Nehledáme teoretika, ale člověka, který ví, jak věci opravdu fungují v produkci.\n\nProces výběrového řízení\n\nChceme být féroví a efektivní – žádné nekonečné kolečko pohovorů.\n\n• Ozve se ti náš recruiter a krátce si sladíte očekávání.\n\n\n• Následuje setkání s hiring manažerem a technická diskuze nad architekturou, tvým přístupem a zkušenostmi.\n\n\n• Pokud si budeme oboustranně sedět, potkáš se i s dalšími lidmi z týmu, se kterými bys reálně spolupracoval.\n\n\n• Finální rozhodnutí děláme rychle a otevřeně – víš, na čem jsi.\n\n\nTrochu víc o naší kultuře, hodnotách a kancelářích\n\nJednoduše. Rychle. Přátelsky. Bezpečně. Čtyři hodnoty, které nás definují a dávají nám směr při všem, co ve Fidoo tvoříme.\n\nJe nás teď cca 100 a stále rosteme. A i díky tomu, že nám v zády stojí skupina Direct, stojíme na pevných základech a můžeme pracovat na dalším rozvoji.\n\nJsme culture-first. Všichni si týkáme a nemáme moc rádi hru na názvy pozic (nepoužíváme třeba slovo ředitel). Základní premisou v našich vztazích je pro nás důvěra. Máme proto třeba neomezenou dovolenou nebo taky nenařizujeme členům týmů, jak mají pracovat. Preferujeme hybridní formu režimu mezi office a home office.\n\nNa jedné straně víme, že doma z obýváku kulturu nevybudujeme, a proto máme moderní kanceláře v Holešovicích, se kterými jsme vyhráli ocenění Kancelář roku 2023. Slouží nám pro společné potkávání týmů a nabízí velké možnosti jak a kde pracovat – kromě sdílených míst také focus roomy, řadu zasedaček, dvě terasy, kavárnu, velký networkingový prostor Direct Plaza nebo venkovní náplavku u Vltavy.\n\nNa druhou stranu víme, že na home office se dá pracovat soustředěněji, a proto je to pro nás standardní forma práce, kterou členové týmu běžně využívají.\n\nDále tě může zaujmout dog-friendly office, neomezený přístup k výborné kávě z šumavské pražírny Café Etincelle ve všech kávovarech nebo různé slevy na produkty skupiny Direct (např. sleva na nákup auta nebo pojištění).\n\nPokud tě zajímá naše kultura a pracovní prostředí víc, určitě nahlédni na náš profil na Cocumě.\n\nRádi ti všechny zmíněné informace rozšíříme na osobním setkání u nás. Pokud vnímáš, že se na roli Solution Architect hodíš, zanech nám své CV nebo profil na LinkedInu skrz formulář níže.\n\nDíky a těšíme se! 👋",
+          "salaryInfo": null,
+          "posterFullName": null,
+          "posterProfileUrl": null,
+          "sector": null,
+          "workMode": "Hybrid",
+          "employmentType": "Freelance, Work Contract",
+          "source": "startupjobscz"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "c749bf71-1a47-4d20-b971-da2b2f32b09a",
+  "activeVersionId": "c749bf71-1a47-4d20-b971-da2b2f32b09a",
   "triggerCount": 0,
   "shared": [
     {
@@ -631,9 +660,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-06T12:30:23.000Z",
-    "createdAt": "2026-03-06T12:30:21.446Z",
-    "versionId": "0f34977d-771f-4e2a-a5a1-ff278c7284ce",
+    "updatedAt": "2026-03-20T07:57:25.000Z",
+    "createdAt": "2026-03-20T07:57:05.837Z",
+    "versionId": "c749bf71-1a47-4d20-b971-da2b2f32b09a",
     "workflowId": "NBCVFrfmAz4h6S1a",
     "nodes": [
       {
@@ -708,7 +737,7 @@
       {
         "parameters": {
           "operation": "executeQuery",
-          "query": "SELECT * FROM match_jobs(\n  ARRAY[{{ $json.embedding.values }}]::vector(1536), \n  '{{ $json.jobUrl }}',\n  1 \n);",
+          "query": "SELECT * FROM match_jobs(\n  ARRAY[{{ $json.embedding.values }}]::extensions.vector(1536), \n  '{{ $json.jobUrl }}',\n  1 \n);",
           "options": {}
         },
         "type": "n8n-nodes-base.postgres",
@@ -724,7 +753,7 @@
         "credentials": {
           "postgres": {
             "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres account"
+            "name": "Postgres careerops"
           }
         }
       },
@@ -1056,7 +1085,7 @@
         "credentials": {
           "postgres": {
             "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres account"
+            "name": "Postgres careerops"
           }
         }
       },
@@ -1236,9 +1265,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version 0f34977d",
+    "name": "Version c749bf71",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": [
     {
