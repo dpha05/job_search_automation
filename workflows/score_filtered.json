@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-09T09:31:13.053Z",
+  "updatedAt": "2026-03-23T07:21:56.622Z",
   "createdAt": "2026-03-05T09:43:45.214Z",
   "id": "gHdlEKX8TSjpy2ON",
   "name": "score_filtered",
@@ -216,6 +216,10 @@
             {
               "fieldId": "status",
               "fieldValue": "scored"
+            },
+            {
+              "fieldId": "lead_progression",
+              "fieldValue": "qualified_lead"
             }
           ]
         }
@@ -842,8 +846,8 @@
       }
     ]
   },
-  "versionId": "07bb6665-0564-4ade-a506-284fc419d7aa",
-  "activeVersionId": "07bb6665-0564-4ade-a506-284fc419d7aa",
+  "versionId": "1beaf710-bb53-4d00-a12d-1233a7431388",
+  "activeVersionId": "1beaf710-bb53-4d00-a12d-1233a7431388",
   "triggerCount": 0,
   "shared": [
     {
@@ -855,9 +859,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-09T09:31:17.000Z",
-    "createdAt": "2026-03-05T09:47:39.952Z",
-    "versionId": "07bb6665-0564-4ade-a506-284fc419d7aa",
+    "updatedAt": "2026-03-23T07:22:01.000Z",
+    "createdAt": "2026-03-23T07:21:56.623Z",
+    "versionId": "1beaf710-bb53-4d00-a12d-1233a7431388",
     "workflowId": "gHdlEKX8TSjpy2ON",
     "nodes": [
       {
@@ -1070,6 +1074,10 @@
               {
                 "fieldId": "status",
                 "fieldValue": "scored"
+              },
+              {
+                "fieldId": "lead_progression",
+                "fieldValue": "qualified_lead"
               }
             ]
           }
@@ -1642,9 +1650,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version 07bb6665",
+    "name": "Version 1beaf710",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": [
     {
