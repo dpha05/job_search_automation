@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-03-11T08:07:01.607Z",
-  "createdAt": "2026-03-06T12:22:00.641Z",
-  "id": "K2KfZFVuadrrWDTC",
+  "updatedAt": "2026-03-27T12:55:49.031Z",
+  "createdAt": "2026-03-27T11:57:18.131Z",
+  "id": "z38m1K07JSAoJ9TT",
   "name": "sync_last_success",
   "active": true,
   "isArchived": false,
@@ -11,8 +11,8 @@
         "rule": {
           "interval": [
             {
-              "field": "cronExpression",
-              "expression": "*/45 8-22 * * *"
+              "field": "minutes",
+              "minutesInterval": 30
             }
           ]
         }
@@ -20,44 +20,11 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.3,
       "position": [
-        -720,
-        -224
+        -304,
+        -144
       ],
-      "id": "7efd436e-ae82-4b3c-9e32-76b3518006da",
+      "id": "ecbdcf5e-a6ce-499d-b574-a0683f923a48",
       "name": "Schedule Trigger"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "4b5c09e6-9ce5-4767-8b89-76527a23c432",
-              "leftValue": "={{ $json.should_run }}",
-              "rightValue": true,
-              "operator": {
-                "type": "boolean",
-                "operation": "equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3,
-      "position": [
-        -112,
-        -224
-      ],
-      "id": "1c58d2d3-b925-4888-819a-71d5bbb181c8",
-      "name": "If"
     },
     {
       "parameters": {
@@ -82,33 +49,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        688,
-        -224
+        816,
+        -48
       ],
-      "id": "2d40bc7c-4556-407e-a8d3-3a98602fed04",
+      "id": "b75384ab-dce5-4902-adf9-3e122f89fbc8",
       "name": "Get Id"
-    },
-    {
-      "parameters": {
-        "operation": "getAll",
-        "tableId": "workflow_health",
-        "returnAll": true
-      },
-      "type": "n8n-nodes-base.supabase",
-      "typeVersion": 1,
-      "position": [
-        -528,
-        -224
-      ],
-      "id": "e7463151-0147-43e1-8ab9-4bdce324ee8f",
-      "name": "Get workflow status",
-      "retryOnFail": true,
-      "credentials": {
-        "supabaseApi": {
-          "id": "qB1TBV7vyX50RGhp",
-          "name": "Supabase account"
-        }
-      }
     },
     {
       "parameters": {
@@ -120,7 +65,7 @@
           "parameters": [
             {
               "name": "tags",
-              "value": "=prod,  {{ $json.workflowTag }}"
+              "value": "=prod,{{ $json.workflow_tag }}"
             }
           ]
         },
@@ -129,10 +74,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        464,
-        -224
+        592,
+        -48
       ],
-      "id": "ed7962c5-2562-4040-9c54-fd2bf7cda4c2",
+      "id": "5dca9335-87d5-4b5f-a08d-e31e296eb85f",
       "name": "Get workflow details",
       "credentials": {
         "httpHeaderAuth": {
@@ -147,23 +92,9 @@
     },
     {
       "parameters": {
-        "mode": "runOnceForEachItem",
-        "jsCode": "const lastSuccessStr = $json.last_success_at;\nconst status = $json.status;\nconst workflowTag = $json.workflow_tag;\n\nlet shouldRun = false;\nlet reason = \"\";\n\nif (!lastSuccessStr) {\n  shouldRun = true;\n  reason = 'No previous success record';\n} else {\n  const lastSuccessDate = new Date(lastSuccessStr);\n  const now = new Date();\n\n  const isToday = \n    lastSuccessDate.getUTCFullYear() === now.getUTCFullYear() &&\n    lastSuccessDate.getUTCMonth() === now.getUTCMonth() &&\n    lastSuccessDate.getUTCDate() === now.getUTCDate();\n\n  shouldRun = (!isToday || status === 'error') && status !== 'running';\n  \n  if (!isToday) {\n    reason = 'Last success was not today';\n  } else if (status === 'error') {\n    reason = 'Last run failed';\n  } else {\n    reason = 'Already done or running';\n  }\n}\n\nreturn { \n  workflowTag, \n  should_run: shouldRun, \n  reason: reason \n};"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -336,
-        -224
-      ],
-      "id": "870a9da5-e7e1-4213-86bf-a85fa613a7ec",
-      "name": "Check shouldRun?"
-    },
-    {
-      "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "={{ $json.data[0].id }}",
+          "value": "={{ $('Get Id').item.json.data[0].id }}",
           "mode": "id"
         },
         "workflowInputs": {
@@ -179,10 +110,10 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        912,
-        -224
+        1264,
+        -48
       ],
-      "id": "74204f86-599d-4efb-81a9-a8fa02239260",
+      "id": "cc3c0e4b-17db-48df-8024-cb426628d0c5",
       "name": "Execute Workflow"
     },
     {
@@ -192,10 +123,10 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        160,
-        -224
+        368,
+        -48
       ],
-      "id": "b72dda7b-306e-4e9e-860b-45726406f628",
+      "id": "32bee2e1-adbe-4981-bef3-45abf7c62d5a",
       "name": "Loop Over Items"
     },
     {
@@ -203,11 +134,109 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        336,
-        -464
+        592,
+        -240
       ],
-      "id": "754bf3b9-ed6d-442b-a761-cd874e68cb8b",
+      "id": "964dce9f-15ce-4354-b29b-d265b927e58f",
       "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT workflow_tag, status, last_success_at, retry_count\nFROM workflow_health\nWHERE \n  (retry_count < 3) \n  AND (\n    (last_success_at IS NULL) OR\n    (status != 'running' AND last_success_at < CURRENT_DATE) OR\n    (status = 'running' AND last_success_at < NOW() - INTERVAL '90 minutes')\n  );",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -80,
+        -144
+      ],
+      "id": "dd578900-63bc-4813-90d2-439dcee0e537",
+      "name": "Get Stuck And Unfired Flows",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4b5c09e6-9ce5-4767-8b89-76527a23c432",
+              "leftValue": "={{ $json.workflow_tag }}",
+              "rightValue": true,
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        144,
+        -144
+      ],
+      "id": "7caec312-0b31-487e-91b7-ed36a44c7fb8",
+      "name": "Is Stuck Or Unfired?"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE workflow_health SET retry_count = retry_count + 1 WHERE workflow_tag = '{{ $json.data[0].name }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1040,
+        -48
+      ],
+      "id": "cfeca93b-958f-476c-9476-d526f40482e0",
+      "name": "Increase Retry Count",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE workflow_health SET retry_count = 0 WHERE workflow_tag = '{{ $('Get Id').item.json.data[0].name }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1488,
+        48
+      ],
+      "id": "042d468e-bd61-4c5d-b6e3-8dbbd1fadf08",
+      "name": "Reset Retry Count",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
     }
   ],
   "connections": {
@@ -215,36 +244,18 @@
       "main": [
         [
           {
-            "node": "Get workflow status",
+            "node": "Get Stuck And Unfired Flows",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "If": {
+    "Get Id": {
       "main": [
         [
           {
-            "node": "Loop Over Items",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "No Operation, do nothing",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get workflow status": {
-      "main": [
-        [
-          {
-            "node": "Check shouldRun?",
+            "node": "Increase Retry Count",
             "type": "main",
             "index": 0
           }
@@ -262,22 +273,11 @@
         ]
       ]
     },
-    "Check shouldRun?": {
+    "Execute Workflow": {
       "main": [
         [
           {
-            "node": "If",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get Id": {
-      "main": [
-        [
-          {
-            "node": "Execute Workflow",
+            "node": "Reset Retry Count",
             "type": "main",
             "index": 0
           }
@@ -302,7 +302,47 @@
         ]
       ]
     },
-    "Execute Workflow": {
+    "Get Stuck And Unfired Flows": {
+      "main": [
+        [
+          {
+            "node": "Is Stuck Or Unfired?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Stuck Or Unfired?": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Increase Retry Count": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reset Retry Count": {
       "main": [
         [
           {
@@ -330,53 +370,32 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {
-    "Schedule Trigger": [
-      {
-        "json": {
-          "timestamp": "2026-03-09T08:45:00.020+01:00",
-          "Readable date": "March 9th 2026, 8:45:00 am",
-          "Readable time": "8:45:00 am",
-          "Day of week": "Monday",
-          "Year": "2026",
-          "Month": "March",
-          "Day of month": "09",
-          "Hour": "08",
-          "Minute": "45",
-          "Second": "00",
-          "Timezone": "Europe/Prague (UTC+01:00)"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ]
-  },
-  "versionId": "65378cf1-c121-4d1b-afe3-94e3563a3da9",
-  "activeVersionId": "65378cf1-c121-4d1b-afe3-94e3563a3da9",
+  "pinData": {},
+  "versionId": "12bc6620-cb26-41c3-a261-83281d2c4a03",
+  "activeVersionId": "12bc6620-cb26-41c3-a261-83281d2c4a03",
   "triggerCount": 1,
   "shared": [
     {
-      "updatedAt": "2026-03-06T12:22:00.643Z",
-      "createdAt": "2026-03-06T12:22:00.643Z",
+      "updatedAt": "2026-03-27T11:57:18.136Z",
+      "createdAt": "2026-03-27T11:57:18.136Z",
       "role": "workflow:owner",
-      "workflowId": "K2KfZFVuadrrWDTC",
+      "workflowId": "z38m1K07JSAoJ9TT",
       "projectId": "540BGLV3Iv8prOb0"
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-11T08:08:47.000Z",
-    "createdAt": "2026-03-11T08:07:01.608Z",
-    "versionId": "65378cf1-c121-4d1b-afe3-94e3563a3da9",
-    "workflowId": "K2KfZFVuadrrWDTC",
+    "updatedAt": "2026-03-27T12:55:51.000Z",
+    "createdAt": "2026-03-27T12:55:49.032Z",
+    "versionId": "12bc6620-cb26-41c3-a261-83281d2c4a03",
+    "workflowId": "z38m1K07JSAoJ9TT",
     "nodes": [
       {
         "parameters": {
           "rule": {
             "interval": [
               {
-                "field": "cronExpression",
-                "expression": "*/45 8-22 * * *"
+                "field": "minutes",
+                "minutesInterval": 30
               }
             ]
           }
@@ -384,44 +403,11 @@
         "type": "n8n-nodes-base.scheduleTrigger",
         "typeVersion": 1.3,
         "position": [
-          -720,
-          -224
+          -304,
+          -144
         ],
-        "id": "7efd436e-ae82-4b3c-9e32-76b3518006da",
+        "id": "ecbdcf5e-a6ce-499d-b574-a0683f923a48",
         "name": "Schedule Trigger"
-      },
-      {
-        "parameters": {
-          "conditions": {
-            "options": {
-              "caseSensitive": true,
-              "leftValue": "",
-              "typeValidation": "strict",
-              "version": 3
-            },
-            "conditions": [
-              {
-                "id": "4b5c09e6-9ce5-4767-8b89-76527a23c432",
-                "leftValue": "={{ $json.should_run }}",
-                "rightValue": true,
-                "operator": {
-                  "type": "boolean",
-                  "operation": "equals"
-                }
-              }
-            ],
-            "combinator": "and"
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.if",
-        "typeVersion": 2.3,
-        "position": [
-          -112,
-          -224
-        ],
-        "id": "1c58d2d3-b925-4888-819a-71d5bbb181c8",
-        "name": "If"
       },
       {
         "parameters": {
@@ -446,33 +432,11 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          688,
-          -224
+          816,
+          -48
         ],
-        "id": "2d40bc7c-4556-407e-a8d3-3a98602fed04",
+        "id": "b75384ab-dce5-4902-adf9-3e122f89fbc8",
         "name": "Get Id"
-      },
-      {
-        "parameters": {
-          "operation": "getAll",
-          "tableId": "workflow_health",
-          "returnAll": true
-        },
-        "type": "n8n-nodes-base.supabase",
-        "typeVersion": 1,
-        "position": [
-          -528,
-          -224
-        ],
-        "id": "e7463151-0147-43e1-8ab9-4bdce324ee8f",
-        "name": "Get workflow status",
-        "retryOnFail": true,
-        "credentials": {
-          "supabaseApi": {
-            "id": "qB1TBV7vyX50RGhp",
-            "name": "Supabase account"
-          }
-        }
       },
       {
         "parameters": {
@@ -484,7 +448,7 @@
             "parameters": [
               {
                 "name": "tags",
-                "value": "=prod,  {{ $json.workflowTag }}"
+                "value": "=prod,{{ $json.workflow_tag }}"
               }
             ]
           },
@@ -493,10 +457,10 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          464,
-          -224
+          592,
+          -48
         ],
-        "id": "ed7962c5-2562-4040-9c54-fd2bf7cda4c2",
+        "id": "5dca9335-87d5-4b5f-a08d-e31e296eb85f",
         "name": "Get workflow details",
         "credentials": {
           "httpHeaderAuth": {
@@ -511,23 +475,9 @@
       },
       {
         "parameters": {
-          "mode": "runOnceForEachItem",
-          "jsCode": "const lastSuccessStr = $json.last_success_at;\nconst status = $json.status;\nconst workflowTag = $json.workflow_tag;\n\nlet shouldRun = false;\nlet reason = \"\";\n\nif (!lastSuccessStr) {\n  shouldRun = true;\n  reason = 'No previous success record';\n} else {\n  const lastSuccessDate = new Date(lastSuccessStr);\n  const now = new Date();\n\n  const isToday = \n    lastSuccessDate.getUTCFullYear() === now.getUTCFullYear() &&\n    lastSuccessDate.getUTCMonth() === now.getUTCMonth() &&\n    lastSuccessDate.getUTCDate() === now.getUTCDate();\n\n  shouldRun = (!isToday || status === 'error') && status !== 'running';\n  \n  if (!isToday) {\n    reason = 'Last success was not today';\n  } else if (status === 'error') {\n    reason = 'Last run failed';\n  } else {\n    reason = 'Already done or running';\n  }\n}\n\nreturn { \n  workflowTag, \n  should_run: shouldRun, \n  reason: reason \n};"
-        },
-        "type": "n8n-nodes-base.code",
-        "typeVersion": 2,
-        "position": [
-          -336,
-          -224
-        ],
-        "id": "870a9da5-e7e1-4213-86bf-a85fa613a7ec",
-        "name": "Check shouldRun?"
-      },
-      {
-        "parameters": {
           "workflowId": {
             "__rl": true,
-            "value": "={{ $json.data[0].id }}",
+            "value": "={{ $('Get Id').item.json.data[0].id }}",
             "mode": "id"
           },
           "workflowInputs": {
@@ -543,10 +493,10 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          912,
-          -224
+          1264,
+          -48
         ],
-        "id": "74204f86-599d-4efb-81a9-a8fa02239260",
+        "id": "cc3c0e4b-17db-48df-8024-cb426628d0c5",
         "name": "Execute Workflow"
       },
       {
@@ -556,10 +506,10 @@
         "type": "n8n-nodes-base.splitInBatches",
         "typeVersion": 3,
         "position": [
-          160,
-          -224
+          368,
+          -48
         ],
-        "id": "b72dda7b-306e-4e9e-860b-45726406f628",
+        "id": "32bee2e1-adbe-4981-bef3-45abf7c62d5a",
         "name": "Loop Over Items"
       },
       {
@@ -567,11 +517,109 @@
         "type": "n8n-nodes-base.noOp",
         "typeVersion": 1,
         "position": [
-          336,
-          -464
+          592,
+          -240
         ],
-        "id": "754bf3b9-ed6d-442b-a761-cd874e68cb8b",
+        "id": "964dce9f-15ce-4354-b29b-d265b927e58f",
         "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT workflow_tag, status, last_success_at, retry_count\nFROM workflow_health\nWHERE \n  (retry_count < 3) \n  AND (\n    (last_success_at IS NULL) OR\n    (status != 'running' AND last_success_at < CURRENT_DATE) OR\n    (status = 'running' AND last_success_at < NOW() - INTERVAL '90 minutes')\n  );",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -80,
+          -144
+        ],
+        "id": "dd578900-63bc-4813-90d2-439dcee0e537",
+        "name": "Get Stuck And Unfired Flows",
+        "alwaysOutputData": true,
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "4b5c09e6-9ce5-4767-8b89-76527a23c432",
+                "leftValue": "={{ $json.workflow_tag }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          144,
+          -144
+        ],
+        "id": "7caec312-0b31-487e-91b7-ed36a44c7fb8",
+        "name": "Is Stuck Or Unfired?"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "UPDATE workflow_health SET retry_count = retry_count + 1 WHERE workflow_tag = '{{ $json.data[0].name }}';",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          1040,
+          -48
+        ],
+        "id": "cfeca93b-958f-476c-9476-d526f40482e0",
+        "name": "Increase Retry Count",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "UPDATE workflow_health SET retry_count = 0 WHERE workflow_tag = '{{ $('Get Id').item.json.data[0].name }}';",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          1488,
+          48
+        ],
+        "id": "042d468e-bd61-4c5d-b6e3-8dbbd1fadf08",
+        "name": "Reset Retry Count",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
       }
     ],
     "connections": {
@@ -579,36 +627,18 @@
         "main": [
           [
             {
-              "node": "Get workflow status",
+              "node": "Get Stuck And Unfired Flows",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "If": {
+      "Get Id": {
         "main": [
           [
             {
-              "node": "Loop Over Items",
-              "type": "main",
-              "index": 0
-            }
-          ],
-          [
-            {
-              "node": "No Operation, do nothing",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Get workflow status": {
-        "main": [
-          [
-            {
-              "node": "Check shouldRun?",
+              "node": "Increase Retry Count",
               "type": "main",
               "index": 0
             }
@@ -626,22 +656,11 @@
           ]
         ]
       },
-      "Check shouldRun?": {
+      "Execute Workflow": {
         "main": [
           [
             {
-              "node": "If",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Get Id": {
-        "main": [
-          [
-            {
-              "node": "Execute Workflow",
+              "node": "Reset Retry Count",
               "type": "main",
               "index": 0
             }
@@ -666,7 +685,47 @@
           ]
         ]
       },
-      "Execute Workflow": {
+      "Get Stuck And Unfired Flows": {
+        "main": [
+          [
+            {
+              "node": "Is Stuck Or Unfired?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Is Stuck Or Unfired?": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Increase Retry Count": {
+        "main": [
+          [
+            {
+              "node": "Execute Workflow",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Reset Retry Count": {
         "main": [
           [
             {
@@ -679,9 +738,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version 65378cf1",
+    "name": "Version 12bc6620",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": [
     {
