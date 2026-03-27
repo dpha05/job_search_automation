@@ -425,7 +425,7 @@
   "meta": null,
   "pinData": {},
   "versionId": "b3d20bee-4736-453c-9e9e-d85eb7e63ec3",
-  "activeVersionId": "f5c6a097-198b-49fb-8c85-c4892b8cf1ef",
+  "activeVersionId": "b3d20bee-4736-453c-9e9e-d85eb7e63ec3",
   "triggerCount": 1,
   "shared": [
     {
@@ -437,9 +437,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-06T12:30:38.000Z",
-    "createdAt": "2026-03-06T12:30:36.611Z",
-    "versionId": "f5c6a097-198b-49fb-8c85-c4892b8cf1ef",
+    "updatedAt": "2026-03-27T11:55:12.000Z",
+    "createdAt": "2026-03-26T06:53:49.371Z",
+    "versionId": "b3d20bee-4736-453c-9e9e-d85eb7e63ec3",
     "workflowId": "7TRjT3YJDeAlSHqk",
     "nodes": [
       {
@@ -586,7 +586,7 @@
         "credentials": {
           "postgres": {
             "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres account"
+            "name": "Postgres careerops"
           }
         }
       },
@@ -661,7 +661,7 @@
         "credentials": {
           "postgres": {
             "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres account"
+            "name": "Postgres careerops"
           }
         }
       },
@@ -684,9 +684,19 @@
                   "operation": "empty",
                   "singleValue": true
                 }
+              },
+              {
+                "id": "3386fa3f-36f9-43c7-84ce-26a26496d820",
+                "leftValue": "={{ $json.source }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "empty",
+                  "singleValue": true
+                }
               }
             ],
-            "combinator": "and"
+            "combinator": "or"
           },
           "options": {}
         },
@@ -836,7 +846,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version f5c6a097",
+    "name": "Version b3d20bee",
     "description": "",
     "autosaved": false
   },
