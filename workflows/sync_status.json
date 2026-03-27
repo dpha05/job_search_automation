@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-06T13:20:17.216Z",
+  "updatedAt": "2026-03-26T06:53:50.076Z",
   "createdAt": "2026-03-06T12:22:31.762Z",
   "id": "7TRjT3YJDeAlSHqk",
   "name": "sync_status",
@@ -150,7 +150,7 @@
       "credentials": {
         "postgres": {
           "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres account"
+          "name": "Postgres careerops"
         }
       }
     },
@@ -225,7 +225,7 @@
       "credentials": {
         "postgres": {
           "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres account"
+          "name": "Postgres careerops"
         }
       }
     },
@@ -248,9 +248,19 @@
                 "operation": "empty",
                 "singleValue": true
               }
+            },
+            {
+              "id": "3386fa3f-36f9-43c7-84ce-26a26496d820",
+              "leftValue": "={{ $json.source }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
             }
           ],
-          "combinator": "and"
+          "combinator": "or"
         },
         "options": {}
       },
@@ -414,7 +424,7 @@
   },
   "meta": null,
   "pinData": {},
-  "versionId": "f5c6a097-198b-49fb-8c85-c4892b8cf1ef",
+  "versionId": "b3d20bee-4736-453c-9e9e-d85eb7e63ec3",
   "activeVersionId": "f5c6a097-198b-49fb-8c85-c4892b8cf1ef",
   "triggerCount": 1,
   "shared": [
