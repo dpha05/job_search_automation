@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-23T07:27:29.774Z",
+  "updatedAt": "2026-03-27T08:09:19.091Z",
   "createdAt": "2026-03-05T09:43:06.766Z",
   "id": "fShvCbZRgCtLGec8",
   "name": "score_reject_technical",
@@ -8,7 +8,7 @@
   "nodes": [
     {
       "parameters": {
-        "jsCode": "const items = $('Standardize input').all();\n\nconst hardReject = [\n'sales', 'director', 'assistant', 'recruiter', 'intern',  'stáž', 'graduate', 'account manager', 'executive', 'head', 'representative', 'marketing', 'ředitel', 'vedoucí', 'legal', 'prodej', 'obchod', 'customer success', 'seo', 'lead', 'principal', 'staff', 'part-time', 'part time', 'junior'\n];\n\nconst contextualReject = [ \n'full-stack', 'fullstack', 'java', 'php', 'c++', 'c#', '.net', 'kotlin', 'rust', 'golang', 'ios', 'android', 'swift', 'react native', 'qa automation', 'test automation', 'kubernetes', 'manual tester', 'developer', 'vývojář', 'engineer', 'inženýr', 'consultant'\n];\n\nconst saviorKeyword = [\n'ai', 'automat', 'n8n', 'agent', 'architect', 'ops', 'operat', 'solution', 'workflow', 'specialist', 'low-code', 'no-code', 'integration', 'product', 'mcp', 'implement', 'bridge', 'process', 'enablement', 'strategy', 'delivery'\n]\n\nreturn items.map(item => {\n  const title = (item.json.job_title || \"\").toLowerCase();\n\n  let newStatus = 'filtered';\n\n  const isHardReject = hardReject.some(word => title.includes(word));\n  const isContextualReject = contextualReject.some(word => title.includes(word));\n  const hasSavior = saviorKeyword.some(word => title.includes(word));\n  \n  if (isHardReject) {\n    newStatus = 'rejected';\n  }\n  else if (hasSavior) {\n    newStatus = 'passed_title';\n  }\n  else if (isContextualReject) {\n    newStatus = 'rejected';\n  }\n\n  return {\n    json: {\n      ...item.json,\n      status: newStatus,\n    }\n  };\n});"
+        "jsCode": "const items = $('Standardize input').all();\n\nconst hardReject = [\n'sales', 'director', 'assistant', 'recruiter', 'intern',  'stáž', 'graduate', 'account manager', 'executive', 'head', 'representative', 'marketing', 'ředitel', 'vedoucí', 'legal', 'prodej', 'obchod', 'customer success', 'seo', 'lead', 'principal', 'staff', 'part-time', 'part time', 'junior'\n];\n\nconst contextualReject = [ \n'full-stack', 'fullstack', 'java', 'php', 'c++', 'c#', '.net', 'kotlin', 'rust', 'golang', 'ios', 'android', 'swift', 'react native', 'qa automation', 'test automation', 'kubernetes', 'manual tester', 'developer', 'vývojář', 'engineer', 'inženýr', 'consultant'\n];\n\nconst saviorKeyword = [\n'ai', 'automat', 'n8n', 'agent', 'architect', 'ops', 'operat', 'solution', 'workflow', 'specialist', 'low-code', 'no-code', 'integration', 'product', 'mcp', 'implement', 'bridge', 'process', 'enablement', 'strategy', 'delivery'\n]\n\nreturn items.map(item => {\n  const title = (item.json.job_title || \"\").toLowerCase();\n\n  let newStatus = 'filtered';\n\n  const isHardReject = hardReject.some(word => title.includes(word));\n  const isContextualReject = contextualReject.some(word => title.includes(word));\n  const hasSavior = saviorKeyword.some(word => title.includes(word));\n  \n  if (isHardReject) {\n    newStatus = 'rejected_title';\n  }\n  else if (hasSavior) {\n    newStatus = 'passed_title';\n  }\n  else if (isContextualReject) {\n    newStatus = 'rejected_title';\n  }\n\n  return {\n    json: {\n      ...item.json,\n      status: newStatus,\n    }\n  };\n});"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -117,7 +117,7 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const llmScore = $json.technicalScoreLLM;\nconst cosineScore = $json.technicalScoreCosine;\nconst weightedScore = $json.new_technical_score;\nconst title = $json.job_title.toLowerCase();\nconst hasAI = title.includes('ai');\nconst multipliedScore = Math.round(weightedScore * 100);\n\nconst maxAllowedDiff = 0.4;\nconst passMax = 0.5;\nconst reviewMax = 0.59;\n\nlet finalDecision = 'rejected';\nlet reason = 'Too technical';\nlet applicationStage = 'lead';\n\nconst scoreDifference = Math.abs(llmScore - cosineScore);\n\nif (scoreDifference > maxAllowedDiff && llmScore < reviewMax) {\n  finalDecision = 'manual_review';\n  reason = \"LLM and Cosine score difference too big\";\n}\nelse if (weightedScore < passMax) {\n  finalDecision = 'passed_description';\n  reason = 'Not so technical'\n}\nelse if (weightedScore >= passMax && weightedScore <= reviewMax) {\n  if (hasAI) {\n    finalDecision = 'manual_review';\n    reason = 'Mid technical with AI title';\n  } else {\n    finalDecision = 'rejected';\n    reason = 'Mid technical without AI title';\n    applicationStage = 'withdrawn';\n  }\n}\n\nreturn {\n  json: {\n    ...$json,\n    status: finalDecision,\n    multipliedScore,\n    reason,\n    applicationStage\n  }\n};"
+        "jsCode": "const llmScore = $json.technicalScoreLLM;\nconst cosineScore = $json.technicalScoreCosine;\nconst weightedScore = $json.new_technical_score;\nconst title = $json.job_title.toLowerCase();\nconst hasAI = title.includes('ai');\nconst multipliedScore = Math.round(weightedScore * 100);\n\nconst maxAllowedDiff = 0.4;\nconst passMax = 0.5;\nconst reviewMax = 0.65;\n\nlet finalDecision = 'rejected_description';\nlet reason = 'Too technical';\nlet applicationStage = 'lead';\n\nconst scoreDifference = Math.abs(llmScore - cosineScore);\n\nif (scoreDifference > maxAllowedDiff && llmScore < reviewMax) {\n  finalDecision = 'manual_review';\n  reason = \"LLM and Cosine score difference too big\";\n}\nelse if (weightedScore < passMax) {\n  finalDecision = 'passed_description';\n  reason = 'Not so technical'\n}\nelse if (weightedScore >= passMax && weightedScore <= reviewMax) {\n  if (hasAI) {\n    finalDecision = 'manual_review';\n    reason = 'Mid technical with AI title';\n  } else {\n    finalDecision = 'rejected_description';\n    reason = 'Mid technical without AI title';\n    applicationStage = 'withdrawn';\n  }\n}\n\nreturn {\n  json: {\n    ...$json,\n    status: finalDecision,\n    multipliedScore,\n    reason,\n    applicationStage\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -840,8 +840,8 @@
       }
     ]
   },
-  "versionId": "72b8f675-a10e-4d59-8238-c274d3fe6fd2",
-  "activeVersionId": "72b8f675-a10e-4d59-8238-c274d3fe6fd2",
+  "versionId": "834403de-c059-41a7-97d8-420c8a43eac4",
+  "activeVersionId": "834403de-c059-41a7-97d8-420c8a43eac4",
   "triggerCount": 0,
   "shared": [
     {
@@ -853,14 +853,14 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-23T07:27:32.000Z",
-    "createdAt": "2026-03-23T07:27:29.774Z",
-    "versionId": "72b8f675-a10e-4d59-8238-c274d3fe6fd2",
+    "updatedAt": "2026-03-27T08:09:30.000Z",
+    "createdAt": "2026-03-27T08:09:19.092Z",
+    "versionId": "834403de-c059-41a7-97d8-420c8a43eac4",
     "workflowId": "fShvCbZRgCtLGec8",
     "nodes": [
       {
         "parameters": {
-          "jsCode": "const items = $('Standardize input').all();\n\nconst hardReject = [\n'sales', 'director', 'assistant', 'recruiter', 'intern',  'stáž', 'graduate', 'account manager', 'executive', 'head', 'representative', 'marketing', 'ředitel', 'vedoucí', 'legal', 'prodej', 'obchod', 'customer success', 'seo', 'lead', 'principal', 'staff', 'part-time', 'part time', 'junior'\n];\n\nconst contextualReject = [ \n'full-stack', 'fullstack', 'java', 'php', 'c++', 'c#', '.net', 'kotlin', 'rust', 'golang', 'ios', 'android', 'swift', 'react native', 'qa automation', 'test automation', 'kubernetes', 'manual tester', 'developer', 'vývojář', 'engineer', 'inženýr', 'consultant'\n];\n\nconst saviorKeyword = [\n'ai', 'automat', 'n8n', 'agent', 'architect', 'ops', 'operat', 'solution', 'workflow', 'specialist', 'low-code', 'no-code', 'integration', 'product', 'mcp', 'implement', 'bridge', 'process', 'enablement', 'strategy', 'delivery'\n]\n\nreturn items.map(item => {\n  const title = (item.json.job_title || \"\").toLowerCase();\n\n  let newStatus = 'filtered';\n\n  const isHardReject = hardReject.some(word => title.includes(word));\n  const isContextualReject = contextualReject.some(word => title.includes(word));\n  const hasSavior = saviorKeyword.some(word => title.includes(word));\n  \n  if (isHardReject) {\n    newStatus = 'rejected';\n  }\n  else if (hasSavior) {\n    newStatus = 'passed_title';\n  }\n  else if (isContextualReject) {\n    newStatus = 'rejected';\n  }\n\n  return {\n    json: {\n      ...item.json,\n      status: newStatus,\n    }\n  };\n});"
+          "jsCode": "const items = $('Standardize input').all();\n\nconst hardReject = [\n'sales', 'director', 'assistant', 'recruiter', 'intern',  'stáž', 'graduate', 'account manager', 'executive', 'head', 'representative', 'marketing', 'ředitel', 'vedoucí', 'legal', 'prodej', 'obchod', 'customer success', 'seo', 'lead', 'principal', 'staff', 'part-time', 'part time', 'junior'\n];\n\nconst contextualReject = [ \n'full-stack', 'fullstack', 'java', 'php', 'c++', 'c#', '.net', 'kotlin', 'rust', 'golang', 'ios', 'android', 'swift', 'react native', 'qa automation', 'test automation', 'kubernetes', 'manual tester', 'developer', 'vývojář', 'engineer', 'inženýr', 'consultant'\n];\n\nconst saviorKeyword = [\n'ai', 'automat', 'n8n', 'agent', 'architect', 'ops', 'operat', 'solution', 'workflow', 'specialist', 'low-code', 'no-code', 'integration', 'product', 'mcp', 'implement', 'bridge', 'process', 'enablement', 'strategy', 'delivery'\n]\n\nreturn items.map(item => {\n  const title = (item.json.job_title || \"\").toLowerCase();\n\n  let newStatus = 'filtered';\n\n  const isHardReject = hardReject.some(word => title.includes(word));\n  const isContextualReject = contextualReject.some(word => title.includes(word));\n  const hasSavior = saviorKeyword.some(word => title.includes(word));\n  \n  if (isHardReject) {\n    newStatus = 'rejected_title';\n  }\n  else if (hasSavior) {\n    newStatus = 'passed_title';\n  }\n  else if (isContextualReject) {\n    newStatus = 'rejected_title';\n  }\n\n  return {\n    json: {\n      ...item.json,\n      status: newStatus,\n    }\n  };\n});"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -969,7 +969,7 @@
       {
         "parameters": {
           "mode": "runOnceForEachItem",
-          "jsCode": "const llmScore = $json.technicalScoreLLM;\nconst cosineScore = $json.technicalScoreCosine;\nconst weightedScore = $json.new_technical_score;\nconst title = $json.job_title.toLowerCase();\nconst hasAI = title.includes('ai');\nconst multipliedScore = Math.round(weightedScore * 100);\n\nconst maxAllowedDiff = 0.4;\nconst passMax = 0.5;\nconst reviewMax = 0.59;\n\nlet finalDecision = 'rejected';\nlet reason = 'Too technical';\nlet applicationStage = 'lead';\n\nconst scoreDifference = Math.abs(llmScore - cosineScore);\n\nif (scoreDifference > maxAllowedDiff && llmScore < reviewMax) {\n  finalDecision = 'manual_review';\n  reason = \"LLM and Cosine score difference too big\";\n}\nelse if (weightedScore < passMax) {\n  finalDecision = 'passed_description';\n  reason = 'Not so technical'\n}\nelse if (weightedScore >= passMax && weightedScore <= reviewMax) {\n  if (hasAI) {\n    finalDecision = 'manual_review';\n    reason = 'Mid technical with AI title';\n  } else {\n    finalDecision = 'rejected';\n    reason = 'Mid technical without AI title';\n    applicationStage = 'withdrawn';\n  }\n}\n\nreturn {\n  json: {\n    ...$json,\n    status: finalDecision,\n    multipliedScore,\n    reason,\n    applicationStage\n  }\n};"
+          "jsCode": "const llmScore = $json.technicalScoreLLM;\nconst cosineScore = $json.technicalScoreCosine;\nconst weightedScore = $json.new_technical_score;\nconst title = $json.job_title.toLowerCase();\nconst hasAI = title.includes('ai');\nconst multipliedScore = Math.round(weightedScore * 100);\n\nconst maxAllowedDiff = 0.4;\nconst passMax = 0.5;\nconst reviewMax = 0.65;\n\nlet finalDecision = 'rejected_description';\nlet reason = 'Too technical';\nlet applicationStage = 'lead';\n\nconst scoreDifference = Math.abs(llmScore - cosineScore);\n\nif (scoreDifference > maxAllowedDiff && llmScore < reviewMax) {\n  finalDecision = 'manual_review';\n  reason = \"LLM and Cosine score difference too big\";\n}\nelse if (weightedScore < passMax) {\n  finalDecision = 'passed_description';\n  reason = 'Not so technical'\n}\nelse if (weightedScore >= passMax && weightedScore <= reviewMax) {\n  if (hasAI) {\n    finalDecision = 'manual_review';\n    reason = 'Mid technical with AI title';\n  } else {\n    finalDecision = 'rejected_description';\n    reason = 'Mid technical without AI title';\n    applicationStage = 'withdrawn';\n  }\n}\n\nreturn {\n  json: {\n    ...$json,\n    status: finalDecision,\n    multipliedScore,\n    reason,\n    applicationStage\n  }\n};"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -1632,7 +1632,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 72b8f675",
+    "name": "Version 834403de",
     "description": "",
     "autosaved": true
   },
