@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-20T07:57:45.928Z",
+  "updatedAt": "2026-03-27T08:09:46.706Z",
   "createdAt": "2026-03-05T09:46:11.745Z",
   "id": "bhlGPoZTR6B1MQhp",
   "name": "score_reject_nonAI",
@@ -455,7 +455,7 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const weightedScore = $json.final_weighted_score;\nconst multipliedScore = Math.round(weightedScore * 100);\n\nconst passMin = 0.27;\n\nlet finalDecision = 'rejected';\nlet reason = 'little AI responsibility';\nlet applicationStage = 'lead';\n\nif (weightedScore >= passMin) {\n  finalDecision = 'passed_responsibility';\n  reason = \"enough AI responsibility\";\n}\nelse {\n  finalDecision = 'rejected';\n  applicationStage = 'withdrawn';\n}\n\nreturn {\n  json: {\n    ...$json,\n    status: finalDecision,\n    multipliedScore,\n    reason,\n    applicationStage\n  }\n};"
+        "jsCode": "const weightedScore = $json.final_weighted_score;\nconst multipliedScore = Math.round(weightedScore * 100);\n\nconst passMin = 0.27;\n\nlet finalDecision = 'rejected_nonAI';\nlet reason = 'little AI responsibility';\nlet applicationStage = 'lead';\n\nif (weightedScore >= passMin) {\n  finalDecision = 'passed_responsibility';\n  reason = \"enough AI responsibility\";\n}\nelse {\n  finalDecision = 'rejected_nonAI';\n  applicationStage = 'withdrawn';\n}\n\nreturn {\n  json: {\n    ...$json,\n    status: finalDecision,\n    multipliedScore,\n    reason,\n    applicationStage\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -756,8 +756,8 @@
       }
     ]
   },
-  "versionId": "856667e4-5a3e-4776-ba61-92002a94293d",
-  "activeVersionId": "856667e4-5a3e-4776-ba61-92002a94293d",
+  "versionId": "1df283d6-b38e-4364-9ca6-deb08f79a5f6",
+  "activeVersionId": "1df283d6-b38e-4364-9ca6-deb08f79a5f6",
   "triggerCount": 0,
   "shared": [
     {
@@ -769,9 +769,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-20T07:57:48.000Z",
-    "createdAt": "2026-03-20T07:57:45.930Z",
-    "versionId": "856667e4-5a3e-4776-ba61-92002a94293d",
+    "updatedAt": "2026-03-27T08:09:53.000Z",
+    "createdAt": "2026-03-27T08:09:46.707Z",
+    "versionId": "1df283d6-b38e-4364-9ca6-deb08f79a5f6",
     "workflowId": "bhlGPoZTR6B1MQhp",
     "nodes": [
       {
@@ -1223,7 +1223,7 @@
       {
         "parameters": {
           "mode": "runOnceForEachItem",
-          "jsCode": "const weightedScore = $json.final_weighted_score;\nconst multipliedScore = Math.round(weightedScore * 100);\n\nconst passMin = 0.27;\n\nlet finalDecision = 'rejected';\nlet reason = 'little AI responsibility';\nlet applicationStage = 'lead';\n\nif (weightedScore >= passMin) {\n  finalDecision = 'passed_responsibility';\n  reason = \"enough AI responsibility\";\n}\nelse {\n  finalDecision = 'rejected';\n  applicationStage = 'withdrawn';\n}\n\nreturn {\n  json: {\n    ...$json,\n    status: finalDecision,\n    multipliedScore,\n    reason,\n    applicationStage\n  }\n};"
+          "jsCode": "const weightedScore = $json.final_weighted_score;\nconst multipliedScore = Math.round(weightedScore * 100);\n\nconst passMin = 0.27;\n\nlet finalDecision = 'rejected_nonAI';\nlet reason = 'little AI responsibility';\nlet applicationStage = 'lead';\n\nif (weightedScore >= passMin) {\n  finalDecision = 'passed_responsibility';\n  reason = \"enough AI responsibility\";\n}\nelse {\n  finalDecision = 'rejected_nonAI';\n  applicationStage = 'withdrawn';\n}\n\nreturn {\n  json: {\n    ...$json,\n    status: finalDecision,\n    multipliedScore,\n    reason,\n    applicationStage\n  }\n};"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -1443,7 +1443,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 856667e4",
+    "name": "Version 1df283d6",
     "description": "",
     "autosaved": true
   },
