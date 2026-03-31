@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-17T07:47:21.433Z",
+  "updatedAt": "2026-03-30T06:36:40.901Z",
   "createdAt": "2026-03-06T12:06:20.463Z",
   "id": "R9D0hoi99OqinBsn",
   "name": "scrape_linkedin",
@@ -214,8 +214,8 @@
       "retryOnFail": true,
       "credentials": {
         "apifyApi": {
-          "id": "Z9ZzwclUGcruR8o6",
-          "name": "Apify account 2"
+          "id": "i5PH9MrmLNn1QJba",
+          "name": "Apify account"
         }
       }
     },
@@ -257,8 +257,7 @@
           "cachedResultName": "LinkedIn Jobs Scraper | Remove Duplicate Jobs | Pay Per Result (cheap_scraper/linkedin-job-scraper)",
           "cachedResultUrl": "https://console.apify.com/actors/2rJKkhh7vjpX7pvjg/input"
         },
-        "customBody": "={\n    \"distance\": \"50\",\n    \"enrichCompanyData\": false,\n    \"experienceLevel\": [\n        \"associate\",\n        \"mid-senior\"\n    ],\n    \"jobType\": [\n        \"full-time\",\n        \"contract\"\n    ],\n    \"keyword\": [\n        \"AI engineer\",\n        \"AI operator\",\n        \"AI automation specialist\",\n        \"AI solutions architect\",\n        \"AI workflow designer\",\n        \"Agentic AI\",\n        \"AI implementation\",\n        \"low-code AI\",\n        \"AI specialist\",\n        \"AI Ops\"\n    ],\n    \"location\": \"{{ $json.region }}\",\n    \"publishedAt\": \"{{ $json.publishedAtString }}\",\n    \"saveOnlyUniqueItems\": true,\n    \"workType\": [\n        \"remote\"\n    ]\n}",
-        "timeout": {}
+        "customBody": "={\n    \"distance\": \"50\",\n    \"enrichCompanyData\": false,\n    \"experienceLevel\": [\n        \"associate\",\n        \"mid-senior\"\n    ],\n    \"jobType\": [\n        \"full-time\",\n        \"contract\"\n    ],\n    \"keyword\": [\n        \"AI engineer\",\n        \"AI operator\",\n        \"AI automation specialist\",\n        \"AI solutions architect\",\n        \"AI workflow designer\",\n        \"Agentic AI\",\n        \"AI implementation\",\n        \"low-code AI\",\n        \"AI specialist\",\n        \"AI Ops\"\n    ],\n    \"location\": \"{{ $json.region }}\",\n    \"publishedAt\": \"{{ $json.publishedAtString }}\",\n    \"saveOnlyUniqueItems\": true,\n    \"workType\": [\n        \"remote\"\n    ]\n}"
       },
       "type": "@apify/n8n-nodes-apify.apify",
       "typeVersion": 1,
@@ -272,8 +271,8 @@
       "retryOnFail": true,
       "credentials": {
         "apifyApi": {
-          "id": "Z9ZzwclUGcruR8o6",
-          "name": "Apify account 2"
+          "id": "i5PH9MrmLNn1QJba",
+          "name": "Apify account"
         }
       }
     },
@@ -397,8 +396,7 @@
           "cachedResultName": "LinkedIn Jobs Scraper | Remove Duplicate Jobs | Pay Per Result (cheap_scraper/linkedin-job-scraper)",
           "cachedResultUrl": "https://console.apify.com/actors/2rJKkhh7vjpX7pvjg/input"
         },
-        "customBody": "={\n    \"distance\": \"50\",\n    \"enrichCompanyData\": false,\n    \"experienceLevel\": [\n        \"associate\",\n        \"mid-senior\"\n    ],\n    \"jobType\": [\n        \"full-time\",\n        \"contract\"\n    ],\n    \"keyword\": [\n        \"AI engineer\",\n        \"AI operator\",\n        \"AI automation specialist\",\n        \"AI solutions architect\",\n        \"AI workflow designer\",\n        \"Agentic AI\",\n        \"AI implementation\",\n        \"low-code AI\",\n        \"AI specialist\",\n        \"AI Ops\"\n    ],\n    \"location\": \"{{ $json.region }}\",\n    \"publishedAt\": \"{{ $json.publishedAtString }}\",\n    \"saveOnlyUniqueItems\": true,\n    \"workType\": [\n        \"remote\"\n    ]\n}",
-        "timeout": {}
+        "customBody": "={\n    \"distance\": \"50\",\n    \"enrichCompanyData\": false,\n    \"experienceLevel\": [\n        \"associate\",\n        \"mid-senior\"\n    ],\n    \"jobType\": [\n        \"full-time\",\n        \"contract\"\n    ],\n    \"keyword\": [\n        \"AI engineer\",\n        \"AI operator\",\n        \"AI automation specialist\",\n        \"AI solutions architect\",\n        \"AI workflow designer\",\n        \"Agentic AI\",\n        \"AI implementation\",\n        \"low-code AI\",\n        \"AI specialist\",\n        \"AI Ops\"\n    ],\n    \"location\": \"{{ $json.region }}\",\n    \"publishedAt\": \"{{ $json.publishedAtString }}\",\n    \"saveOnlyUniqueItems\": true,\n    \"workType\": [\n        \"remote\"\n    ]\n}"
       },
       "type": "@apify/n8n-nodes-apify.apify",
       "typeVersion": 1,
@@ -412,8 +410,8 @@
       "retryOnFail": true,
       "credentials": {
         "apifyApi": {
-          "id": "Z9ZzwclUGcruR8o6",
-          "name": "Apify account 2"
+          "id": "i5PH9MrmLNn1QJba",
+          "name": "Apify account"
         }
       }
     },
@@ -427,8 +425,7 @@
           "cachedResultName": "LinkedIn Jobs Scraper | Remove Duplicate Jobs | Pay Per Result (cheap_scraper/linkedin-job-scraper)",
           "cachedResultUrl": "https://console.apify.com/actors/2rJKkhh7vjpX7pvjg/input"
         },
-        "customBody": "={\n    \"distance\": \"50\",\n    \"enrichCompanyData\": false,\n    \"experienceLevel\": [\n        \"associate\",\n        \"mid-senior\"\n    ],\n    \"jobType\": [\n        \"full-time\",\n        \"contract\"\n    ],\n    \"keyword\": [\n        \"AI engineer\",\n        \"AI operator\",\n        \"AI automation specialist\",\n        \"AI solutions architect\",\n        \"AI workflow designer\",\n        \"Agentic AI\",\n        \"AI implementation\",\n        \"low-code AI\",\n        \"AI specialist\",\n        \"AI Ops\"\n    ],\n    \"location\": \"{{ $json.region }}\",\n    \"publishedAt\": \"{{ $json.publishedAtString }}\",\n    \"saveOnlyUniqueItems\": true,\n    \"workType\": [\n        \"remote\"\n    ]\n}",
-        "timeout": {}
+        "customBody": "={\n    \"distance\": \"50\",\n    \"enrichCompanyData\": false,\n    \"experienceLevel\": [\n        \"associate\",\n        \"mid-senior\"\n    ],\n    \"jobType\": [\n        \"full-time\",\n        \"contract\"\n    ],\n    \"keyword\": [\n        \"AI engineer\",\n        \"AI operator\",\n        \"AI automation specialist\",\n        \"AI solutions architect\",\n        \"AI workflow designer\",\n        \"Agentic AI\",\n        \"AI implementation\",\n        \"low-code AI\",\n        \"AI specialist\",\n        \"AI Ops\"\n    ],\n    \"location\": \"{{ $json.region }}\",\n    \"publishedAt\": \"{{ $json.publishedAtString }}\",\n    \"saveOnlyUniqueItems\": true,\n    \"workType\": [\n        \"remote\"\n    ]\n}"
       },
       "type": "@apify/n8n-nodes-apify.apify",
       "typeVersion": 1,
@@ -442,8 +439,8 @@
       "retryOnFail": true,
       "credentials": {
         "apifyApi": {
-          "id": "Z9ZzwclUGcruR8o6",
-          "name": "Apify account 2"
+          "id": "i5PH9MrmLNn1QJba",
+          "name": "Apify account"
         }
       }
     },
@@ -3369,8 +3366,8 @@
       }
     ]
   },
-  "versionId": "307c6454-8978-48ea-b5e0-83c45b71bcee",
-  "activeVersionId": "307c6454-8978-48ea-b5e0-83c45b71bcee",
+  "versionId": "49f63746-49ea-4d19-a792-c36273220993",
+  "activeVersionId": "49f63746-49ea-4d19-a792-c36273220993",
   "triggerCount": 1,
   "shared": [
     {
@@ -3382,9 +3379,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-20T07:59:03.000Z",
-    "createdAt": "2026-03-17T07:47:21.433Z",
-    "versionId": "307c6454-8978-48ea-b5e0-83c45b71bcee",
+    "updatedAt": "2026-03-30T06:36:47.000Z",
+    "createdAt": "2026-03-30T06:36:40.901Z",
+    "versionId": "49f63746-49ea-4d19-a792-c36273220993",
     "workflowId": "R9D0hoi99OqinBsn",
     "nodes": [
       {
@@ -3595,8 +3592,8 @@
         "retryOnFail": true,
         "credentials": {
           "apifyApi": {
-            "id": "Z9ZzwclUGcruR8o6",
-            "name": "Apify account 2"
+            "id": "i5PH9MrmLNn1QJba",
+            "name": "Apify account"
           }
         }
       },
@@ -3638,8 +3635,7 @@
             "cachedResultName": "LinkedIn Jobs Scraper | Remove Duplicate Jobs | Pay Per Result (cheap_scraper/linkedin-job-scraper)",
             "cachedResultUrl": "https://console.apify.com/actors/2rJKkhh7vjpX7pvjg/input"
           },
-          "customBody": "={\n    \"distance\": \"50\",\n    \"enrichCompanyData\": false,\n    \"experienceLevel\": [\n        \"associate\",\n        \"mid-senior\"\n    ],\n    \"jobType\": [\n        \"full-time\",\n        \"contract\"\n    ],\n    \"keyword\": [\n        \"AI engineer\",\n        \"AI operator\",\n        \"AI automation specialist\",\n        \"AI solutions architect\",\n        \"AI workflow designer\",\n        \"Agentic AI\",\n        \"AI implementation\",\n        \"low-code AI\",\n        \"AI specialist\",\n        \"AI Ops\"\n    ],\n    \"location\": \"{{ $json.region }}\",\n    \"publishedAt\": \"{{ $json.publishedAtString }}\",\n    \"saveOnlyUniqueItems\": true,\n    \"workType\": [\n        \"remote\"\n    ]\n}",
-          "timeout": {}
+          "customBody": "={\n    \"distance\": \"50\",\n    \"enrichCompanyData\": false,\n    \"experienceLevel\": [\n        \"associate\",\n        \"mid-senior\"\n    ],\n    \"jobType\": [\n        \"full-time\",\n        \"contract\"\n    ],\n    \"keyword\": [\n        \"AI engineer\",\n        \"AI operator\",\n        \"AI automation specialist\",\n        \"AI solutions architect\",\n        \"AI workflow designer\",\n        \"Agentic AI\",\n        \"AI implementation\",\n        \"low-code AI\",\n        \"AI specialist\",\n        \"AI Ops\"\n    ],\n    \"location\": \"{{ $json.region }}\",\n    \"publishedAt\": \"{{ $json.publishedAtString }}\",\n    \"saveOnlyUniqueItems\": true,\n    \"workType\": [\n        \"remote\"\n    ]\n}"
         },
         "type": "@apify/n8n-nodes-apify.apify",
         "typeVersion": 1,
@@ -3653,8 +3649,8 @@
         "retryOnFail": true,
         "credentials": {
           "apifyApi": {
-            "id": "Z9ZzwclUGcruR8o6",
-            "name": "Apify account 2"
+            "id": "i5PH9MrmLNn1QJba",
+            "name": "Apify account"
           }
         }
       },
@@ -3778,8 +3774,7 @@
             "cachedResultName": "LinkedIn Jobs Scraper | Remove Duplicate Jobs | Pay Per Result (cheap_scraper/linkedin-job-scraper)",
             "cachedResultUrl": "https://console.apify.com/actors/2rJKkhh7vjpX7pvjg/input"
           },
-          "customBody": "={\n    \"distance\": \"50\",\n    \"enrichCompanyData\": false,\n    \"experienceLevel\": [\n        \"associate\",\n        \"mid-senior\"\n    ],\n    \"jobType\": [\n        \"full-time\",\n        \"contract\"\n    ],\n    \"keyword\": [\n        \"AI engineer\",\n        \"AI operator\",\n        \"AI automation specialist\",\n        \"AI solutions architect\",\n        \"AI workflow designer\",\n        \"Agentic AI\",\n        \"AI implementation\",\n        \"low-code AI\",\n        \"AI specialist\",\n        \"AI Ops\"\n    ],\n    \"location\": \"{{ $json.region }}\",\n    \"publishedAt\": \"{{ $json.publishedAtString }}\",\n    \"saveOnlyUniqueItems\": true,\n    \"workType\": [\n        \"remote\"\n    ]\n}",
-          "timeout": {}
+          "customBody": "={\n    \"distance\": \"50\",\n    \"enrichCompanyData\": false,\n    \"experienceLevel\": [\n        \"associate\",\n        \"mid-senior\"\n    ],\n    \"jobType\": [\n        \"full-time\",\n        \"contract\"\n    ],\n    \"keyword\": [\n        \"AI engineer\",\n        \"AI operator\",\n        \"AI automation specialist\",\n        \"AI solutions architect\",\n        \"AI workflow designer\",\n        \"Agentic AI\",\n        \"AI implementation\",\n        \"low-code AI\",\n        \"AI specialist\",\n        \"AI Ops\"\n    ],\n    \"location\": \"{{ $json.region }}\",\n    \"publishedAt\": \"{{ $json.publishedAtString }}\",\n    \"saveOnlyUniqueItems\": true,\n    \"workType\": [\n        \"remote\"\n    ]\n}"
         },
         "type": "@apify/n8n-nodes-apify.apify",
         "typeVersion": 1,
@@ -3793,8 +3788,8 @@
         "retryOnFail": true,
         "credentials": {
           "apifyApi": {
-            "id": "Z9ZzwclUGcruR8o6",
-            "name": "Apify account 2"
+            "id": "i5PH9MrmLNn1QJba",
+            "name": "Apify account"
           }
         }
       },
@@ -3808,8 +3803,7 @@
             "cachedResultName": "LinkedIn Jobs Scraper | Remove Duplicate Jobs | Pay Per Result (cheap_scraper/linkedin-job-scraper)",
             "cachedResultUrl": "https://console.apify.com/actors/2rJKkhh7vjpX7pvjg/input"
           },
-          "customBody": "={\n    \"distance\": \"50\",\n    \"enrichCompanyData\": false,\n    \"experienceLevel\": [\n        \"associate\",\n        \"mid-senior\"\n    ],\n    \"jobType\": [\n        \"full-time\",\n        \"contract\"\n    ],\n    \"keyword\": [\n        \"AI engineer\",\n        \"AI operator\",\n        \"AI automation specialist\",\n        \"AI solutions architect\",\n        \"AI workflow designer\",\n        \"Agentic AI\",\n        \"AI implementation\",\n        \"low-code AI\",\n        \"AI specialist\",\n        \"AI Ops\"\n    ],\n    \"location\": \"{{ $json.region }}\",\n    \"publishedAt\": \"{{ $json.publishedAtString }}\",\n    \"saveOnlyUniqueItems\": true,\n    \"workType\": [\n        \"remote\"\n    ]\n}",
-          "timeout": {}
+          "customBody": "={\n    \"distance\": \"50\",\n    \"enrichCompanyData\": false,\n    \"experienceLevel\": [\n        \"associate\",\n        \"mid-senior\"\n    ],\n    \"jobType\": [\n        \"full-time\",\n        \"contract\"\n    ],\n    \"keyword\": [\n        \"AI engineer\",\n        \"AI operator\",\n        \"AI automation specialist\",\n        \"AI solutions architect\",\n        \"AI workflow designer\",\n        \"Agentic AI\",\n        \"AI implementation\",\n        \"low-code AI\",\n        \"AI specialist\",\n        \"AI Ops\"\n    ],\n    \"location\": \"{{ $json.region }}\",\n    \"publishedAt\": \"{{ $json.publishedAtString }}\",\n    \"saveOnlyUniqueItems\": true,\n    \"workType\": [\n        \"remote\"\n    ]\n}"
         },
         "type": "@apify/n8n-nodes-apify.apify",
         "typeVersion": 1,
@@ -3823,8 +3817,8 @@
         "retryOnFail": true,
         "credentials": {
           "apifyApi": {
-            "id": "Z9ZzwclUGcruR8o6",
-            "name": "Apify account 2"
+            "id": "i5PH9MrmLNn1QJba",
+            "name": "Apify account"
           }
         }
       },
@@ -4248,7 +4242,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 307c6454",
+    "name": "Version 49f63746",
     "description": "",
     "autosaved": true
   },
