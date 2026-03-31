@@ -1,0 +1,2646 @@
+{
+  "updatedAt": "2026-03-31T14:22:59.793Z",
+  "createdAt": "2026-03-13T09:00:43.409Z",
+  "id": "uwgMqfMmHqoIMgocF5zaH",
+  "name": "scrape_trueup",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "fieldToSplitOut": "results[0].hits",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        256,
+        -1328
+      ],
+      "id": "9e99f588-bf5d-4da7-b853-2d3bc1caaedc",
+      "name": "Split Out",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        32,
+        -1328
+      ],
+      "id": "5f429e3c-17db-49cf-8e9c-c580d2c81a6e",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://uhyrve0t36-dsn.algolia.net/1/indexes/*/queries",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "x-algolia-agent",
+              "value": "Algolia for JavaScript (5.49.2); Lite (5.49.2); Browser; instantsearch.js (4.91.0); react (19.2.4); react-instantsearch (7.27.0); react-instantsearch-core (7.27.0); next.js (16.1.6); JS Helper (3.28.0)"
+            },
+            {
+              "name": "x-algolia-api-key",
+              "value": "5317faae90021b5876474f759244f245"
+            },
+            {
+              "name": "x-algolia-application-id",
+              "value": "UHYRVE0T36"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Language",
+              "value": "en-US,en;q=0.9,cs;q=0.8"
+            },
+            {
+              "name": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "name": "Origin",
+              "value": "https://www.trueup.io"
+            },
+            {
+              "name": "Referer",
+              "value": "https://www.trueup.io/"
+            },
+            {
+              "name": "Sec-Fetch-Dest",
+              "value": "empty"
+            },
+            {
+              "name": "Sec-Fetch-Mode",
+              "value": "cors"
+            },
+            {
+              "name": "Sec-Fetch-Site",
+              "value": "cross-site"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "sec-ch-ua",
+              "value": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"145\", \"Chromium\";v=\"145\""
+            },
+            {
+              "name": "sec-ch-ua-mobile",
+              "value": "?0"
+            },
+            {
+              "name": "sec-ch-ua-platform",
+              "value": "\"macOS\""
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"requests\": [\n    {\n      \"indexName\": \"job\",\n      \"query\": \"agent\",\n      \"hitsPerPage\": 200,\n      \"filters\": \"updated_at_timestamp > {{ $json.unixTimestamp }}\",\n      \"facetFilters\": [\n        [\n          \"job_locations_combined:🇩🇪 Germany (remote)\",\n          \"job_locations_combined:🇦🇹 Austria (remote)\",\n          \"job_locations_combined:🇨🇭 Switzerland (remote)\",\n          \"job_locations_combined:🇳🇱 Netherlands (remote)\",\n          \"job_locations_combined:🇧🇪 Belgium (remote)\",\n          \"job_locations_combined:🇱🇺 Luxembourg (remote)\",\n          \"job_locations_combined:🇸🇪 Sweden (remote)\",\n          \"job_locations_combined:🇩🇰 Denmark (remote)\",\n          \"job_locations_combined:🇳🇴 Norway (remote)\",\n          \"job_locations_combined:🇫🇮 Finland (remote)\",\n          \"job_locations_combined:🇨🇿 Czech Republic (remote)\"\n        ]\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -192,
+        -1232
+      ],
+      "id": "08250085-099e-43e1-8835-2385b56883d4",
+      "name": "Scrape url agent"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://uhyrve0t36-dsn.algolia.net/1/indexes/*/queries",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "x-algolia-agent",
+              "value": "Algolia for JavaScript (5.49.2); Lite (5.49.2); Browser; instantsearch.js (4.91.0); react (19.2.4); react-instantsearch (7.27.0); react-instantsearch-core (7.27.0); next.js (16.1.6); JS Helper (3.28.0)"
+            },
+            {
+              "name": "x-algolia-api-key",
+              "value": "5317faae90021b5876474f759244f245"
+            },
+            {
+              "name": "x-algolia-application-id",
+              "value": "UHYRVE0T36"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Language",
+              "value": "en-US,en;q=0.9,cs;q=0.8"
+            },
+            {
+              "name": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "name": "Origin",
+              "value": "https://www.trueup.io"
+            },
+            {
+              "name": "Referer",
+              "value": "https://www.trueup.io/"
+            },
+            {
+              "name": "Sec-Fetch-Dest",
+              "value": "empty"
+            },
+            {
+              "name": "Sec-Fetch-Mode",
+              "value": "cors"
+            },
+            {
+              "name": "Sec-Fetch-Site",
+              "value": "cross-site"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "sec-ch-ua",
+              "value": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"145\", \"Chromium\";v=\"145\""
+            },
+            {
+              "name": "sec-ch-ua-mobile",
+              "value": "?0"
+            },
+            {
+              "name": "sec-ch-ua-platform",
+              "value": "\"macOS\""
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"requests\": [\n    {\n      \"indexName\": \"job\",\n      \"query\": \"ai\",\n      \"hitsPerPage\": 200,\n      \"filters\": \"updated_at_timestamp > {{ $json.unixTimestamp }}\",\n      \"facetFilters\": [\n        [\n          \"job_locations_combined:🇩🇪 Germany (remote)\",\n          \"job_locations_combined:🇦🇹 Austria (remote)\",\n          \"job_locations_combined:🇨🇭 Switzerland (remote)\",\n          \"job_locations_combined:🇳🇱 Netherlands (remote)\",\n          \"job_locations_combined:🇧🇪 Belgium (remote)\",\n          \"job_locations_combined:🇱🇺 Luxembourg (remote)\",\n          \"job_locations_combined:🇸🇪 Sweden (remote)\",\n          \"job_locations_combined:🇩🇰 Denmark (remote)\",\n          \"job_locations_combined:🇳🇴 Norway (remote)\",\n          \"job_locations_combined:🇫🇮 Finland (remote)\",\n          \"job_locations_combined:🇨🇿 Czech Republic (remote)\"\n        ]\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -192,
+        -1424
+      ],
+      "id": "abebb362-80eb-4730-a6f9-18015dc465aa",
+      "name": "Scrape url ai"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "job_leads",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "={{ $json.url }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        704,
+        -1392
+      ],
+      "id": "0052a307-f0a7-48b3-8801-584ceaa7d861",
+      "name": "Check for dupes",
+      "alwaysOutputData": false,
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
+              "leftValue": "={{ $json.title }}",
+              "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|n8n).*",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            },
+            {
+              "id": "6f924664-fa20-4947-af03-df2841af8012",
+              "leftValue": "={{ $json.title }}",
+              "rightValue": ".*(sales|asistent|manual|legal|qa-engineer|obchodni|akvizicni|prodejni|account-manager|qa-automation|test-automation|head|director|reditel|vedouci|java|kotlin|swift|android|php|react-native|assistant|intern|part-time|principal|staff|account|acquisition|lead|azure|cloud|only|research|found|frontend|backend|forward|fde|fullstack|full-stack).*",
+              "operator": {
+                "type": "string",
+                "operation": "notRegex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        480,
+        -1328
+      ],
+      "id": "72fbcf62-9e98-40de-9515-c53f0f8fc2b3",
+      "name": "Filter positive and negative"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "job_url",
+              "field2": "url"
+            }
+          ]
+        },
+        "joinMode": "keepNonMatches",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        928,
+        -1328
+      ],
+      "id": "c666fe13-d998-4c69-888d-afdfbbf5a0d9",
+      "name": "Keep non-dupes",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1376,
+        -1152
+      ],
+      "id": "042a6260-0d64-4b13-ab10-bdf7603a112f",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "const platformName = \"trueup\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2944,
+        -1120
+      ],
+      "id": "501deb95-f859-445a-b597-a168fde88b4f",
+      "name": "add source"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
+              "name": "jobId",
+              "value": "={{ $('Switch').item.json.job_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
+              "name": "jobTitle",
+              "value": "={{ $('Switch').item.json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
+              "name": "jobUrl",
+              "value": "={{ $('Switch').item.json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "a7609c01-4e31-43a0-940d-b97171f0123a",
+              "name": "companyName",
+              "value": "={{ $('Switch').item.json.company }}",
+              "type": "string"
+            },
+            {
+              "id": "51e71c18-177a-4370-a63d-25f8001fce8e",
+              "name": "companyUrl",
+              "value": "={{ $('Switch').item.json.company_url_clean }}",
+              "type": "string"
+            },
+            {
+              "id": "ce6bae6a-2e69-4671-b2d3-08f6ff27fd81",
+              "name": "companyLogo",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "0103b2e7-89df-48b2-a1dc-4b91932b8495",
+              "name": "publishedAt",
+              "value": "={{ $('Switch').item.json.updated_at }}",
+              "type": "string"
+            },
+            {
+              "id": "b8611d60-09ec-409e-a0c0-8a6d7da87ea0",
+              "name": "applyUrl",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "008246ee-3829-4a26-af95-544f914e1fe9",
+              "name": "location",
+              "value": "={{ $('Switch').item.json.location }}",
+              "type": "string"
+            },
+            {
+              "id": "949e43c8-0db8-420e-a39d-6be73d8c5efc",
+              "name": "contractType",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "7e313d83-31bb-455f-83df-1c2bb8ef992d",
+              "name": "experienceLevel",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "30f4be42-bf3a-459d-bbb3-5000af3a21de",
+              "name": "jobDescription",
+              "value": "={{ $json.jobDescription }}",
+              "type": "string"
+            },
+            {
+              "id": "8a24969d-d6b7-49d3-8013-91bfa60e7b89",
+              "name": "salaryInfo",
+              "value": "[]",
+              "type": "array"
+            },
+            {
+              "id": "87782311-7ad5-4821-aea4-7d293c6b4f59",
+              "name": "posterFullName",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "160cbda5-0d12-4d1a-a654-13a3e1ad720f",
+              "name": "posterProfileUrl",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "1e0e0a25-7bb2-443e-be17-220d44d95d92",
+              "name": "sector",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "d7ecf8bd-46b7-414c-8862-41811f709f0a",
+              "name": "workMode",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "a43ad1be-2936-4dd3-ba10-fd613008347d",
+              "name": "employmentType",
+              "value": "=",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2720,
+        -1120
+      ],
+      "id": "3965ef86-74d7-4c83-9a76-02ec4cfc502d",
+      "name": "Standardize output (**adjust fields**)"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "completed",
+            "last_success_at": "={{ $now.toISO() }}",
+            "workflow_tag": "trueup"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1600,
+        -1488
+      ],
+      "id": "84da7d23-a6a1-403d-8e16-e97be0ce3a9e",
+      "name": "update success status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NBCVFrfmAz4h6S1a",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NBCVFrfmAz4h6S1a",
+          "cachedResultName": "scrape_dedupe_upsert"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        3168,
+        -848
+      ],
+      "id": "641811ef-1802-4189-9325-da5d23f847d6",
+      "name": "Call '03_dedupe_upsert'"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1824,
+        -1488
+      ],
+      "id": "9d86c4f6-37e0-401d-92af-3c856447275b",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const rawData = $input.item.json.data;\n\nconst startMarker = '\"description\":\"';\nconst endMarker = '\",\"directApply\"';\n\nlet jobDescription = \"\";\n\nif (rawData.includes(startMarker) && rawData.includes(endMarker)) {\n    jobDescription = rawData.split(startMarker)[1].split(endMarker)[0];\n\n    jobDescription = jobDescription\n        .replace(/\\\\n/g, ' ')        // Remove newlines\n        .replace(/\\\\\"/g, '\"')        // Fix escaped quotes\n        .replace(/<[^>]*>/g, ' ')    // Remove all HTML tags (<p>, <strong>, etc.)\n        .replace(/&nbsp;/g, ' ')     // Fix spaces\n        .replace(/&amp;/g, '&')      // Fix ampersands\n        .replace(/\\s+/g, ' ')        // Collapse extra white space\n        .trim();\n}\n\nreturn {\n    jobDescription: jobDescription\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2272,
+        -1344
+      ],
+      "id": "2331c73e-44d6-4d9f-8f5d-be3a1cc4ed1e",
+      "name": "HTML parser job description"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2048,
+        -1344
+      ],
+      "id": "ca2e5a26-54c2-4fad-a096-51109fe6f787",
+      "name": "Fetch raw job html",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.url }}",
+                    "rightValue": "ashby",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "eae4b983-e0f5-4531-b41d-d2cacc77d3ec"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "deaea76f-d534-418f-a180-98372fccdfa5",
+                    "leftValue": "={{ $json.url }}",
+                    "rightValue": "greenhouse",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c5503eaa-e52c-434a-b13d-896dbc158053",
+                    "leftValue": "={{ $json.url }}",
+                    "rightValue": "(ashby\ngreenhouse)",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notRegex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1600,
+        -1168
+      ],
+      "id": "b990ff24-33b1-42cd-bc6b-e62e22c40301",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2048,
+        -1152
+      ],
+      "id": "ffee3870-d2ba-4c81-b2f3-f1d30b427a94",
+      "name": "Fetch raw job html1",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const html = $input.item.json.data;\n\nconst greenhouseRegex = /class=\\\"job__description body\\\">([\\s\\S]*?)<div class=\\\"divider\\\"/;\nconst match = html.match(greenhouseRegex);\n\nlet jobDescription = \"\";\n\nif (match && match[1]) {\n    jobDescription = match[1];\n    \n    jobDescription = jobDescription\n        .replace(/<\\/p>/g, '\\n\\n')\n        .replace(/<\\/li>/g, '\\n')\n        .replace(/<[^>]*>?/gm, '') // Remove all remaining tags\n        .replace(/&nbsp;/g, ' ')   // Fix non-breaking spaces\n        .replace(/&amp;/g, '&');   // Fix ampersands\n}\n\nreturn {\n    jobDescription: jobDescription.trim()\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2272,
+        -1152
+      ],
+      "id": "4de7394e-9797-48f9-9d66-758b7d9e6cdb",
+      "name": "HTML parser job description1"
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/{{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2048,
+        -832
+      ],
+      "id": "11b4ba4d-1b39-4af1-a834-9be5d6795dcb",
+      "name": "Jina fetch job text",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "job_leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "={{ $('Switch').item.json.url }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "failed_jina"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2272,
+        -768
+      ],
+      "id": "c53c3633-eb35-4ba1-a068-03a53693bb48",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const raw = $input.item.json.data || \"\"; \n\nreturn { \n    jobDescription: raw.split(\"Markdown Content:\")[1]?.trim() || raw \n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2272,
+        -960
+      ],
+      "id": "f5c43e86-9a94-4c33-ad4d-00653e94e7f6",
+      "name": "Payload parser job description"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "running",
+            "workflow_tag": "trueup"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -640,
+        -1328
+      ],
+      "id": "b7d5f1a3-e793-4a0b-b876-353f0e92062e",
+      "name": "update running status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1824,
+        -832
+      ],
+      "id": "67a393ba-4174-4e3f-bba1-b311e26e682e",
+      "name": "Wait",
+      "webhookId": "0ea4137f-7603-4c4f-a8fd-ae89ebd7721b"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2496,
+        -1120
+      ],
+      "id": "14fad25d-0ef6-4ba9-9a84-e7654f0ab48b",
+      "name": "No Operation, do nothing1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = Date.now();\n\nconst seventyTwoHoursAgoMs = now - (72 * 60 * 60 * 1000);\n\nconst unixTimestampSeconds = Math.floor(seventyTwoHoursAgoMs / 1000);\n\nreturn {\n    unixTimestamp: unixTimestampSeconds\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -416,
+        -1328
+      ],
+      "id": "4592d69a-3758-4937-8da8-aa4993715c79",
+      "name": "calculate timestamp"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -864,
+        -1424
+      ],
+      "id": "a9e65dcf-3b98-48a4-acdc-29f4c5881bfc",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "8a02f61d-5d91-4c1a-bff6-75756b8b6646",
+              "leftValue": "={{ $json.url }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1152,
+        -1328
+      ],
+      "id": "3bed270c-dd73-4367-9a74-73b997992dd0",
+      "name": "If empty"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -864,
+        -1232
+      ],
+      "id": "e58f156d-3733-40e5-9de9-e14344db22c3",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "connections": {
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape url agent": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Scrape url ai": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter positive and negative",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for dupes": {
+      "main": [
+        [
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter positive and negative": {
+      "main": [
+        [
+          {
+            "node": "Check for dupes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Keep non-dupes": {
+      "main": [
+        [
+          {
+            "node": "If empty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "update success status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add source": {
+      "main": [
+        [
+          {
+            "node": "Call '03_dedupe_upsert'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Standardize output (**adjust fields**)": {
+      "main": [
+        [
+          {
+            "node": "add source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call '03_dedupe_upsert'": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update success status": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML parser job description": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch raw job html": {
+      "main": [
+        [
+          {
+            "node": "HTML parser job description",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Fetch raw job html",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch raw job html1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch raw job html1": {
+      "main": [
+        [
+          {
+            "node": "HTML parser job description1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML parser job description1": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Jina fetch job text": {
+      "main": [
+        [
+          {
+            "node": "Payload parser job description",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Payload parser job description": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update running status": {
+      "main": [
+        [
+          {
+            "node": "calculate timestamp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Jina fetch job text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing1": {
+      "main": [
+        [
+          {
+            "node": "Standardize output (**adjust fields**)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "calculate timestamp": {
+      "main": [
+        [
+          {
+            "node": "Scrape url ai",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Scrape url agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "update running status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If empty": {
+      "main": [
+        [
+          {
+            "node": "update success status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "update running status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg",
+    "timezone": "Europe/Prague",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "181ae690-f639-4698-89e4-f7636e9855bc",
+  "activeVersionId": "181ae690-f639-4698-89e4-f7636e9855bc",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-03-13T09:00:43.415Z",
+      "createdAt": "2026-03-13T09:00:43.415Z",
+      "role": "workflow:owner",
+      "workflowId": "uwgMqfMmHqoIMgocF5zaH",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-03-31T14:23:06.000Z",
+    "createdAt": "2026-03-31T14:22:59.795Z",
+    "versionId": "181ae690-f639-4698-89e4-f7636e9855bc",
+    "workflowId": "uwgMqfMmHqoIMgocF5zaH",
+    "nodes": [
+      {
+        "parameters": {
+          "fieldToSplitOut": "results[0].hits",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          256,
+          -1328
+        ],
+        "id": "9e99f588-bf5d-4da7-b853-2d3bc1caaedc",
+        "name": "Split Out",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          32,
+          -1328
+        ],
+        "id": "5f429e3c-17db-49cf-8e9c-c580d2c81a6e",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://uhyrve0t36-dsn.algolia.net/1/indexes/*/queries",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "x-algolia-agent",
+                "value": "Algolia for JavaScript (5.49.2); Lite (5.49.2); Browser; instantsearch.js (4.91.0); react (19.2.4); react-instantsearch (7.27.0); react-instantsearch-core (7.27.0); next.js (16.1.6); JS Helper (3.28.0)"
+              },
+              {
+                "name": "x-algolia-api-key",
+                "value": "5317faae90021b5876474f759244f245"
+              },
+              {
+                "name": "x-algolia-application-id",
+                "value": "UHYRVE0T36"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept-Language",
+                "value": "en-US,en;q=0.9,cs;q=0.8"
+              },
+              {
+                "name": "Connection",
+                "value": "keep-alive"
+              },
+              {
+                "name": "Origin",
+                "value": "https://www.trueup.io"
+              },
+              {
+                "name": "Referer",
+                "value": "https://www.trueup.io/"
+              },
+              {
+                "name": "Sec-Fetch-Dest",
+                "value": "empty"
+              },
+              {
+                "name": "Sec-Fetch-Mode",
+                "value": "cors"
+              },
+              {
+                "name": "Sec-Fetch-Site",
+                "value": "cross-site"
+              },
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              },
+              {
+                "name": "sec-ch-ua",
+                "value": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"145\", \"Chromium\";v=\"145\""
+              },
+              {
+                "name": "sec-ch-ua-mobile",
+                "value": "?0"
+              },
+              {
+                "name": "sec-ch-ua-platform",
+                "value": "\"macOS\""
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"requests\": [\n    {\n      \"indexName\": \"job\",\n      \"query\": \"agent\",\n      \"hitsPerPage\": 200,\n      \"filters\": \"updated_at_timestamp > {{ $json.unixTimestamp }}\",\n      \"facetFilters\": [\n        [\n          \"job_locations_combined:🇩🇪 Germany (remote)\",\n          \"job_locations_combined:🇦🇹 Austria (remote)\",\n          \"job_locations_combined:🇨🇭 Switzerland (remote)\",\n          \"job_locations_combined:🇳🇱 Netherlands (remote)\",\n          \"job_locations_combined:🇧🇪 Belgium (remote)\",\n          \"job_locations_combined:🇱🇺 Luxembourg (remote)\",\n          \"job_locations_combined:🇸🇪 Sweden (remote)\",\n          \"job_locations_combined:🇩🇰 Denmark (remote)\",\n          \"job_locations_combined:🇳🇴 Norway (remote)\",\n          \"job_locations_combined:🇫🇮 Finland (remote)\",\n          \"job_locations_combined:🇨🇿 Czech Republic (remote)\"\n        ]\n      ]\n    }\n  ]\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -192,
+          -1232
+        ],
+        "id": "08250085-099e-43e1-8835-2385b56883d4",
+        "name": "Scrape url agent"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://uhyrve0t36-dsn.algolia.net/1/indexes/*/queries",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "x-algolia-agent",
+                "value": "Algolia for JavaScript (5.49.2); Lite (5.49.2); Browser; instantsearch.js (4.91.0); react (19.2.4); react-instantsearch (7.27.0); react-instantsearch-core (7.27.0); next.js (16.1.6); JS Helper (3.28.0)"
+              },
+              {
+                "name": "x-algolia-api-key",
+                "value": "5317faae90021b5876474f759244f245"
+              },
+              {
+                "name": "x-algolia-application-id",
+                "value": "UHYRVE0T36"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept-Language",
+                "value": "en-US,en;q=0.9,cs;q=0.8"
+              },
+              {
+                "name": "Connection",
+                "value": "keep-alive"
+              },
+              {
+                "name": "Origin",
+                "value": "https://www.trueup.io"
+              },
+              {
+                "name": "Referer",
+                "value": "https://www.trueup.io/"
+              },
+              {
+                "name": "Sec-Fetch-Dest",
+                "value": "empty"
+              },
+              {
+                "name": "Sec-Fetch-Mode",
+                "value": "cors"
+              },
+              {
+                "name": "Sec-Fetch-Site",
+                "value": "cross-site"
+              },
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              },
+              {
+                "name": "sec-ch-ua",
+                "value": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"145\", \"Chromium\";v=\"145\""
+              },
+              {
+                "name": "sec-ch-ua-mobile",
+                "value": "?0"
+              },
+              {
+                "name": "sec-ch-ua-platform",
+                "value": "\"macOS\""
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"requests\": [\n    {\n      \"indexName\": \"job\",\n      \"query\": \"ai\",\n      \"hitsPerPage\": 200,\n      \"filters\": \"updated_at_timestamp > {{ $json.unixTimestamp }}\",\n      \"facetFilters\": [\n        [\n          \"job_locations_combined:🇩🇪 Germany (remote)\",\n          \"job_locations_combined:🇦🇹 Austria (remote)\",\n          \"job_locations_combined:🇨🇭 Switzerland (remote)\",\n          \"job_locations_combined:🇳🇱 Netherlands (remote)\",\n          \"job_locations_combined:🇧🇪 Belgium (remote)\",\n          \"job_locations_combined:🇱🇺 Luxembourg (remote)\",\n          \"job_locations_combined:🇸🇪 Sweden (remote)\",\n          \"job_locations_combined:🇩🇰 Denmark (remote)\",\n          \"job_locations_combined:🇳🇴 Norway (remote)\",\n          \"job_locations_combined:🇫🇮 Finland (remote)\",\n          \"job_locations_combined:🇨🇿 Czech Republic (remote)\"\n        ]\n      ]\n    }\n  ]\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -192,
+          -1424
+        ],
+        "id": "abebb362-80eb-4730-a6f9-18015dc465aa",
+        "name": "Scrape url ai"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "job_leads",
+          "returnAll": true,
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "job_url",
+                "condition": "eq",
+                "keyValue": "={{ $json.url }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          704,
+          -1392
+        ],
+        "id": "0052a307-f0a7-48b3-8801-584ceaa7d861",
+        "name": "Check for dupes",
+        "alwaysOutputData": false,
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
+                "leftValue": "={{ $json.title }}",
+                "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|n8n).*",
+                "operator": {
+                  "type": "string",
+                  "operation": "regex"
+                }
+              },
+              {
+                "id": "6f924664-fa20-4947-af03-df2841af8012",
+                "leftValue": "={{ $json.title }}",
+                "rightValue": ".*(sales|asistent|manual|legal|qa-engineer|obchodni|akvizicni|prodejni|account-manager|qa-automation|test-automation|head|director|reditel|vedouci|java|kotlin|swift|android|php|react-native|assistant|intern|part-time|principal|staff|account|acquisition|lead|azure|cloud|only|research|found|frontend|backend|forward|fde|fullstack|full-stack).*",
+                "operator": {
+                  "type": "string",
+                  "operation": "notRegex"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {
+            "ignoreCase": true
+          }
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          480,
+          -1328
+        ],
+        "id": "72fbcf62-9e98-40de-9515-c53f0f8fc2b3",
+        "name": "Filter positive and negative"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "advanced": true,
+          "mergeByFields": {
+            "values": [
+              {
+                "field1": "job_url",
+                "field2": "url"
+              }
+            ]
+          },
+          "joinMode": "keepNonMatches",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          928,
+          -1328
+        ],
+        "id": "c666fe13-d998-4c69-888d-afdfbbf5a0d9",
+        "name": "Keep non-dupes",
+        "executeOnce": false
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          1376,
+          -1152
+        ],
+        "id": "042a6260-0d64-4b13-ab10-bdf7603a112f",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "jsCode": "const platformName = \"trueup\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2944,
+          -1120
+        ],
+        "id": "501deb95-f859-445a-b597-a168fde88b4f",
+        "name": "add source"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
+                "name": "jobId",
+                "value": "={{ $('Switch').item.json.job_id }}",
+                "type": "string"
+              },
+              {
+                "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
+                "name": "jobTitle",
+                "value": "={{ $('Switch').item.json.title }}",
+                "type": "string"
+              },
+              {
+                "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
+                "name": "jobUrl",
+                "value": "={{ $('Switch').item.json.url }}",
+                "type": "string"
+              },
+              {
+                "id": "a7609c01-4e31-43a0-940d-b97171f0123a",
+                "name": "companyName",
+                "value": "={{ $('Switch').item.json.company }}",
+                "type": "string"
+              },
+              {
+                "id": "51e71c18-177a-4370-a63d-25f8001fce8e",
+                "name": "companyUrl",
+                "value": "={{ $('Switch').item.json.company_url_clean }}",
+                "type": "string"
+              },
+              {
+                "id": "ce6bae6a-2e69-4671-b2d3-08f6ff27fd81",
+                "name": "companyLogo",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "0103b2e7-89df-48b2-a1dc-4b91932b8495",
+                "name": "publishedAt",
+                "value": "={{ $('Switch').item.json.updated_at }}",
+                "type": "string"
+              },
+              {
+                "id": "b8611d60-09ec-409e-a0c0-8a6d7da87ea0",
+                "name": "applyUrl",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "008246ee-3829-4a26-af95-544f914e1fe9",
+                "name": "location",
+                "value": "={{ $('Switch').item.json.location }}",
+                "type": "string"
+              },
+              {
+                "id": "949e43c8-0db8-420e-a39d-6be73d8c5efc",
+                "name": "contractType",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "7e313d83-31bb-455f-83df-1c2bb8ef992d",
+                "name": "experienceLevel",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "30f4be42-bf3a-459d-bbb3-5000af3a21de",
+                "name": "jobDescription",
+                "value": "={{ $json.jobDescription }}",
+                "type": "string"
+              },
+              {
+                "id": "8a24969d-d6b7-49d3-8013-91bfa60e7b89",
+                "name": "salaryInfo",
+                "value": "[]",
+                "type": "array"
+              },
+              {
+                "id": "87782311-7ad5-4821-aea4-7d293c6b4f59",
+                "name": "posterFullName",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "160cbda5-0d12-4d1a-a654-13a3e1ad720f",
+                "name": "posterProfileUrl",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "1e0e0a25-7bb2-443e-be17-220d44d95d92",
+                "name": "sector",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "d7ecf8bd-46b7-414c-8862-41811f709f0a",
+                "name": "workMode",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "a43ad1be-2936-4dd3-ba10-fd613008347d",
+                "name": "employmentType",
+                "value": "=",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2720,
+          -1120
+        ],
+        "id": "3965ef86-74d7-4c83-9a76-02ec4cfc502d",
+        "name": "Standardize output (**adjust fields**)"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "completed",
+              "last_success_at": "={{ $now.toISO() }}",
+              "workflow_tag": "trueup"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          1600,
+          -1488
+        ],
+        "id": "84da7d23-a6a1-403d-8e16-e97be0ce3a9e",
+        "name": "update success status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "NBCVFrfmAz4h6S1a",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/NBCVFrfmAz4h6S1a",
+            "cachedResultName": "scrape_dedupe_upsert"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          3168,
+          -848
+        ],
+        "id": "641811ef-1802-4189-9325-da5d23f847d6",
+        "name": "Call '03_dedupe_upsert'"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          1824,
+          -1488
+        ],
+        "id": "9d86c4f6-37e0-401d-92af-3c856447275b",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const rawData = $input.item.json.data;\n\nconst startMarker = '\"description\":\"';\nconst endMarker = '\",\"directApply\"';\n\nlet jobDescription = \"\";\n\nif (rawData.includes(startMarker) && rawData.includes(endMarker)) {\n    jobDescription = rawData.split(startMarker)[1].split(endMarker)[0];\n\n    jobDescription = jobDescription\n        .replace(/\\\\n/g, ' ')        // Remove newlines\n        .replace(/\\\\\"/g, '\"')        // Fix escaped quotes\n        .replace(/<[^>]*>/g, ' ')    // Remove all HTML tags (<p>, <strong>, etc.)\n        .replace(/&nbsp;/g, ' ')     // Fix spaces\n        .replace(/&amp;/g, '&')      // Fix ampersands\n        .replace(/\\s+/g, ' ')        // Collapse extra white space\n        .trim();\n}\n\nreturn {\n    jobDescription: jobDescription\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2272,
+          -1344
+        ],
+        "id": "2331c73e-44d6-4d9f-8f5d-be3a1cc4ed1e",
+        "name": "HTML parser job description"
+      },
+      {
+        "parameters": {
+          "url": "={{ $json.url }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          2048,
+          -1344
+        ],
+        "id": "ca2e5a26-54c2-4fad-a096-51109fe6f787",
+        "name": "Fetch raw job html",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.url }}",
+                      "rightValue": "ashby",
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "id": "eae4b983-e0f5-4531-b41d-d2cacc77d3ec"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "deaea76f-d534-418f-a180-98372fccdfa5",
+                      "leftValue": "={{ $json.url }}",
+                      "rightValue": "greenhouse",
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "c5503eaa-e52c-434a-b13d-896dbc158053",
+                      "leftValue": "={{ $json.url }}",
+                      "rightValue": "(ashby\ngreenhouse)",
+                      "operator": {
+                        "type": "string",
+                        "operation": "notRegex"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          1600,
+          -1168
+        ],
+        "id": "b990ff24-33b1-42cd-bc6b-e62e22c40301",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "url": "={{ $json.url }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          2048,
+          -1152
+        ],
+        "id": "ffee3870-d2ba-4c81-b2f3-f1d30b427a94",
+        "name": "Fetch raw job html1",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const html = $input.item.json.data;\n\nconst greenhouseRegex = /class=\\\"job__description body\\\">([\\s\\S]*?)<div class=\\\"divider\\\"/;\nconst match = html.match(greenhouseRegex);\n\nlet jobDescription = \"\";\n\nif (match && match[1]) {\n    jobDescription = match[1];\n    \n    jobDescription = jobDescription\n        .replace(/<\\/p>/g, '\\n\\n')\n        .replace(/<\\/li>/g, '\\n')\n        .replace(/<[^>]*>?/gm, '') // Remove all remaining tags\n        .replace(/&nbsp;/g, ' ')   // Fix non-breaking spaces\n        .replace(/&amp;/g, '&');   // Fix ampersands\n}\n\nreturn {\n    jobDescription: jobDescription.trim()\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2272,
+          -1152
+        ],
+        "id": "4de7394e-9797-48f9-9d66-758b7d9e6cdb",
+        "name": "HTML parser job description1"
+      },
+      {
+        "parameters": {
+          "url": "=https://r.jina.ai/{{ $json.url }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          2048,
+          -832
+        ],
+        "id": "11b4ba4d-1b39-4af1-a834-9be5d6795dcb",
+        "name": "Jina fetch job text",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "job_leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "job_url",
+                "condition": "eq",
+                "keyValue": "={{ $('Switch').item.json.url }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "status",
+                "fieldValue": "failed_jina"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          2272,
+          -768
+        ],
+        "id": "c53c3633-eb35-4ba1-a068-03a53693bb48",
+        "name": "Update a row",
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const raw = $input.item.json.data || \"\"; \n\nreturn { \n    jobDescription: raw.split(\"Markdown Content:\")[1]?.trim() || raw \n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2272,
+          -960
+        ],
+        "id": "f5c43e86-9a94-4c33-ad4d-00653e94e7f6",
+        "name": "Payload parser job description"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "running",
+              "workflow_tag": "trueup"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -640,
+          -1328
+        ],
+        "id": "b7d5f1a3-e793-4a0b-b876-353f0e92062e",
+        "name": "update running status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1824,
+          -832
+        ],
+        "id": "67a393ba-4174-4e3f-bba1-b311e26e682e",
+        "name": "Wait",
+        "webhookId": "0ea4137f-7603-4c4f-a8fd-ae89ebd7721b"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          2496,
+          -1120
+        ],
+        "id": "14fad25d-0ef6-4ba9-9a84-e7654f0ab48b",
+        "name": "No Operation, do nothing1"
+      },
+      {
+        "parameters": {
+          "jsCode": "const now = Date.now();\n\nconst seventyTwoHoursAgoMs = now - (72 * 60 * 60 * 1000);\n\nconst unixTimestampSeconds = Math.floor(seventyTwoHoursAgoMs / 1000);\n\nreturn {\n    unixTimestamp: unixTimestampSeconds\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -416,
+          -1328
+        ],
+        "id": "4592d69a-3758-4937-8da8-aa4993715c79",
+        "name": "calculate timestamp"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 8
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -864,
+          -1424
+        ],
+        "id": "a9e65dcf-3b98-48a4-acdc-29f4c5881bfc",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "8a02f61d-5d91-4c1a-bff6-75756b8b6646",
+                "leftValue": "={{ $json.url }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "empty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1152,
+          -1328
+        ],
+        "id": "3bed270c-dd73-4367-9a74-73b997992dd0",
+        "name": "If empty"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -864,
+          -1232
+        ],
+        "id": "e58f156d-3733-40e5-9de9-e14344db22c3",
+        "name": "When Executed by Another Workflow"
+      }
+    ],
+    "connections": {
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Scrape url agent": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Scrape url ai": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Filter positive and negative",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check for dupes": {
+        "main": [
+          [
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter positive and negative": {
+        "main": [
+          [
+            {
+              "node": "Check for dupes",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Keep non-dupes": {
+        "main": [
+          [
+            {
+              "node": "If empty",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "update success status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "add source": {
+        "main": [
+          [
+            {
+              "node": "Call '03_dedupe_upsert'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Standardize output (**adjust fields**)": {
+        "main": [
+          [
+            {
+              "node": "add source",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call '03_dedupe_upsert'": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update success status": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTML parser job description": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch raw job html": {
+        "main": [
+          [
+            {
+              "node": "HTML parser job description",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Fetch raw job html",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Fetch raw job html1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch raw job html1": {
+        "main": [
+          [
+            {
+              "node": "HTML parser job description1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTML parser job description1": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Jina fetch job text": {
+        "main": [
+          [
+            {
+              "node": "Payload parser job description",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Update a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Payload parser job description": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update running status": {
+        "main": [
+          [
+            {
+              "node": "calculate timestamp",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Jina fetch job text",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "No Operation, do nothing1": {
+        "main": [
+          [
+            {
+              "node": "Standardize output (**adjust fields**)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "calculate timestamp": {
+        "main": [
+          [
+            {
+              "node": "Scrape url ai",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Scrape url agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "update running status",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If empty": {
+        "main": [
+          [
+            {
+              "node": "update success status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "update running status",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "d d",
+    "name": "Version 181ae690",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-03-06T13:15:28.248Z",
+      "createdAt": "2026-01-22T12:40:37.040Z",
+      "id": "mcS1gLAfDII7yoGe",
+      "name": "scrape"
+    },
+    {
+      "updatedAt": "2026-03-30T13:28:38.256Z",
+      "createdAt": "2026-03-30T13:28:38.256Z",
+      "id": "pljGe4TfyfIyA9y3",
+      "name": "trueup"
+    }
+  ]
+}
