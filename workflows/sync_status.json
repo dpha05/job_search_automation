@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-30T05:53:46.793Z",
+  "updatedAt": "2026-03-31T08:38:39.447Z",
   "createdAt": "2026-03-06T12:22:31.762Z",
   "id": "7TRjT3YJDeAlSHqk",
   "name": "sync_status",
@@ -20,7 +20,7 @@
       "typeVersion": 1.3,
       "position": [
         -304,
-        0
+        -224
       ],
       "id": "8eb7851a-ea75-4a44-ba6c-07a86b01b266",
       "name": "Schedule Trigger"
@@ -46,6 +46,16 @@
               "keyName": "status",
               "condition": "eq",
               "keyValue": "passed_description"
+            },
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "passed_language"
+            },
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "passed_responsibility"
             }
           ]
         }
@@ -53,8 +63,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        80,
-        0
+        144,
+        -128
       ],
       "id": "36a7c071-a014-4472-899d-2d91b3415817",
       "name": "Get many rows",
@@ -74,8 +84,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        544,
-        48
+        592,
+        -32
       ],
       "id": "0ef05b85-8ce4-43b3-9b81-151313688529",
       "name": "Loop Over Items"
@@ -142,8 +152,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -112,
-        0
+        -80,
+        -128
       ],
       "id": "a317a659-9eab-46f8-a65b-67c94ac6811e",
       "name": "update running status",
@@ -217,8 +227,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        768,
-        -80
+        816,
+        -176
       ],
       "id": "24af5a12-f6d2-42c9-b76d-ff88fc238de7",
       "name": "update success status",
@@ -267,8 +277,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        288,
-        0
+        368,
+        -128
       ],
       "id": "be2067ce-1161-4c31-81da-3b37d92a910f",
       "name": "Is empty?"
@@ -281,7 +291,7 @@
       "typeVersion": 1.1,
       "position": [
         -304,
-        176
+        -32
       ],
       "id": "bc959d2f-0cc0-4111-993f-81d1eb7080d2",
       "name": "When Executed by Another Workflow"
@@ -290,10 +300,10 @@
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "fShvCbZRgCtLGec8",
+          "value": "dknMuvBL2PSXQfLG",
           "mode": "list",
-          "cachedResultUrl": "/workflow/fShvCbZRgCtLGec8",
-          "cachedResultName": "score_reject_technical"
+          "cachedResultUrl": "/workflow/dknMuvBL2PSXQfLG",
+          "cachedResultName": "score_reject_nonENCZ"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -309,11 +319,11 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        768,
-        96
+        816,
+        48
       ],
       "id": "7c3877c4-d964-4fba-8234-63f2a52a2138",
-      "name": "Call '01_reject_technical'"
+      "name": "Call 'score_reject_nonENCZ'"
     }
   ],
   "connections": {
@@ -350,7 +360,7 @@
         ],
         [
           {
-            "node": "Call '01_reject_technical'",
+            "node": "Call 'score_reject_nonENCZ'",
             "type": "main",
             "index": 0
           }
@@ -397,7 +407,7 @@
         ]
       ]
     },
-    "Call '01_reject_technical'": {
+    "Call 'score_reject_nonENCZ'": {
       "main": [
         [
           {
@@ -424,8 +434,8 @@
   },
   "meta": null,
   "pinData": {},
-  "versionId": "34b87133-7430-4952-ab57-a2b5a1e1882a",
-  "activeVersionId": "34b87133-7430-4952-ab57-a2b5a1e1882a",
+  "versionId": "e54c4d82-ba30-4e8d-b19a-620f794e4a54",
+  "activeVersionId": "e54c4d82-ba30-4e8d-b19a-620f794e4a54",
   "triggerCount": 1,
   "shared": [
     {
@@ -437,9 +447,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-30T06:57:15.000Z",
-    "createdAt": "2026-03-30T05:53:46.794Z",
-    "versionId": "34b87133-7430-4952-ab57-a2b5a1e1882a",
+    "updatedAt": "2026-03-31T08:39:36.000Z",
+    "createdAt": "2026-03-31T08:38:39.448Z",
+    "versionId": "e54c4d82-ba30-4e8d-b19a-620f794e4a54",
     "workflowId": "7TRjT3YJDeAlSHqk",
     "nodes": [
       {
@@ -456,7 +466,7 @@
         "typeVersion": 1.3,
         "position": [
           -304,
-          0
+          -224
         ],
         "id": "8eb7851a-ea75-4a44-ba6c-07a86b01b266",
         "name": "Schedule Trigger"
@@ -482,6 +492,16 @@
                 "keyName": "status",
                 "condition": "eq",
                 "keyValue": "passed_description"
+              },
+              {
+                "keyName": "status",
+                "condition": "eq",
+                "keyValue": "passed_language"
+              },
+              {
+                "keyName": "status",
+                "condition": "eq",
+                "keyValue": "passed_responsibility"
               }
             ]
           }
@@ -489,8 +509,8 @@
         "type": "n8n-nodes-base.supabase",
         "typeVersion": 1,
         "position": [
-          80,
-          0
+          144,
+          -128
         ],
         "id": "36a7c071-a014-4472-899d-2d91b3415817",
         "name": "Get many rows",
@@ -510,8 +530,8 @@
         "type": "n8n-nodes-base.splitInBatches",
         "typeVersion": 3,
         "position": [
-          544,
-          48
+          592,
+          -32
         ],
         "id": "0ef05b85-8ce4-43b3-9b81-151313688529",
         "name": "Loop Over Items"
@@ -578,8 +598,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          -112,
-          0
+          -80,
+          -128
         ],
         "id": "a317a659-9eab-46f8-a65b-67c94ac6811e",
         "name": "update running status",
@@ -653,8 +673,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          768,
-          -80
+          816,
+          -176
         ],
         "id": "24af5a12-f6d2-42c9-b76d-ff88fc238de7",
         "name": "update success status",
@@ -703,8 +723,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          288,
-          0
+          368,
+          -128
         ],
         "id": "be2067ce-1161-4c31-81da-3b37d92a910f",
         "name": "Is empty?"
@@ -717,7 +737,7 @@
         "typeVersion": 1.1,
         "position": [
           -304,
-          176
+          -32
         ],
         "id": "bc959d2f-0cc0-4111-993f-81d1eb7080d2",
         "name": "When Executed by Another Workflow"
@@ -726,10 +746,10 @@
         "parameters": {
           "workflowId": {
             "__rl": true,
-            "value": "fShvCbZRgCtLGec8",
+            "value": "dknMuvBL2PSXQfLG",
             "mode": "list",
-            "cachedResultUrl": "/workflow/fShvCbZRgCtLGec8",
-            "cachedResultName": "score_reject_technical"
+            "cachedResultUrl": "/workflow/dknMuvBL2PSXQfLG",
+            "cachedResultName": "score_reject_nonENCZ"
           },
           "workflowInputs": {
             "mappingMode": "defineBelow",
@@ -745,11 +765,11 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          768,
-          96
+          816,
+          48
         ],
         "id": "7c3877c4-d964-4fba-8234-63f2a52a2138",
-        "name": "Call '01_reject_technical'"
+        "name": "Call 'score_reject_nonENCZ'"
       }
     ],
     "connections": {
@@ -786,7 +806,7 @@
           ],
           [
             {
-              "node": "Call '01_reject_technical'",
+              "node": "Call 'score_reject_nonENCZ'",
               "type": "main",
               "index": 0
             }
@@ -833,7 +853,7 @@
           ]
         ]
       },
-      "Call '01_reject_technical'": {
+      "Call 'score_reject_nonENCZ'": {
         "main": [
           [
             {
@@ -846,7 +866,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 34b87133",
+    "name": "Version e54c4d82",
     "description": "",
     "autosaved": true
   },
