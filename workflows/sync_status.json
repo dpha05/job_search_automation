@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-26T06:53:50.076Z",
+  "updatedAt": "2026-03-30T05:53:46.793Z",
   "createdAt": "2026-03-06T12:22:31.762Z",
   "id": "7TRjT3YJDeAlSHqk",
   "name": "sync_status",
@@ -293,7 +293,7 @@
           "value": "fShvCbZRgCtLGec8",
           "mode": "list",
           "cachedResultUrl": "/workflow/fShvCbZRgCtLGec8",
-          "cachedResultName": "01_reject_technical"
+          "cachedResultName": "score_reject_technical"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -424,8 +424,8 @@
   },
   "meta": null,
   "pinData": {},
-  "versionId": "b3d20bee-4736-453c-9e9e-d85eb7e63ec3",
-  "activeVersionId": "b3d20bee-4736-453c-9e9e-d85eb7e63ec3",
+  "versionId": "34b87133-7430-4952-ab57-a2b5a1e1882a",
+  "activeVersionId": "34b87133-7430-4952-ab57-a2b5a1e1882a",
   "triggerCount": 1,
   "shared": [
     {
@@ -437,9 +437,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-27T11:55:12.000Z",
-    "createdAt": "2026-03-26T06:53:49.371Z",
-    "versionId": "b3d20bee-4736-453c-9e9e-d85eb7e63ec3",
+    "updatedAt": "2026-03-30T06:57:15.000Z",
+    "createdAt": "2026-03-30T05:53:46.794Z",
+    "versionId": "34b87133-7430-4952-ab57-a2b5a1e1882a",
     "workflowId": "7TRjT3YJDeAlSHqk",
     "nodes": [
       {
@@ -729,7 +729,7 @@
             "value": "fShvCbZRgCtLGec8",
             "mode": "list",
             "cachedResultUrl": "/workflow/fShvCbZRgCtLGec8",
-            "cachedResultName": "01_reject_technical"
+            "cachedResultName": "score_reject_technical"
           },
           "workflowInputs": {
             "mappingMode": "defineBelow",
@@ -846,9 +846,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version b3d20bee",
+    "name": "Version 34b87133",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": [
     {
