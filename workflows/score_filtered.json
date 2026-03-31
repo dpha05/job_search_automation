@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-23T07:21:56.622Z",
+  "updatedAt": "2026-03-30T07:25:37.647Z",
   "createdAt": "2026-03-05T09:43:45.214Z",
   "id": "gHdlEKX8TSjpy2ON",
   "name": "score_filtered",
@@ -109,8 +109,8 @@
       "name": "Groq Chat Model",
       "credentials": {
         "groqApi": {
-          "id": "WHKYJmDyVoPXPzmK",
-          "name": "Groq account"
+          "id": "qIViI0GlVNPrPEWA",
+          "name": "Groq account 2"
         }
       }
     },
@@ -846,8 +846,8 @@
       }
     ]
   },
-  "versionId": "1beaf710-bb53-4d00-a12d-1233a7431388",
-  "activeVersionId": "1beaf710-bb53-4d00-a12d-1233a7431388",
+  "versionId": "95a054d2-6ab4-43e5-91f9-f9854bf7f18e",
+  "activeVersionId": "95a054d2-6ab4-43e5-91f9-f9854bf7f18e",
   "triggerCount": 0,
   "shared": [
     {
@@ -859,9 +859,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-23T07:22:01.000Z",
-    "createdAt": "2026-03-23T07:21:56.623Z",
-    "versionId": "1beaf710-bb53-4d00-a12d-1233a7431388",
+    "updatedAt": "2026-03-30T07:25:38.000Z",
+    "createdAt": "2026-03-30T07:25:37.648Z",
+    "versionId": "95a054d2-6ab4-43e5-91f9-f9854bf7f18e",
     "workflowId": "gHdlEKX8TSjpy2ON",
     "nodes": [
       {
@@ -967,8 +967,8 @@
         "name": "Groq Chat Model",
         "credentials": {
           "groqApi": {
-            "id": "WHKYJmDyVoPXPzmK",
-            "name": "Groq account"
+            "id": "qIViI0GlVNPrPEWA",
+            "name": "Groq account 2"
           }
         }
       },
@@ -1650,7 +1650,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 1beaf710",
+    "name": "Version 95a054d2",
     "description": "",
     "autosaved": true
   },
