@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-27T08:09:46.706Z",
+  "updatedAt": "2026-03-30T08:19:42.146Z",
   "createdAt": "2026-03-05T09:46:11.745Z",
   "id": "bhlGPoZTR6B1MQhp",
   "name": "score_reject_nonAI",
@@ -76,7 +76,7 @@
               "rightValue": "rejected",
               "operator": {
                 "type": "string",
-                "operation": "equals"
+                "operation": "contains"
               }
             }
           ],
@@ -322,8 +322,8 @@
       "name": "Groq Chat Model",
       "credentials": {
         "groqApi": {
-          "id": "WHKYJmDyVoPXPzmK",
-          "name": "Groq account"
+          "id": "qIViI0GlVNPrPEWA",
+          "name": "Groq account 2"
         }
       }
     },
@@ -756,8 +756,8 @@
       }
     ]
   },
-  "versionId": "1df283d6-b38e-4364-9ca6-deb08f79a5f6",
-  "activeVersionId": "1df283d6-b38e-4364-9ca6-deb08f79a5f6",
+  "versionId": "81cdd64c-625b-468f-860e-6bb0bc0ee100",
+  "activeVersionId": "81cdd64c-625b-468f-860e-6bb0bc0ee100",
   "triggerCount": 0,
   "shared": [
     {
@@ -769,9 +769,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-27T08:09:53.000Z",
-    "createdAt": "2026-03-27T08:09:46.707Z",
-    "versionId": "1df283d6-b38e-4364-9ca6-deb08f79a5f6",
+    "updatedAt": "2026-03-30T08:19:44.000Z",
+    "createdAt": "2026-03-30T08:19:42.147Z",
+    "versionId": "81cdd64c-625b-468f-860e-6bb0bc0ee100",
     "workflowId": "bhlGPoZTR6B1MQhp",
     "nodes": [
       {
@@ -844,7 +844,7 @@
                 "rightValue": "rejected",
                 "operator": {
                   "type": "string",
-                  "operation": "equals"
+                  "operation": "contains"
                 }
               }
             ],
@@ -1090,8 +1090,8 @@
         "name": "Groq Chat Model",
         "credentials": {
           "groqApi": {
-            "id": "WHKYJmDyVoPXPzmK",
-            "name": "Groq account"
+            "id": "qIViI0GlVNPrPEWA",
+            "name": "Groq account 2"
           }
         }
       },
@@ -1443,7 +1443,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 1df283d6",
+    "name": "Version 81cdd64c",
     "description": "",
     "autosaved": true
   },
