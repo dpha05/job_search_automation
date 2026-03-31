@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-27T08:18:20.504Z",
+  "updatedAt": "2026-03-30T08:19:12.138Z",
   "createdAt": "2026-03-27T06:59:58.519Z",
   "id": "dknMuvBL2PSXQfLG",
   "name": "score_reject_nonENCZ",
@@ -61,10 +61,10 @@
             {
               "id": "1021ed61-251d-4947-9faf-33ce3965e97b",
               "leftValue": "={{ $json.status }}",
-              "rightValue": "rejected_language",
+              "rightValue": "rejected_",
               "operator": {
                 "type": "string",
-                "operation": "equals"
+                "operation": "contains"
               }
             }
           ],
@@ -542,8 +542,8 @@
       }
     ]
   },
-  "versionId": "4a1f9ecf-82d9-4b52-8217-31ce33278e11",
-  "activeVersionId": "4a1f9ecf-82d9-4b52-8217-31ce33278e11",
+  "versionId": "77aadd38-6a8f-4542-8ed2-c0009c76dc00",
+  "activeVersionId": "77aadd38-6a8f-4542-8ed2-c0009c76dc00",
   "triggerCount": 0,
   "shared": [
     {
@@ -555,9 +555,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-27T08:18:21.000Z",
-    "createdAt": "2026-03-27T08:18:18.229Z",
-    "versionId": "4a1f9ecf-82d9-4b52-8217-31ce33278e11",
+    "updatedAt": "2026-03-30T08:19:13.000Z",
+    "createdAt": "2026-03-30T08:19:12.139Z",
+    "versionId": "77aadd38-6a8f-4542-8ed2-c0009c76dc00",
     "workflowId": "dknMuvBL2PSXQfLG",
     "nodes": [
       {
@@ -615,10 +615,10 @@
               {
                 "id": "1021ed61-251d-4947-9faf-33ce3965e97b",
                 "leftValue": "={{ $json.status }}",
-                "rightValue": "rejected_language",
+                "rightValue": "rejected_",
                 "operator": {
                   "type": "string",
-                  "operation": "equals"
+                  "operation": "contains"
                 }
               }
             ],
@@ -1036,7 +1036,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 4a1f9ecf",
+    "name": "Version 77aadd38",
     "description": "",
     "autosaved": true
   },
