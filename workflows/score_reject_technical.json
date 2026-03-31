@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-27T08:09:19.091Z",
+  "updatedAt": "2026-03-31T07:31:50.560Z",
   "createdAt": "2026-03-05T09:43:06.766Z",
   "id": "fShvCbZRgCtLGec8",
   "name": "score_reject_technical",
@@ -8,7 +8,7 @@
   "nodes": [
     {
       "parameters": {
-        "jsCode": "const items = $('Standardize input').all();\n\nconst hardReject = [\n'sales', 'director', 'assistant', 'recruiter', 'intern',  'stáž', 'graduate', 'account manager', 'executive', 'head', 'representative', 'marketing', 'ředitel', 'vedoucí', 'legal', 'prodej', 'obchod', 'customer success', 'seo', 'lead', 'principal', 'staff', 'part-time', 'part time', 'junior'\n];\n\nconst contextualReject = [ \n'full-stack', 'fullstack', 'java', 'php', 'c++', 'c#', '.net', 'kotlin', 'rust', 'golang', 'ios', 'android', 'swift', 'react native', 'qa automation', 'test automation', 'kubernetes', 'manual tester', 'developer', 'vývojář', 'engineer', 'inženýr', 'consultant'\n];\n\nconst saviorKeyword = [\n'ai', 'automat', 'n8n', 'agent', 'architect', 'ops', 'operat', 'solution', 'workflow', 'specialist', 'low-code', 'no-code', 'integration', 'product', 'mcp', 'implement', 'bridge', 'process', 'enablement', 'strategy', 'delivery'\n]\n\nreturn items.map(item => {\n  const title = (item.json.job_title || \"\").toLowerCase();\n\n  let newStatus = 'filtered';\n\n  const isHardReject = hardReject.some(word => title.includes(word));\n  const isContextualReject = contextualReject.some(word => title.includes(word));\n  const hasSavior = saviorKeyword.some(word => title.includes(word));\n  \n  if (isHardReject) {\n    newStatus = 'rejected_title';\n  }\n  else if (hasSavior) {\n    newStatus = 'passed_title';\n  }\n  else if (isContextualReject) {\n    newStatus = 'rejected_title';\n  }\n\n  return {\n    json: {\n      ...item.json,\n      status: newStatus,\n    }\n  };\n});"
+        "jsCode": "const items = $('Standardize input').all();\n\nconst hardReject = [\n'sales', 'director', 'assistant', 'recruiter', 'intern',  'stáž', 'graduate', 'account manager', 'executive', 'head', 'representative', 'ředitel', 'vedoucí', 'legal', 'prodej', 'obchod', 'seo', 'lead', 'principal', 'staff', 'part-time', 'part time', 'junior', 'deploy', 'lead', 'fde', 'senior',\n\n'java', 'php', 'c++', 'c#', '.net', 'kotlin', 'rust', 'golang', 'ios', 'android', 'swift', 'react native', 'qa automation', 'test automation', 'kubernetes', 'manual tester', 'azure', 'cloud', 'architect'\n];\n\nreturn items.map(item => {\n  const title = (item.json.job_title || \"\").toLowerCase();\n\n  let newStatus = 'filtered';\n  \n  const isHardReject = hardReject.some(word => title.includes(word));\n  \n  if (isHardReject) {\n    newStatus = 'rejected_title';\n  }\n  else {\n    newStatus = 'passed_title';\n  }\n\n  return {\n    json: {\n      ...item.json,\n      status: newStatus,\n    }\n  };\n});"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -82,7 +82,7 @@
               "rightValue": "rejected",
               "operator": {
                 "type": "string",
-                "operation": "equals"
+                "operation": "contains"
               }
             }
           ],
@@ -265,7 +265,7 @@
               "rightValue": "rejected",
               "operator": {
                 "type": "string",
-                "operation": "equals"
+                "operation": "contains"
               }
             }
           ],
@@ -840,8 +840,8 @@
       }
     ]
   },
-  "versionId": "834403de-c059-41a7-97d8-420c8a43eac4",
-  "activeVersionId": "834403de-c059-41a7-97d8-420c8a43eac4",
+  "versionId": "5be6ea86-fcbb-44f4-ae3f-c9f83af5d25d",
+  "activeVersionId": "5be6ea86-fcbb-44f4-ae3f-c9f83af5d25d",
   "triggerCount": 0,
   "shared": [
     {
@@ -853,14 +853,14 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-27T08:09:30.000Z",
-    "createdAt": "2026-03-27T08:09:19.092Z",
-    "versionId": "834403de-c059-41a7-97d8-420c8a43eac4",
+    "updatedAt": "2026-03-31T07:34:34.000Z",
+    "createdAt": "2026-03-31T07:31:50.561Z",
+    "versionId": "5be6ea86-fcbb-44f4-ae3f-c9f83af5d25d",
     "workflowId": "fShvCbZRgCtLGec8",
     "nodes": [
       {
         "parameters": {
-          "jsCode": "const items = $('Standardize input').all();\n\nconst hardReject = [\n'sales', 'director', 'assistant', 'recruiter', 'intern',  'stáž', 'graduate', 'account manager', 'executive', 'head', 'representative', 'marketing', 'ředitel', 'vedoucí', 'legal', 'prodej', 'obchod', 'customer success', 'seo', 'lead', 'principal', 'staff', 'part-time', 'part time', 'junior'\n];\n\nconst contextualReject = [ \n'full-stack', 'fullstack', 'java', 'php', 'c++', 'c#', '.net', 'kotlin', 'rust', 'golang', 'ios', 'android', 'swift', 'react native', 'qa automation', 'test automation', 'kubernetes', 'manual tester', 'developer', 'vývojář', 'engineer', 'inženýr', 'consultant'\n];\n\nconst saviorKeyword = [\n'ai', 'automat', 'n8n', 'agent', 'architect', 'ops', 'operat', 'solution', 'workflow', 'specialist', 'low-code', 'no-code', 'integration', 'product', 'mcp', 'implement', 'bridge', 'process', 'enablement', 'strategy', 'delivery'\n]\n\nreturn items.map(item => {\n  const title = (item.json.job_title || \"\").toLowerCase();\n\n  let newStatus = 'filtered';\n\n  const isHardReject = hardReject.some(word => title.includes(word));\n  const isContextualReject = contextualReject.some(word => title.includes(word));\n  const hasSavior = saviorKeyword.some(word => title.includes(word));\n  \n  if (isHardReject) {\n    newStatus = 'rejected_title';\n  }\n  else if (hasSavior) {\n    newStatus = 'passed_title';\n  }\n  else if (isContextualReject) {\n    newStatus = 'rejected_title';\n  }\n\n  return {\n    json: {\n      ...item.json,\n      status: newStatus,\n    }\n  };\n});"
+          "jsCode": "const items = $('Standardize input').all();\n\nconst hardReject = [\n'sales', 'director', 'assistant', 'recruiter', 'intern',  'stáž', 'graduate', 'account manager', 'executive', 'head', 'representative', 'ředitel', 'vedoucí', 'legal', 'prodej', 'obchod', 'seo', 'lead', 'principal', 'staff', 'part-time', 'part time', 'junior', 'deploy', 'lead', 'fde', 'senior',\n\n'java', 'php', 'c++', 'c#', '.net', 'kotlin', 'rust', 'golang', 'ios', 'android', 'swift', 'react native', 'qa automation', 'test automation', 'kubernetes', 'manual tester', 'azure', 'cloud', 'architect'\n];\n\nreturn items.map(item => {\n  const title = (item.json.job_title || \"\").toLowerCase();\n\n  let newStatus = 'filtered';\n  \n  const isHardReject = hardReject.some(word => title.includes(word));\n  \n  if (isHardReject) {\n    newStatus = 'rejected_title';\n  }\n  else {\n    newStatus = 'passed_title';\n  }\n\n  return {\n    json: {\n      ...item.json,\n      status: newStatus,\n    }\n  };\n});"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -934,7 +934,7 @@
                 "rightValue": "rejected",
                 "operator": {
                   "type": "string",
-                  "operation": "equals"
+                  "operation": "contains"
                 }
               }
             ],
@@ -1117,7 +1117,7 @@
                 "rightValue": "rejected",
                 "operator": {
                   "type": "string",
-                  "operation": "equals"
+                  "operation": "contains"
                 }
               }
             ],
@@ -1632,7 +1632,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 834403de",
+    "name": "Version 5be6ea86",
     "description": "",
     "autosaved": true
   },
