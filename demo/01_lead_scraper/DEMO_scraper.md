@@ -55,7 +55,7 @@
 <br>
 
 ### 📂 Technical Documentation
-* [**Raw JSON Workflows**](workflows/)
+* [**Raw JSON Workflows**](../workflows/)
 * [**Detailed Technical README**](../README.md)
 
 <br>
