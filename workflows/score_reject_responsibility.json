@@ -1,0 +1,1395 @@
+{
+  "updatedAt": "2026-04-02T06:39:01.678Z",
+  "createdAt": "2026-03-05T09:46:11.745Z",
+  "id": "bhlGPoZTR6B1MQhp",
+  "name": "score_reject_responsibility",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "job_leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "={{ $('Standardize input').item.json.job_url }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $json.status }}"
+            },
+            {
+              "fieldId": "processed_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            },
+            {
+              "fieldId": "responsibility_score",
+              "fieldValue": "={{ $json.multipliedScore }}"
+            },
+            {
+              "fieldId": "application_stage",
+              "fieldValue": "={{ $json.applicationStage }}"
+            },
+            {
+              "fieldId": "ideal_score",
+              "fieldValue": "={{ $('Adjust score cosine').item.json.multipliedCosine }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -2240,
+        224
+      ],
+      "id": "68e69222-5f15-4d21-8022-2c8abf57438c",
+      "name": "Update a row",
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "cf32c89d-73f9-4e42-992a-bb6f8ef48bd3",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "rejected",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2032,
+        224
+      ],
+      "id": "c16dcfa9-3862-420e-994e-d787d259dd9d",
+      "name": "Is rejected?"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -4176,
+        224
+      ],
+      "id": "90504e1e-e3d1-460c-b3df-343249205c89",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7e6f82e4-042a-49fe-b7d9-34eafdead4e7",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "98dd640c-efc3-4cc2-8f45-442711c3aaf6",
+              "name": "published_at",
+              "value": "={{ $json.published_at }}",
+              "type": "string"
+            },
+            {
+              "id": "ddc97d13-cf78-4120-af9c-2135094c68e5",
+              "name": "company_name",
+              "value": "={{ $json.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "d83105f2-d36e-4f58-a304-048d6b1cea81",
+              "name": "job_title",
+              "value": "={{ $json.job_title }}",
+              "type": "string"
+            },
+            {
+              "id": "98472579-8758-49e7-afb3-4c9cccec75bc",
+              "name": "job_url",
+              "value": "={{ $json.job_url }}",
+              "type": "string"
+            },
+            {
+              "id": "b750dd49-51e3-4f87-a61a-c4c33978f17d",
+              "name": "match_score",
+              "value": "={{ $json.match_score }}",
+              "type": "number"
+            },
+            {
+              "id": "9988f698-c59a-4a5c-8162-81c45b75e224",
+              "name": "job_description",
+              "value": "={{ $json.job_description }}",
+              "type": "string"
+            },
+            {
+              "id": "5804039c-ea1b-43fd-8c6b-bb4b3cbcbdbb",
+              "name": "job_location",
+              "value": "={{ $json.job_location }}",
+              "type": "string"
+            },
+            {
+              "id": "429a78c3-9b24-4a4f-96c3-43aaee37d6c3",
+              "name": "external_id",
+              "value": "={{ $json.external_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b775719f-125e-463c-ae72-458bc4659483",
+              "name": "job_salary",
+              "value": "={{ $json.job_salary }}",
+              "type": "string"
+            },
+            {
+              "id": "ee82521f-b573-4d52-aa26-4e46c5a5a0a3",
+              "name": "company_department",
+              "value": "={{ $json.company_department }}",
+              "type": "string"
+            },
+            {
+              "id": "667763ef-6bbf-422e-b98a-44bb51b835bb",
+              "name": "job_sector",
+              "value": "={{ $json.job_sector }}",
+              "type": "string"
+            },
+            {
+              "id": "e02990cc-70a0-4672-a050-6280df10fdb8",
+              "name": "contract_type",
+              "value": "={{ $json.contract_type }}",
+              "type": "string"
+            },
+            {
+              "id": "3d532878-6ff8-4d21-9bea-fd927ab38bd9",
+              "name": "signal_tier",
+              "value": "={{ $json.signal_tier }}",
+              "type": "string"
+            },
+            {
+              "id": "45833e66-5531-4b1f-b56c-3401f31448c8",
+              "name": "status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "49c83c67-536e-42be-a041-4b247875218b",
+              "name": "processed_at",
+              "value": "={{ $json.processed_at }}",
+              "type": "string"
+            },
+            {
+              "id": "e36b8eb9-3dc9-406b-aa74-0ba4839ff0eb",
+              "name": "company_url",
+              "value": "={{ $json.company_url }}",
+              "type": "string"
+            },
+            {
+              "id": "80d94137-bddf-4264-80c3-d0eb5ecda587",
+              "name": "poster_name",
+              "value": "={{ $json.poster_name }}",
+              "type": "string"
+            },
+            {
+              "id": "cf1fb289-8821-4cbf-bdea-814ee646ed9e",
+              "name": "poster_linkedin",
+              "value": "={{ $json.poster_linkedin }}",
+              "type": "string"
+            },
+            {
+              "id": "f7041f7f-79c8-4f8d-a280-56a151df3885",
+              "name": "company_logo",
+              "value": "={{ $json.company_logo }}",
+              "type": "string"
+            },
+            {
+              "id": "4dc74732-aa86-4718-9e3f-f2ac23552cda",
+              "name": "experience_level",
+              "value": "={{ $json.experience_level }}",
+              "type": "string"
+            },
+            {
+              "id": "ccbbece4-e599-4a22-91fd-6d5a4425240f",
+              "name": "apply_url",
+              "value": "={{ $json.apply_url }}",
+              "type": "string"
+            },
+            {
+              "id": "9c881010-3c28-4f7e-a5fd-da3e9f6814d2",
+              "name": "source",
+              "value": "={{ $json.source }}",
+              "type": "string"
+            },
+            {
+              "id": "7c61ac99-d19a-48ed-94a0-754f00eba142",
+              "name": "description_vector",
+              "value": "={{ $json.description_vector }}",
+              "type": "string"
+            },
+            {
+              "id": "83620fee-933a-4de4-9652-91faa26f6260",
+              "name": "employment_type",
+              "value": "={{ $json.employment_type }}",
+              "type": "string"
+            },
+            {
+              "id": "e70e38db-bc1d-4bf4-807f-55155ff0ed8c",
+              "name": "work_mode",
+              "value": "={{ $json.work_mode }}",
+              "type": "string"
+            },
+            {
+              "id": "2fd7e6b1-856b-4d4a-b90d-7d177318cbe2",
+              "name": "metadata",
+              "value": "={{ $json.metadata }}",
+              "type": "string"
+            },
+            {
+              "id": "7b1de7ac-addb-4f76-a3bf-959d7acafff6",
+              "name": "tech_score",
+              "value": "={{ $json.tech_score }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3952,
+        224
+      ],
+      "id": "98ed10b9-256e-4c4b-aa80-8dbe54286009",
+      "name": "Standardize input"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -3712,
+        -32
+      ],
+      "id": "d7948519-9901-42e7-8a4b-11cae8ecd3e9",
+      "name": "Wait",
+      "webhookId": "86d473ee-baad-455d-a1f6-a7dcf086c793"
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -3552,
+        176
+      ],
+      "id": "4beb757b-4b47-4fba-965e-8f78d81270d9",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "WHKYJmDyVoPXPzmK",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"is_ai_orchestration_heavy\": { \"type\": \"string\" },\n    \"is_ai_mentoring_heavy\": { \"type\": \"string\" },\n    \"is_ai_strategy_heavy\": { \"type\": \"string\" },\n    \"is_overqualified\": { \"type\": \"string\" }\n}\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -3344,
+        176
+      ],
+      "id": "dcb6975c-cce6-415e-8a09-7a4e14f68d5c",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const rawCosine = $json.ideal_score_cosine;\n\nconst min = 0.53;\nconst max = 0.67;\n\nlet adjustedCosine = (rawCosine - min) / (max - min);\n\nadjustedCosine = Math.max(0, Math.min(1, adjustedCosine));\n\nconst multipliedCosine = Math.round(adjustedCosine * 100);\n\nreturn  {\n    ideal_score_cosine: adjustedCosine,\n    multipliedCosine\n  }\n;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3152,
+        368
+      ],
+      "id": "727a25b3-2004-476b-9fbe-89c2d1d266cc",
+      "name": "Adjust score cosine"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM check_vibe(\n  '{{ $json.description_vector }}'::extensions.vector(1536),\n  'ideal_anchor'\n) AS ideal_score_cosine;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3712,
+        368
+      ],
+      "id": "98186720-48dc-4a62-8cb6-ff6c95cfec74",
+      "name": "Check ideal - cosine",
+      "alwaysOutputData": false,
+      "retryOnFail": true,
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const item = $json;\n\nconst responsibilityScore = item.ai_responsibility_score;\nconst idealScoreCosine = item.ideal_score_cosine;\n\nconst weightResponsibility = 0.7;\nconst weightCosine = 0.3;\n\nconst finalWeightedScore = (responsibilityScore * weightResponsibility) + (idealScoreCosine * weightCosine);\n\nreturn {\n  final_weighted_score: finalWeightedScore,\n  responsibility_weighted: responsibilityScore * weightResponsibility,\n  ideal_cosine_weighted: idealScoreCosine * weightCosine\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2704,
+        224
+      ],
+      "id": "91b8c021-4e40-4829-8f33-8c262560906e",
+      "name": "Calculate weighted sum"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -2928,
+        224
+      ],
+      "id": "b7425460-087f-4db2-9946-b1525c753821",
+      "name": "Merge"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -1584,
+        208
+      ],
+      "id": "8c7ff92e-5c58-4d89-98d8-49a869658809",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Provided job description:\n{{ $json.job_description }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "<task>\nAct as a precise Workload Analysis Unit. Your only goal is to determine if the primary daily and weekly responsibilities of the provided Job Description meet specific AI-centric thresholds and seniority limits.\n</task>\n\n<rules>\n- Respond ONLY using the provided JSON output tool.\n- Answer every question with exactly \"Yes\" or \"No\".\n- Use semantic understanding: Analyze the *verbs* and *objectives* to estimate time allocation.\n- is_ai_orchestration_heavy: Answer \"Yes\" ONLY if designing, building, managing, or debugging autonomous workflows, data-backbones for agents, or real-time context retrieval systems (n8n, Supabase, API-chaining, LLM orchestration) appears to constitute at least 50% of the weekly workload.\n- is_ai_mentoring_heavy: Answer \"Yes\" ONLY if coaching teams (internal or external) on AI adoption, prompting techniques, and operational change management constitutes at least 50% of the workload.\n- is_ai_strategy_heavy: Answer \"Yes\" ONLY if discovery phases, identifying AI opportunities, building business cases, and translating stakeholder intent into technical roadmaps constitutes at least 50% of the workload.\n- is_overqualified: Answer \"Yes\" ONLY if the JD explicitly requires the applicant to have 4 or more years of professional experience. \n  - CRITICAL: Answer \"No\" if the years refer to the company's age, the team's combined experience, or the age of a technology.\n  - CRITICAL: Answer \"No\" if the requirement is 3 years or fewer.\n- CRITICAL: If a responsibility is not explicitly mentioned or the time allocation feels secondary/occasional, you MUST output \"No\".\n- Do not use outside knowledge or research.\n- Do not factor in \"Autonomy,\" \"Salary,\" or \"Perks\" in this unit. Focus ONLY on the percentage of technical/strategic work.\n</rules>"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -3504,
+        -32
+      ],
+      "id": "9ed844ff-5a16-40b4-afbb-4e67e76863d7",
+      "name": "Check responsibility boolean",
+      "retryOnFail": true,
+      "waitBetweenTries": 4000
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const data = $json.output; \nlet ai_responsibility_score = 1;\n\nif (data.is_overqualified === \"Yes\") {\n  ai_responsibility_score = 0;\n}\n\nelse if (data.is_ai_orchestration_heavy === \"No\" && data.is_ai_mentoring_heavy === \"No\" && data.is_ai_strategy_heavy === \"No\") {\n  ai_responsibility_score = 0;\n}\n\nreturn {\n  ai_responsibility_score\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3152,
+        -32
+      ],
+      "id": "44f7b680-d01f-437c-b3a8-8ec304bd0fed",
+      "name": "Calculate responsibility"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "gHdlEKX8TSjpy2ON",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/gHdlEKX8TSjpy2ON",
+          "cachedResultName": "03_score_filtered"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -1808,
+        336
+      ],
+      "id": "fab76511-b9b4-48bc-9512-d26837639327",
+      "name": "Call '03_score_filtered'"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const weightedScore = $json.final_weighted_score;\nconst multipliedScore = Math.round(weightedScore * 100);\n\nconst passMin = 0.27;\n\nlet finalDecision = 'rejected_responsibility';\nlet applicationStage = 'withdrawn';\n\nif (weightedScore >= passMin) {\n  finalDecision = 'passed_responsibility';\n  applicationStage = 'lead';\n}\n\nreturn {\n  json: {\n    ...$json,\n    status: finalDecision,\n    multipliedScore,\n    applicationStage\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2480,
+        224
+      ],
+      "id": "12d9eb3d-9c19-448a-a97a-e75bc6f8380d",
+      "name": "Reject nonAI and senior descriptions"
+    }
+  ],
+  "connections": {
+    "Is rejected?": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call '03_score_filtered'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Standardize input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Standardize input": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Check ideal - cosine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Check responsibility boolean",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Check responsibility boolean",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Check responsibility boolean",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adjust score cosine": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Check ideal - cosine": {
+      "main": [
+        [
+          {
+            "node": "Adjust score cosine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Calculate weighted sum",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate weighted sum": {
+      "main": [
+        [
+          {
+            "node": "Reject nonAI and senior descriptions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row": {
+      "main": [
+        [
+          {
+            "node": "Is rejected?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check responsibility boolean": {
+      "main": [
+        [
+          {
+            "node": "Calculate responsibility",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate responsibility": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call '03_score_filtered'": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reject nonAI and senior descriptions": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "Europe/Prague",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "fda3721f-9d36-4878-9854-215e727cb89d",
+  "activeVersionId": "fda3721f-9d36-4878-9854-215e727cb89d",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-03-05T09:46:11.748Z",
+      "createdAt": "2026-03-05T09:46:11.748Z",
+      "role": "workflow:owner",
+      "workflowId": "bhlGPoZTR6B1MQhp",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-04-02T06:39:03.000Z",
+    "createdAt": "2026-04-02T06:39:01.679Z",
+    "versionId": "fda3721f-9d36-4878-9854-215e727cb89d",
+    "workflowId": "bhlGPoZTR6B1MQhp",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "job_leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "job_url",
+                "condition": "eq",
+                "keyValue": "={{ $('Standardize input').item.json.job_url }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "status",
+                "fieldValue": "={{ $json.status }}"
+              },
+              {
+                "fieldId": "processed_at",
+                "fieldValue": "={{ $now.toISO() }}"
+              },
+              {
+                "fieldId": "responsibility_score",
+                "fieldValue": "={{ $json.multipliedScore }}"
+              },
+              {
+                "fieldId": "application_stage",
+                "fieldValue": "={{ $json.applicationStage }}"
+              },
+              {
+                "fieldId": "ideal_score",
+                "fieldValue": "={{ $('Adjust score cosine').item.json.multipliedCosine }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -2240,
+          224
+        ],
+        "id": "68e69222-5f15-4d21-8022-2c8abf57438c",
+        "name": "Update a row",
+        "retryOnFail": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "cf32c89d-73f9-4e42-992a-bb6f8ef48bd3",
+                "leftValue": "={{ $json.status }}",
+                "rightValue": "rejected",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -2032,
+          224
+        ],
+        "id": "c16dcfa9-3862-420e-994e-d787d259dd9d",
+        "name": "Is rejected?"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -4176,
+          224
+        ],
+        "id": "90504e1e-e3d1-460c-b3df-343249205c89",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "7e6f82e4-042a-49fe-b7d9-34eafdead4e7",
+                "name": "id",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              },
+              {
+                "id": "98dd640c-efc3-4cc2-8f45-442711c3aaf6",
+                "name": "published_at",
+                "value": "={{ $json.published_at }}",
+                "type": "string"
+              },
+              {
+                "id": "ddc97d13-cf78-4120-af9c-2135094c68e5",
+                "name": "company_name",
+                "value": "={{ $json.company_name }}",
+                "type": "string"
+              },
+              {
+                "id": "d83105f2-d36e-4f58-a304-048d6b1cea81",
+                "name": "job_title",
+                "value": "={{ $json.job_title }}",
+                "type": "string"
+              },
+              {
+                "id": "98472579-8758-49e7-afb3-4c9cccec75bc",
+                "name": "job_url",
+                "value": "={{ $json.job_url }}",
+                "type": "string"
+              },
+              {
+                "id": "b750dd49-51e3-4f87-a61a-c4c33978f17d",
+                "name": "match_score",
+                "value": "={{ $json.match_score }}",
+                "type": "number"
+              },
+              {
+                "id": "9988f698-c59a-4a5c-8162-81c45b75e224",
+                "name": "job_description",
+                "value": "={{ $json.job_description }}",
+                "type": "string"
+              },
+              {
+                "id": "5804039c-ea1b-43fd-8c6b-bb4b3cbcbdbb",
+                "name": "job_location",
+                "value": "={{ $json.job_location }}",
+                "type": "string"
+              },
+              {
+                "id": "429a78c3-9b24-4a4f-96c3-43aaee37d6c3",
+                "name": "external_id",
+                "value": "={{ $json.external_id }}",
+                "type": "string"
+              },
+              {
+                "id": "b775719f-125e-463c-ae72-458bc4659483",
+                "name": "job_salary",
+                "value": "={{ $json.job_salary }}",
+                "type": "string"
+              },
+              {
+                "id": "ee82521f-b573-4d52-aa26-4e46c5a5a0a3",
+                "name": "company_department",
+                "value": "={{ $json.company_department }}",
+                "type": "string"
+              },
+              {
+                "id": "667763ef-6bbf-422e-b98a-44bb51b835bb",
+                "name": "job_sector",
+                "value": "={{ $json.job_sector }}",
+                "type": "string"
+              },
+              {
+                "id": "e02990cc-70a0-4672-a050-6280df10fdb8",
+                "name": "contract_type",
+                "value": "={{ $json.contract_type }}",
+                "type": "string"
+              },
+              {
+                "id": "3d532878-6ff8-4d21-9bea-fd927ab38bd9",
+                "name": "signal_tier",
+                "value": "={{ $json.signal_tier }}",
+                "type": "string"
+              },
+              {
+                "id": "45833e66-5531-4b1f-b56c-3401f31448c8",
+                "name": "status",
+                "value": "={{ $json.status }}",
+                "type": "string"
+              },
+              {
+                "id": "49c83c67-536e-42be-a041-4b247875218b",
+                "name": "processed_at",
+                "value": "={{ $json.processed_at }}",
+                "type": "string"
+              },
+              {
+                "id": "e36b8eb9-3dc9-406b-aa74-0ba4839ff0eb",
+                "name": "company_url",
+                "value": "={{ $json.company_url }}",
+                "type": "string"
+              },
+              {
+                "id": "80d94137-bddf-4264-80c3-d0eb5ecda587",
+                "name": "poster_name",
+                "value": "={{ $json.poster_name }}",
+                "type": "string"
+              },
+              {
+                "id": "cf1fb289-8821-4cbf-bdea-814ee646ed9e",
+                "name": "poster_linkedin",
+                "value": "={{ $json.poster_linkedin }}",
+                "type": "string"
+              },
+              {
+                "id": "f7041f7f-79c8-4f8d-a280-56a151df3885",
+                "name": "company_logo",
+                "value": "={{ $json.company_logo }}",
+                "type": "string"
+              },
+              {
+                "id": "4dc74732-aa86-4718-9e3f-f2ac23552cda",
+                "name": "experience_level",
+                "value": "={{ $json.experience_level }}",
+                "type": "string"
+              },
+              {
+                "id": "ccbbece4-e599-4a22-91fd-6d5a4425240f",
+                "name": "apply_url",
+                "value": "={{ $json.apply_url }}",
+                "type": "string"
+              },
+              {
+                "id": "9c881010-3c28-4f7e-a5fd-da3e9f6814d2",
+                "name": "source",
+                "value": "={{ $json.source }}",
+                "type": "string"
+              },
+              {
+                "id": "7c61ac99-d19a-48ed-94a0-754f00eba142",
+                "name": "description_vector",
+                "value": "={{ $json.description_vector }}",
+                "type": "string"
+              },
+              {
+                "id": "83620fee-933a-4de4-9652-91faa26f6260",
+                "name": "employment_type",
+                "value": "={{ $json.employment_type }}",
+                "type": "string"
+              },
+              {
+                "id": "e70e38db-bc1d-4bf4-807f-55155ff0ed8c",
+                "name": "work_mode",
+                "value": "={{ $json.work_mode }}",
+                "type": "string"
+              },
+              {
+                "id": "2fd7e6b1-856b-4d4a-b90d-7d177318cbe2",
+                "name": "metadata",
+                "value": "={{ $json.metadata }}",
+                "type": "string"
+              },
+              {
+                "id": "7b1de7ac-addb-4f76-a3bf-959d7acafff6",
+                "name": "tech_score",
+                "value": "={{ $json.tech_score }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -3952,
+          224
+        ],
+        "id": "98ed10b9-256e-4c4b-aa80-8dbe54286009",
+        "name": "Standardize input"
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          -3712,
+          -32
+        ],
+        "id": "d7948519-9901-42e7-8a4b-11cae8ecd3e9",
+        "name": "Wait",
+        "webhookId": "86d473ee-baad-455d-a1f6-a7dcf086c793"
+      },
+      {
+        "parameters": {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "options": {
+            "temperature": 0.1
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+        "typeVersion": 1,
+        "position": [
+          -3552,
+          176
+        ],
+        "id": "4beb757b-4b47-4fba-965e-8f78d81270d9",
+        "name": "Groq Chat Model",
+        "credentials": {
+          "groqApi": {
+            "id": "WHKYJmDyVoPXPzmK",
+            "name": "Groq account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "schemaType": "manual",
+          "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"is_ai_orchestration_heavy\": { \"type\": \"string\" },\n    \"is_ai_mentoring_heavy\": { \"type\": \"string\" },\n    \"is_ai_strategy_heavy\": { \"type\": \"string\" },\n    \"is_overqualified\": { \"type\": \"string\" }\n}\n}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.3,
+        "position": [
+          -3344,
+          176
+        ],
+        "id": "dcb6975c-cce6-415e-8a09-7a4e14f68d5c",
+        "name": "Structured Output Parser"
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const rawCosine = $json.ideal_score_cosine;\n\nconst min = 0.53;\nconst max = 0.67;\n\nlet adjustedCosine = (rawCosine - min) / (max - min);\n\nadjustedCosine = Math.max(0, Math.min(1, adjustedCosine));\n\nconst multipliedCosine = Math.round(adjustedCosine * 100);\n\nreturn  {\n    ideal_score_cosine: adjustedCosine,\n    multipliedCosine\n  }\n;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -3152,
+          368
+        ],
+        "id": "727a25b3-2004-476b-9fbe-89c2d1d266cc",
+        "name": "Adjust score cosine"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT * FROM check_vibe(\n  '{{ $json.description_vector }}'::extensions.vector(1536),\n  'ideal_anchor'\n) AS ideal_score_cosine;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -3712,
+          368
+        ],
+        "id": "98186720-48dc-4a62-8cb6-ff6c95cfec74",
+        "name": "Check ideal - cosine",
+        "alwaysOutputData": false,
+        "retryOnFail": true,
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const item = $json;\n\nconst responsibilityScore = item.ai_responsibility_score;\nconst idealScoreCosine = item.ideal_score_cosine;\n\nconst weightResponsibility = 0.7;\nconst weightCosine = 0.3;\n\nconst finalWeightedScore = (responsibilityScore * weightResponsibility) + (idealScoreCosine * weightCosine);\n\nreturn {\n  final_weighted_score: finalWeightedScore,\n  responsibility_weighted: responsibilityScore * weightResponsibility,\n  ideal_cosine_weighted: idealScoreCosine * weightCosine\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -2704,
+          224
+        ],
+        "id": "91b8c021-4e40-4829-8f33-8c262560906e",
+        "name": "Calculate weighted sum"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -2928,
+          224
+        ],
+        "id": "b7425460-087f-4db2-9946-b1525c753821",
+        "name": "Merge"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          -1584,
+          208
+        ],
+        "id": "8c7ff92e-5c58-4d89-98d8-49a869658809",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Provided job description:\n{{ $json.job_description }}",
+          "hasOutputParser": true,
+          "options": {
+            "systemMessage": "<task>\nAct as a precise Workload Analysis Unit. Your only goal is to determine if the primary daily and weekly responsibilities of the provided Job Description meet specific AI-centric thresholds and seniority limits.\n</task>\n\n<rules>\n- Respond ONLY using the provided JSON output tool.\n- Answer every question with exactly \"Yes\" or \"No\".\n- Use semantic understanding: Analyze the *verbs* and *objectives* to estimate time allocation.\n- is_ai_orchestration_heavy: Answer \"Yes\" ONLY if designing, building, managing, or debugging autonomous workflows, data-backbones for agents, or real-time context retrieval systems (n8n, Supabase, API-chaining, LLM orchestration) appears to constitute at least 50% of the weekly workload.\n- is_ai_mentoring_heavy: Answer \"Yes\" ONLY if coaching teams (internal or external) on AI adoption, prompting techniques, and operational change management constitutes at least 50% of the workload.\n- is_ai_strategy_heavy: Answer \"Yes\" ONLY if discovery phases, identifying AI opportunities, building business cases, and translating stakeholder intent into technical roadmaps constitutes at least 50% of the workload.\n- is_overqualified: Answer \"Yes\" ONLY if the JD explicitly requires the applicant to have 4 or more years of professional experience. \n  - CRITICAL: Answer \"No\" if the years refer to the company's age, the team's combined experience, or the age of a technology.\n  - CRITICAL: Answer \"No\" if the requirement is 3 years or fewer.\n- CRITICAL: If a responsibility is not explicitly mentioned or the time allocation feels secondary/occasional, you MUST output \"No\".\n- Do not use outside knowledge or research.\n- Do not factor in \"Autonomy,\" \"Salary,\" or \"Perks\" in this unit. Focus ONLY on the percentage of technical/strategic work.\n</rules>"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          -3504,
+          -32
+        ],
+        "id": "9ed844ff-5a16-40b4-afbb-4e67e76863d7",
+        "name": "Check responsibility boolean",
+        "retryOnFail": true,
+        "waitBetweenTries": 4000
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const data = $json.output; \nlet ai_responsibility_score = 1;\n\nif (data.is_overqualified === \"Yes\") {\n  ai_responsibility_score = 0;\n}\n\nelse if (data.is_ai_orchestration_heavy === \"No\" && data.is_ai_mentoring_heavy === \"No\" && data.is_ai_strategy_heavy === \"No\") {\n  ai_responsibility_score = 0;\n}\n\nreturn {\n  ai_responsibility_score\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -3152,
+          -32
+        ],
+        "id": "44f7b680-d01f-437c-b3a8-8ec304bd0fed",
+        "name": "Calculate responsibility"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "gHdlEKX8TSjpy2ON",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/gHdlEKX8TSjpy2ON",
+            "cachedResultName": "03_score_filtered"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -1808,
+          336
+        ],
+        "id": "fab76511-b9b4-48bc-9512-d26837639327",
+        "name": "Call '03_score_filtered'"
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const weightedScore = $json.final_weighted_score;\nconst multipliedScore = Math.round(weightedScore * 100);\n\nconst passMin = 0.27;\n\nlet finalDecision = 'rejected_responsibility';\nlet applicationStage = 'withdrawn';\n\nif (weightedScore >= passMin) {\n  finalDecision = 'passed_responsibility';\n  applicationStage = 'lead';\n}\n\nreturn {\n  json: {\n    ...$json,\n    status: finalDecision,\n    multipliedScore,\n    applicationStage\n  }\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -2480,
+          224
+        ],
+        "id": "12d9eb3d-9c19-448a-a97a-e75bc6f8380d",
+        "name": "Reject nonAI and senior descriptions"
+      }
+    ],
+    "connections": {
+      "Is rejected?": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Call '03_score_filtered'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Standardize input",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Standardize input": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Check ideal - cosine",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Check responsibility boolean",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Groq Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Check responsibility boolean",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "Check responsibility boolean",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Adjust score cosine": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Check ideal - cosine": {
+        "main": [
+          [
+            {
+              "node": "Adjust score cosine",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Calculate weighted sum",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Calculate weighted sum": {
+        "main": [
+          [
+            {
+              "node": "Reject nonAI and senior descriptions",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update a row": {
+        "main": [
+          [
+            {
+              "node": "Is rejected?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check responsibility boolean": {
+        "main": [
+          [
+            {
+              "node": "Calculate responsibility",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Calculate responsibility": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call '03_score_filtered'": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Reject nonAI and senior descriptions": {
+        "main": [
+          [
+            {
+              "node": "Update a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "d d",
+    "name": "Version fda3721f",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-03-06T13:15:23.201Z",
+      "createdAt": "2026-01-26T08:43:12.205Z",
+      "id": "q3Jm1TtyectpAeLG",
+      "name": "score"
+    }
+  ]
+}
