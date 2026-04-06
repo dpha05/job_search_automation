@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T08:38:39.447Z",
+  "updatedAt": "2026-04-01T08:10:16.843Z",
   "createdAt": "2026-03-06T12:22:31.762Z",
   "id": "7TRjT3YJDeAlSHqk",
   "name": "sync_status",
@@ -56,6 +56,11 @@
               "keyName": "status",
               "condition": "eq",
               "keyValue": "passed_responsibility"
+            },
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "skipped_description"
             }
           ]
         }
@@ -434,8 +439,8 @@
   },
   "meta": null,
   "pinData": {},
-  "versionId": "e54c4d82-ba30-4e8d-b19a-620f794e4a54",
-  "activeVersionId": "e54c4d82-ba30-4e8d-b19a-620f794e4a54",
+  "versionId": "d7a5ee89-4c1f-495f-a632-34cc1f79317e",
+  "activeVersionId": "d7a5ee89-4c1f-495f-a632-34cc1f79317e",
   "triggerCount": 1,
   "shared": [
     {
@@ -447,9 +452,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-31T08:39:36.000Z",
-    "createdAt": "2026-03-31T08:38:39.448Z",
-    "versionId": "e54c4d82-ba30-4e8d-b19a-620f794e4a54",
+    "updatedAt": "2026-04-01T08:10:25.000Z",
+    "createdAt": "2026-04-01T08:10:16.844Z",
+    "versionId": "d7a5ee89-4c1f-495f-a632-34cc1f79317e",
     "workflowId": "7TRjT3YJDeAlSHqk",
     "nodes": [
       {
@@ -502,6 +507,11 @@
                 "keyName": "status",
                 "condition": "eq",
                 "keyValue": "passed_responsibility"
+              },
+              {
+                "keyName": "status",
+                "condition": "eq",
+                "keyValue": "skipped_description"
               }
             ]
           }
@@ -866,7 +876,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version e54c4d82",
+    "name": "Version d7a5ee89",
     "description": "",
     "autosaved": true
   },
