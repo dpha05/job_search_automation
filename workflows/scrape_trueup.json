@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T14:22:59.793Z",
+  "updatedAt": "2026-04-03T10:50:33.380Z",
   "createdAt": "2026-03-13T09:00:43.409Z",
   "id": "uwgMqfMmHqoIMgocF5zaH",
   "name": "scrape_trueup",
@@ -238,50 +238,6 @@
           "name": "Supabase account"
         }
       }
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": false,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
-              "leftValue": "={{ $json.title }}",
-              "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|n8n).*",
-              "operator": {
-                "type": "string",
-                "operation": "regex"
-              }
-            },
-            {
-              "id": "6f924664-fa20-4947-af03-df2841af8012",
-              "leftValue": "={{ $json.title }}",
-              "rightValue": ".*(sales|asistent|manual|legal|qa-engineer|obchodni|akvizicni|prodejni|account-manager|qa-automation|test-automation|head|director|reditel|vedouci|java|kotlin|swift|android|php|react-native|assistant|intern|part-time|principal|staff|account|acquisition|lead|azure|cloud|only|research|found|frontend|backend|forward|fde|fullstack|full-stack).*",
-              "operator": {
-                "type": "string",
-                "operation": "notRegex"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {
-          "ignoreCase": true
-        }
-      },
-      "type": "n8n-nodes-base.filter",
-      "typeVersion": 2.3,
-      "position": [
-        480,
-        -1328
-      ],
-      "id": "72fbcf62-9e98-40de-9515-c53f0f8fc2b3",
-      "name": "Filter positive and negative"
     },
     {
       "parameters": {
@@ -959,6 +915,50 @@
       ],
       "id": "e58f156d-3733-40e5-9de9-e14344db22c3",
       "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
+              "leftValue": "={{ $json.title }}",
+              "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n).*",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            },
+            {
+              "id": "6f924664-fa20-4947-af03-df2841af8012",
+              "leftValue": "={{ $json.title }}",
+              "rightValue": ".*(sales-representative|assistant|manual|legal|qa-engineer|account-manager|account-executive|qa-automation|test-automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react-native|cloud|only|research|frontend|backend|forward|fde|fullstack|full-stack|junior|ruby|rust|acquisition).*",
+              "operator": {
+                "type": "string",
+                "operation": "notRegex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        480,
+        -1328
+      ],
+      "id": "c9ffade3-36be-488f-b7af-2f090bb95d31",
+      "name": "Filter positive and negative1"
     }
   ],
   "connections": {
@@ -999,7 +999,7 @@
       "main": [
         [
           {
-            "node": "Filter positive and negative",
+            "node": "Filter positive and negative1",
             "type": "main",
             "index": 0
           }
@@ -1013,22 +1013,6 @@
             "node": "Keep non-dupes",
             "type": "main",
             "index": 0
-          }
-        ]
-      ]
-    },
-    "Filter positive and negative": {
-      "main": [
-        [
-          {
-            "node": "Check for dupes",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Keep non-dupes",
-            "type": "main",
-            "index": 1
           }
         ]
       ]
@@ -1292,6 +1276,22 @@
           }
         ]
       ]
+    },
+    "Filter positive and negative1": {
+      "main": [
+        [
+          {
+            "node": "Check for dupes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1312,8 +1312,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "181ae690-f639-4698-89e4-f7636e9855bc",
-  "activeVersionId": "181ae690-f639-4698-89e4-f7636e9855bc",
+  "versionId": "c5d7cc1d-5ff5-41d6-a091-8a52af66a1b5",
+  "activeVersionId": "c5d7cc1d-5ff5-41d6-a091-8a52af66a1b5",
   "triggerCount": 1,
   "shared": [
     {
@@ -1325,9 +1325,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-31T14:23:06.000Z",
-    "createdAt": "2026-03-31T14:22:59.795Z",
-    "versionId": "181ae690-f639-4698-89e4-f7636e9855bc",
+    "updatedAt": "2026-04-03T10:50:49.000Z",
+    "createdAt": "2026-04-03T10:50:33.380Z",
+    "versionId": "c5d7cc1d-5ff5-41d6-a091-8a52af66a1b5",
     "workflowId": "uwgMqfMmHqoIMgocF5zaH",
     "nodes": [
       {
@@ -1562,50 +1562,6 @@
             "name": "Supabase account"
           }
         }
-      },
-      {
-        "parameters": {
-          "conditions": {
-            "options": {
-              "caseSensitive": false,
-              "leftValue": "",
-              "typeValidation": "strict",
-              "version": 3
-            },
-            "conditions": [
-              {
-                "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
-                "leftValue": "={{ $json.title }}",
-                "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|n8n).*",
-                "operator": {
-                  "type": "string",
-                  "operation": "regex"
-                }
-              },
-              {
-                "id": "6f924664-fa20-4947-af03-df2841af8012",
-                "leftValue": "={{ $json.title }}",
-                "rightValue": ".*(sales|asistent|manual|legal|qa-engineer|obchodni|akvizicni|prodejni|account-manager|qa-automation|test-automation|head|director|reditel|vedouci|java|kotlin|swift|android|php|react-native|assistant|intern|part-time|principal|staff|account|acquisition|lead|azure|cloud|only|research|found|frontend|backend|forward|fde|fullstack|full-stack).*",
-                "operator": {
-                  "type": "string",
-                  "operation": "notRegex"
-                }
-              }
-            ],
-            "combinator": "and"
-          },
-          "options": {
-            "ignoreCase": true
-          }
-        },
-        "type": "n8n-nodes-base.filter",
-        "typeVersion": 2.3,
-        "position": [
-          480,
-          -1328
-        ],
-        "id": "72fbcf62-9e98-40de-9515-c53f0f8fc2b3",
-        "name": "Filter positive and negative"
       },
       {
         "parameters": {
@@ -2283,6 +2239,50 @@
         ],
         "id": "e58f156d-3733-40e5-9de9-e14344db22c3",
         "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
+                "leftValue": "={{ $json.title }}",
+                "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n).*",
+                "operator": {
+                  "type": "string",
+                  "operation": "regex"
+                }
+              },
+              {
+                "id": "6f924664-fa20-4947-af03-df2841af8012",
+                "leftValue": "={{ $json.title }}",
+                "rightValue": ".*(sales-representative|assistant|manual|legal|qa-engineer|account-manager|account-executive|qa-automation|test-automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react-native|cloud|only|research|frontend|backend|forward|fde|fullstack|full-stack|junior|ruby|rust|acquisition).*",
+                "operator": {
+                  "type": "string",
+                  "operation": "notRegex"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {
+            "ignoreCase": true
+          }
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          480,
+          -1328
+        ],
+        "id": "c9ffade3-36be-488f-b7af-2f090bb95d31",
+        "name": "Filter positive and negative1"
       }
     ],
     "connections": {
@@ -2323,7 +2323,7 @@
         "main": [
           [
             {
-              "node": "Filter positive and negative",
+              "node": "Filter positive and negative1",
               "type": "main",
               "index": 0
             }
@@ -2337,22 +2337,6 @@
               "node": "Keep non-dupes",
               "type": "main",
               "index": 0
-            }
-          ]
-        ]
-      },
-      "Filter positive and negative": {
-        "main": [
-          [
-            {
-              "node": "Check for dupes",
-              "type": "main",
-              "index": 0
-            },
-            {
-              "node": "Keep non-dupes",
-              "type": "main",
-              "index": 1
             }
           ]
         ]
@@ -2616,10 +2600,26 @@
             }
           ]
         ]
+      },
+      "Filter positive and negative1": {
+        "main": [
+          [
+            {
+              "node": "Check for dupes",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
       }
     },
     "authors": "d d",
-    "name": "Version 181ae690",
+    "name": "Version c5d7cc1d",
     "description": "",
     "autosaved": true
   },
