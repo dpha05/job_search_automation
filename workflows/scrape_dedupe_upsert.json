@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-30T07:44:09.293Z",
+  "updatedAt": "2026-04-01T06:32:33.344Z",
   "createdAt": "2026-01-23T07:30:24.776Z",
   "id": "NBCVFrfmAz4h6S1a",
   "name": "scrape_dedupe_upsert",
@@ -15,7 +15,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        -1904,
+        -1920,
         832
       ],
       "id": "43100e07-e3b6-46ff-9fd5-d9aee3165dc5",
@@ -58,7 +58,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -1440,
+        -1472,
         832
       ],
       "id": "e9731f1f-bb36-45b6-9879-614017e4319b",
@@ -69,7 +69,7 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        -1232,
+        -1248,
         736
       ],
       "id": "0d18f417-1cff-4c6a-b3fa-be817da36ca3",
@@ -84,7 +84,7 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -1680,
+        -1696,
         832
       ],
       "id": "d2f07c8b-e6ac-4d72-8b8f-fe1b4d4bf077",
@@ -417,8 +417,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -1232,
-        1040
+        -1024,
+        928
       ],
       "id": "8f1cdc43-7257-4363-8577-b4e4ed62feb0",
       "name": "Upsert rows",
@@ -438,7 +438,7 @@
       "typeVersion": 1.1,
       "position": [
         -2368,
-        816
+        832
       ],
       "id": "2491de5d-9dd8-4b55-b874-f1664388d992",
       "name": "When Executed by Another Workflow"
@@ -471,7 +471,7 @@
       "typeVersion": 4.3,
       "position": [
         -2144,
-        960
+        904
       ],
       "id": "ed986c05-e980-4cc9-893f-3f634476edcb",
       "name": "Vectorize job description",
@@ -507,11 +507,39 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -992,
-        1040
+        -800,
+        928
       ],
       "id": "b7d593f2-2513-4176-a972-91229b5a9eb9",
       "name": "Call 'score_reject_nonENCZ'"
+    },
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [
+            {
+              "key": "jobID",
+              "value": "={{ $('Merge').item.json.jobId }}"
+            },
+            {
+              "key": "jobTitle",
+              "value": "={{ $('Merge').item.json.jobTitle }}"
+            },
+            {
+              "key": "companyName",
+              "value": "={{ $('Merge').item.json.companyName }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executionData",
+      "typeVersion": 1.1,
+      "position": [
+        -1248,
+        928
+      ],
+      "id": "1868a76e-b3ef-48d7-a2d9-411301847e5f",
+      "name": "Execution Data"
     }
   ],
   "connections": {
@@ -537,7 +565,7 @@
         ],
         [
           {
-            "node": "Upsert rows",
+            "node": "Execution Data",
             "type": "main",
             "index": 0
           }
@@ -603,6 +631,17 @@
       "main": [
         []
       ]
+    },
+    "Execution Data": {
+      "main": [
+        [
+          {
+            "node": "Upsert rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -621,34 +660,31 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "jobId": "48c584a6-ed08-4bb1-9fe5-65e9a75cb2cd",
-          "jobTitle": "AI Deployment Manager",
-          "jobUrl": "https://jobs.ashbyhq.com/openai/d4e8f24e-1719-46bf-9f85-f41008334d89",
-          "companyName": "",
-          "companyUrl": "openai.com",
-          "companyLogo": "",
-          "publishedAt": "2026-03-09T16:07:00.000Z",
-          "applyUrl": "",
-          "location": "Munich, Germany / remote",
-          "contractType": "",
-          "experienceLevel": "",
-          "jobDescription": "ABOUT THE TEAM\n\nOpenAI’s AI Deployment Manager team partners with the world’s most ambitious organizations to help them turn cutting-edge AI capabilities into everyday impact. We specialize in technical enablement and adoption, guiding customers through how to effectively use OpenAI’s products across teams, workflows, and stages of maturity.\n\nOur work spans structured workshops, technical enablement, and adoption programs that help customers move from initial exposure to confident, scalable use. We work closely with Sales, AI Success Engineers, Solutions Engineering, and Product to ensure customers are not only enabled, but set up for long-term success as OpenAI’s platform evolves.\n\nOur customers range from fast-growing digital natives to the largest global enterprises, government agencies, and educational institutions. Every engagement is an opportunity to ensure that AI benefits the way people work, build, and innovate. This role sits at the center of that mission.\n\n\nABOUT THE ROLE\n\nThe AI Deployment Manager role is a specialist post-sales enablement role focused on delivering high-impact enablement and adoption services across OpenAI’s product suite. This role is responsible for designing and delivering technical enablement experiences that support a repeatable adoption framework– driving sustained activation, expanding breadth and depth of usage, and measurable business value across OpenAI’s product suite, including ChatGPT Enterprise, Codex, Agents, and the API. This includes helping customers understand and correctly apply the deployment harnesses, evaluation layers, and operational controls required for reliable use.\n\nThis role blends deep technical fluency, instructional design, and customer advisory. You will lead live trainings, workshops, and adoption interventions for audiences ranging from hands-on builders to executive leaders, helping customers understand not just what OpenAI’s products can do, but how to use them effectively in real-world contexts.\n\nSuccess in this role means accelerating customer confidence, increasing product adoption, supporting successful launches of new product capabilities, and helping customers translate technical features into tangible outcomes.\n\nThis role is based in Munich, Germany. We use a hybrid work model of 3 days in the office per week and offer relocation assistance to new employees.\n\n\nIN THIS ROLE, YOU WILL:\n\n - Own the technical enablement of OpenAI products, including ChatGPT Enterprise, Codex, Agents, and API capabilities, helping define effective enablement patterns that support adoption across customer segments\n\n - Lead customer training and enablement across the full customer lifecycle, from initial onboarding through expansion, optimization, and long-term adoption.\n\n - Design and deliver high-impact training engagements, including onboarding sessions, advanced capability trainings, executive briefings, hackathons, and hands-on workshops for audiences ranging from senior leaders to working teams.\n\n - Drive customer activation, sustained usage, and measurable business value through structured enablement and deployment programs designed for durable adoption at scale\n\n - Partner closely with Sales, AI Success Engineers, Solutions Engineering, and Product teams to ensure seamless handoff from pre- to post-sale and consistent customer experience.\n\n - Develop and refine reusable training assets, playbooks, and best practices based on patterns observed across customers and regions.\n\n - Gather customer feedback from training and enablement engagements, synthesize themes across accounts, and relay insights to internal stakeholders to inform product and program improvements.\n\n\nYOU’LL THRIVE IN THIS ROLE IF YOU:\n\n - Have 4+ years of experience in customer-facing or instructional roles, engaging C-level and senior technical audiences in complex enterprise environments.\n\n - Possess exceptional presentation and communication skills, particularly when conveying the value of technical concepts clearly to senior and executive-level audiences.\n\n - Strong technical depth across coding, agents, and APIs, with a practical understanding of how AI systems are built, evaluated, and operated in production, including RAG, evaluation strategies, fine-tuning, and key tradeoffs.\n\n - Proven experience leading structured technical trainings, such as API bootcamps, workshops, or enablement sessions, with the ability to design learning journeys, handle live questions, and reason through problems in real time.\n\n - Strong ability to connect technical features and capabilities to concrete business outcomes such as productivity, efficiency, cost reduction, risk mitigation, or revenue impact.\n\n - Have a humble attitude, an eagerness to help others, and a desire to pick up whatever knowledge you're missing to make both your team and our customers succeed.\n\n - Comfortable thinking on their feet in live customer settings, adapting quickly to new information, shifting priorities, and real-time questions while maintaining clarity, ownership, and momentum.\n\n - Are personally committed to fostering the safe and ethical evolution of AI.\n\nAbout OpenAI\n\nOpenAI is an AI research and deployment company dedicated to ensuring that general-purpose artificial intelligence benefits all of humanity. We push the boundaries of the capabilities of AI systems and seek to safely deploy them to the world through our products. AI is an extremely powerful tool that must be created with safety and human needs at its core, and to achieve our mission, we must encompass and value the many different perspectives, voices, and experiences that form the full spectrum of humanity. \n\nWe are an equal opportunity employer, and we do not discriminate on the basis of race, religion, color, national origin, sex, sexual orientation, age, veteran status, disability, genetic information, or other applicable legally protected characteristic.\n\nFor additional information, please see OpenAI’s Affirmative Action and Equal Employment Opportunity Policy Statement https://cdn.openai.com/policies/eeo-policy-statement.pdf.\n\nBackground checks for applicants will be administered in accordance with applicable law, and qualified applicants with arrest or conviction records will be considered for employment consistent with those laws, including the San Francisco Fair Chance Ordinance, the Los Angeles County Fair Chance Ordinance for Employers, and the California Fair Chance Act, for US-based candidates. For unincorporated Los Angeles County workers: we reasonably believe that criminal history may have a direct, adverse and negative relationship with the following job duties, potentially resulting in the withdrawal of a conditional offer of employment: protect computer hardware entrusted to you from theft, loss or damage; return all computer hardware in your possession (including the data contained therein) upon termination of employment or end of assignment; and maintain the confidentiality of proprietary, confidential, and non-public information. In addition, job duties require access to secure and protected information technology systems and related data security obligations.\n\nTo notify OpenAI that you believe this job posting is non-compliant, please submit a report through this form https://form.asana.com/?d=57018692298241&k=5MqR40fZd7jlxVUh5J-UeA. No response will be provided to inquiries unrelated to job posting compliance.\n\nWe are committed to providing reasonable accommodations to applicants with disabilities, and requests can be made via this link https://form.asana.com/?k=bQ7w9h3iexRlicUdWRiwvg&d=57018692298241.\n\nOpenAI Global Applicant Privacy Policy https://cdn.openai.com/policies/global-employee-and-contractor-privacy-policy.pdf\n\nAt OpenAI, we believe artificial intelligence has the potential to help people solve immense global challenges, and we want the upside of AI to be widely shared. Join us in shaping the future of technology.",
+          "jobId": "102229",
+          "jobTitle": "Global AI & SW Hunter",
+          "jobUrl": "https://www.startupjobs.cz/nabidka/102229/global-ai-sw-hunter-business-development-manager-remote-field-based",
+          "companyName": "StartupJobs TOP SECRET",
+          "companyUrl": "https://www.startupjobs.cz/startup/startupjobs-top-secret",
+          "companyLogo": "https://images-assets.startupjobs.cz/LOGO/6018/38e4d655daca0423daedcec88e5049f2.png",
+          "publishedAt": "2026-03-11T11:59:00.000Z",
+          "applyUrl": "https://www.startupjobs.cz/nabidka/102229/prihlasit#application",
+          "location": "Prague",
+          "contractType": "Full-time",
+          "experienceLevel": "Medior, Senior",
+          "jobDescription": "Stavíme komplexní softwarová řešení pro klienty po celém světě a do našeho týmu hledáme dravého parťáka, který si vezme na starost růst byznysu.Nejsme korporát, jsme parta profíků, co vyvíjí špičkový software s přesahem do AI.\n\nKoho hledáme? 🎯Zkušeného „lovce“ (huntera), který se vyzná v prodeji zakázkového vývoje software a má tah na branku.\n\nVáš profil:\n\n• Min. 3 roky v aktivním prodeji software (znalost prostředí zakázkového vývoje je nutnost).\n• Akviziční drajv: Lead gen, cold-calling a vyjednávání máte v krvi.\n• Angličtina na profi úrovni, bez té to nepůjde.\n• Tech-savvy: Rozumíte technologiím a baví vás využívat AI nástroje pro zefektivnění prodeje.\nCo budete dělat? 🛠️ \u0004\n\n• Aktivní akvizice nových klientů a vyhledávání obchodních příležitostí na globálním trhu (především v USA)\n• Příprava nabídek ve spolupráci s naším technickým týmem.\n• Rozšiřování sítě mezinárodních partnerů a účast na zahraničních akcích.\n• Podpora marketingu, který má hlavu a patu.\nProč k nám? ✨\n\n• Prodáváte práci špičkového týmu, který řeší náročné tech výzvy.\n• Žádný mikromanagement, ale reálný vliv na chod firmy a svoboda.\n• Možnost cestovat a budovat si kontakty po celém světě.\n• Hybridní režim nebo remote (office v Praze), jak vám vyhovuje.\n• Férové ohodnocení – 80 000–120 000 Kč fix + provize.\nChcete s námi stavět software, co dává smysl? Pošlete CV a pojďme se potkat!",
           "salaryInfo": null,
-          "posterFullName": "",
-          "posterProfileUrl": "",
-          "sector": "",
-          "workMode": "",
-          "employmentType": "",
-          "source": "trueup"
-        },
-        "pairedItem": {
-          "item": 0
+          "posterFullName": null,
+          "posterProfileUrl": null,
+          "sector": null,
+          "workMode": "Remote, Hybrid",
+          "employmentType": "Freelance",
+          "source": "startupjobscz"
         }
       }
     ]
   },
-  "versionId": "bc1290a1-97a2-4892-8ff1-6649d78aded4",
-  "activeVersionId": "bc1290a1-97a2-4892-8ff1-6649d78aded4",
+  "versionId": "602e1561-e70d-4241-a30e-8be31176402a",
+  "activeVersionId": "602e1561-e70d-4241-a30e-8be31176402a",
   "triggerCount": 0,
   "shared": [
     {
@@ -660,9 +696,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-30T10:04:13.000Z",
-    "createdAt": "2026-03-30T07:44:09.294Z",
-    "versionId": "bc1290a1-97a2-4892-8ff1-6649d78aded4",
+    "updatedAt": "2026-04-01T06:32:46.000Z",
+    "createdAt": "2026-04-01T06:32:33.345Z",
+    "versionId": "602e1561-e70d-4241-a30e-8be31176402a",
     "workflowId": "NBCVFrfmAz4h6S1a",
     "nodes": [
       {
@@ -674,7 +710,7 @@
         "type": "n8n-nodes-base.merge",
         "typeVersion": 3.2,
         "position": [
-          -1904,
+          -1920,
           832
         ],
         "id": "43100e07-e3b6-46ff-9fd5-d9aee3165dc5",
@@ -717,7 +753,7 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          -1440,
+          -1472,
           832
         ],
         "id": "e9731f1f-bb36-45b6-9879-614017e4319b",
@@ -728,7 +764,7 @@
         "type": "n8n-nodes-base.noOp",
         "typeVersion": 1,
         "position": [
-          -1232,
+          -1248,
           736
         ],
         "id": "0d18f417-1cff-4c6a-b3fa-be817da36ca3",
@@ -743,7 +779,7 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          -1680,
+          -1696,
           832
         ],
         "id": "d2f07c8b-e6ac-4d72-8b8f-fe1b4d4bf077",
@@ -1076,8 +1112,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          -1232,
-          1040
+          -1024,
+          928
         ],
         "id": "8f1cdc43-7257-4363-8577-b4e4ed62feb0",
         "name": "Upsert rows",
@@ -1097,7 +1133,7 @@
         "typeVersion": 1.1,
         "position": [
           -2368,
-          816
+          832
         ],
         "id": "2491de5d-9dd8-4b55-b874-f1664388d992",
         "name": "When Executed by Another Workflow"
@@ -1130,7 +1166,7 @@
         "typeVersion": 4.3,
         "position": [
           -2144,
-          960
+          904
         ],
         "id": "ed986c05-e980-4cc9-893f-3f634476edcb",
         "name": "Vectorize job description",
@@ -1166,11 +1202,39 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          -992,
-          1040
+          -800,
+          928
         ],
         "id": "b7d593f2-2513-4176-a972-91229b5a9eb9",
         "name": "Call 'score_reject_nonENCZ'"
+      },
+      {
+        "parameters": {
+          "dataToSave": {
+            "values": [
+              {
+                "key": "jobID",
+                "value": "={{ $('Merge').item.json.jobId }}"
+              },
+              {
+                "key": "jobTitle",
+                "value": "={{ $('Merge').item.json.jobTitle }}"
+              },
+              {
+                "key": "companyName",
+                "value": "={{ $('Merge').item.json.companyName }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executionData",
+        "typeVersion": 1.1,
+        "position": [
+          -1248,
+          928
+        ],
+        "id": "1868a76e-b3ef-48d7-a2d9-411301847e5f",
+        "name": "Execution Data"
       }
     ],
     "connections": {
@@ -1196,7 +1260,7 @@
           ],
           [
             {
-              "node": "Upsert rows",
+              "node": "Execution Data",
               "type": "main",
               "index": 0
             }
@@ -1262,10 +1326,21 @@
         "main": [
           []
         ]
+      },
+      "Execution Data": {
+        "main": [
+          [
+            {
+              "node": "Upsert rows",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "d d",
-    "name": "Version bc1290a1",
+    "name": "Version 602e1561",
     "description": "",
     "autosaved": true
   },
