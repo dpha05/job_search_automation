@@ -1,0 +1,1439 @@
+{
+  "updatedAt": "2026-04-02T07:40:34.646Z",
+  "createdAt": "2026-03-05T09:43:06.766Z",
+  "id": "fShvCbZRgCtLGec8",
+  "name": "score_reject_description",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "job_leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "={{ $('Standardize input').item.json.job_url }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $json.status }}"
+            },
+            {
+              "fieldId": "processed_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            },
+            {
+              "fieldId": "tech_score",
+              "fieldValue": "={{ $json.multipliedScore }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        -176
+      ],
+      "id": "aeb0609f-b4c1-46af-8cdb-b868c396cedd",
+      "name": "Update a row",
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const llmScore = $json.technicalScoreLLM;\nconst cosineScore = $json.technicalScoreCosine;\nconst weightedScore = $json.new_technical_score;\nconst title = $('Standardize input').item.json.job_title.toLowerCase();\nconst multipliedScore = Math.round(weightedScore * 100);\n\nconst bridgeTitle = ['ai', 'platform', 'workflow', 'agent', 'n8n', 'ops'];\nconst hasBridgeTitle = bridgeTitle.some(word => title.includes(word));\n\nconst maxAllowedDiff = 0.4;\nconst passMax = 0.5;\nconst reviewMax = 0.7;\n\nlet finalDecision = 'rejected_description';\nlet reason = 'Too technical';\nlet applicationStage = 'lead';\n\nconst scoreDifference = Math.abs(llmScore - cosineScore);\n\nif (scoreDifference > maxAllowedDiff && llmScore < reviewMax) {\n  finalDecision = 'manual_review';\n  reason = \"LLM and Cosine score difference too big\";\n}\nelse if (weightedScore < passMax) {\n  finalDecision = 'passed_description';\n  reason = 'Not so technical'\n}\nelse if (weightedScore >= passMax && weightedScore <= reviewMax) {\n  if (hasBridgeTitle) {\n    finalDecision = 'manual_review';\n    reason = 'Mid technical with bridge title';\n  } else {\n    finalDecision = 'rejected_description';\n    reason = 'Mid technical without bridge title';\n    applicationStage = 'withdrawn';\n  }\n}\n\nreturn {\n  json: {\n    ...$json,\n    status: finalDecision,\n    multipliedScore,\n    reason,\n    applicationStage\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1216,
+        -176
+      ],
+      "id": "8de6bb39-cbe8-4a3e-bb57-2f931d7c2f06",
+      "name": "Reject technical descriptions"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        144,
+        -240
+      ],
+      "id": "a45410c0-18b1-4588-a51e-71e05576f4b3",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "YhtGw7h88f9jUZts",
+          "name": "Google Gemini(PaLM) Api account_llm"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM check_vibe(\n  '{{ $json.description_vector }}'::extensions.vector(1536),\n  'technical_anchor'\n) AS technical_score_cosine;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        256,
+        -32
+      ],
+      "id": "ee738ca1-be5a-4c44-9594-483f7e51d8fb",
+      "name": "Check technicality - cosine",
+      "alwaysOutputData": false,
+      "retryOnFail": true,
+      "waitBetweenTries": 2000,
+      "maxTries": 5,
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Provided job description:\n{{ $json.job_description }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "<system_instructions>\n<persona>\nYou are a Senior Executive Talent Scout for a Tier-1 AI Consultancy. You specialize in identifying \"Bridge Professionals\"—individuals who translate business strategy into high-level AI architecture and operations (AI Ops, Solutions Architecture, Implementation). You explicitly AVOID \"Engine Room\" roles that are purely execution-heavy or research-based.\n</persona>\n\n<task>\nAnalyze the provided Job Description (JD) and assess its \"Engine Room\" intensity. You are looking for roles focused on design and orchestration (The Bridge). You are filtering out roles focused on heavy coding and infrastructure (The Engine Room).\n</task>\n\n<scoring_logic>\n0.8 - 1.0: THE MECHANIC (REJECT). Low-level coding (C++, Rust), manual memory management, or maintaining legacy on-premise servers. \"Fixing the car.\"\n0.6 - 0.79: THE FACTORY WORKER (REJECT). High-volume, repetitive backend coding in Java/C#. Managing Kubernetes clusters for non-AI purposes. \n0.4 - 0.59: THE ARCHITECT (TARGET - PASS). Roles building \"Data Backbones,\" \"Context Layers,\" or \"Agent Platforms.\" They use technical tools (Python, SQL, Supabase) to enable AI. If it mentions \"Scaling agents\" or \"Versioned endpoints for AI,\" it is a PASS.\n0.1 - 0.39: THE ORCHESTRATOR (TARGET - PASS). Designing workflows in n8n, LangChain, or Zapier. Translating business needs into API chains. \"Wiring\" the system.\n</scoring_logic>\n\n<anchoring_instructions>\nCRITICAL: Do not reject \"Technical\" roles if the technology being built is an ORCHESTRATION LAYER (like the GTM Brain or an Agentic Platform). \n- If the JD mentions \"n8n,\" \"Clay,\" or \"API Orchestration,\" it is an automatic score below 0.5.\n- \"Infrastructure\" is only a reason to reject if it is \"Boring/Legacy\" infrastructure. If it is \"AI Infrastructure,\" it is a Bridge.\n</anchoring_instructions>\n\n<few_shot_examples>\n<example>\n<jd_snippet>...manual memory management in C++ and Rust for high-throughput backend...</jd_snippet>\n<reasoning>This is pure low-level execution focused on infrastructure; it is 100% Engine Room.</reasoning>\n<score>0.95</score>\n</example>\n<example>\n<jd_snippet>...AI Solutions Architect designing LLM workflows using LangChain and Python APIs to bridge client needs...</jd_snippet>\n<reasoning>The focus is on design and orchestration (\"wiring\") rather than building the underlying engine.</reasoning>\n<score>0.35</score>\n</example>\n<example>\n<jd_snippet>...architecting a centralized context retrieval system to serve 200 GTM agents with sub-second latency using n8n and Supabase...</jd_snippet>\n<reasoning>This role involves high-level technical architecture, but because it utilizes orchestration and automation platforms (n8n/Supabase) to enable AI agents, it remains a 'Bridge' role rather than an 'Engine Room' role.</reasoning>\n<score>0.35</score>\n</example>\n</few_shot_examples>\n\n<constraints>\n- Language: The JD may be in Czech, Slovak, or English. Translate the meaning before scoring.\n- Thinking: You MUST provide a \"thought_process\" before the score to ensure accuracy.\n</constraints>\n</system_instructions>"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        192,
+        -432
+      ],
+      "id": "d9040b20-cad5-49ab-bc03-b980af1f059b",
+      "name": "Check technicality - llm",
+      "retryOnFail": true,
+      "waitBetweenTries": 4000
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const item = $json;\n\nconst technicalScoreLLM = item.technical_score_llm;\nconst technicalScoreCosine = item.technical_score_cosine;\n\nconst weightLLM = 0.7;\nconst weightCosine = 0.3;\n\nconst finalTechnicalScore = (technicalScoreLLM * weightLLM) + (technicalScoreCosine * weightCosine);\n\nreturn {\n  new_technical_score: finalTechnicalScore,\n  technicalScoreLLM,\n  technicalScoreCosine\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        992,
+        -176
+      ],
+      "id": "a67f0f29-7e8a-4f73-b059-6e48aa192e75",
+      "name": "Calculate weighted technicality"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"thought_process\": \"text\",\n  \"reasoning\": \"text\",\n  \"technical_score_llm\": 0.5\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        352,
+        -240
+      ],
+      "id": "cd266088-9e6a-44bc-9dca-d69eb823b746",
+      "name": "Structured Output Parser",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const rawScore = $json.output?.technical_score_llm;\n\nconst min = 0.10;\nconst max = 0.80;\n\nlet adjusted_score = (rawScore - min) / (max - min);\n\nadjusted_score = Math.max(0, Math.min(1, adjusted_score));\n\nreturn  {\n    technical_score_llm: adjusted_score\n  }\n;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        -336
+      ],
+      "id": "40bde504-0235-493c-8423-45a475757cf5",
+      "name": "Adjust score llm"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const rawScore = $json.technical_score_cosine;\n\nconst min = 0.51;\nconst max = 0.65;\n\nlet adjusted_score = (rawScore - min) / (max - min);\n\nadjusted_score = Math.max(0, Math.min(1, adjusted_score));\n\nreturn  {\n    technical_score_cosine: adjusted_score\n  }\n;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        -32
+      ],
+      "id": "790792a4-73a2-4d42-a907-67fb4244d7e0",
+      "name": "Adjust score cosine"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1021ed61-251d-4947-9faf-33ce3965e97b",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "rejected",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1664,
+        -176
+      ],
+      "id": "5fc8c93e-61a0-48dc-b1dc-bb44d57c1cde",
+      "name": "Is rejected?1"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -480,
+        -176
+      ],
+      "id": "a5482bc5-059f-451e-be12-bcc5fae115c3",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        768,
+        -176
+      ],
+      "id": "62302278-ec1c-44bd-bf20-9f28260d2b4f",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -32,
+        -336
+      ],
+      "id": "a09bf0aa-bb13-44ee-b7fb-54a308790de9",
+      "name": "Wait",
+      "webhookId": "73413620-0112-433f-bf75-39fe9a3ba119"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2112,
+        -176
+      ],
+      "id": "90cb680b-6679-414f-a001-da46722c4ef3",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7e6f82e4-042a-49fe-b7d9-34eafdead4e7",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "98dd640c-efc3-4cc2-8f45-442711c3aaf6",
+              "name": "published_at",
+              "value": "={{ $json.published_at }}",
+              "type": "string"
+            },
+            {
+              "id": "ddc97d13-cf78-4120-af9c-2135094c68e5",
+              "name": "company_name",
+              "value": "={{ $json.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "d83105f2-d36e-4f58-a304-048d6b1cea81",
+              "name": "job_title",
+              "value": "={{ $json.job_title }}",
+              "type": "string"
+            },
+            {
+              "id": "98472579-8758-49e7-afb3-4c9cccec75bc",
+              "name": "job_url",
+              "value": "={{ $json.job_url }}",
+              "type": "string"
+            },
+            {
+              "id": "b750dd49-51e3-4f87-a61a-c4c33978f17d",
+              "name": "match_score",
+              "value": "={{ $json.match_score }}",
+              "type": "number"
+            },
+            {
+              "id": "9988f698-c59a-4a5c-8162-81c45b75e224",
+              "name": "job_description",
+              "value": "={{ $json.job_description }}",
+              "type": "string"
+            },
+            {
+              "id": "5804039c-ea1b-43fd-8c6b-bb4b3cbcbdbb",
+              "name": "job_location",
+              "value": "={{ $json.job_location }}",
+              "type": "string"
+            },
+            {
+              "id": "429a78c3-9b24-4a4f-96c3-43aaee37d6c3",
+              "name": "external_id",
+              "value": "={{ $json.external_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b775719f-125e-463c-ae72-458bc4659483",
+              "name": "job_salary",
+              "value": "={{ $json.job_salary }}",
+              "type": "string"
+            },
+            {
+              "id": "ee82521f-b573-4d52-aa26-4e46c5a5a0a3",
+              "name": "company_department",
+              "value": "={{ $json.company_department }}",
+              "type": "string"
+            },
+            {
+              "id": "667763ef-6bbf-422e-b98a-44bb51b835bb",
+              "name": "job_sector",
+              "value": "={{ $json.job_sector }}",
+              "type": "string"
+            },
+            {
+              "id": "e02990cc-70a0-4672-a050-6280df10fdb8",
+              "name": "contract_type",
+              "value": "={{ $json.contract_type }}",
+              "type": "string"
+            },
+            {
+              "id": "3d532878-6ff8-4d21-9bea-fd927ab38bd9",
+              "name": "signal_tier",
+              "value": "={{ $json.signal_tier }}",
+              "type": "string"
+            },
+            {
+              "id": "45833e66-5531-4b1f-b56c-3401f31448c8",
+              "name": "status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "49c83c67-536e-42be-a041-4b247875218b",
+              "name": "processed_at",
+              "value": "={{ $json.processed_at }}",
+              "type": "string"
+            },
+            {
+              "id": "e36b8eb9-3dc9-406b-aa74-0ba4839ff0eb",
+              "name": "company_url",
+              "value": "={{ $json.company_url }}",
+              "type": "string"
+            },
+            {
+              "id": "80d94137-bddf-4264-80c3-d0eb5ecda587",
+              "name": "poster_name",
+              "value": "={{ $json.poster_name }}",
+              "type": "string"
+            },
+            {
+              "id": "cf1fb289-8821-4cbf-bdea-814ee646ed9e",
+              "name": "poster_linkedin",
+              "value": "={{ $json.poster_linkedin }}",
+              "type": "string"
+            },
+            {
+              "id": "f7041f7f-79c8-4f8d-a280-56a151df3885",
+              "name": "company_logo",
+              "value": "={{ $json.company_logo }}",
+              "type": "string"
+            },
+            {
+              "id": "4dc74732-aa86-4718-9e3f-f2ac23552cda",
+              "name": "experience_level",
+              "value": "={{ $json.experience_level }}",
+              "type": "string"
+            },
+            {
+              "id": "ccbbece4-e599-4a22-91fd-6d5a4425240f",
+              "name": "apply_url",
+              "value": "={{ $json.apply_url }}",
+              "type": "string"
+            },
+            {
+              "id": "9c881010-3c28-4f7e-a5fd-da3e9f6814d2",
+              "name": "source",
+              "value": "={{ $json.source }}",
+              "type": "string"
+            },
+            {
+              "id": "7c61ac99-d19a-48ed-94a0-754f00eba142",
+              "name": "description_vector",
+              "value": "={{ $json.description_vector }}",
+              "type": "string"
+            },
+            {
+              "id": "83620fee-933a-4de4-9652-91faa26f6260",
+              "name": "employment_type",
+              "value": "={{ $json.employment_type }}",
+              "type": "string"
+            },
+            {
+              "id": "e70e38db-bc1d-4bf4-807f-55155ff0ed8c",
+              "name": "work_mode",
+              "value": "={{ $json.work_mode }}",
+              "type": "string"
+            },
+            {
+              "id": "2fd7e6b1-856b-4d4a-b90d-7d177318cbe2",
+              "name": "metadata",
+              "value": "={{ $json.metadata }}",
+              "type": "string"
+            },
+            {
+              "id": "7b1de7ac-addb-4f76-a3bf-959d7acafff6",
+              "name": "tech_score",
+              "value": "={{ $json.tech_score }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -256,
+        -176
+      ],
+      "id": "d31fd845-d264-4c1a-89c7-f94e336fad50",
+      "name": "Standardize input"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "bhlGPoZTR6B1MQhp",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/bhlGPoZTR6B1MQhp",
+          "cachedResultName": "score_reject_nonAI"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1888,
+        -112
+      ],
+      "id": "3470b108-e60c-439c-9789-20b281b0dd2d",
+      "name": "Call '02_reject_nonAI'"
+    }
+  ],
+  "connections": {
+    "Update a row": {
+      "main": [
+        [
+          {
+            "node": "Is rejected?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reject technical descriptions": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Check technicality - llm",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check technicality - cosine": {
+      "main": [
+        [
+          {
+            "node": "Adjust score cosine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check technicality - llm": {
+      "main": [
+        [
+          {
+            "node": "Adjust score llm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Check technicality - llm",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate weighted technicality": {
+      "main": [
+        [
+          {
+            "node": "Reject technical descriptions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adjust score llm": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adjust score cosine": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Is rejected?1": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call '02_reject_nonAI'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Standardize input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Calculate weighted technicality",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Check technicality - llm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        []
+      ]
+    },
+    "Standardize input": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Check technicality - cosine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call '02_reject_nonAI'": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "Europe/Prague",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "id": "b0a34b7b-d990-492d-9a6c-1cdc346b575a",
+          "published_at": "2026-03-25T01:00:00+01:00",
+          "company_name": "Coody",
+          "job_title": "Machine Learning Engineer",
+          "job_url": "https://se.linkedin.com/jobs/view/machine-learning-engineer-at-coody-4390339118?trk=public_jobs_topcard-title",
+          "match_score": 0,
+          "job_description": "Why choose Coody\n\nAt Coody, We Cut Out Everything Unnecessary To Give More Back To You As a Consultant. And We Have Done It In The Package Of a Lean And Efficient Organization, Meaning No Overpaid Managers, No Fancy Offices And No Extravagant Conferences. Instead We Give You\n\nMaximized Compensation. Typically a +40% salary increase.\n\nFreedom & Flexibility. No bosses. All digital. Fully remote for those who prefer.\n\nEmployment Security. High salary, pension, insurance, paid vacation and a big educational fund.\n\nShape the Future. Projects and assignments for digital game changers like Spotify, Hemnet, Visa, Tobii, Toca Boca, Mojang, Flightradar24, SJ, and exciting startups and scaleups.\n\nAs we are growing, we are continuously hiring senior tech consultants and connecting them with impactful projects through our client network.\n\nWhat You’ll Be Doing\n\nAs a Senior Machine Learning Engineer at Coody, you'll take on fullstack Machine Learning Assignments covering the full spectra from GenAI, developing and training models in production, and building cloud platforms where they can run. Each assignment is 6–24 months and will give you both broadness and deepness from various industries and companies. Often, we play a key role for the project, product and team we work in. You will dive into complex systems, ramping up fast, and delivering real impact from day one. Beyond coding and training models, you’ll influence product direction, and fostering a collaborative, high-trust team culture.\n\nWho You Are\n\nWe believe that you have about 4+ years of experience and a proven track record of delivering real results within Machine Learning. If you’ve got the following, you’re probably a great fit:\n\nA track-record of building and training ML models in production\nCloud experience (AWS, GCP, Azure, Docker, Kubernetes)\nExperience with commonly used data tools (e.g., Spark, Dask, PySpark, Apache Beam)\nExpertise in Python and modern ML/AI libraries (PyTorch/TensorFlow, Transformers, LangChain, LangGraph, Vertex AI)\nStrong understanding of ML infrastructure: deployment, monitoring, debugging, optimization\nA degree in Computer Science, Engineering, Mathematics, Statistics, or similar\nYou must be based in Sweden with a Swedish citizenship, a valid work visa, temporary or permanent residency\nFluent in English (spoken and written)\n\nThis is Coody\n\nWe’re one of Sweden’s fastest-growing tech consultancies, expanding in both people and revenue. We attribute our growth to our simple yet powerful approach to Gravity-Free Consulting, combining the freedom and flexibility of freelancing with the security of traditional employment.\n\nAt Coody, we believe in freedom, trust, and ambition which means you’ll feel like a freelancer with free rein on assignments that excite you, while enjoying the benefits of being employed by a company that invests in your growth.\n\nOur senior sales team has built a vast, carefully curated client network, enabling our consultants to work with some of the most innovative companies in Sweden, Finland, the US, and the UK across Gaming, Fintech, Medtech, AI, SaaS, Aviation, and Automotive, tackling real technical challenges while shaping their own career paths.\n\nWe’re a diverse community of ambitious tech professionals, representing more than 14 nationalities.\n\nCoody is more of a platform than a traditional consultancy. Everything we do is designed to help you work and live according to your own priorities and ambitions. If you’re curious to see how this works in practice, explore our Employee Handbook and discover a company that truly puts consultants first. \nShow more Show less",
+          "job_location": "Stockholm, Stockholm County, Sweden",
+          "external_id": "4390339118",
+          "job_salary": "{}",
+          "company_department": null,
+          "job_sector": "Information Services and Technology, Information and Internet",
+          "contract_type": "Full-time",
+          "signal_tier": null,
+          "status": "passed_title",
+          "processed_at": "2026-04-02T09:18:11.711+02:00",
+          "company_url": "https://se.linkedin.com/company/coody?trk=public_jobs_topcard-org-name",
+          "poster_name": "",
+          "poster_linkedin": "",
+          "company_logo": "https://media.licdn.com/dms/image/v2/D4D0BAQHu9mbMZzKV1g/company-logo_100_100/company-logo_100_100/0/1713512002086/coody_logo?e=2147483647&v=beta&t=blA0JswWz3mhnHhiF9JlVB3UetFvEO_I71J9xPYtYWo",
+          "experience_level": "Not Applicable",
+          "apply_url": "https://se.linkedin.com/jobs/view/machine-learning-engineer-at-coody-4390339118?trk=public_jobs_topcard-title",
+          "source": "linkedin",
+          "description_vector": "[-0.008807633,-0.005998708,0.009074076,-0.06539729,-0.0033602887,-0.0044469796,-0.0013056207,0.029246515,0.025124874,-0.0007800765,-0.006351007,-0.028120445,0.009869067,-0.0075526643,0.121084124,0.0088653555,0.0013362248,0.0048844363,-0.011005165,0.008024402,0.004263632,0.004438944,0.014879578,0.0021188322,-0.02070323,-0.015893755,0.023580527,-0.015635502,0.059620325,-0.0056377216,0.008042889,0.009458697,0.005771484,0.03817833,-0.006009897,0.014137949,0.025255365,-0.032275707,0.015887879,-0.0025220276,0.00090414943,-0.012075044,0.0037889744,-0.01769033,-0.0046905424,0.007695337,-0.0012070272,0.009681439,0.0045322645,0.0016502384,-0.015944837,0.01469898,-0.011911475,-0.16095345,0.015500147,0.0065086232,-0.014177516,0.009222482,0.003851008,-0.0017839393,0.005537554,0.02491085,-0.02380294,-0.004119053,0.006745127,-0.008848936,0.017618293,0.018703846,0.041528914,-0.025208693,0.0117944665,0.031967267,0.0127788335,-0.007631983,-0.012472543,-0.01363277,-0.0032412338,-0.012253242,0.022158206,0.015795862,-0.0052391663,0.0005244986,-0.015199171,-0.0012718333,-0.013934901,0.018652055,0.02135648,-0.01752692,-0.008832265,-0.019057462,0.007922052,0.032143235,0.025338076,0.03847129,-0.028182963,-0.02052125,0.020099333,-0.010382472,0.04052703,0.0047963485,-0.009497023,-0.02905922,0.0031883619,-0.02444693,-0.0046818815,0.02924738,-0.021457843,-0.017746624,-0.01601071,0.021088723,0.010414077,-0.012037893,-0.026591966,0.0380263,-0.004638187,-0.13923246,-0.00085597247,0.0011120392,0.009822106,-0.01926339,0.016830241,-0.016953712,0.019451488,0.020298325,-0.014293545,0.0067430194,0.004122273,-0.015062067,-0.0103702545,-0.011952042,-0.01502081,-0.002373804,0.012876183,-0.005137743,0.004654601,0.008202181,-0.0082331905,-0.0060969284,-0.0429055,-0.010531454,-0.046489894,-0.008124495,0.012153819,0.01539869,-0.0005895526,-0.000824321,-0.01620416,-0.0055880984,0.023025664,-0.026959224,0.028357543,-0.037510917,-0.004249826,-0.017334377,0.0016084849,-0.047545303,0.013141205,0.020864293,0.009240556,0.0004442268,-0.030543733,-0.009757149,-0.011840509,0.0134455105,0.015837375,0.014277543,-0.026377838,0.018871134,-0.009920482,0.00799203,0.015686085,0.0011718306,-0.0075090113,-0.0055215894,-0.0047439407,0.0026622138,-0.0123750195,0.008931531,0.0022258575,-0.024651123,0.043744568,0.007926414,-0.011326031,0.0046050195,-0.019893408,-0.00753879,-0.014761274,0.026665967,0.035857618,-0.005631283,0.020880852,0.005423423,0.014041928,0.0039969976,0.016816763,-0.03151832,0.0076396144,-0.030862905,-0.008386965,0.015792197,0.031489246,-0.016359502,0.006931138,-0.01783862,0.009107093,0.017895728,0.003905406,0.0062473053,-0.017772824,0.01055554,0.013030181,0.03057628,0.0057840757,-0.008699467,0.0052271294,0.011309545,-0.029476909,-0.019925943,0.0012881106,0.0025641806,-0.00048222786,-0.03883184,0.01612813,0.0103812115,-0.013162297,-0.006905864,-0.004085425,-0.0042017964,-0.016525913,-0.010910751,0.011183451,0.0027392423,0.0055988193,0.007534277,-0.022804044,0.023694962,0.009382823,0.023965826,-0.009806735,-0.0030481261,-0.008246044,0.024980675,-0.0008952426,0.02888058,-0.026281249,0.008077832,-0.018424088,-0.008757654,0.003017751,-0.012425958,-0.00645668,-0.013462473,-0.00494386,-0.0038188563,-0.0012135827,-0.027385883,-0.009080259,-0.016384315,0.0062361634,-0.00077199406,-0.006958667,0.008680053,-0.0146883065,-0.029977249,-0.015564749,-0.0069728824,0.012467786,0.011103986,-0.008673896,0.029625548,0.015863536,0.0536463,-0.0056094863,0.0018894514,-0.00023271235,0.007932497,-0.081456214,0.029524943,0.004807902,-0.007843532,-0.0061646877,0.010147353,0.012102113,0.0071550095,-0.035424903,0.0022830183,-0.032825842,-0.007853146,-0.0011866573,-0.03500435,-0.008673585,-0.009555764,-0.002069831,0.0013804721,0.016698739,-0.009766808,0.01675727,-0.017777309,-0.0031328148,0.024214286,0.00045695185,-0.03097533,0.02533567,0.06368059,-0.017792763,0.012842086,0.012299647,0.02485717,0.0063728387,0.0003884888,0.00049388484,0.023030594,0.0055008675,-0.0030270393,-0.008592762,0.000771278,0.009995542,-0.00671015,-0.004000992,0.0009505368,0.02894105,0.012995196,-0.012514498,-0.0033680056,-0.019725572,0.0013560501,-0.011083526,0.025734866,0.004724685,0.007898112,-0.014567088,-0.007499448,0.0068985336,-0.037757676,-3.61309e-05,0.005158302,0.032444265,0.016086191,-0.004527002,0.004245642,0.0096577015,-0.017867858,-0.0031130118,0.0011340175,-0.01867282,0.018671885,-0.008782049,-0.02275725,0.00093462615,-0.039042506,0.0027644115,-0.011454624,-0.022340117,0.0024381964,-0.018861484,0.017694386,0.0041709533,-0.00084633817,0.017822688,0.011427525,0.016629698,-0.00082057295,-0.009540462,-0.012659548,0.013228266,-0.009661857,0.022594228,0.0073023844,-0.004685607,0.0010728932,-0.02445504,-0.012489834,-0.008264548,-0.014387793,0.017798243,-0.006040838,-0.027445044,-0.032036096,-0.038942333,0.010587475,-0.02060871,0.046507116,-0.0054053864,-0.00903092,0.0046181814,-0.017365152,0.028271561,0.0084274355,-6.743497e-05,0.024036843,-0.0052603227,0.0031322609,0.031771407,-0.013737704,-0.00930402,0.0040919473,-0.03579363,-0.026037488,-0.0014037918,-0.018880857,0.017458605,0.01280848,0.019832266,0.028443769,-0.021217545,-0.01549678,-0.009358107,0.0046817074,-0.009839893,-0.0074503897,-0.00888727,0.0034564016,0.023775334,0.0024335473,0.020577068,-0.012955598,-0.028409913,0.00024534043,0.032213993,-0.006082421,0.0028857333,0.027210087,0.002523508,-0.02500297,0.009913556,0.0064325472,-0.024435174,-0.006978408,-0.007119155,0.010305664,-0.006415567,0.0019505771,-0.0072426614,-0.00018161914,-0.034203265,-0.00476994,0.0077810194,-0.009598374,-0.00631193,-0.031701032,0.03151777,-0.03506872,0.009405292,-0.015036953,0.013398448,-0.0006429278,0.011801643,-0.0012722859,-0.017839327,0.007759306,0.0029903522,0.00198916,-0.0018312649,-0.0125531005,-0.0021879992,-0.02525879,-0.035211444,-0.010880199,0.0064931554,0.0002260932,-0.009757371,0.036366776,-0.0155064305,-0.01818241,-0.015251022,-0.011805377,0.015859367,-0.008169382,0.0043386472,0.010455042,-0.019192064,-0.011426821,0.013441301,0.021149946,0.008126564,-0.030096984,0.020484457,-0.021650959,-0.0072952253,0.016830072,-0.0030555169,-0.0354542,-0.016248886,-0.029381258,0.010034856,0.014179857,-0.016324159,0.02093798,-0.012006327,-0.028955812,0.02165897,0.0003573179,-0.008948006,-0.011828235,0.026107255,-0.007347711,-0.011247894,-0.0058977017,0.018334411,-0.0017614397,-0.002517768,-0.015421986,0.0076375916,-0.0057662036,0.0055959225,-0.012515645,0.0021702168,-0.017502004,0.028067164,-0.006345349,-0.004151648,0.0051850337,0.0013845958,0.016284173,-0.010199052,-0.0050112964,0.011745183,-0.025179356,0.0005184191,-0.014539079,0.004735758,0.0127589265,-0.016428987,0.008633699,-0.017195469,0.0010934588,0.017006006,0.017223816,0.021865712,-0.01227143,0.0042446223,0.012869482,-0.005770352,0.0048838765,0.00829527,-0.011020044,0.003388255,0.01233522,0.0029495652,0.026829613,-0.007146006,0.0036833296,0.0037896459,-0.034666996,-0.0066084093,-0.07183166,0.00303735,0.0038811408,-0.0007246935,0.000735541,0.008873738,-0.0017934727,-0.0056174635,0.0069638346,0.010430813,0.0035976777,-0.013393188,0.018059159,0.009397664,-0.02818695,-0.03642788,0.0059434026,0.014956277,-0.016470928,-0.030257707,0.027889745,-0.021120142,-0.018463707,0.010035495,-0.021256654,-0.012384333,0.035346095,-0.0010175131,0.021929838,-0.016356893,-0.031574816,-0.031528562,0.030033737,0.028640682,-0.001297754,0.0026572098,-0.022947457,-0.014640329,-0.009016776,0.01737967,0.0072924267,-0.00045174893,-0.010911392,-0.008905158,0.021779982,0.022454409,0.0045425342,-0.03620354,0.01568087,0.020834029,-0.021515425,-0.026376052,0.034235947,0.004523178,0.008157267,0.018369898,0.00995026,-0.0037583704,0.024755733,-0.00852875,-0.01209053,0.001102392,-0.0030052864,0.036715597,-0.028634582,-0.0069882846,0.0033257604,0.014583018,0.0062677134,0.036580402,0.012529202,-0.041814685,-0.017037278,0.0022468679,-0.0016032842,0.005833656,-0.002855017,0.01117721,0.011144985,-0.018183716,-0.021907182,-0.0016542533,-0.076050885,-0.00070760545,-0.0020053498,0.00096216536,-0.008444052,0.02958602,0.006770314,-0.007840165,0.0063306508,-0.01789427,-0.030823098,-0.017402774,0.010779235,0.007006035,0.030866105,0.006265368,0.025957216,0.0028085688,-0.02170345,-0.028228514,-0.00053676876,0.0054757353,0.011235445,0.017497504,-0.008560102,-0.011536745,-0.015316119,0.0063322713,0.014885325,0.016257737,-0.00989483,-0.14972953,-0.015315932,-0.011473782,0.006581795,-0.0015738759,-0.003653843,-0.019204782,0.002497221,0.02237542,0.008760759,0.012150886,-0.03046706,-0.04238639,-0.0059300438,-0.011188092,0.12732263,-0.016202966,0.007905023,-0.011343346,-0.0100035565,-0.0076307566,-0.0085435435,-0.0009268532,0.008078764,-0.006124863,-0.006674597,0.029393177,-0.013086108,-0.017126339,0.017739624,0.01605317,0.01099348,0.0014773768,-0.006391033,0.0047553265,0.007322808,-0.011829889,-0.0038398758,0.016942017,-0.0040882165,0.011767333,0.01969474,0.00904573,-0.010356711,0.020761311,-0.007825814,-0.0013633175,0.02665166,0.0026901674,-0.008526678,0.0033276882,-0.079620995,0.012338248,0.002825225,0.008184406,0.004849359,-0.035265353,-0.0044394955,0.03423581,0.005750322,-0.010010475,-0.0046870043,0.012779751,0.0013086436,-0.0008539004,0.0041879206,0.011693953,0.029001694,0.005032366,0.013813089,0.021572053,-0.008931983,0.004142129,-0.0059165983,0.008054007,0.004504755,0.0043943874,0.016633134,0.008463109,-0.01702172,0.016967151,-0.022507844,0.014005099,-0.00522931,0.0049214135,-0.008431905,0.012483204,0.026418624,-0.020081352,9.4504736e-05,-0.0014243367,0.0052451612,-0.00323112,-0.0013912577,0.0017465678,0.04104685,0.008024565,-0.00079970807,-0.006134947,-0.0052713607,0.007324257,-0.022607494,-0.034631174,-0.047449175,-0.019031769,-0.025101876,0.0013655185,0.015128891,-0.008380133,-0.007555035,0.010397627,0.01651883,-0.019985816,-0.005936529,0.0013364747,0.0033832814,0.012587227,0.009569286,-0.011374783,-0.0038026178,-0.003841529,-0.010536813,0.004830629,0.017221976,-0.0037336242,-0.00597871,-0.021295598,-0.0052409978,-0.0063060485,-0.002066206,0.0090595335,-0.0033327944,0.0034492787,-0.006059595,0.0011178677,-0.001028545,0.0064724823,-0.0066874716,0.0024797248,0.008632948,0.010825141,-0.004809719,-0.013680265,-0.0030288128,-0.009365105,-9.582983e-05,6.964567e-05,-0.0048181512,0.013759193,-0.026215645,-0.0057272566,-0.029835684,-0.0030933465,-0.021010533,-0.00029302068,0.014750365,0.017026354,0.0024850932,0.014929731,-0.00806856,0.003455372,-0.016212486,0.010603051,0.0066469773,-0.008052708,0.0119869,0.0071778647,-0.011419983,-0.013073597,0.020453889,0.009838145,-0.0032865524,-0.019080782,-0.003729009,-0.0033976808,-0.0041070064,0.014079326,0.00851659,0.00062460516,0.009064287,-0.011731851,0.0005301795,0.003970913,0.011369553,0.00879454,0.015021008,0.0010527389,0.01174535,0.021810919,0.008526695,0.0008266084,-0.03477487,0.023436991,-0.022430504,-0.008246704,-0.006251109,-0.01590191,-0.016670853,-0.012605824,0.011776968,0.0066733663,-0.006482454,-0.006953678,-0.0024293512,-0.006231673,0.014071786,0.00041957578,0.013954885,0.010130227,0.019170513,0.01802396,-0.0025047837,-0.0067159506,-0.011024087,0.00022031057,0.00105801,0.02133387,0.020081751,0.0045259083,-0.008899756,-0.0073350086,-0.0032762873,0.0112676965,-0.015482154,-0.007999018,0.004457353,-0.0028633599,0.009204094,0.0037138222,0.011732965,0.029298738,0.007105853,0.0047886185,-0.003135375,-0.011987485,-0.0028268977,0.016960964,0.008047514,0.008901068,0.029997932,0.010177814,0.019178381,-0.010130699,0.008901414,-0.016931422,0.0013298207,-0.003628499,0.0017838347,-0.0023879388,0.011253736,0.00447937,0.010453605,0.020873055,0.014940893,-0.023471529,0.0046196454,-0.00977784,-0.0130104525,-0.0010300224,-0.009269252,-0.008640076,0.011285213,-0.0066511203,-0.002816775,0.015837984,0.00018605051,0.0063062385,0.0029505044,0.0006850951,0.018418819,-0.0009024764,0.0012384892,0.013977998,0.011128207,-0.0039744442,-0.011744199,0.007676499,0.0012983411,-0.0067683663,0.0041916836,-0.00168233,-0.003963778,-0.010771804,5.048068e-06,0.008290778,-0.0036925622,0.014506994,-0.008566924,0.0023460342,0.00045725345,0.006023968,0.011853278,-0.02183843,0.011307869,-0.009820442,-0.005388835,-0.006844704,0.0022314386,-0.0062120394,-0.0059480146,-0.006295694,0.0006617305,-0.008063449,0.004474758,0.006359854,-0.027250692,-0.0050854054,0.00096562144,0.004102516,0.012229882,0.09466609,0.02233044,0.0010584939,0.0036460361,0.0058659627,0.002100659,-0.0049748067,-0.016909588,0.0115029765,0.019870684,-0.0056286035,-0.0015258987,0.0018095821,-0.011847951,0.012666062,0.00070714875,-0.0057280287,0.009922357,-0.004338764,0.0006856944,0.014348867,0.0003885253,0.0068096262,-0.0080632055,-0.0018627101,0.012752756,-0.005179951,-0.014337068,-0.0009892829,0.015129222,0.00078871666,-0.00038999593,-0.013246262,0.0038695857,-0.006108049,-0.008958335,-0.01167239,0.020443073,0.0042859334,0.00576933,0.01387255,0.01437037,0.0048765657,-0.009725599,-0.008734222,0.0019636133,-0.0034413678,0.003241852,0.0017036854,-0.021010656,-0.015060166,0.0057522045,-0.009084456,0.0028481025,0.00907773,-0.005177611,0.00034112064,0.004634215,0.0028433779,0.0043735886,-0.004416424,-0.006621802,0.0015568801,0.010533026,0.0050627594,-0.013527656,0.014634281,-0.003294483,0.00033657855,-0.0033188933,-0.009130268,0.010008926,-0.006824729,-0.0034938566,0.016389793,0.010479115,-0.0001711798,-0.0015839775,-0.010200041,-0.007648447,0.0054112673,-0.0005041625,-0.036293335,-0.013825543,-0.0074308994,0.014608421,-0.027002823,-0.014431374,0.0051164622,-0.0032721374,-0.0018121206,0.0034019747,0.011929281,0.0071015637,-0.015355692,0.014455356,0.045771066,0.0093357805,0.00978959,0.0064215157,0.0067162956,3.2798573e-05,0.015000685,0.016267916,0.008558704,-0.0026898084,0.0066029956,-0.011478163,-0.0012763672,0.005889803,-0.002352296,-0.013420814,0.004860943,-0.008435967,-0.012652953,-0.019139322,-0.020185642,0.010710265,-0.0008249726,0.0029332943,0.009408415,-8.361296e-05,-0.00080991356,0.0037818667,0.0059189154,0.00080179266,-0.0077251145,-0.0069158566,0.00634885,0.022092858,-0.002207348,-0.009115086,0.00035531592,-0.0022429647,0.0045400904,0.008894923,0.009872894,0.0011446746,-0.01622451,0.0016326501,-0.002266121,0.0007695857,-0.018076692,0.012435017,-0.010950587,-0.0066998745,-0.013775311,-0.0062176404,-0.0063105505,-0.022030063,-0.008274025,0.0029697511,-0.01151166,0.025843121,0.0075553656,0.007836876,0.0068993885,0.010925223,0.009372587,0.017528469,-0.00073022896,0.013424185,-0.013383432,0.003197349,-0.004521754,-0.0085982755,-0.011355132,-0.012864053,0.0010199515,0.012760387,-0.017732449,0.0021897175,0.0072061247,-0.00901073,-0.01114615,0.004564326,-0.011252818,-0.008893627,-0.0024397722,0.00096191914,-0.0021901438,0.0021371057,-0.013151207,0.0054653436,-0.022645935,-0.00645793,0.007294335,-0.0024073832,0.007981793,-0.0027704781,0.009768797,0.0042391927,-0.0011408529,0.0015368228,-0.0015415978,0.0016740478,-0.01031519,0.0152003355,0.008703096,-0.013423146,0.012155533,0.002474232,0.024166757,-0.010610869,0.0076540154,-0.0026876412,0.015279859,0.005117908,0.0020082498,0.01676023,-0.009088979,-0.01909745,-0.00416809,0.017715618,-0.00018036581,0.010336204,-0.014272606,-0.001634902,0.007870338,0.00829277,-0.014518728,-0.0069966274,0.0065817665,-0.01623878,0.017461326,-0.014462985,-0.00093941804,0.003017794,-0.00016363409,-0.004243647,-0.012936706,0.0039520664,-0.02321482,-0.020555317,-0.0077379528,-0.0023230296,0.00037817904,-0.020157877,0.007965713,0.0040995996,0.0036679208,0.011566473,-0.0037452849,0.008055997,0.0007966312,-0.013721806,-0.015167386,-0.006019814,-0.0014889827,0.0024781155,-0.012815168,-0.012536928,0.010106672,0.0031527358,0.005205899,0.015494633,0.018229095,-0.08230973,0.014004075,0.022744134,0.023456967,-0.0048219343,-0.011049726,-0.0102485465,-0.0040578577,-0.0054891333,0.011226888,0.019654736,0.0064305216,-0.006042038,0.002790344,0.012488938,0.0028959871,-0.004005468,0.010851561,0.012678563,-0.009627365,-0.008484679,-0.0020087208,0.003362019,0.010119272,-0.002523086,-0.0026677966,-0.00814367,0.011743591,-0.0062515056,0.0050068228,0.024196044,0.0042053987,-0.00015312262,0.009469401,0.002653425,-0.011741527,0.016206361,0.005791112,-0.004435756,0.006400435,0.025538117,0.0073404056,0.008571006,0.0024742137,0.0015637222,-0.011272567,0.010964782,-0.014245296,0.029557297,0.007836021,0.0032066212,0.011073548,-0.022757947,0.006323898,0.0017745427,-0.004342891,0.0006855725,-0.0024342253,-0.0059848046,-0.00386953,0.013391172,0.002867463,0.0077709435,-0.005572497,-0.016620995,-0.007462055,-0.0011590953,-0.005648141,-0.0136292875,0.0046720016,0.0029501973,0.012897373,0.00050559297,0.0072901826,-0.0060317134,0.013729077,0.010577893,-0.0047448464,0.0017129184,0.017952692,-0.0017015203,0.009616412,-0.014124663,-0.004965854,-0.005801301,0.012625976,-0.010610696,-0.008115426,-0.019909253,0.000692106,-0.009948353,-0.006378147,-0.0034912708,0.004033714,-0.010788049,0.008871084,0.0019425306,0.019406075,0.011078852,0.003913822,-0.0015352083,-0.018327791,-0.013146532,-0.0063803517,-0.0066597094,-0.00459813,-0.014833653,0.011473017,-0.0038091314,-0.0024792266,-0.0064735087,0.01073598,0.0013331313,0.00029330232,0.025477797,-0.0052906647,-0.015095508,-0.023702674,-0.015647093,0.003653319,-0.029212154,0.034914553,-0.025996285,0.011248173,0.017079951,0.008759714,0.00096186437,0.005478611,0.008287504,-0.009840067,0.00852139,0.0058374503,0.0034344678,-0.008958062,-0.020385476,-0.003474827,0.00694668,0.00501465,0.0032187435,0.016208714,0.009199254,0.008893255,-0.0043535265,-0.02980749,-0.014620723,-0.014745334,0.011958966,0.004403895,-0.0015889863,-0.01375406,-0.0017764309,-0.018539418,-0.01041498,0.008020987,-0.0053802654,-0.010542502,0.014862423,-0.013181125,-0.0042284573,0.00483525,0.007836407,-0.00049148744,0.00093566853,0.0025429502,0.0049668825,0.0011887235,-0.013263961,-0.000927758,-0.016556561,-0.010147891,-0.0046890606,0.007838002,-0.0022759559,0.013547844,0.009333789,-0.008307514,0.021884346,-0.0023427382,-0.00084995915,0.0032909901,0.00441396,0.008662783,0.009687072,0.018288264,0.0063455873,-0.0028271829,-0.0073063597,0.005124984,0.0034364148,0.0022208686,-0.0043106354,-0.011472958,0.013406807,0.0011539245,0.011967102,-0.0117234625,0.0054201307,0.0014471203,0.0022457324,-0.012246026,-0.015115691,-0.0051444382,0.00018058297,-0.0019500818,0.007531111,-0.10944222,0.0048633604,-0.019043423,0.0038485778,0.0051795393,0.005937857,-0.007659074,0.011378372,-0.029099459,0.0114179645,0.0022304477,0.0027041752,0.01101954,-0.017534934,-0.0009959142,0.003922369,-0.005780353,-0.007844532,0.0028716007,-0.015832582,0.004863349,0.0006523964,-0.01953088,0.0144469645,-0.0008594115,-0.017498441,-0.024440888,-0.006956279,-0.002161651,0.0037507406,-0.01742355,0.002907479,-0.0022574777,0.0017048797,0.0071901367,-0.008869099,0.0024972132,0.004993253,-0.13741457,-0.0072221304,0.0065074596,0.004232447,-0.0020901847,0.0054366477,0.0058173356,0.00068686635,-6.104301e-05,-0.005468057,-0.0014685721,-0.004712182,0.0076291743,0.0023687754,0.007296234,0.0050775576,-0.010345854,0.006725939,0.0032324798,0.008162834,0.0059360713,0.015884154,-0.015779639,0.018288411,0.0039315866,0.019690253,0.019116279,-0.0071602957,0.009519274,-0.007977289,0.017790494,-0.018068634,0.0008836581,0.011236375,0.00481138,0.0049574454,0.0071517783,-0.00044935517,-0.024008023,-0.009166559,0.016107315,0.006168792,0.011716765,-0.005625016,-0.004214359,-0.0037591404,0.0031737867,-0.0048870887,0.017766844,-0.003431771,-0.010174193,-0.01906045,0.009259407,-0.0055620275,-0.0021190115,-0.012004079,0.013881431,-0.0005083193,0.00020652235,0.020702176,0.015015645,-0.017774284,-0.007106386,0.012589663,0.010580644,-0.0026955574,0.011171246,0.009072824]",
+          "employment_type": null,
+          "work_mode": null,
+          "metadata": null,
+          "tech_score": 0,
+          "is_active": true,
+          "application_stage": "lead",
+          "last_interaction": "none",
+          "last_checked": null,
+          "notes": null,
+          "responsibility_score": null,
+          "ideal_score": null,
+          "updated_at": "2026-03-26T08:57:22.835829+01:00",
+          "lead_progression": "lead",
+          "progress_updated_at": "2026-03-26T08:57:22.835829+01:00"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "233064ed-fd27-4471-9847-c2dbcc05c376",
+  "activeVersionId": "233064ed-fd27-4471-9847-c2dbcc05c376",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-03-05T09:43:06.768Z",
+      "createdAt": "2026-03-05T09:43:06.768Z",
+      "role": "workflow:owner",
+      "workflowId": "fShvCbZRgCtLGec8",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-04-02T07:40:41.000Z",
+    "createdAt": "2026-04-02T07:40:34.647Z",
+    "versionId": "233064ed-fd27-4471-9847-c2dbcc05c376",
+    "workflowId": "fShvCbZRgCtLGec8",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "job_leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "job_url",
+                "condition": "eq",
+                "keyValue": "={{ $('Standardize input').item.json.job_url }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "status",
+                "fieldValue": "={{ $json.status }}"
+              },
+              {
+                "fieldId": "processed_at",
+                "fieldValue": "={{ $now.toISO() }}"
+              },
+              {
+                "fieldId": "tech_score",
+                "fieldValue": "={{ $json.multipliedScore }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          1440,
+          -176
+        ],
+        "id": "aeb0609f-b4c1-46af-8cdb-b868c396cedd",
+        "name": "Update a row",
+        "retryOnFail": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const llmScore = $json.technicalScoreLLM;\nconst cosineScore = $json.technicalScoreCosine;\nconst weightedScore = $json.new_technical_score;\nconst title = $('Standardize input').item.json.job_title.toLowerCase();\nconst multipliedScore = Math.round(weightedScore * 100);\n\nconst bridgeTitle = ['ai', 'platform', 'workflow', 'agent', 'n8n', 'ops'];\nconst hasBridgeTitle = bridgeTitle.some(word => title.includes(word));\n\nconst maxAllowedDiff = 0.4;\nconst passMax = 0.5;\nconst reviewMax = 0.7;\n\nlet finalDecision = 'rejected_description';\nlet reason = 'Too technical';\nlet applicationStage = 'lead';\n\nconst scoreDifference = Math.abs(llmScore - cosineScore);\n\nif (scoreDifference > maxAllowedDiff && llmScore < reviewMax) {\n  finalDecision = 'manual_review';\n  reason = \"LLM and Cosine score difference too big\";\n}\nelse if (weightedScore < passMax) {\n  finalDecision = 'passed_description';\n  reason = 'Not so technical'\n}\nelse if (weightedScore >= passMax && weightedScore <= reviewMax) {\n  if (hasBridgeTitle) {\n    finalDecision = 'manual_review';\n    reason = 'Mid technical with bridge title';\n  } else {\n    finalDecision = 'rejected_description';\n    reason = 'Mid technical without bridge title';\n    applicationStage = 'withdrawn';\n  }\n}\n\nreturn {\n  json: {\n    ...$json,\n    status: finalDecision,\n    multipliedScore,\n    reason,\n    applicationStage\n  }\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1216,
+          -176
+        ],
+        "id": "8de6bb39-cbe8-4a3e-bb57-2f931d7c2f06",
+        "name": "Reject technical descriptions"
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-3-flash-preview",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          144,
+          -240
+        ],
+        "id": "a45410c0-18b1-4588-a51e-71e05576f4b3",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "YhtGw7h88f9jUZts",
+            "name": "Google Gemini(PaLM) Api account_llm"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT * FROM check_vibe(\n  '{{ $json.description_vector }}'::extensions.vector(1536),\n  'technical_anchor'\n) AS technical_score_cosine;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          256,
+          -32
+        ],
+        "id": "ee738ca1-be5a-4c44-9594-483f7e51d8fb",
+        "name": "Check technicality - cosine",
+        "alwaysOutputData": false,
+        "retryOnFail": true,
+        "waitBetweenTries": 2000,
+        "maxTries": 5,
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Provided job description:\n{{ $json.job_description }}",
+          "hasOutputParser": true,
+          "options": {
+            "systemMessage": "<system_instructions>\n<persona>\nYou are a Senior Executive Talent Scout for a Tier-1 AI Consultancy. You specialize in identifying \"Bridge Professionals\"—individuals who translate business strategy into high-level AI architecture and operations (AI Ops, Solutions Architecture, Implementation). You explicitly AVOID \"Engine Room\" roles that are purely execution-heavy or research-based.\n</persona>\n\n<task>\nAnalyze the provided Job Description (JD) and assess its \"Engine Room\" intensity. You are looking for roles focused on design and orchestration (The Bridge). You are filtering out roles focused on heavy coding and infrastructure (The Engine Room).\n</task>\n\n<scoring_logic>\n0.8 - 1.0: THE MECHANIC (REJECT). Low-level coding (C++, Rust), manual memory management, or maintaining legacy on-premise servers. \"Fixing the car.\"\n0.6 - 0.79: THE FACTORY WORKER (REJECT). High-volume, repetitive backend coding in Java/C#. Managing Kubernetes clusters for non-AI purposes. \n0.4 - 0.59: THE ARCHITECT (TARGET - PASS). Roles building \"Data Backbones,\" \"Context Layers,\" or \"Agent Platforms.\" They use technical tools (Python, SQL, Supabase) to enable AI. If it mentions \"Scaling agents\" or \"Versioned endpoints for AI,\" it is a PASS.\n0.1 - 0.39: THE ORCHESTRATOR (TARGET - PASS). Designing workflows in n8n, LangChain, or Zapier. Translating business needs into API chains. \"Wiring\" the system.\n</scoring_logic>\n\n<anchoring_instructions>\nCRITICAL: Do not reject \"Technical\" roles if the technology being built is an ORCHESTRATION LAYER (like the GTM Brain or an Agentic Platform). \n- If the JD mentions \"n8n,\" \"Clay,\" or \"API Orchestration,\" it is an automatic score below 0.5.\n- \"Infrastructure\" is only a reason to reject if it is \"Boring/Legacy\" infrastructure. If it is \"AI Infrastructure,\" it is a Bridge.\n</anchoring_instructions>\n\n<few_shot_examples>\n<example>\n<jd_snippet>...manual memory management in C++ and Rust for high-throughput backend...</jd_snippet>\n<reasoning>This is pure low-level execution focused on infrastructure; it is 100% Engine Room.</reasoning>\n<score>0.95</score>\n</example>\n<example>\n<jd_snippet>...AI Solutions Architect designing LLM workflows using LangChain and Python APIs to bridge client needs...</jd_snippet>\n<reasoning>The focus is on design and orchestration (\"wiring\") rather than building the underlying engine.</reasoning>\n<score>0.35</score>\n</example>\n<example>\n<jd_snippet>...architecting a centralized context retrieval system to serve 200 GTM agents with sub-second latency using n8n and Supabase...</jd_snippet>\n<reasoning>This role involves high-level technical architecture, but because it utilizes orchestration and automation platforms (n8n/Supabase) to enable AI agents, it remains a 'Bridge' role rather than an 'Engine Room' role.</reasoning>\n<score>0.35</score>\n</example>\n</few_shot_examples>\n\n<constraints>\n- Language: The JD may be in Czech, Slovak, or English. Translate the meaning before scoring.\n- Thinking: You MUST provide a \"thought_process\" before the score to ensure accuracy.\n</constraints>\n</system_instructions>"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          192,
+          -432
+        ],
+        "id": "d9040b20-cad5-49ab-bc03-b980af1f059b",
+        "name": "Check technicality - llm",
+        "retryOnFail": true,
+        "waitBetweenTries": 4000
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const item = $json;\n\nconst technicalScoreLLM = item.technical_score_llm;\nconst technicalScoreCosine = item.technical_score_cosine;\n\nconst weightLLM = 0.7;\nconst weightCosine = 0.3;\n\nconst finalTechnicalScore = (technicalScoreLLM * weightLLM) + (technicalScoreCosine * weightCosine);\n\nreturn {\n  new_technical_score: finalTechnicalScore,\n  technicalScoreLLM,\n  technicalScoreCosine\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          992,
+          -176
+        ],
+        "id": "a67f0f29-7e8a-4f73-b059-6e48aa192e75",
+        "name": "Calculate weighted technicality"
+      },
+      {
+        "parameters": {
+          "jsonSchemaExample": "{\n  \"thought_process\": \"text\",\n  \"reasoning\": \"text\",\n  \"technical_score_llm\": 0.5\n}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.3,
+        "position": [
+          352,
+          -240
+        ],
+        "id": "cd266088-9e6a-44bc-9dca-d69eb823b746",
+        "name": "Structured Output Parser",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const rawScore = $json.output?.technical_score_llm;\n\nconst min = 0.10;\nconst max = 0.80;\n\nlet adjusted_score = (rawScore - min) / (max - min);\n\nadjusted_score = Math.max(0, Math.min(1, adjusted_score));\n\nreturn  {\n    technical_score_llm: adjusted_score\n  }\n;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          544,
+          -336
+        ],
+        "id": "40bde504-0235-493c-8423-45a475757cf5",
+        "name": "Adjust score llm"
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const rawScore = $json.technical_score_cosine;\n\nconst min = 0.51;\nconst max = 0.65;\n\nlet adjusted_score = (rawScore - min) / (max - min);\n\nadjusted_score = Math.max(0, Math.min(1, adjusted_score));\n\nreturn  {\n    technical_score_cosine: adjusted_score\n  }\n;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          544,
+          -32
+        ],
+        "id": "790792a4-73a2-4d42-a907-67fb4244d7e0",
+        "name": "Adjust score cosine"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "1021ed61-251d-4947-9faf-33ce3965e97b",
+                "leftValue": "={{ $json.status }}",
+                "rightValue": "rejected",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1664,
+          -176
+        ],
+        "id": "5fc8c93e-61a0-48dc-b1dc-bb44d57c1cde",
+        "name": "Is rejected?1"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -480,
+          -176
+        ],
+        "id": "a5482bc5-059f-451e-be12-bcc5fae115c3",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          768,
+          -176
+        ],
+        "id": "62302278-ec1c-44bd-bf20-9f28260d2b4f",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          -32,
+          -336
+        ],
+        "id": "a09bf0aa-bb13-44ee-b7fb-54a308790de9",
+        "name": "Wait",
+        "webhookId": "73413620-0112-433f-bf75-39fe9a3ba119"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          2112,
+          -176
+        ],
+        "id": "90cb680b-6679-414f-a001-da46722c4ef3",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "7e6f82e4-042a-49fe-b7d9-34eafdead4e7",
+                "name": "id",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              },
+              {
+                "id": "98dd640c-efc3-4cc2-8f45-442711c3aaf6",
+                "name": "published_at",
+                "value": "={{ $json.published_at }}",
+                "type": "string"
+              },
+              {
+                "id": "ddc97d13-cf78-4120-af9c-2135094c68e5",
+                "name": "company_name",
+                "value": "={{ $json.company_name }}",
+                "type": "string"
+              },
+              {
+                "id": "d83105f2-d36e-4f58-a304-048d6b1cea81",
+                "name": "job_title",
+                "value": "={{ $json.job_title }}",
+                "type": "string"
+              },
+              {
+                "id": "98472579-8758-49e7-afb3-4c9cccec75bc",
+                "name": "job_url",
+                "value": "={{ $json.job_url }}",
+                "type": "string"
+              },
+              {
+                "id": "b750dd49-51e3-4f87-a61a-c4c33978f17d",
+                "name": "match_score",
+                "value": "={{ $json.match_score }}",
+                "type": "number"
+              },
+              {
+                "id": "9988f698-c59a-4a5c-8162-81c45b75e224",
+                "name": "job_description",
+                "value": "={{ $json.job_description }}",
+                "type": "string"
+              },
+              {
+                "id": "5804039c-ea1b-43fd-8c6b-bb4b3cbcbdbb",
+                "name": "job_location",
+                "value": "={{ $json.job_location }}",
+                "type": "string"
+              },
+              {
+                "id": "429a78c3-9b24-4a4f-96c3-43aaee37d6c3",
+                "name": "external_id",
+                "value": "={{ $json.external_id }}",
+                "type": "string"
+              },
+              {
+                "id": "b775719f-125e-463c-ae72-458bc4659483",
+                "name": "job_salary",
+                "value": "={{ $json.job_salary }}",
+                "type": "string"
+              },
+              {
+                "id": "ee82521f-b573-4d52-aa26-4e46c5a5a0a3",
+                "name": "company_department",
+                "value": "={{ $json.company_department }}",
+                "type": "string"
+              },
+              {
+                "id": "667763ef-6bbf-422e-b98a-44bb51b835bb",
+                "name": "job_sector",
+                "value": "={{ $json.job_sector }}",
+                "type": "string"
+              },
+              {
+                "id": "e02990cc-70a0-4672-a050-6280df10fdb8",
+                "name": "contract_type",
+                "value": "={{ $json.contract_type }}",
+                "type": "string"
+              },
+              {
+                "id": "3d532878-6ff8-4d21-9bea-fd927ab38bd9",
+                "name": "signal_tier",
+                "value": "={{ $json.signal_tier }}",
+                "type": "string"
+              },
+              {
+                "id": "45833e66-5531-4b1f-b56c-3401f31448c8",
+                "name": "status",
+                "value": "={{ $json.status }}",
+                "type": "string"
+              },
+              {
+                "id": "49c83c67-536e-42be-a041-4b247875218b",
+                "name": "processed_at",
+                "value": "={{ $json.processed_at }}",
+                "type": "string"
+              },
+              {
+                "id": "e36b8eb9-3dc9-406b-aa74-0ba4839ff0eb",
+                "name": "company_url",
+                "value": "={{ $json.company_url }}",
+                "type": "string"
+              },
+              {
+                "id": "80d94137-bddf-4264-80c3-d0eb5ecda587",
+                "name": "poster_name",
+                "value": "={{ $json.poster_name }}",
+                "type": "string"
+              },
+              {
+                "id": "cf1fb289-8821-4cbf-bdea-814ee646ed9e",
+                "name": "poster_linkedin",
+                "value": "={{ $json.poster_linkedin }}",
+                "type": "string"
+              },
+              {
+                "id": "f7041f7f-79c8-4f8d-a280-56a151df3885",
+                "name": "company_logo",
+                "value": "={{ $json.company_logo }}",
+                "type": "string"
+              },
+              {
+                "id": "4dc74732-aa86-4718-9e3f-f2ac23552cda",
+                "name": "experience_level",
+                "value": "={{ $json.experience_level }}",
+                "type": "string"
+              },
+              {
+                "id": "ccbbece4-e599-4a22-91fd-6d5a4425240f",
+                "name": "apply_url",
+                "value": "={{ $json.apply_url }}",
+                "type": "string"
+              },
+              {
+                "id": "9c881010-3c28-4f7e-a5fd-da3e9f6814d2",
+                "name": "source",
+                "value": "={{ $json.source }}",
+                "type": "string"
+              },
+              {
+                "id": "7c61ac99-d19a-48ed-94a0-754f00eba142",
+                "name": "description_vector",
+                "value": "={{ $json.description_vector }}",
+                "type": "string"
+              },
+              {
+                "id": "83620fee-933a-4de4-9652-91faa26f6260",
+                "name": "employment_type",
+                "value": "={{ $json.employment_type }}",
+                "type": "string"
+              },
+              {
+                "id": "e70e38db-bc1d-4bf4-807f-55155ff0ed8c",
+                "name": "work_mode",
+                "value": "={{ $json.work_mode }}",
+                "type": "string"
+              },
+              {
+                "id": "2fd7e6b1-856b-4d4a-b90d-7d177318cbe2",
+                "name": "metadata",
+                "value": "={{ $json.metadata }}",
+                "type": "string"
+              },
+              {
+                "id": "7b1de7ac-addb-4f76-a3bf-959d7acafff6",
+                "name": "tech_score",
+                "value": "={{ $json.tech_score }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -256,
+          -176
+        ],
+        "id": "d31fd845-d264-4c1a-89c7-f94e336fad50",
+        "name": "Standardize input"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "bhlGPoZTR6B1MQhp",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/bhlGPoZTR6B1MQhp",
+            "cachedResultName": "score_reject_nonAI"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          1888,
+          -112
+        ],
+        "id": "3470b108-e60c-439c-9789-20b281b0dd2d",
+        "name": "Call '02_reject_nonAI'"
+      }
+    ],
+    "connections": {
+      "Update a row": {
+        "main": [
+          [
+            {
+              "node": "Is rejected?1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Reject technical descriptions": {
+        "main": [
+          [
+            {
+              "node": "Update a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Check technicality - llm",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check technicality - cosine": {
+        "main": [
+          [
+            {
+              "node": "Adjust score cosine",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check technicality - llm": {
+        "main": [
+          [
+            {
+              "node": "Adjust score llm",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "Check technicality - llm",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Calculate weighted technicality": {
+        "main": [
+          [
+            {
+              "node": "Reject technical descriptions",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Adjust score llm": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Adjust score cosine": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Is rejected?1": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Call '02_reject_nonAI'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Standardize input",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Calculate weighted technicality",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Check technicality - llm",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "No Operation, do nothing": {
+        "main": [
+          []
+        ]
+      },
+      "Standardize input": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Check technicality - cosine",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call '02_reject_nonAI'": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "d d",
+    "name": "Version 233064ed",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-03-06T13:15:23.201Z",
+      "createdAt": "2026-01-26T08:43:12.205Z",
+      "id": "q3Jm1TtyectpAeLG",
+      "name": "score"
+    }
+  ]
+}
