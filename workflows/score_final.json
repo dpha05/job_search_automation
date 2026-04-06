@@ -1,0 +1,1629 @@
+{
+  "updatedAt": "2026-04-02T06:16:00.857Z",
+  "createdAt": "2026-03-05T09:43:45.214Z",
+  "id": "gHdlEKX8TSjpy2ON",
+  "name": "score_final",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        1264,
+        -416
+      ],
+      "id": "24949c26-70b7-4c3c-ba7d-db39f22ab986",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1888,
+        -240
+      ],
+      "id": "8538cff6-751d-452e-b266-d5d49f4a3b41",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "YhtGw7h88f9jUZts",
+          "name": "Google Gemini(PaLM) Api account_llm"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1760,
+        -416
+      ],
+      "id": "393ba679-d205-4c99-a7f3-3243066e3f43",
+      "name": "Wait1",
+      "webhookId": "c43fd4fd-4a1a-400a-880b-b67b39f1ed9a"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const rawMission = $json.output.mission_score; \nconst rawResponsibility = $json.output.responsibility_score;\n\nconst minRange = 0.10;\nconst maxRange = 0.90;\n\nconst adjust = (score) => {\n    let adjustedScore = (score - minRange) / (maxRange - minRange);\n    return Math.max(0, Math.min(1, adjustedScore));\n};\n\nconst adjustedMission = adjust(rawMission);\nconst adjustedResponsibility = adjust(rawResponsibility);\n\nreturn {\n    mission_score: adjustedMission,\n    responsibility_score: adjustedResponsibility,\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2240,
+        -416
+      ],
+      "id": "bee73337-34ff-4b7a-845f-91dd12afa9d2",
+      "name": "Adjust score llm"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        3808,
+        -544
+      ],
+      "id": "de0019dc-b513-401e-9fde-c3c1b2875099",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1760,
+        -736
+      ],
+      "id": "bca08fcb-3cbb-4916-868b-7dcdb9b33648",
+      "name": "Wait",
+      "webhookId": "d53c9dd6-3d74-49b0-a2b8-775c95492c7d"
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1856,
+        -560
+      ],
+      "id": "9ea3d3a4-104e-4068-a6bc-123202c8bcce",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "WHKYJmDyVoPXPzmK",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Reference Calibration (Stay consistent with these verified scores):\n\nPillar 1: Mission Alignment\n\nEducation (High Impact): Academy of Digital Industries = 0.82\n\nProductivity SaaS (Neutral): Make.com = 0.35\n\nCommercial SW House (Capped): ARTIN = 0.25\n\nPurely Commercial (Baseline): Inbank = 0.15\n\nCommercial Consultancy (Capped): Seyfor = 0.28\n\nPillar 2: Responsibility Fit (Autonomy/Bridge)\n\nADI (Mentor/Designer): High creative autonomy & design freedom = 0.90\n\nMake (Product Manager): High strategic bridge & \"CEO of product\" = 0.85\n\nARTIN (AI Engineer): Creative problem solving over instructions = 0.80\n\nSeyfor (AI Business Consultant):High bridge and discovery focus, but slightly limited by client-defined project scopes = 0.78\n\nAltamira (Consultant): Bridge role but limited by client/bank frameworks = 0.70\n\nInbank (Implementation): Operational bridge but within rigid finance rails = 0.65\n\nTask: Now, score the following job based on the scales and anchors provided above:\n\nTitle: {{ $json.job_title }}\n\nLevel: {{ $json.experience_level }}\n\nDescription: {{ $json.job_description }}\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "<system_instructions>\n<persona>\nSenior Talent Scout specialized in Impact-Driven Roles. You value social beauty, compassion, and the democratization of technology. You are an expert at identifying \"Bridge Roles\" where technical AI implementation meets human-centric autonomy.\n</persona>\n\n<task>\nAnalyze the JD and calculate two distinct scores: \n1. \"Mission Alignment Score\": How much the organization's CORE purpose aligns with Social Good, Education, or Open Source.\n2. \"Responsibility Fit Score\": How much the daily tasks allow for autonomy, AI system design, and high-empathy communication (Speaking/Listening).\n</task>\n\n<scoring_anchors_pillar_1_mission>\n0.0 - 0.2: PURELY COMMERCIAL. Banks, standard SaaS, Retail, or Insurance. (Baseline)\n0.3 - 0.5: SEMI-IMPACT / LOCAL. Local small businesses or startups with a \"neutral\" mission.\n0.6 - 0.8: CORE IMPACT. Educational platforms, Open Source contributors, or \"Tech for Good\" initiatives.\n0.9 - 1.0: THE IDEAL MISSION. NGOs, Environmental protection, Global Education, or Non-profit humanitarian work.\n</scoring_anchors_pillar_1_mission>\n\n<scoring_anchors_pillar_2_responsibility>\n0.0 - 0.3: RIGID / SILOED. Pure execution, ticket-based work, no design freedom, or purely technical dev with no human interface.\n0.4 - 0.6: MODERATE / HYBRID. Some design freedom but follows strict corporate frameworks. Limited empathy/speaking requirements.\n0.7 - 0.9: HIGH AUTONOMY / BRIDGE. \"Own the process,\" create syllabuses/frameworks, design AI workflows, or lead implementation through high-empathy communication.\n1.0: THE PERFECT FIT. Complete autonomy to design AI solutions/education from scratch with a focus on human-centric implementation.\n</scoring_anchors_pillar_2_responsibility>\n\n<logic_rules>\n- PILLAR 1: \"NGO/Charity/Non-profit\" = Min 0.85. Primary product \"Education\" = Min 0.70. Commercial SW House cap = 0.30.\n- PILLAR 2: If the JD mentions \"shaping the role,\" \"designing the framework,\" or \"owning the strategy,\" increase fit by 0.2.\n- PILLAR 2: If the role is purely \"maintaining existing systems\" or \"following technical specs,\" cap fit at 0.4.\n- PILLAR 2: Empathy/Speaking/Mentoring tasks are positive signals; don't penalize \"Teaching\" if there is design freedom.\n</logic_rules>\n\n<few_shot_examples>\n<example>\n<jd_snippet>\"AI Data Solutions Engineer for a large bank. Follow existing agile processes to maintain data pipelines.\"</jd_snippet>\n<thought_process>\nMission: Bank is purely commercial (0.15). \nResponsibility: Mentions \"following existing processes\" and \"maintaining.\" Low autonomy and no mention of bridge-style communication.\n</thought_process>\n<mission_score>0.15</mission_score>\n<responsibility_score>0.25</responsibility_score>\n</example>\n<example>\n<jd_snippet>\"AI Enablement Lead. Own the AI adoption strategy, design internal training, and coach teams on AI implementation.\"</jd_snippet>\n<thought_process>\nMission: SaaS/Internal tool (0.40). \nResponsibility: \"Own the strategy\" and \"Design training\" signal high autonomy. \"Coaching\" hits empathy and speaking skills. This is a classic Bridge Role.\n</thought_process>\n<mission_score>0.40</mission_score>\n<responsibility_score>0.90</responsibility_score>\n</example>\n</few_shot_examples>\n\n<constraints>\n- Thought Process: MUST be written first, then reasoning for both pillars, then the scores.\n- Format: Respond only in valid JSON.\n- Input Language: Czech, Slovak, English.\n</constraints>\n</system_instructions>"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1936,
+        -416
+      ],
+      "id": "aad2b700-3c65-494d-a038-355d6be386de",
+      "name": "Check pillar fit - llm",
+      "retryOnFail": true,
+      "waitBetweenTries": 4000
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze this JD: {{ $json.job_description }}\n\nhere is additional job info: \nsalary: {{ $json.job_salary }}\ncontract type: {{ $json.contract_type }}\nwork mode: {{ $json.work_mode }}\nlocation: {{ $json.job_location }}\n\nExtract the following data as \"Yes\" or \"No\":\n\n--- REMOTE LADDER ---\n1. remote_5_5: Is it 100% fully remote?\n2. remote_4_1: Is it 4 days remote, 1 in office?\n3. remote_3_2: Is it 3 days remote, 2 in office?\n4. remote_2_3: Is it 2 days remote, 3 in office?\n5. remote_1_4: Is it 1 day remote, 4 in office?\n\n--- SALARY LADDER ---\n6. salary_120k_plus: Is salary 120k CZK/mo or higher?\n7. salary_100k_120k: Is salary between 100k and 120k CZK/mo?\n8. salary_90k_100k: Is salary between 90k and 100k CZK/mo?\n9. salary_80k_90k: Is salary between 80k and 90k CZK/mo?\n10. salary_70k_80k: Is salary between 70k and 80k CZK/mo?\n\n--- TEAM & PERKS ---\n11. is_international: Is the team described as international, global, or English-speaking?\n12. is_startup: Is the company described as a startup or early-stage?\n13. team_under_5: Is the team size explicitly 5 people or fewer?\n14. team_5_to_10: Is the team size between 6 and 10 people?\n15. has_equity: Does it mention RSUs, stocks, options, or equity?\n16. has_car: Is a company car or car allowance mentioned?\n17. has_edu_budget: Is there a budget for courses, books, or certifications?\n18. has_4_day_week: Is a 4-day or 32-hour work week mentioned?\n\n--- TECH & WORKFLOW ---\n19. uses_n8n: Does it mention n8n or workflow automation?\n20. uses_cursor: Does it mention Cursor or \"vibe-coding\"?\n21. uses_mcp: Does it mention MCP (Model Context Protocol)?\n22. uses_agents: Does it mention AI Agents or Autonomous Agents?\n23. uses_langchain_vector: Does it mention LangChain, LlamaIndex, or Vector Databases (Pinecone, Weaviate, etc.)?\n24. flexible_hours: Does it mention flexible working hours?\n25. direct_impact: Does it mention reporting to or working directly with founders, CEO, CTO, or \"C-level\"?\n\n\n--- THE UNICORN PERKS ---\n26. has_home_office_budget: Does it mention a budget for your home setup?\n27. is_result_driven: Does it mention \"result-based,\" \"output-oriented,\" or \"finish work and you're done\"?\n28. is_flat_hierarchy: Does it mention \"flat hierarchy,\" \"no red tape,\" \"no bureaucracy,\" or \"autonomous teams\"?\n29. is_async_focus: Does it mention \"asynchronous,\" \"deep work,\" \"focus time,\" or \"no-meeting culture\"?\n30. has_free_food: Does it mention free breakfast, lunch, or snacks in the office?\n31. has_retreats: Does it mention \"team retreats,\" \"offsites,\" or \"company trips\"?\n32. has_autonomy: Does it mention \"svoboda,\" \"self-management,\" \"choosing your own tools,\" or \"freedom in how to solve problems\"?\n... (and re-number the rest)\n\n--- ADDONS ---\n33. uses_automation_proxies: \"Yes\" if it mentions Make (Integromat), Zapier, or \"low-code automation\" generally.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "<task>\nAct as a precise Data Extraction Unit. Your only goal is to answer a set of Boolean questions based STRICTLY on the provided Job Description.\n</task>\n\n<rules>\n- Respond ONLY using the provided JSON output tool.\n- Answer every question with exactly \"Yes\" or \"No\".\n- CRITICAL: If a benefit is NOT mentioned, you must output \"No\". Never use \"Not Mentioned\".\n- Use semantic understanding (e.g., \"WFH\" or \"Anywhere\" = Remote).\n- Do not use outside knowledge or research.\n- For the \"Remote Ladder\" and \"Salary Ladder\", only mark \"Yes\" for the most accurate specific range.\n- is_flat_hierarchy: Must explicitly mention \"flat hierarchy,\" \"no managers,\" \"holacracy,\" or \"horizontal structure.\"\n- is_result_driven: Must explicitly mention \"results only,\" \"output-based,\" or \"no tracked hours.\"\n- is_async_focus: Must explicitly mention \"async,\" \"no-meeting,\" or \"deep work.\"\n- Be STRICT with \"Direct Impact\": Only \"Yes\" if C-suite, Founders, or \"Management-free reporting\" is mentioned.\n- uses_automation_proxies: Only \"Yes\" if competitive tools like Make, Integromat, or Zapier are mentioned.\n- has_autonomy: Answer \"Yes\" if there is ANY mention (even once) of self-reliance, creative/strategic control, independence, \"shaping,\" \"owning a product,\" or \"freedom to explore.\" or \"being CEO of own product\". \nCRITICAL: A single mention is an automatic \"Yes\" trigger. Do NOT weigh this against mentions of meetings, collaboration, or stakeholders. If the signal exists, the answer is \"Yes\".\n\n</rules>"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1904,
+        -736
+      ],
+      "id": "8e41a759-db17-48cd-95fd-dff4c668296f",
+      "name": "Check bonus boolean",
+      "retryOnFail": true,
+      "waitBetweenTries": 4000
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "let bonus = 0;\nconst data = $json.output; \n\n// 1. Remote & Salary\nif (data.remote_5_5 === \"Yes\") bonus += 50;\nelse if (data.remote_4_1 === \"Yes\") bonus += 40;\nelse if (data.remote_3_2 === \"Yes\") bonus += 30;\nelse if (data.remote_2_3 === \"Yes\") bonus += 20;\nelse if (data.remote_1_4 === \"Yes\") bonus += 10;\nif (data.salary_120k_plus === \"Yes\") bonus += 70;\nelse if (data.salary_100k_120k === \"Yes\") bonus += 50;\nelse if (data.salary_90k_100k === \"Yes\") bonus += 40;\nelse if (data.salary_80k_90k === \"Yes\") bonus += 25;\nelse if (data.salary_70k_80k === \"Yes\") bonus += 10;\n\n// 2. High-Value Culture\nif (data.has_4_day_week === \"Yes\") bonus += 100;\nif (data.is_flat_hierarchy === \"Yes\") bonus += 70;\nif (data.is_async_focus === \"Yes\") bonus += 45;\nif (data.has_autonomy === \"Yes\") bonus += 40;\nif (data.is_result_driven === \"Yes\") bonus += 40;\nif (data.direct_impact === \"Yes\") bonus += 35;\n\n// 3. Tech Stack\nif (data.uses_n8n === \"Yes\") bonus += 50;\nif (data.uses_automation_proxies === \"Yes\") bonus += 25; \nif (data.uses_cursor === \"Yes\") bonus += 25;\nif (data.uses_mcp === \"Yes\") bonus += 35;\nif (data.uses_agents === \"Yes\") bonus += 50;\nif (data.uses_langchain_vector === \"Yes\") bonus += 15;\n\n// 4. Perks & Environment\nif (data.has_equity === \"Yes\") bonus += 30;\nif (data.is_international === \"Yes\") bonus += 20;\nif (data.is_startup === \"Yes\") bonus += 30;\nif (data.has_edu_budget === \"Yes\") bonus += 20;\nif (data.has_free_food === \"Yes\") bonus += 15;\nif (data.has_home_office_budget === \"Yes\") bonus += 15;\nif (data.has_retreats === \"Yes\") bonus += 15;\nif (data.team_under_5 === \"Yes\") bonus += 25;\nif (data.team_5_to_10 === \"Yes\") bonus += 15;\nif (data.has_car === \"Yes\") bonus += 50;\nif (data.flexible_hours === \"Yes\") bonus += 10;\n\nreturn { \n  total_score: bonus,\n  bonus: data \n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2448,
+        -736
+      ],
+      "id": "eb82473a-4bf6-48ba-9378-dcfa53a45230",
+      "name": "Calculate bonus"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const item = $json;\n\nconst missionScore = item.mission_score;\nconst responsibilityScore = item.responsibility_score;\nconst idealScoreCosine = ($('Standardize input').item.json.ideal_score)/100;\n\nconst weightMission = 0.4;\nconst weightResponsibility = 0.4;\nconst weightCosine = 0.2;\n\nconst finalWeightedScore = (missionScore * weightMission) + (responsibilityScore * weightResponsibility) + (idealScoreCosine * weightCosine);\n\nreturn {\n  final_weighted_score: finalWeightedScore,\n  mission_weighted: missionScore * weightMission,\n  responsibility_weighted: responsibilityScore * weightResponsibility,\n  cosine_weighted: idealScoreCosine * weightCosine\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2448,
+        -416
+      ],
+      "id": "74d04ffd-8de9-4db8-b053-aef00256fe80",
+      "name": "Calculate weighted sum"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "job_leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "={{ $json.job_url }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "metadata",
+              "fieldValue": "={{ $json.metadata }}"
+            },
+            {
+              "fieldId": "processed_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            },
+            {
+              "fieldId": "match_score",
+              "fieldValue": "={{ $json.match_score }}"
+            },
+            {
+              "fieldId": "signal_tier",
+              "fieldValue": "={{ $json.signal_tier }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "scored"
+            },
+            {
+              "fieldId": "lead_progression",
+              "fieldValue": "qualified_lead"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3152,
+        -560
+      ],
+      "id": "1ef3e847-df2a-43b8-9a1f-2ef7ccdafc1e",
+      "name": "Update a row",
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const pillarScore = $input.item.json.final_weighted_score;\nconst bonusScore = $input.item.json.total_score;\nconst mission = $input.item.json.mission_weighted;\nconst responsibility = $input.item.json.responsibility_weighted;\n\nconst pillarMultiplier = 300;\n\nconst pillarScoreMultiplied = Math.round(pillarScore * pillarMultiplier);\nlet finalSumScore = pillarScoreMultiplied + bonusScore;\n\nlet signalTier = 'low';\n\nif (mission >= 0.3 && responsibility >= 0.3) {\n  signalTier = 'rare';\n} else if (finalSumScore >= 400) {\n  signalTier = 'high';\n} else if (finalSumScore >= 280) {\n  signalTier = 'mid';\n}\n\nreturn {\n  signal_tier: signalTier,\n  match_score: finalSumScore,\n  job_url:$('Standardize input').item.json.job_url,\n  metadata: {\n    scores: {\n      mission,\n      responsibility,\n      pillar: pillarScoreMultiplied,\n      bonus: bonusScore,\n    },\n    flags: {\n      remote_5_5: $json.bonus.remote_5_5,\n      remote_4_1: $json.bonus.remote_4_1,\n      remote_3_2: $json.bonus.remote_3_2,\n      salary_120k_plus: $json.bonus.salary_120k_plus,\n      salary_100k_120k: $json.bonus.salary_100k_120k,\n      salary_90k_100k: $json.bonus.salary_90k_100k,\n      team_under_5: $json.bonus.team_under_5,\n      equity: $json.bonus.has_equity,\n      car: $json.bonus.has_car,\n      n8n: $json.bonus.uses_n8n,\n      agents: $json.bonus.uses_agents,\n      result_driven: $json.bonus.is_result_driven,\n      flat_hierarchy: $json.bonus.is_flat_hierarchy\n    }\n  }\n}\n;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2960,
+        -560
+      ],
+      "id": "90ac504a-a59b-4f40-bb79-a60d8919fcb4",
+      "name": "Finalize sum + payload"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "nvHCNWL4_7W0r-v9r2u0G",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/nvHCNWL4_7W0r-v9r2u0G",
+          "cachedResultName": "research_high_rare"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        3584,
+        -704
+      ],
+      "id": "d4ad9d65-ce41-45fb-b67e-26b181984452",
+      "name": "Call 'research_high_rare'"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "76330b5c-f689-4ce0-b216-8a98ee0b65cf",
+              "leftValue": "={{ $json.signal_tier }}",
+              "rightValue": "high",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "d6d2ede8-4542-4e55-87b9-8b86170d91ec",
+              "leftValue": "={{ $json.signal_tier }}",
+              "rightValue": "rare",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3344,
+        -560
+      ],
+      "id": "5b5f337c-d6f8-47be-b978-e19d8569f187",
+      "name": "Is high or rare?"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"thought_process\": \"text\",\n  \"reasoning\": \"text\",\n  \"mission_score\": 0.72,\n  \"responsibility_score\": 0.45\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2128,
+        -240
+      ],
+      "id": "4a12024b-4877-4e52-bbff-b25b17da46cb",
+      "name": "Structured Output Parser1",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"remote_5_5\": { \"type\": \"string\" },\n    \"remote_4_1\": { \"type\": \"string\" },\n    \"remote_3_2\": { \"type\": \"string\" },\n    \"remote_2_3\": { \"type\": \"string\" },\n    \"remote_1_4\": { \"type\": \"string\" },\n    \"salary_120k_plus\": { \"type\": \"string\" },\n    \"salary_100k_120k\": { \"type\": \"string\" },\n    \"salary_90k_100k\": { \"type\": \"string\" },\n    \"salary_80k_90k\": { \"type\": \"string\" },\n    \"salary_70k_80k\": { \"type\": \"string\" },\n    \"is_international\": { \"type\": \"string\" },\n    \"is_startup\": { \"type\": \"string\" },\n    \"team_under_5\": { \"type\": \"string\" },\n    \"team_5_to_10\": { \"type\": \"string\" },\n    \"has_equity\": { \"type\": \"string\" },\n    \"has_car\": { \"type\": \"string\" },\n    \"has_edu_budget\": { \"type\": \"string\" },\n    \"has_4_day_week\": { \"type\": \"string\" },\n  \"uses_n8n\": { \"type\": \"string\" },\n    \"uses_cursor\": { \"type\": \"string\" },\n    \"uses_mcp\": { \"type\": \"string\" },\n    \"uses_agents\": { \"type\": \"string\" },\n    \"uses_langchain_vector\": { \"type\": \"string\" },\n    \"flexible_hours\": { \"type\": \"string\" },\n    \"direct_impact\": { \"type\": \"string\" },\n    \"has_home_office_budget\": { \"type\": \"string\" },\n    \"is_result_driven\": { \"type\": \"string\" },\n    \"is_flat_hierarchy\": { \"type\": \"string\" },\n    \"is_async_focus\": { \"type\": \"string\" },\n    \"has_free_food\": { \"type\": \"string\" },\n    \"has_retreats\": { \"type\": \"string\" },\n    \"has_autonomy\": { \"type\": \"string\" },\n    \"uses_automation_proxies\": { \"type\": \"string\" }\n}\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2096,
+        -560
+      ],
+      "id": "c620744f-81f2-4a0b-b8ef-bb1cf1573721",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {
+          "includeUnpaired": true
+        }
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2752,
+        -560
+      ],
+      "id": "9d5f4bca-319c-4c44-bc56-d02ecf17e812",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7e6f82e4-042a-49fe-b7d9-34eafdead4e7",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "98dd640c-efc3-4cc2-8f45-442711c3aaf6",
+              "name": "published_at",
+              "value": "={{ $json.published_at }}",
+              "type": "string"
+            },
+            {
+              "id": "ddc97d13-cf78-4120-af9c-2135094c68e5",
+              "name": "company_name",
+              "value": "={{ $json.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "d83105f2-d36e-4f58-a304-048d6b1cea81",
+              "name": "job_title",
+              "value": "={{ $json.job_title }}",
+              "type": "string"
+            },
+            {
+              "id": "98472579-8758-49e7-afb3-4c9cccec75bc",
+              "name": "job_url",
+              "value": "={{ $json.job_url }}",
+              "type": "string"
+            },
+            {
+              "id": "b750dd49-51e3-4f87-a61a-c4c33978f17d",
+              "name": "match_score",
+              "value": "={{ $json.match_score }}",
+              "type": "number"
+            },
+            {
+              "id": "9988f698-c59a-4a5c-8162-81c45b75e224",
+              "name": "job_description",
+              "value": "={{ $json.job_description }}",
+              "type": "string"
+            },
+            {
+              "id": "5804039c-ea1b-43fd-8c6b-bb4b3cbcbdbb",
+              "name": "job_location",
+              "value": "={{ $json.job_location }}",
+              "type": "string"
+            },
+            {
+              "id": "429a78c3-9b24-4a4f-96c3-43aaee37d6c3",
+              "name": "external_id",
+              "value": "={{ $json.external_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b775719f-125e-463c-ae72-458bc4659483",
+              "name": "job_salary",
+              "value": "={{ $json.job_salary }}",
+              "type": "string"
+            },
+            {
+              "id": "ee82521f-b573-4d52-aa26-4e46c5a5a0a3",
+              "name": "company_department",
+              "value": "={{ $json.company_department }}",
+              "type": "string"
+            },
+            {
+              "id": "667763ef-6bbf-422e-b98a-44bb51b835bb",
+              "name": "job_sector",
+              "value": "={{ $json.job_sector }}",
+              "type": "string"
+            },
+            {
+              "id": "e02990cc-70a0-4672-a050-6280df10fdb8",
+              "name": "contract_type",
+              "value": "={{ $json.contract_type }}",
+              "type": "string"
+            },
+            {
+              "id": "3d532878-6ff8-4d21-9bea-fd927ab38bd9",
+              "name": "signal_tier",
+              "value": "={{ $json.signal_tier }}",
+              "type": "string"
+            },
+            {
+              "id": "45833e66-5531-4b1f-b56c-3401f31448c8",
+              "name": "status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "49c83c67-536e-42be-a041-4b247875218b",
+              "name": "processed_at",
+              "value": "={{ $json.processed_at }}",
+              "type": "string"
+            },
+            {
+              "id": "e36b8eb9-3dc9-406b-aa74-0ba4839ff0eb",
+              "name": "company_url",
+              "value": "={{ $json.company_url }}",
+              "type": "string"
+            },
+            {
+              "id": "80d94137-bddf-4264-80c3-d0eb5ecda587",
+              "name": "poster_name",
+              "value": "={{ $json.poster_name }}",
+              "type": "string"
+            },
+            {
+              "id": "cf1fb289-8821-4cbf-bdea-814ee646ed9e",
+              "name": "poster_linkedin",
+              "value": "={{ $json.poster_linkedin }}",
+              "type": "string"
+            },
+            {
+              "id": "f7041f7f-79c8-4f8d-a280-56a151df3885",
+              "name": "company_logo",
+              "value": "={{ $json.company_logo }}",
+              "type": "string"
+            },
+            {
+              "id": "4dc74732-aa86-4718-9e3f-f2ac23552cda",
+              "name": "experience_level",
+              "value": "={{ $json.experience_level }}",
+              "type": "string"
+            },
+            {
+              "id": "ccbbece4-e599-4a22-91fd-6d5a4425240f",
+              "name": "apply_url",
+              "value": "={{ $json.apply_url }}",
+              "type": "string"
+            },
+            {
+              "id": "9c881010-3c28-4f7e-a5fd-da3e9f6814d2",
+              "name": "source",
+              "value": "={{ $json.source }}",
+              "type": "string"
+            },
+            {
+              "id": "7c61ac99-d19a-48ed-94a0-754f00eba142",
+              "name": "description_vector",
+              "value": "={{ $json.description_vector }}",
+              "type": "string"
+            },
+            {
+              "id": "83620fee-933a-4de4-9652-91faa26f6260",
+              "name": "employment_type",
+              "value": "={{ $json.employment_type }}",
+              "type": "string"
+            },
+            {
+              "id": "e70e38db-bc1d-4bf4-807f-55155ff0ed8c",
+              "name": "work_mode",
+              "value": "={{ $json.work_mode }}",
+              "type": "string"
+            },
+            {
+              "id": "2fd7e6b1-856b-4d4a-b90d-7d177318cbe2",
+              "name": "metadata",
+              "value": "={{ $json.metadata }}",
+              "type": "string"
+            },
+            {
+              "id": "7b1de7ac-addb-4f76-a3bf-959d7acafff6",
+              "name": "tech_score",
+              "value": "={{ $json.tech_score }}",
+              "type": "string"
+            },
+            {
+              "id": "b3449308-ba72-4ad3-8a6c-aceb70c3d693",
+              "name": "responsibility_score",
+              "value": "={{ $json.responsibility_score }}",
+              "type": "number"
+            },
+            {
+              "id": "bc4b0d48-ba86-474d-85d7-991446cb804c",
+              "name": "application_stage",
+              "value": "={{ $json.application_stage }}",
+              "type": "string"
+            },
+            {
+              "id": "508d8b5b-84cc-4ed8-8822-71dd78bed93c",
+              "name": "ideal_score",
+              "value": "={{ $json.ideal_score }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1472,
+        -416
+      ],
+      "id": "eea5cdd4-1933-4743-9347-a218aeea7d83",
+      "name": "Standardize input"
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Standardize input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Check pillar fit - llm",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Check pillar fit - llm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adjust score llm": {
+      "main": [
+        [
+          {
+            "node": "Calculate weighted sum",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        []
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Check bonus boolean",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Check bonus boolean",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check pillar fit - llm": {
+      "main": [
+        [
+          {
+            "node": "Adjust score llm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check bonus boolean": {
+      "main": [
+        [
+          {
+            "node": "Calculate bonus",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate bonus": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate weighted sum": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Update a row": {
+      "main": [
+        [
+          {
+            "node": "Is high or rare?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finalize sum + payload": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'research_high_rare'": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is high or rare?": {
+      "main": [
+        [
+          {
+            "node": "Call 'research_high_rare'",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Check pillar fit - llm",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Check bonus boolean",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Finalize sum + payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Standardize input": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "Europe/Prague",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "8f34af30-a302-4a25-b14f-0944f56dcd89",
+  "activeVersionId": "8f34af30-a302-4a25-b14f-0944f56dcd89",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-03-05T09:43:45.216Z",
+      "createdAt": "2026-03-05T09:43:45.216Z",
+      "role": "workflow:owner",
+      "workflowId": "gHdlEKX8TSjpy2ON",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-04-02T06:16:03.000Z",
+    "createdAt": "2026-04-02T06:16:00.858Z",
+    "versionId": "8f34af30-a302-4a25-b14f-0944f56dcd89",
+    "workflowId": "gHdlEKX8TSjpy2ON",
+    "nodes": [
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          1264,
+          -416
+        ],
+        "id": "24949c26-70b7-4c3c-ba7d-db39f22ab986",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-3-flash-preview",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          1888,
+          -240
+        ],
+        "id": "8538cff6-751d-452e-b266-d5d49f4a3b41",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "YhtGw7h88f9jUZts",
+            "name": "Google Gemini(PaLM) Api account_llm"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1760,
+          -416
+        ],
+        "id": "393ba679-d205-4c99-a7f3-3243066e3f43",
+        "name": "Wait1",
+        "webhookId": "c43fd4fd-4a1a-400a-880b-b67b39f1ed9a"
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const rawMission = $json.output.mission_score; \nconst rawResponsibility = $json.output.responsibility_score;\n\nconst minRange = 0.10;\nconst maxRange = 0.90;\n\nconst adjust = (score) => {\n    let adjustedScore = (score - minRange) / (maxRange - minRange);\n    return Math.max(0, Math.min(1, adjustedScore));\n};\n\nconst adjustedMission = adjust(rawMission);\nconst adjustedResponsibility = adjust(rawResponsibility);\n\nreturn {\n    mission_score: adjustedMission,\n    responsibility_score: adjustedResponsibility,\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2240,
+          -416
+        ],
+        "id": "bee73337-34ff-4b7a-845f-91dd12afa9d2",
+        "name": "Adjust score llm"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          3808,
+          -544
+        ],
+        "id": "de0019dc-b513-401e-9fde-c3c1b2875099",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1760,
+          -736
+        ],
+        "id": "bca08fcb-3cbb-4916-868b-7dcdb9b33648",
+        "name": "Wait",
+        "webhookId": "d53c9dd6-3d74-49b0-a2b8-775c95492c7d"
+      },
+      {
+        "parameters": {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "options": {
+            "temperature": 0.1
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+        "typeVersion": 1,
+        "position": [
+          1856,
+          -560
+        ],
+        "id": "9ea3d3a4-104e-4068-a6bc-123202c8bcce",
+        "name": "Groq Chat Model",
+        "credentials": {
+          "groqApi": {
+            "id": "WHKYJmDyVoPXPzmK",
+            "name": "Groq account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Reference Calibration (Stay consistent with these verified scores):\n\nPillar 1: Mission Alignment\n\nEducation (High Impact): Academy of Digital Industries = 0.82\n\nProductivity SaaS (Neutral): Make.com = 0.35\n\nCommercial SW House (Capped): ARTIN = 0.25\n\nPurely Commercial (Baseline): Inbank = 0.15\n\nCommercial Consultancy (Capped): Seyfor = 0.28\n\nPillar 2: Responsibility Fit (Autonomy/Bridge)\n\nADI (Mentor/Designer): High creative autonomy & design freedom = 0.90\n\nMake (Product Manager): High strategic bridge & \"CEO of product\" = 0.85\n\nARTIN (AI Engineer): Creative problem solving over instructions = 0.80\n\nSeyfor (AI Business Consultant):High bridge and discovery focus, but slightly limited by client-defined project scopes = 0.78\n\nAltamira (Consultant): Bridge role but limited by client/bank frameworks = 0.70\n\nInbank (Implementation): Operational bridge but within rigid finance rails = 0.65\n\nTask: Now, score the following job based on the scales and anchors provided above:\n\nTitle: {{ $json.job_title }}\n\nLevel: {{ $json.experience_level }}\n\nDescription: {{ $json.job_description }}\n",
+          "hasOutputParser": true,
+          "options": {
+            "systemMessage": "<system_instructions>\n<persona>\nSenior Talent Scout specialized in Impact-Driven Roles. You value social beauty, compassion, and the democratization of technology. You are an expert at identifying \"Bridge Roles\" where technical AI implementation meets human-centric autonomy.\n</persona>\n\n<task>\nAnalyze the JD and calculate two distinct scores: \n1. \"Mission Alignment Score\": How much the organization's CORE purpose aligns with Social Good, Education, or Open Source.\n2. \"Responsibility Fit Score\": How much the daily tasks allow for autonomy, AI system design, and high-empathy communication (Speaking/Listening).\n</task>\n\n<scoring_anchors_pillar_1_mission>\n0.0 - 0.2: PURELY COMMERCIAL. Banks, standard SaaS, Retail, or Insurance. (Baseline)\n0.3 - 0.5: SEMI-IMPACT / LOCAL. Local small businesses or startups with a \"neutral\" mission.\n0.6 - 0.8: CORE IMPACT. Educational platforms, Open Source contributors, or \"Tech for Good\" initiatives.\n0.9 - 1.0: THE IDEAL MISSION. NGOs, Environmental protection, Global Education, or Non-profit humanitarian work.\n</scoring_anchors_pillar_1_mission>\n\n<scoring_anchors_pillar_2_responsibility>\n0.0 - 0.3: RIGID / SILOED. Pure execution, ticket-based work, no design freedom, or purely technical dev with no human interface.\n0.4 - 0.6: MODERATE / HYBRID. Some design freedom but follows strict corporate frameworks. Limited empathy/speaking requirements.\n0.7 - 0.9: HIGH AUTONOMY / BRIDGE. \"Own the process,\" create syllabuses/frameworks, design AI workflows, or lead implementation through high-empathy communication.\n1.0: THE PERFECT FIT. Complete autonomy to design AI solutions/education from scratch with a focus on human-centric implementation.\n</scoring_anchors_pillar_2_responsibility>\n\n<logic_rules>\n- PILLAR 1: \"NGO/Charity/Non-profit\" = Min 0.85. Primary product \"Education\" = Min 0.70. Commercial SW House cap = 0.30.\n- PILLAR 2: If the JD mentions \"shaping the role,\" \"designing the framework,\" or \"owning the strategy,\" increase fit by 0.2.\n- PILLAR 2: If the role is purely \"maintaining existing systems\" or \"following technical specs,\" cap fit at 0.4.\n- PILLAR 2: Empathy/Speaking/Mentoring tasks are positive signals; don't penalize \"Teaching\" if there is design freedom.\n</logic_rules>\n\n<few_shot_examples>\n<example>\n<jd_snippet>\"AI Data Solutions Engineer for a large bank. Follow existing agile processes to maintain data pipelines.\"</jd_snippet>\n<thought_process>\nMission: Bank is purely commercial (0.15). \nResponsibility: Mentions \"following existing processes\" and \"maintaining.\" Low autonomy and no mention of bridge-style communication.\n</thought_process>\n<mission_score>0.15</mission_score>\n<responsibility_score>0.25</responsibility_score>\n</example>\n<example>\n<jd_snippet>\"AI Enablement Lead. Own the AI adoption strategy, design internal training, and coach teams on AI implementation.\"</jd_snippet>\n<thought_process>\nMission: SaaS/Internal tool (0.40). \nResponsibility: \"Own the strategy\" and \"Design training\" signal high autonomy. \"Coaching\" hits empathy and speaking skills. This is a classic Bridge Role.\n</thought_process>\n<mission_score>0.40</mission_score>\n<responsibility_score>0.90</responsibility_score>\n</example>\n</few_shot_examples>\n\n<constraints>\n- Thought Process: MUST be written first, then reasoning for both pillars, then the scores.\n- Format: Respond only in valid JSON.\n- Input Language: Czech, Slovak, English.\n</constraints>\n</system_instructions>"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          1936,
+          -416
+        ],
+        "id": "aad2b700-3c65-494d-a038-355d6be386de",
+        "name": "Check pillar fit - llm",
+        "retryOnFail": true,
+        "waitBetweenTries": 4000
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Analyze this JD: {{ $json.job_description }}\n\nhere is additional job info: \nsalary: {{ $json.job_salary }}\ncontract type: {{ $json.contract_type }}\nwork mode: {{ $json.work_mode }}\nlocation: {{ $json.job_location }}\n\nExtract the following data as \"Yes\" or \"No\":\n\n--- REMOTE LADDER ---\n1. remote_5_5: Is it 100% fully remote?\n2. remote_4_1: Is it 4 days remote, 1 in office?\n3. remote_3_2: Is it 3 days remote, 2 in office?\n4. remote_2_3: Is it 2 days remote, 3 in office?\n5. remote_1_4: Is it 1 day remote, 4 in office?\n\n--- SALARY LADDER ---\n6. salary_120k_plus: Is salary 120k CZK/mo or higher?\n7. salary_100k_120k: Is salary between 100k and 120k CZK/mo?\n8. salary_90k_100k: Is salary between 90k and 100k CZK/mo?\n9. salary_80k_90k: Is salary between 80k and 90k CZK/mo?\n10. salary_70k_80k: Is salary between 70k and 80k CZK/mo?\n\n--- TEAM & PERKS ---\n11. is_international: Is the team described as international, global, or English-speaking?\n12. is_startup: Is the company described as a startup or early-stage?\n13. team_under_5: Is the team size explicitly 5 people or fewer?\n14. team_5_to_10: Is the team size between 6 and 10 people?\n15. has_equity: Does it mention RSUs, stocks, options, or equity?\n16. has_car: Is a company car or car allowance mentioned?\n17. has_edu_budget: Is there a budget for courses, books, or certifications?\n18. has_4_day_week: Is a 4-day or 32-hour work week mentioned?\n\n--- TECH & WORKFLOW ---\n19. uses_n8n: Does it mention n8n or workflow automation?\n20. uses_cursor: Does it mention Cursor or \"vibe-coding\"?\n21. uses_mcp: Does it mention MCP (Model Context Protocol)?\n22. uses_agents: Does it mention AI Agents or Autonomous Agents?\n23. uses_langchain_vector: Does it mention LangChain, LlamaIndex, or Vector Databases (Pinecone, Weaviate, etc.)?\n24. flexible_hours: Does it mention flexible working hours?\n25. direct_impact: Does it mention reporting to or working directly with founders, CEO, CTO, or \"C-level\"?\n\n\n--- THE UNICORN PERKS ---\n26. has_home_office_budget: Does it mention a budget for your home setup?\n27. is_result_driven: Does it mention \"result-based,\" \"output-oriented,\" or \"finish work and you're done\"?\n28. is_flat_hierarchy: Does it mention \"flat hierarchy,\" \"no red tape,\" \"no bureaucracy,\" or \"autonomous teams\"?\n29. is_async_focus: Does it mention \"asynchronous,\" \"deep work,\" \"focus time,\" or \"no-meeting culture\"?\n30. has_free_food: Does it mention free breakfast, lunch, or snacks in the office?\n31. has_retreats: Does it mention \"team retreats,\" \"offsites,\" or \"company trips\"?\n32. has_autonomy: Does it mention \"svoboda,\" \"self-management,\" \"choosing your own tools,\" or \"freedom in how to solve problems\"?\n... (and re-number the rest)\n\n--- ADDONS ---\n33. uses_automation_proxies: \"Yes\" if it mentions Make (Integromat), Zapier, or \"low-code automation\" generally.",
+          "hasOutputParser": true,
+          "options": {
+            "systemMessage": "<task>\nAct as a precise Data Extraction Unit. Your only goal is to answer a set of Boolean questions based STRICTLY on the provided Job Description.\n</task>\n\n<rules>\n- Respond ONLY using the provided JSON output tool.\n- Answer every question with exactly \"Yes\" or \"No\".\n- CRITICAL: If a benefit is NOT mentioned, you must output \"No\". Never use \"Not Mentioned\".\n- Use semantic understanding (e.g., \"WFH\" or \"Anywhere\" = Remote).\n- Do not use outside knowledge or research.\n- For the \"Remote Ladder\" and \"Salary Ladder\", only mark \"Yes\" for the most accurate specific range.\n- is_flat_hierarchy: Must explicitly mention \"flat hierarchy,\" \"no managers,\" \"holacracy,\" or \"horizontal structure.\"\n- is_result_driven: Must explicitly mention \"results only,\" \"output-based,\" or \"no tracked hours.\"\n- is_async_focus: Must explicitly mention \"async,\" \"no-meeting,\" or \"deep work.\"\n- Be STRICT with \"Direct Impact\": Only \"Yes\" if C-suite, Founders, or \"Management-free reporting\" is mentioned.\n- uses_automation_proxies: Only \"Yes\" if competitive tools like Make, Integromat, or Zapier are mentioned.\n- has_autonomy: Answer \"Yes\" if there is ANY mention (even once) of self-reliance, creative/strategic control, independence, \"shaping,\" \"owning a product,\" or \"freedom to explore.\" or \"being CEO of own product\". \nCRITICAL: A single mention is an automatic \"Yes\" trigger. Do NOT weigh this against mentions of meetings, collaboration, or stakeholders. If the signal exists, the answer is \"Yes\".\n\n</rules>"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          1904,
+          -736
+        ],
+        "id": "8e41a759-db17-48cd-95fd-dff4c668296f",
+        "name": "Check bonus boolean",
+        "retryOnFail": true,
+        "waitBetweenTries": 4000
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "let bonus = 0;\nconst data = $json.output; \n\n// 1. Remote & Salary\nif (data.remote_5_5 === \"Yes\") bonus += 50;\nelse if (data.remote_4_1 === \"Yes\") bonus += 40;\nelse if (data.remote_3_2 === \"Yes\") bonus += 30;\nelse if (data.remote_2_3 === \"Yes\") bonus += 20;\nelse if (data.remote_1_4 === \"Yes\") bonus += 10;\nif (data.salary_120k_plus === \"Yes\") bonus += 70;\nelse if (data.salary_100k_120k === \"Yes\") bonus += 50;\nelse if (data.salary_90k_100k === \"Yes\") bonus += 40;\nelse if (data.salary_80k_90k === \"Yes\") bonus += 25;\nelse if (data.salary_70k_80k === \"Yes\") bonus += 10;\n\n// 2. High-Value Culture\nif (data.has_4_day_week === \"Yes\") bonus += 100;\nif (data.is_flat_hierarchy === \"Yes\") bonus += 70;\nif (data.is_async_focus === \"Yes\") bonus += 45;\nif (data.has_autonomy === \"Yes\") bonus += 40;\nif (data.is_result_driven === \"Yes\") bonus += 40;\nif (data.direct_impact === \"Yes\") bonus += 35;\n\n// 3. Tech Stack\nif (data.uses_n8n === \"Yes\") bonus += 50;\nif (data.uses_automation_proxies === \"Yes\") bonus += 25; \nif (data.uses_cursor === \"Yes\") bonus += 25;\nif (data.uses_mcp === \"Yes\") bonus += 35;\nif (data.uses_agents === \"Yes\") bonus += 50;\nif (data.uses_langchain_vector === \"Yes\") bonus += 15;\n\n// 4. Perks & Environment\nif (data.has_equity === \"Yes\") bonus += 30;\nif (data.is_international === \"Yes\") bonus += 20;\nif (data.is_startup === \"Yes\") bonus += 30;\nif (data.has_edu_budget === \"Yes\") bonus += 20;\nif (data.has_free_food === \"Yes\") bonus += 15;\nif (data.has_home_office_budget === \"Yes\") bonus += 15;\nif (data.has_retreats === \"Yes\") bonus += 15;\nif (data.team_under_5 === \"Yes\") bonus += 25;\nif (data.team_5_to_10 === \"Yes\") bonus += 15;\nif (data.has_car === \"Yes\") bonus += 50;\nif (data.flexible_hours === \"Yes\") bonus += 10;\n\nreturn { \n  total_score: bonus,\n  bonus: data \n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2448,
+          -736
+        ],
+        "id": "eb82473a-4bf6-48ba-9378-dcfa53a45230",
+        "name": "Calculate bonus"
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const item = $json;\n\nconst missionScore = item.mission_score;\nconst responsibilityScore = item.responsibility_score;\nconst idealScoreCosine = ($('Standardize input').item.json.ideal_score)/100;\n\nconst weightMission = 0.4;\nconst weightResponsibility = 0.4;\nconst weightCosine = 0.2;\n\nconst finalWeightedScore = (missionScore * weightMission) + (responsibilityScore * weightResponsibility) + (idealScoreCosine * weightCosine);\n\nreturn {\n  final_weighted_score: finalWeightedScore,\n  mission_weighted: missionScore * weightMission,\n  responsibility_weighted: responsibilityScore * weightResponsibility,\n  cosine_weighted: idealScoreCosine * weightCosine\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2448,
+          -416
+        ],
+        "id": "74d04ffd-8de9-4db8-b053-aef00256fe80",
+        "name": "Calculate weighted sum"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "job_leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "job_url",
+                "condition": "eq",
+                "keyValue": "={{ $json.job_url }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "metadata",
+                "fieldValue": "={{ $json.metadata }}"
+              },
+              {
+                "fieldId": "processed_at",
+                "fieldValue": "={{ $now.toISO() }}"
+              },
+              {
+                "fieldId": "match_score",
+                "fieldValue": "={{ $json.match_score }}"
+              },
+              {
+                "fieldId": "signal_tier",
+                "fieldValue": "={{ $json.signal_tier }}"
+              },
+              {
+                "fieldId": "status",
+                "fieldValue": "scored"
+              },
+              {
+                "fieldId": "lead_progression",
+                "fieldValue": "qualified_lead"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          3152,
+          -560
+        ],
+        "id": "1ef3e847-df2a-43b8-9a1f-2ef7ccdafc1e",
+        "name": "Update a row",
+        "retryOnFail": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const pillarScore = $input.item.json.final_weighted_score;\nconst bonusScore = $input.item.json.total_score;\nconst mission = $input.item.json.mission_weighted;\nconst responsibility = $input.item.json.responsibility_weighted;\n\nconst pillarMultiplier = 300;\n\nconst pillarScoreMultiplied = Math.round(pillarScore * pillarMultiplier);\nlet finalSumScore = pillarScoreMultiplied + bonusScore;\n\nlet signalTier = 'low';\n\nif (mission >= 0.3 && responsibility >= 0.3) {\n  signalTier = 'rare';\n} else if (finalSumScore >= 400) {\n  signalTier = 'high';\n} else if (finalSumScore >= 280) {\n  signalTier = 'mid';\n}\n\nreturn {\n  signal_tier: signalTier,\n  match_score: finalSumScore,\n  job_url:$('Standardize input').item.json.job_url,\n  metadata: {\n    scores: {\n      mission,\n      responsibility,\n      pillar: pillarScoreMultiplied,\n      bonus: bonusScore,\n    },\n    flags: {\n      remote_5_5: $json.bonus.remote_5_5,\n      remote_4_1: $json.bonus.remote_4_1,\n      remote_3_2: $json.bonus.remote_3_2,\n      salary_120k_plus: $json.bonus.salary_120k_plus,\n      salary_100k_120k: $json.bonus.salary_100k_120k,\n      salary_90k_100k: $json.bonus.salary_90k_100k,\n      team_under_5: $json.bonus.team_under_5,\n      equity: $json.bonus.has_equity,\n      car: $json.bonus.has_car,\n      n8n: $json.bonus.uses_n8n,\n      agents: $json.bonus.uses_agents,\n      result_driven: $json.bonus.is_result_driven,\n      flat_hierarchy: $json.bonus.is_flat_hierarchy\n    }\n  }\n}\n;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2960,
+          -560
+        ],
+        "id": "90ac504a-a59b-4f40-bb79-a60d8919fcb4",
+        "name": "Finalize sum + payload"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "nvHCNWL4_7W0r-v9r2u0G",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/nvHCNWL4_7W0r-v9r2u0G",
+            "cachedResultName": "research_high_rare"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          3584,
+          -704
+        ],
+        "id": "d4ad9d65-ce41-45fb-b67e-26b181984452",
+        "name": "Call 'research_high_rare'"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "76330b5c-f689-4ce0-b216-8a98ee0b65cf",
+                "leftValue": "={{ $json.signal_tier }}",
+                "rightValue": "high",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "d6d2ede8-4542-4e55-87b9-8b86170d91ec",
+                "leftValue": "={{ $json.signal_tier }}",
+                "rightValue": "rare",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          3344,
+          -560
+        ],
+        "id": "5b5f337c-d6f8-47be-b978-e19d8569f187",
+        "name": "Is high or rare?"
+      },
+      {
+        "parameters": {
+          "jsonSchemaExample": "{\n  \"thought_process\": \"text\",\n  \"reasoning\": \"text\",\n  \"mission_score\": 0.72,\n  \"responsibility_score\": 0.45\n}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.3,
+        "position": [
+          2128,
+          -240
+        ],
+        "id": "4a12024b-4877-4e52-bbff-b25b17da46cb",
+        "name": "Structured Output Parser1",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "schemaType": "manual",
+          "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"remote_5_5\": { \"type\": \"string\" },\n    \"remote_4_1\": { \"type\": \"string\" },\n    \"remote_3_2\": { \"type\": \"string\" },\n    \"remote_2_3\": { \"type\": \"string\" },\n    \"remote_1_4\": { \"type\": \"string\" },\n    \"salary_120k_plus\": { \"type\": \"string\" },\n    \"salary_100k_120k\": { \"type\": \"string\" },\n    \"salary_90k_100k\": { \"type\": \"string\" },\n    \"salary_80k_90k\": { \"type\": \"string\" },\n    \"salary_70k_80k\": { \"type\": \"string\" },\n    \"is_international\": { \"type\": \"string\" },\n    \"is_startup\": { \"type\": \"string\" },\n    \"team_under_5\": { \"type\": \"string\" },\n    \"team_5_to_10\": { \"type\": \"string\" },\n    \"has_equity\": { \"type\": \"string\" },\n    \"has_car\": { \"type\": \"string\" },\n    \"has_edu_budget\": { \"type\": \"string\" },\n    \"has_4_day_week\": { \"type\": \"string\" },\n  \"uses_n8n\": { \"type\": \"string\" },\n    \"uses_cursor\": { \"type\": \"string\" },\n    \"uses_mcp\": { \"type\": \"string\" },\n    \"uses_agents\": { \"type\": \"string\" },\n    \"uses_langchain_vector\": { \"type\": \"string\" },\n    \"flexible_hours\": { \"type\": \"string\" },\n    \"direct_impact\": { \"type\": \"string\" },\n    \"has_home_office_budget\": { \"type\": \"string\" },\n    \"is_result_driven\": { \"type\": \"string\" },\n    \"is_flat_hierarchy\": { \"type\": \"string\" },\n    \"is_async_focus\": { \"type\": \"string\" },\n    \"has_free_food\": { \"type\": \"string\" },\n    \"has_retreats\": { \"type\": \"string\" },\n    \"has_autonomy\": { \"type\": \"string\" },\n    \"uses_automation_proxies\": { \"type\": \"string\" }\n}\n}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.3,
+        "position": [
+          2096,
+          -560
+        ],
+        "id": "c620744f-81f2-4a0b-b8ef-bb1cf1573721",
+        "name": "Structured Output Parser"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {
+            "includeUnpaired": true
+          }
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          2752,
+          -560
+        ],
+        "id": "9d5f4bca-319c-4c44-bc56-d02ecf17e812",
+        "name": "Merge1"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "7e6f82e4-042a-49fe-b7d9-34eafdead4e7",
+                "name": "id",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              },
+              {
+                "id": "98dd640c-efc3-4cc2-8f45-442711c3aaf6",
+                "name": "published_at",
+                "value": "={{ $json.published_at }}",
+                "type": "string"
+              },
+              {
+                "id": "ddc97d13-cf78-4120-af9c-2135094c68e5",
+                "name": "company_name",
+                "value": "={{ $json.company_name }}",
+                "type": "string"
+              },
+              {
+                "id": "d83105f2-d36e-4f58-a304-048d6b1cea81",
+                "name": "job_title",
+                "value": "={{ $json.job_title }}",
+                "type": "string"
+              },
+              {
+                "id": "98472579-8758-49e7-afb3-4c9cccec75bc",
+                "name": "job_url",
+                "value": "={{ $json.job_url }}",
+                "type": "string"
+              },
+              {
+                "id": "b750dd49-51e3-4f87-a61a-c4c33978f17d",
+                "name": "match_score",
+                "value": "={{ $json.match_score }}",
+                "type": "number"
+              },
+              {
+                "id": "9988f698-c59a-4a5c-8162-81c45b75e224",
+                "name": "job_description",
+                "value": "={{ $json.job_description }}",
+                "type": "string"
+              },
+              {
+                "id": "5804039c-ea1b-43fd-8c6b-bb4b3cbcbdbb",
+                "name": "job_location",
+                "value": "={{ $json.job_location }}",
+                "type": "string"
+              },
+              {
+                "id": "429a78c3-9b24-4a4f-96c3-43aaee37d6c3",
+                "name": "external_id",
+                "value": "={{ $json.external_id }}",
+                "type": "string"
+              },
+              {
+                "id": "b775719f-125e-463c-ae72-458bc4659483",
+                "name": "job_salary",
+                "value": "={{ $json.job_salary }}",
+                "type": "string"
+              },
+              {
+                "id": "ee82521f-b573-4d52-aa26-4e46c5a5a0a3",
+                "name": "company_department",
+                "value": "={{ $json.company_department }}",
+                "type": "string"
+              },
+              {
+                "id": "667763ef-6bbf-422e-b98a-44bb51b835bb",
+                "name": "job_sector",
+                "value": "={{ $json.job_sector }}",
+                "type": "string"
+              },
+              {
+                "id": "e02990cc-70a0-4672-a050-6280df10fdb8",
+                "name": "contract_type",
+                "value": "={{ $json.contract_type }}",
+                "type": "string"
+              },
+              {
+                "id": "3d532878-6ff8-4d21-9bea-fd927ab38bd9",
+                "name": "signal_tier",
+                "value": "={{ $json.signal_tier }}",
+                "type": "string"
+              },
+              {
+                "id": "45833e66-5531-4b1f-b56c-3401f31448c8",
+                "name": "status",
+                "value": "={{ $json.status }}",
+                "type": "string"
+              },
+              {
+                "id": "49c83c67-536e-42be-a041-4b247875218b",
+                "name": "processed_at",
+                "value": "={{ $json.processed_at }}",
+                "type": "string"
+              },
+              {
+                "id": "e36b8eb9-3dc9-406b-aa74-0ba4839ff0eb",
+                "name": "company_url",
+                "value": "={{ $json.company_url }}",
+                "type": "string"
+              },
+              {
+                "id": "80d94137-bddf-4264-80c3-d0eb5ecda587",
+                "name": "poster_name",
+                "value": "={{ $json.poster_name }}",
+                "type": "string"
+              },
+              {
+                "id": "cf1fb289-8821-4cbf-bdea-814ee646ed9e",
+                "name": "poster_linkedin",
+                "value": "={{ $json.poster_linkedin }}",
+                "type": "string"
+              },
+              {
+                "id": "f7041f7f-79c8-4f8d-a280-56a151df3885",
+                "name": "company_logo",
+                "value": "={{ $json.company_logo }}",
+                "type": "string"
+              },
+              {
+                "id": "4dc74732-aa86-4718-9e3f-f2ac23552cda",
+                "name": "experience_level",
+                "value": "={{ $json.experience_level }}",
+                "type": "string"
+              },
+              {
+                "id": "ccbbece4-e599-4a22-91fd-6d5a4425240f",
+                "name": "apply_url",
+                "value": "={{ $json.apply_url }}",
+                "type": "string"
+              },
+              {
+                "id": "9c881010-3c28-4f7e-a5fd-da3e9f6814d2",
+                "name": "source",
+                "value": "={{ $json.source }}",
+                "type": "string"
+              },
+              {
+                "id": "7c61ac99-d19a-48ed-94a0-754f00eba142",
+                "name": "description_vector",
+                "value": "={{ $json.description_vector }}",
+                "type": "string"
+              },
+              {
+                "id": "83620fee-933a-4de4-9652-91faa26f6260",
+                "name": "employment_type",
+                "value": "={{ $json.employment_type }}",
+                "type": "string"
+              },
+              {
+                "id": "e70e38db-bc1d-4bf4-807f-55155ff0ed8c",
+                "name": "work_mode",
+                "value": "={{ $json.work_mode }}",
+                "type": "string"
+              },
+              {
+                "id": "2fd7e6b1-856b-4d4a-b90d-7d177318cbe2",
+                "name": "metadata",
+                "value": "={{ $json.metadata }}",
+                "type": "string"
+              },
+              {
+                "id": "7b1de7ac-addb-4f76-a3bf-959d7acafff6",
+                "name": "tech_score",
+                "value": "={{ $json.tech_score }}",
+                "type": "string"
+              },
+              {
+                "id": "b3449308-ba72-4ad3-8a6c-aceb70c3d693",
+                "name": "responsibility_score",
+                "value": "={{ $json.responsibility_score }}",
+                "type": "number"
+              },
+              {
+                "id": "bc4b0d48-ba86-474d-85d7-991446cb804c",
+                "name": "application_stage",
+                "value": "={{ $json.application_stage }}",
+                "type": "string"
+              },
+              {
+                "id": "508d8b5b-84cc-4ed8-8822-71dd78bed93c",
+                "name": "ideal_score",
+                "value": "={{ $json.ideal_score }}",
+                "type": "number"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1472,
+          -416
+        ],
+        "id": "eea5cdd4-1933-4743-9347-a218aeea7d83",
+        "name": "Standardize input"
+      }
+    ],
+    "connections": {
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Standardize input",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Check pillar fit - llm",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait1": {
+        "main": [
+          [
+            {
+              "node": "Check pillar fit - llm",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Adjust score llm": {
+        "main": [
+          [
+            {
+              "node": "Calculate weighted sum",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "No Operation, do nothing": {
+        "main": [
+          []
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Check bonus boolean",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Groq Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Check bonus boolean",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check pillar fit - llm": {
+        "main": [
+          [
+            {
+              "node": "Adjust score llm",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check bonus boolean": {
+        "main": [
+          [
+            {
+              "node": "Calculate bonus",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Calculate bonus": {
+        "main": [
+          [
+            {
+              "node": "Merge1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Calculate weighted sum": {
+        "main": [
+          [
+            {
+              "node": "Merge1",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Update a row": {
+        "main": [
+          [
+            {
+              "node": "Is high or rare?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Finalize sum + payload": {
+        "main": [
+          [
+            {
+              "node": "Update a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'research_high_rare'": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Is high or rare?": {
+        "main": [
+          [
+            {
+              "node": "Call 'research_high_rare'",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser1": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "Check pillar fit - llm",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "Check bonus boolean",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge1": {
+        "main": [
+          [
+            {
+              "node": "Finalize sum + payload",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Standardize input": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "d d",
+    "name": "Version 8f34af30",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-03-06T13:15:23.201Z",
+      "createdAt": "2026-01-26T08:43:12.205Z",
+      "id": "q3Jm1TtyectpAeLG",
+      "name": "score"
+    }
+  ]
+}
