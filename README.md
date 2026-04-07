@@ -19,6 +19,8 @@ An end-to-end autonomous qualification pipeline designed to identify high-signal
 | **Daily Volume**        | 53 Leads/Day      |
 | **Manual Effort Saved** | ~2.5 Hour Daily   |
 
+<br>
+
 ## 🛠️ Tech Stack
 - **Orchestration:** n8n (Self-hosted/Docker)
 - **Database:** Supabase (PostgreSQL + `pgvector`)
@@ -28,8 +30,9 @@ An end-to-end autonomous qualification pipeline designed to identify high-signal
 - **Deployment:** Docker, GitHub (State-Sync)
 - **External APIs**: Pushover (Notification), Jina (Web Scrape), Apify (Lead Scrape), DetectLanguage
 
+<br>
 ---
-
+<br>
 ## 🏗️ Decision Logic: The Why
 
 ### Phase 1: Lead Scrape & Deduplication
@@ -125,7 +128,3 @@ A watchdog audits the system every hour to fix stuck processes and automatically
 
 ## 📂 Resources
 * [**Raw JSON Workflows**](../workflows/)
-
----
-## 📄 License
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
