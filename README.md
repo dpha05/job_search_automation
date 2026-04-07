@@ -35,6 +35,7 @@ An end-to-end autonomous qualification pipeline designed to identify high-signal
 ---
 
 <br>
+
 ## 🏗️ Decision Logic: The Why
 
 ### Phase 1: Lead Scrape & Deduplication
@@ -61,7 +62,11 @@ Workflows can break or get stuck without anyone noticing. Additionally, job link
 **Solution**
 A watchdog audits the system every hour to fix stuck processes and automatically removes inactive job links. A visual dashboard provides acts as CRM to track lead progression and ensure all logic is backed up.
 
+<br>
+
 ---
+
+<br>
 
 ## 🛠️ Technical Features: The How
 
@@ -126,7 +131,12 @@ A watchdog audits the system every hour to fix stuck processes and automatically
 - **Kanban Progression:** Implements a visual pipeline for lead status (e.g., *Sourced → Scored → Applied → Interview*), providing the project management layer missing from raw database views.
 - **Hybrid Data Logic:** Leverages NocoDB for front-end formulas and quick edits while maintaining Supabase for heavy-duty vector operations and relational integrity.
 
+<br>
+
 ---
+
+<br>
 
 ## 📂 Resources
 * [**Raw JSON Workflows**](https://github.com/dpha05/job_search_automation/tree/main/workflows)
+* [**Video Explanation**](https://www.youtube.com/watch?v=P3Jgx5Q_dyU)
