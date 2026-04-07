@@ -1,6 +1,6 @@
 # # job_search_automation
 
-An end-to-end autonomous qualification pipeline designed to identify high-signal career opportunities. This system transforms high-volume raw data into a curated High/Rare match bucket (Top 7%) using hybrid semantic scoring, state-machine logic, and zero-maintenance parsing.
+An end-to-end autonomous qualification pipeline designed to identify high-signal career opportunities. This system transforms high-volume raw data into a curated High/Rare match bucket (Top 7%) using hybrid semantic scoring, state-machine logic, and direct data ingestion.
 
 ---
 	
@@ -52,7 +52,7 @@ The system communicates directly with data sources to ensure structural stabilit
 AI models often struggle to distinguish between average and best opportunities, giving middle-range scores to every job. Relying on a single check also misses critical details regarding technical requirements and seniority.
 
 **Solution**
-The system uses multiple tiers to check specific requirements separately for higher accuracy. It fast-tracks high-value roles that mention preferred tools and uses deterministic math instead of AI guess. This process stretches the scoring range to clearly isolate the most relevant matches.
+The system uses multiple tiers to check specific requirements separately for higher accuracy. It fast-tracks high-value roles that mention preferred tools and uses deterministic math instead of AI guesswork. This process stretches the scoring range to clearly isolate the most relevant matches.
 
 ### Phase 3: AIOps Infrastructure
 
@@ -60,7 +60,7 @@ The system uses multiple tiers to check specific requirements separately for hig
 Workflows can break or get stuck without anyone noticing. Additionally, job links often expire. Without a clear way to see and manage these leads, the entire system becomes difficult to track.
 
 **Solution**
-A watchdog audits the system every hour to fix stuck processes and automatically removes inactive job links. A visual dashboard provides acts as CRM to track lead progression and ensure all logic is backed up.
+A watchdog audits the system every hour to fix stuck processes and automatically removes inactive job links. A visual dashboard that acts as CRM to track lead progression and ensure all logic is backed up.
 
 <br>
 
@@ -103,7 +103,7 @@ A watchdog audits the system every hour to fix stuck processes and automatically
   - **Branch A (The Benefit Map):** Llama 4 (Groq) performs high-speed semantic extraction of 33 Boolean benefit indicators. These are fed into a deterministic Code Node to move weighted math out of the LLM. 
   - **Branch B (Core Pillar Reasoning):** Gemini 3.0 Flash evaluates the Mission Alignment (Open Source, NGO, or Impact-driven) and the Creative Strategy depth (checking for high-priority triggers like "self-reliant" or "strategic control").
 - **Linear Range-Stretching Logic:** To counteract "Neutrality Bias" (AI clustering in the 15%–85% range), the system re-maps observed minimums and maximums to a full $0 \to 100$ spectrum, amplifying signal variance and making 'Rare' matches statistically distinct.
-- **Weighted Branch Distribution:** The final 'Rare' score uses an 80/20 logic split: 80% semantic reasoning (Gemini/Llama) and 20% raw vector proximity to the "Ideal" anchor.
+- **Weighted Branch Distribution:** The final 'Rare' score uses an 80/20 logic split: 80% semantic reasoning (Gemini/) and 20% raw vector proximity to the "Ideal" anchor.
 - **Sub-Branch Allocation:** Scoring reflects personal career priorities: Mission Alignment (40%), Responsibility Fit (40%), and Logistical Benefits (20%).
 - **Priority Logic Escalation**: Includes a hard-coded Strategic Autonomy Override. Semantic triggers like "self-reliant" or "creative strategic control" trigger a "Priority-Yes" flag, escalating the lead regardless of other scores.
 - **Weighted Benefit Summation:** Uses a deterministic point system for 33 benefits (e.g., 50 pts for Remote), including a "Jackpot" multiplier for 4-day work-week roles (4x8).
