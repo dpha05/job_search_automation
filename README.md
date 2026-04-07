@@ -31,7 +31,9 @@ An end-to-end autonomous qualification pipeline designed to identify high-signal
 - **External APIs**: Pushover (Notification), Jina (Web Scrape), Apify (Lead Scrape), DetectLanguage
 
 <br>
+
 ---
+
 <br>
 ## 🏗️ Decision Logic: The Why
 
@@ -127,4 +129,4 @@ A watchdog audits the system every hour to fix stuck processes and automatically
 ---
 
 ## 📂 Resources
-* [**Raw JSON Workflows**](../workflows/)
+* [**Raw JSON Workflows**](https://github.com/dpha05/job_search_automation/tree/main/workflows)
