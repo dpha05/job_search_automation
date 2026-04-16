@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-06T11:01:53.988Z",
+  "updatedAt": "2026-04-09T05:29:15.159Z",
   "createdAt": "2026-03-30T13:48:44.213Z",
   "id": "bwoDzWtxf2Y9ZtCQ",
   "name": "scrape_80k",
@@ -54,7 +54,9 @@
         -1504
       ],
       "id": "681d599e-451f-45a6-8fa0-d6055ad8f32c",
-      "name": "Scrape url ai"
+      "name": "Scrape url ai",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -240,7 +242,8 @@
         -1312
       ],
       "id": "3945e3a3-a43b-4b73-9aab-7370c0975001",
-      "name": "Call '03_dedupe_upsert'"
+      "name": "Call '03_dedupe_upsert'",
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {},
@@ -655,6 +658,34 @@
       ],
       "id": "dc679b3f-98b3-4ede-b3d4-f43c39b11b03",
       "name": "Filter positive and negative"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+          "cachedResultName": "error_global"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        2720,
+        -1312
+      ],
+      "id": "270c6975-014a-446f-b17a-0c7ff796c9ff",
+      "name": "Call 'error_global'"
     }
   ],
   "connections": {
@@ -736,6 +767,13 @@
         [
           {
             "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call 'error_global'",
             "type": "main",
             "index": 0
           }
@@ -912,8 +950,8 @@
       }
     ]
   },
-  "versionId": "1a094f0f-b5e7-4da5-a0bd-d1612f94b3e3",
-  "activeVersionId": "1a094f0f-b5e7-4da5-a0bd-d1612f94b3e3",
+  "versionId": "e833678a-0eb0-481c-8e3d-a6a225a35028",
+  "activeVersionId": "e833678a-0eb0-481c-8e3d-a6a225a35028",
   "triggerCount": 1,
   "shared": [
     {
@@ -925,9 +963,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-06T11:01:57.000Z",
-    "createdAt": "2026-04-06T11:01:53.989Z",
-    "versionId": "1a094f0f-b5e7-4da5-a0bd-d1612f94b3e3",
+    "updatedAt": "2026-04-09T05:29:16.000Z",
+    "createdAt": "2026-04-09T05:29:15.160Z",
+    "versionId": "e833678a-0eb0-481c-8e3d-a6a225a35028",
     "workflowId": "bwoDzWtxf2Y9ZtCQ",
     "nodes": [
       {
@@ -978,7 +1016,9 @@
           -1504
         ],
         "id": "681d599e-451f-45a6-8fa0-d6055ad8f32c",
-        "name": "Scrape url ai"
+        "name": "Scrape url ai",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
       },
       {
         "parameters": {
@@ -1164,7 +1204,8 @@
           -1312
         ],
         "id": "3945e3a3-a43b-4b73-9aab-7370c0975001",
-        "name": "Call '03_dedupe_upsert'"
+        "name": "Call '03_dedupe_upsert'",
+        "onError": "continueErrorOutput"
       },
       {
         "parameters": {},
@@ -1579,6 +1620,34 @@
         ],
         "id": "dc679b3f-98b3-4ede-b3d4-f43c39b11b03",
         "name": "Filter positive and negative"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+            "cachedResultName": "error_global"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          2720,
+          -1312
+        ],
+        "id": "270c6975-014a-446f-b17a-0c7ff796c9ff",
+        "name": "Call 'error_global'"
       }
     ],
     "connections": {
@@ -1660,6 +1729,13 @@
           [
             {
               "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Call 'error_global'",
               "type": "main",
               "index": 0
             }
@@ -1808,9 +1884,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version 1a094f0f",
+    "name": "Version e833678a",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": [
     {
