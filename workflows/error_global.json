@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-25T07:33:33.736Z",
+  "updatedAt": "2026-04-09T05:28:21.298Z",
   "createdAt": "2026-01-23T08:13:19.648Z",
   "id": "Zj1I7MhBC-OsOLt6D4Qyg",
   "name": "error_global",
@@ -27,7 +27,7 @@
       "typeVersion": 1,
       "position": [
         224,
-        0
+        96
       ],
       "id": "44fbea09-3e55-441e-8cad-c15d23e89834",
       "name": "Push a message",
@@ -37,10 +37,34 @@
           "name": "Pushover account"
         }
       }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        192
+      ],
+      "id": "904f21e4-7da1-44a3-8212-77a5b8c8a456",
+      "name": "When Executed by Another Workflow"
     }
   ],
   "connections": {
     "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Push a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
       "main": [
         [
           {
@@ -62,8 +86,8 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "27e564cf-97f0-4b5a-8d2b-aa90e293e65e",
-  "activeVersionId": "27e564cf-97f0-4b5a-8d2b-aa90e293e65e",
+  "versionId": "4c4f5208-7f35-47ba-aba3-f225d8cc8a9f",
+  "activeVersionId": "4c4f5208-7f35-47ba-aba3-f225d8cc8a9f",
   "triggerCount": 0,
   "shared": [
     {
@@ -75,9 +99,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-23T08:27:04.000Z",
-    "createdAt": "2026-01-23T08:27:02.350Z",
-    "versionId": "27e564cf-97f0-4b5a-8d2b-aa90e293e65e",
+    "updatedAt": "2026-04-09T05:28:22.000Z",
+    "createdAt": "2026-04-09T05:28:21.298Z",
+    "versionId": "4c4f5208-7f35-47ba-aba3-f225d8cc8a9f",
     "workflowId": "Zj1I7MhBC-OsOLt6D4Qyg",
     "nodes": [
       {
@@ -101,7 +125,7 @@
         "typeVersion": 1,
         "position": [
           224,
-          0
+          96
         ],
         "id": "44fbea09-3e55-441e-8cad-c15d23e89834",
         "name": "Push a message",
@@ -111,6 +135,19 @@
             "name": "Pushover account"
           }
         }
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          0,
+          192
+        ],
+        "id": "904f21e4-7da1-44a3-8212-77a5b8c8a456",
+        "name": "When Executed by Another Workflow"
       }
     ],
     "connections": {
@@ -124,12 +161,23 @@
             }
           ]
         ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Push a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "d d",
-    "name": "Version 27e564cf",
+    "name": "Version 4c4f5208",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": [
     {
