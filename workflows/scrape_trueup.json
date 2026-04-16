@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-03T10:50:33.380Z",
+  "updatedAt": "2026-04-14T06:51:22.229Z",
   "createdAt": "2026-03-13T09:00:43.409Z",
   "id": "uwgMqfMmHqoIMgocF5zaH",
   "name": "scrape_trueup",
@@ -35,109 +35,21 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://uhyrve0t36-dsn.algolia.net/1/indexes/*/queries",
+        "url": "https://v00cgazfss-dsn.algolia.net/1/indexes/*/queries",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
             {
               "name": "x-algolia-agent",
-              "value": "Algolia for JavaScript (5.49.2); Lite (5.49.2); Browser; instantsearch.js (4.91.0); react (19.2.4); react-instantsearch (7.27.0); react-instantsearch-core (7.27.0); next.js (16.1.6); JS Helper (3.28.0)"
+              "value": "Algolia for JavaScript (5.50.1); Lite (5.50.1); Browser; instantsearch.js (4.93.0); react (19.2.4); react-instantsearch (7.29.0); react-instantsearch-core (7.29.0); next.js (16.2.2); JS Helper (3.28.1)"
             },
             {
               "name": "x-algolia-api-key",
-              "value": "5317faae90021b5876474f759244f245"
+              "value": "e07ab2a8c02b4250f8bff7cbaf528b7f"
             },
             {
               "name": "x-algolia-application-id",
-              "value": "UHYRVE0T36"
-            }
-          ]
-        },
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Accept-Language",
-              "value": "en-US,en;q=0.9,cs;q=0.8"
-            },
-            {
-              "name": "Connection",
-              "value": "keep-alive"
-            },
-            {
-              "name": "Origin",
-              "value": "https://www.trueup.io"
-            },
-            {
-              "name": "Referer",
-              "value": "https://www.trueup.io/"
-            },
-            {
-              "name": "Sec-Fetch-Dest",
-              "value": "empty"
-            },
-            {
-              "name": "Sec-Fetch-Mode",
-              "value": "cors"
-            },
-            {
-              "name": "Sec-Fetch-Site",
-              "value": "cross-site"
-            },
-            {
-              "name": "User-Agent",
-              "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
-            },
-            {
-              "name": "accept",
-              "value": "application/json"
-            },
-            {
-              "name": "sec-ch-ua",
-              "value": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"145\", \"Chromium\";v=\"145\""
-            },
-            {
-              "name": "sec-ch-ua-mobile",
-              "value": "?0"
-            },
-            {
-              "name": "sec-ch-ua-platform",
-              "value": "\"macOS\""
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"requests\": [\n    {\n      \"indexName\": \"job\",\n      \"query\": \"agent\",\n      \"hitsPerPage\": 200,\n      \"filters\": \"updated_at_timestamp > {{ $json.unixTimestamp }}\",\n      \"facetFilters\": [\n        [\n          \"job_locations_combined:🇩🇪 Germany (remote)\",\n          \"job_locations_combined:🇦🇹 Austria (remote)\",\n          \"job_locations_combined:🇨🇭 Switzerland (remote)\",\n          \"job_locations_combined:🇳🇱 Netherlands (remote)\",\n          \"job_locations_combined:🇧🇪 Belgium (remote)\",\n          \"job_locations_combined:🇱🇺 Luxembourg (remote)\",\n          \"job_locations_combined:🇸🇪 Sweden (remote)\",\n          \"job_locations_combined:🇩🇰 Denmark (remote)\",\n          \"job_locations_combined:🇳🇴 Norway (remote)\",\n          \"job_locations_combined:🇫🇮 Finland (remote)\",\n          \"job_locations_combined:🇨🇿 Czech Republic (remote)\"\n        ]\n      ]\n    }\n  ]\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        -192,
-        -1232
-      ],
-      "id": "08250085-099e-43e1-8835-2385b56883d4",
-      "name": "Scrape url agent"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://uhyrve0t36-dsn.algolia.net/1/indexes/*/queries",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "x-algolia-agent",
-              "value": "Algolia for JavaScript (5.49.2); Lite (5.49.2); Browser; instantsearch.js (4.91.0); react (19.2.4); react-instantsearch (7.27.0); react-instantsearch-core (7.27.0); next.js (16.1.6); JS Helper (3.28.0)"
-            },
-            {
-              "name": "x-algolia-api-key",
-              "value": "5317faae90021b5876474f759244f245"
-            },
-            {
-              "name": "x-algolia-application-id",
-              "value": "UHYRVE0T36"
+              "value": "V00CGAZFSS"
             }
           ]
         },
@@ -206,7 +118,9 @@
         -1424
       ],
       "id": "abebb362-80eb-4730-a6f9-18015dc465aa",
-      "name": "Scrape url ai"
+      "name": "Scrape url ai",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -262,7 +176,8 @@
       ],
       "id": "c666fe13-d998-4c69-888d-afdfbbf5a0d9",
       "name": "Keep non-dupes",
-      "executeOnce": false
+      "executeOnce": false,
+      "alwaysOutputData": true
     },
     {
       "parameters": {
@@ -516,7 +431,8 @@
         -848
       ],
       "id": "641811ef-1802-4189-9325-da5d23f847d6",
-      "name": "Call '03_dedupe_upsert'"
+      "name": "Call '03_dedupe_upsert'",
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {},
@@ -556,7 +472,8 @@
       ],
       "id": "ca2e5a26-54c2-4fad-a096-51109fe6f787",
       "name": "Fetch raw job html",
-      "retryOnFail": true
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -654,7 +571,8 @@
       ],
       "id": "ffee3870-d2ba-4c81-b2f3-f1d30b427a94",
       "name": "Fetch raw job html1",
-      "retryOnFail": true
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -959,6 +877,124 @@
       ],
       "id": "c9ffade3-36be-488f-b7af-2f090bb95d31",
       "name": "Filter positive and negative1"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+          "cachedResultName": "error_global"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        3392,
+        -848
+      ],
+      "id": "96bef1c3-a4b4-4e5d-94d4-f1253af17500",
+      "name": "Call 'error_global'"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://v00cgazfss-dsn.algolia.net/1/indexes/*/queries",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "x-algolia-agent",
+              "value": "Algolia for JavaScript (5.50.1); Lite (5.50.1); Browser; instantsearch.js (4.93.0); react (19.2.4); react-instantsearch (7.29.0); react-instantsearch-core (7.29.0); next.js (16.2.2); JS Helper (3.28.1)"
+            },
+            {
+              "name": "x-algolia-api-key",
+              "value": "e07ab2a8c02b4250f8bff7cbaf528b7f"
+            },
+            {
+              "name": "x-algolia-application-id",
+              "value": "V00CGAZFSS"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Language",
+              "value": "en-US,en;q=0.9,cs;q=0.8"
+            },
+            {
+              "name": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "name": "Origin",
+              "value": "https://www.trueup.io"
+            },
+            {
+              "name": "Referer",
+              "value": "https://www.trueup.io/"
+            },
+            {
+              "name": "Sec-Fetch-Dest",
+              "value": "empty"
+            },
+            {
+              "name": "Sec-Fetch-Mode",
+              "value": "cors"
+            },
+            {
+              "name": "Sec-Fetch-Site",
+              "value": "cross-site"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "sec-ch-ua",
+              "value": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"145\", \"Chromium\";v=\"145\""
+            },
+            {
+              "name": "sec-ch-ua-mobile",
+              "value": "?0"
+            },
+            {
+              "name": "sec-ch-ua-platform",
+              "value": "\"macOS\""
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"requests\": [\n    {\n      \"indexName\": \"job\",\n      \"query\": \"agent\",\n      \"hitsPerPage\": 200,\n      \"filters\": \"updated_at_timestamp > {{ $json.unixTimestamp }}\",\n      \"facetFilters\": [\n        [\n          \"job_locations_combined:🇩🇪 Germany (remote)\",\n          \"job_locations_combined:🇦🇹 Austria (remote)\",\n          \"job_locations_combined:🇨🇭 Switzerland (remote)\",\n          \"job_locations_combined:🇳🇱 Netherlands (remote)\",\n          \"job_locations_combined:🇧🇪 Belgium (remote)\",\n          \"job_locations_combined:🇱🇺 Luxembourg (remote)\",\n          \"job_locations_combined:🇸🇪 Sweden (remote)\",\n          \"job_locations_combined:🇩🇰 Denmark (remote)\",\n          \"job_locations_combined:🇳🇴 Norway (remote)\",\n          \"job_locations_combined:🇫🇮 Finland (remote)\",\n          \"job_locations_combined:🇨🇿 Czech Republic (remote)\"\n        ]\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -192,
+        -1136
+      ],
+      "id": "d83ac80f-ad44-4fb0-a657-39ae0312832e",
+      "name": "Scrape url agent",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
     }
   ],
   "connections": {
@@ -969,17 +1005,6 @@
             "node": "Split Out",
             "type": "main",
             "index": 0
-          }
-        ]
-      ]
-    },
-    "Scrape url agent": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
           }
         ]
       ]
@@ -1073,6 +1098,13 @@
         [
           {
             "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call 'error_global'",
             "type": "main",
             "index": 0
           }
@@ -1292,6 +1324,17 @@
           }
         ]
       ]
+    },
+    "Scrape url agent": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1312,8 +1355,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "c5d7cc1d-5ff5-41d6-a091-8a52af66a1b5",
-  "activeVersionId": "c5d7cc1d-5ff5-41d6-a091-8a52af66a1b5",
+  "versionId": "4168ffd7-7dcf-45ac-add1-47e301ef1f29",
+  "activeVersionId": "4168ffd7-7dcf-45ac-add1-47e301ef1f29",
   "triggerCount": 1,
   "shared": [
     {
@@ -1325,9 +1368,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-03T10:50:49.000Z",
-    "createdAt": "2026-04-03T10:50:33.380Z",
-    "versionId": "c5d7cc1d-5ff5-41d6-a091-8a52af66a1b5",
+    "updatedAt": "2026-04-14T06:52:14.000Z",
+    "createdAt": "2026-04-14T06:51:20.776Z",
+    "versionId": "4168ffd7-7dcf-45ac-add1-47e301ef1f29",
     "workflowId": "uwgMqfMmHqoIMgocF5zaH",
     "nodes": [
       {
@@ -1359,109 +1402,21 @@
       {
         "parameters": {
           "method": "POST",
-          "url": "https://uhyrve0t36-dsn.algolia.net/1/indexes/*/queries",
+          "url": "https://v00cgazfss-dsn.algolia.net/1/indexes/*/queries",
           "sendQuery": true,
           "queryParameters": {
             "parameters": [
               {
                 "name": "x-algolia-agent",
-                "value": "Algolia for JavaScript (5.49.2); Lite (5.49.2); Browser; instantsearch.js (4.91.0); react (19.2.4); react-instantsearch (7.27.0); react-instantsearch-core (7.27.0); next.js (16.1.6); JS Helper (3.28.0)"
+                "value": "Algolia for JavaScript (5.50.1); Lite (5.50.1); Browser; instantsearch.js (4.93.0); react (19.2.4); react-instantsearch (7.29.0); react-instantsearch-core (7.29.0); next.js (16.2.2); JS Helper (3.28.1)"
               },
               {
                 "name": "x-algolia-api-key",
-                "value": "5317faae90021b5876474f759244f245"
+                "value": "e07ab2a8c02b4250f8bff7cbaf528b7f"
               },
               {
                 "name": "x-algolia-application-id",
-                "value": "UHYRVE0T36"
-              }
-            ]
-          },
-          "sendHeaders": true,
-          "headerParameters": {
-            "parameters": [
-              {
-                "name": "Accept-Language",
-                "value": "en-US,en;q=0.9,cs;q=0.8"
-              },
-              {
-                "name": "Connection",
-                "value": "keep-alive"
-              },
-              {
-                "name": "Origin",
-                "value": "https://www.trueup.io"
-              },
-              {
-                "name": "Referer",
-                "value": "https://www.trueup.io/"
-              },
-              {
-                "name": "Sec-Fetch-Dest",
-                "value": "empty"
-              },
-              {
-                "name": "Sec-Fetch-Mode",
-                "value": "cors"
-              },
-              {
-                "name": "Sec-Fetch-Site",
-                "value": "cross-site"
-              },
-              {
-                "name": "User-Agent",
-                "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
-              },
-              {
-                "name": "accept",
-                "value": "application/json"
-              },
-              {
-                "name": "sec-ch-ua",
-                "value": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"145\", \"Chromium\";v=\"145\""
-              },
-              {
-                "name": "sec-ch-ua-mobile",
-                "value": "?0"
-              },
-              {
-                "name": "sec-ch-ua-platform",
-                "value": "\"macOS\""
-              }
-            ]
-          },
-          "sendBody": true,
-          "specifyBody": "json",
-          "jsonBody": "={\n  \"requests\": [\n    {\n      \"indexName\": \"job\",\n      \"query\": \"agent\",\n      \"hitsPerPage\": 200,\n      \"filters\": \"updated_at_timestamp > {{ $json.unixTimestamp }}\",\n      \"facetFilters\": [\n        [\n          \"job_locations_combined:🇩🇪 Germany (remote)\",\n          \"job_locations_combined:🇦🇹 Austria (remote)\",\n          \"job_locations_combined:🇨🇭 Switzerland (remote)\",\n          \"job_locations_combined:🇳🇱 Netherlands (remote)\",\n          \"job_locations_combined:🇧🇪 Belgium (remote)\",\n          \"job_locations_combined:🇱🇺 Luxembourg (remote)\",\n          \"job_locations_combined:🇸🇪 Sweden (remote)\",\n          \"job_locations_combined:🇩🇰 Denmark (remote)\",\n          \"job_locations_combined:🇳🇴 Norway (remote)\",\n          \"job_locations_combined:🇫🇮 Finland (remote)\",\n          \"job_locations_combined:🇨🇿 Czech Republic (remote)\"\n        ]\n      ]\n    }\n  ]\n}",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.3,
-        "position": [
-          -192,
-          -1232
-        ],
-        "id": "08250085-099e-43e1-8835-2385b56883d4",
-        "name": "Scrape url agent"
-      },
-      {
-        "parameters": {
-          "method": "POST",
-          "url": "https://uhyrve0t36-dsn.algolia.net/1/indexes/*/queries",
-          "sendQuery": true,
-          "queryParameters": {
-            "parameters": [
-              {
-                "name": "x-algolia-agent",
-                "value": "Algolia for JavaScript (5.49.2); Lite (5.49.2); Browser; instantsearch.js (4.91.0); react (19.2.4); react-instantsearch (7.27.0); react-instantsearch-core (7.27.0); next.js (16.1.6); JS Helper (3.28.0)"
-              },
-              {
-                "name": "x-algolia-api-key",
-                "value": "5317faae90021b5876474f759244f245"
-              },
-              {
-                "name": "x-algolia-application-id",
-                "value": "UHYRVE0T36"
+                "value": "V00CGAZFSS"
               }
             ]
           },
@@ -1530,7 +1485,9 @@
           -1424
         ],
         "id": "abebb362-80eb-4730-a6f9-18015dc465aa",
-        "name": "Scrape url ai"
+        "name": "Scrape url ai",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
       },
       {
         "parameters": {
@@ -1586,7 +1543,8 @@
         ],
         "id": "c666fe13-d998-4c69-888d-afdfbbf5a0d9",
         "name": "Keep non-dupes",
-        "executeOnce": false
+        "executeOnce": false,
+        "alwaysOutputData": true
       },
       {
         "parameters": {
@@ -1840,7 +1798,8 @@
           -848
         ],
         "id": "641811ef-1802-4189-9325-da5d23f847d6",
-        "name": "Call '03_dedupe_upsert'"
+        "name": "Call '03_dedupe_upsert'",
+        "onError": "continueErrorOutput"
       },
       {
         "parameters": {},
@@ -1880,7 +1839,8 @@
         ],
         "id": "ca2e5a26-54c2-4fad-a096-51109fe6f787",
         "name": "Fetch raw job html",
-        "retryOnFail": true
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
       },
       {
         "parameters": {
@@ -1978,7 +1938,8 @@
         ],
         "id": "ffee3870-d2ba-4c81-b2f3-f1d30b427a94",
         "name": "Fetch raw job html1",
-        "retryOnFail": true
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
       },
       {
         "parameters": {
@@ -2283,6 +2244,124 @@
         ],
         "id": "c9ffade3-36be-488f-b7af-2f090bb95d31",
         "name": "Filter positive and negative1"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+            "cachedResultName": "error_global"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          3392,
+          -848
+        ],
+        "id": "96bef1c3-a4b4-4e5d-94d4-f1253af17500",
+        "name": "Call 'error_global'"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://v00cgazfss-dsn.algolia.net/1/indexes/*/queries",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "x-algolia-agent",
+                "value": "Algolia for JavaScript (5.50.1); Lite (5.50.1); Browser; instantsearch.js (4.93.0); react (19.2.4); react-instantsearch (7.29.0); react-instantsearch-core (7.29.0); next.js (16.2.2); JS Helper (3.28.1)"
+              },
+              {
+                "name": "x-algolia-api-key",
+                "value": "e07ab2a8c02b4250f8bff7cbaf528b7f"
+              },
+              {
+                "name": "x-algolia-application-id",
+                "value": "V00CGAZFSS"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept-Language",
+                "value": "en-US,en;q=0.9,cs;q=0.8"
+              },
+              {
+                "name": "Connection",
+                "value": "keep-alive"
+              },
+              {
+                "name": "Origin",
+                "value": "https://www.trueup.io"
+              },
+              {
+                "name": "Referer",
+                "value": "https://www.trueup.io/"
+              },
+              {
+                "name": "Sec-Fetch-Dest",
+                "value": "empty"
+              },
+              {
+                "name": "Sec-Fetch-Mode",
+                "value": "cors"
+              },
+              {
+                "name": "Sec-Fetch-Site",
+                "value": "cross-site"
+              },
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              },
+              {
+                "name": "sec-ch-ua",
+                "value": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"145\", \"Chromium\";v=\"145\""
+              },
+              {
+                "name": "sec-ch-ua-mobile",
+                "value": "?0"
+              },
+              {
+                "name": "sec-ch-ua-platform",
+                "value": "\"macOS\""
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"requests\": [\n    {\n      \"indexName\": \"job\",\n      \"query\": \"agent\",\n      \"hitsPerPage\": 200,\n      \"filters\": \"updated_at_timestamp > {{ $json.unixTimestamp }}\",\n      \"facetFilters\": [\n        [\n          \"job_locations_combined:🇩🇪 Germany (remote)\",\n          \"job_locations_combined:🇦🇹 Austria (remote)\",\n          \"job_locations_combined:🇨🇭 Switzerland (remote)\",\n          \"job_locations_combined:🇳🇱 Netherlands (remote)\",\n          \"job_locations_combined:🇧🇪 Belgium (remote)\",\n          \"job_locations_combined:🇱🇺 Luxembourg (remote)\",\n          \"job_locations_combined:🇸🇪 Sweden (remote)\",\n          \"job_locations_combined:🇩🇰 Denmark (remote)\",\n          \"job_locations_combined:🇳🇴 Norway (remote)\",\n          \"job_locations_combined:🇫🇮 Finland (remote)\",\n          \"job_locations_combined:🇨🇿 Czech Republic (remote)\"\n        ]\n      ]\n    }\n  ]\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -192,
+          -1136
+        ],
+        "id": "d83ac80f-ad44-4fb0-a657-39ae0312832e",
+        "name": "Scrape url agent",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
       }
     ],
     "connections": {
@@ -2293,17 +2372,6 @@
               "node": "Split Out",
               "type": "main",
               "index": 0
-            }
-          ]
-        ]
-      },
-      "Scrape url agent": {
-        "main": [
-          [
-            {
-              "node": "Merge",
-              "type": "main",
-              "index": 1
             }
           ]
         ]
@@ -2397,6 +2465,13 @@
           [
             {
               "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Call 'error_global'",
               "type": "main",
               "index": 0
             }
@@ -2616,12 +2691,23 @@
             }
           ]
         ]
+      },
+      "Scrape url agent": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
       }
     },
     "authors": "d d",
-    "name": "Version c5d7cc1d",
+    "name": "Version 4168ffd7",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": [
     {
