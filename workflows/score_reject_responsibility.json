@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-02T06:39:01.678Z",
+  "updatedAt": "2026-04-29T07:35:14.608Z",
   "createdAt": "2026-03-05T09:46:11.745Z",
   "id": "bhlGPoZTR6B1MQhp",
   "name": "score_reject_responsibility",
@@ -53,6 +53,7 @@
       "id": "68e69222-5f15-4d21-8022-2c8abf57438c",
       "name": "Update a row",
       "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "supabaseApi": {
           "id": "qB1TBV7vyX50RGhp",
@@ -371,6 +372,7 @@
       "name": "Check ideal - cosine",
       "alwaysOutputData": false,
       "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "postgres": {
           "id": "wub5gbhgKNBgMsXa",
@@ -436,7 +438,7 @@
       "id": "9ed844ff-5a16-40b4-afbb-4e67e76863d7",
       "name": "Check responsibility boolean",
       "retryOnFail": true,
-      "waitBetweenTries": 4000
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -475,7 +477,7 @@
       "typeVersion": 1.3,
       "position": [
         -1808,
-        336
+        352
       ],
       "id": "fab76511-b9b4-48bc-9512-d26837639327",
       "name": "Call '03_score_filtered'"
@@ -687,8 +689,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "fda3721f-9d36-4878-9854-215e727cb89d",
-  "activeVersionId": "fda3721f-9d36-4878-9854-215e727cb89d",
+  "versionId": "73e04217-a20c-4497-9291-d2d886981833",
+  "activeVersionId": "73e04217-a20c-4497-9291-d2d886981833",
   "triggerCount": 0,
   "shared": [
     {
@@ -700,9 +702,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-02T06:39:03.000Z",
-    "createdAt": "2026-04-02T06:39:01.679Z",
-    "versionId": "fda3721f-9d36-4878-9854-215e727cb89d",
+    "updatedAt": "2026-04-29T07:35:15.535Z",
+    "createdAt": "2026-04-29T07:35:14.609Z",
+    "versionId": "73e04217-a20c-4497-9291-d2d886981833",
     "workflowId": "bhlGPoZTR6B1MQhp",
     "nodes": [
       {
@@ -752,6 +754,7 @@
         "id": "68e69222-5f15-4d21-8022-2c8abf57438c",
         "name": "Update a row",
         "retryOnFail": true,
+        "waitBetweenTries": 5000,
         "credentials": {
           "supabaseApi": {
             "id": "qB1TBV7vyX50RGhp",
@@ -1070,6 +1073,7 @@
         "name": "Check ideal - cosine",
         "alwaysOutputData": false,
         "retryOnFail": true,
+        "waitBetweenTries": 5000,
         "credentials": {
           "postgres": {
             "id": "wub5gbhgKNBgMsXa",
@@ -1135,7 +1139,7 @@
         "id": "9ed844ff-5a16-40b4-afbb-4e67e76863d7",
         "name": "Check responsibility boolean",
         "retryOnFail": true,
-        "waitBetweenTries": 4000
+        "waitBetweenTries": 5000
       },
       {
         "parameters": {
@@ -1174,7 +1178,7 @@
         "typeVersion": 1.3,
         "position": [
           -1808,
-          336
+          352
         ],
         "id": "fab76511-b9b4-48bc-9512-d26837639327",
         "name": "Call '03_score_filtered'"
@@ -1374,9 +1378,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version fda3721f",
+    "name": "Version 73e04217",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": [
     {
