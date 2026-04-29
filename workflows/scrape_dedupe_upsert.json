@@ -1,27 +1,11 @@
 {
-  "updatedAt": "2026-04-01T06:32:33.344Z",
+  "updatedAt": "2026-04-29T07:34:01.636Z",
   "createdAt": "2026-01-23T07:30:24.776Z",
   "id": "NBCVFrfmAz4h6S1a",
   "name": "scrape_dedupe_upsert",
   "active": true,
   "isArchived": false,
   "nodes": [
-    {
-      "parameters": {
-        "mode": "combine",
-        "combineBy": "combineByPosition",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        -1920,
-        832
-      ],
-      "id": "43100e07-e3b6-46ff-9fd5-d9aee3165dc5",
-      "name": "Merge",
-      "executeOnce": false
-    },
     {
       "parameters": {
         "conditions": {
@@ -58,8 +42,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -1472,
-        832
+        -1360,
+        816
       ],
       "id": "e9731f1f-bb36-45b6-9879-614017e4319b",
       "name": "Is similar?"
@@ -69,8 +53,8 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        -1248,
-        736
+        -1136,
+        720
       ],
       "id": "0d18f417-1cff-4c6a-b3fa-be817da36ca3",
       "name": "No Operation, do nothing1"
@@ -84,13 +68,14 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -1696,
-        832
+        -1584,
+        816
       ],
       "id": "d2f07c8b-e6ac-4d72-8b8f-fe1b4d4bf077",
       "name": "Check description similarity",
       "alwaysOutputData": false,
       "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "postgres": {
           "id": "wub5gbhgKNBgMsXa",
@@ -116,30 +101,26 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "job_url": "={{ $('Merge').item.json.jobUrl }}",
-            "published_at": "={{ $('Merge').item.json.publishedAt }}",
-            "company_name": "={{ $('Merge').item.json.companyName }}",
-            "job_title": "={{ $('Merge').item.json.jobTitle }}",
-            "job_description": "={{ $('Merge').item.json.jobDescription }}",
-            "job_location": "={{ $('Merge').item.json.location }}",
-            "external_id": "={{ $('Merge').item.json.jobId }}",
-            "job_salary": "={{ $('Merge').item.json.salaryInfo }}",
-            "job_sector": "={{ $('Merge').item.json.sector }}",
-            "company_department": "={{ $('Merge').item.json.workType }}",
-            "contract_type": "={{ $('Merge').item.json.contractType }}",
+            "job_url": "={{ $('When Executed by Another Workflow').item.json.jobUrl }}",
+            "published_at": "={{ $('When Executed by Another Workflow').item.json.publishedAt }}",
+            "company_name": "={{ $('When Executed by Another Workflow').item.json.companyName }}",
+            "job_title": "={{ $('When Executed by Another Workflow').item.json.jobTitle }}",
+            "job_description": "={{ $('When Executed by Another Workflow').item.json.jobDescription }}",
+            "job_location": "={{ $('When Executed by Another Workflow').item.json.location }}",
+            "external_id": "={{ $('When Executed by Another Workflow').item.json.jobId }}",
+            "job_sector": "={{ $('When Executed by Another Workflow').item.json.sector }}",
+            "contract_type": "={{ $('When Executed by Another Workflow').item.json.contractType }}",
             "status": "new",
             "processed_at": "={{ $now.toISO() }}",
-            "company_url": "={{ $('Merge').item.json.companyUrl }}",
-            "poster_name": "={{ $('Merge').item.json.posterFullName }}",
-            "poster_linkedin": "={{ $('Merge').item.json.posterProfileUrl }}",
-            "company_logo": "={{ $('Merge').item.json.companyLogo }}",
-            "experience_level": "={{ $('Merge').item.json.experienceLevel }}",
-            "apply_url": "={{ $('Merge').item.json.applyUrl }}",
+            "company_url": "={{ $('When Executed by Another Workflow').item.json.companyUrl }}",
+            "company_logo": "={{ $('When Executed by Another Workflow').item.json.companyLogo }}",
+            "experience_level": "={{ $('When Executed by Another Workflow').item.json.experienceLevel }}",
+            "apply_url": "={{ $('When Executed by Another Workflow').item.json.applyUrl }}",
             "match_score": 0,
-            "description_vector": "={{ $('Merge').item.json.embedding.values }}",
-            "source": "={{ $('Merge').item.json.source }}",
-            "employment_type": "={{ $('Merge').item.json.employmentType }}",
-            "work_mode": "={{ $('Merge').item.json.workMode}}",
+            "description_vector": "={{ $('Vectorize job description').item.json.embedding.values }}",
+            "source": "={{ $('When Executed by Another Workflow').item.json.source }}",
+            "employment_type": "={{ $('When Executed by Another Workflow').item.json.employmentType }}",
+            "work_mode": "={{ $('When Executed by Another Workflow').item.json.workMode}}",
             "tech_score": 0
           },
           "matchingColumns": [
@@ -236,7 +217,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": false
+              "canBeUsedToMatch": false,
+              "removed": true
             },
             {
               "id": "company_department",
@@ -245,7 +227,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": false
+              "canBeUsedToMatch": false,
+              "removed": true
             },
             {
               "id": "job_sector",
@@ -308,7 +291,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": false
+              "canBeUsedToMatch": false,
+              "removed": true
             },
             {
               "id": "poster_linkedin",
@@ -317,7 +301,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": false
+              "canBeUsedToMatch": false,
+              "removed": true
             },
             {
               "id": "company_logo",
@@ -417,12 +402,13 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -1024,
-        928
+        -912,
+        912
       ],
       "id": "8f1cdc43-7257-4363-8577-b4e4ed62feb0",
       "name": "Upsert rows",
       "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "postgres": {
           "id": "wub5gbhgKNBgMsXa",
@@ -437,24 +423,11 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -2368,
-        832
+        -2704,
+        720
       ],
       "id": "2491de5d-9dd8-4b55-b874-f1664388d992",
       "name": "When Executed by Another Workflow"
-    },
-    {
-      "parameters": {
-        "content": "## Expects standardized job JSON\nsee Upsert node"
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -2464,
-        1136
-      ],
-      "id": "efe780a1-bb73-4e23-bbb1-7c33de6b292c",
-      "name": "Sticky Note"
     },
     {
       "parameters": {
@@ -464,19 +437,20 @@
         "nodeCredentialType": "googlePalmApi",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"content\": {\n    \"parts\": [\n      {\n        \"text\": {{ JSON.stringify($json.jobDescription) }}\n      }\n    ]\n  },\n\"outputDimensionality\": 1536\n}",
+        "jsonBody": "={\n  \"content\": {\n    \"parts\": [\n      {\n        \"text\": {{ JSON.stringify($('When Executed by Another Workflow').item.json.jobDescription) }}\n      }\n    ]\n  },\n\"outputDimensionality\": 1536\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -2144,
-        904
+        -2032,
+        816
       ],
       "id": "ed986c05-e980-4cc9-893f-3f634476edcb",
       "name": "Vectorize job description",
       "executeOnce": false,
       "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googlePalmApi": {
           "id": "vmrqCM7rVU8xOXMr",
@@ -507,8 +481,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -800,
-        928
+        -688,
+        944
       ],
       "id": "b7d593f2-2513-4176-a972-91229b5a9eb9",
       "name": "Call 'score_reject_nonENCZ'"
@@ -519,15 +493,15 @@
           "values": [
             {
               "key": "jobID",
-              "value": "={{ $('Merge').item.json.jobId }}"
+              "value": "={{ $('When Executed by Another Workflow').item.json.jobId }}"
             },
             {
               "key": "jobTitle",
-              "value": "={{ $('Merge').item.json.jobTitle }}"
+              "value": "={{ $('When Executed by Another Workflow').item.json.jobTitle }}"
             },
             {
               "key": "companyName",
-              "value": "={{ $('Merge').item.json.companyName }}"
+              "value": "={{ $('When Executed by Another Workflow').item.json.companyName }}"
             }
           ]
         }
@@ -535,25 +509,96 @@
       "type": "n8n-nodes-base.executionData",
       "typeVersion": 1.1,
       "position": [
-        -1248,
-        928
+        -1136,
+        912
       ],
       "id": "1868a76e-b3ef-48d7-a2d9-411301847e5f",
       "name": "Execution Data"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id \nFROM job_leads \nWHERE job_title = '{{ $json.jobTitle }}'\nAND company_name = '{{ $json.companyName }}'\nLIMIT 1;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2480,
+        720
+      ],
+      "id": "b67bada2-77a4-4427-8644-7f7f98fe8a45",
+      "name": "Check company and title similarity",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "12aab632-6a30-4d45-af69-629e385a7a98",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": 0.95,
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2256,
+        720
+      ],
+      "id": "a1439c1c-3343-4fa1-b862-18e257a3e358",
+      "name": "Exists?"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -2032,
+        624
+      ],
+      "id": "2031bdfa-ab20-4928-a9b6-51ebccd6d168",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "jsCode": "const embeddings = $input.all();\n\nconst otherData = $('When Executed by Another Workflow').all();\n\nreturn embeddings.map((item, i) => ({\n  json: { ...otherData[i]?.json, ...item.json }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1808,
+        816
+      ],
+      "id": "33116627-287c-4f83-8107-54deda1492b5",
+      "name": "Merge payload"
     }
   ],
   "connections": {
-    "Merge": {
-      "main": [
-        [
-          {
-            "node": "Check description similarity",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Is similar?": {
       "main": [
         [
@@ -604,12 +649,7 @@
       "main": [
         [
           {
-            "node": "Merge",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Vectorize job description",
+            "node": "Check company and title similarity",
             "type": "main",
             "index": 0
           }
@@ -620,9 +660,9 @@
       "main": [
         [
           {
-            "node": "Merge",
+            "node": "Merge payload",
             "type": "main",
-            "index": 1
+            "index": 0
           }
         ]
       ]
@@ -637,6 +677,46 @@
         [
           {
             "node": "Upsert rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check company and title similarity": {
+      "main": [
+        [
+          {
+            "node": "Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exists?": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Vectorize job description",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge payload": {
+      "main": [
+        [
+          {
+            "node": "Check description similarity",
             "type": "main",
             "index": 0
           }
@@ -660,31 +740,31 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "jobId": "102229",
-          "jobTitle": "Global AI & SW Hunter",
-          "jobUrl": "https://www.startupjobs.cz/nabidka/102229/global-ai-sw-hunter-business-development-manager-remote-field-based",
-          "companyName": "StartupJobs TOP SECRET",
-          "companyUrl": "https://www.startupjobs.cz/startup/startupjobs-top-secret",
-          "companyLogo": "https://images-assets.startupjobs.cz/LOGO/6018/38e4d655daca0423daedcec88e5049f2.png",
-          "publishedAt": "2026-03-11T11:59:00.000Z",
-          "applyUrl": "https://www.startupjobs.cz/nabidka/102229/prihlasit#application",
-          "location": "Prague",
+          "jobId": "4394982072",
+          "jobTitle": "Key Account Executive - SaaS",
+          "jobUrl": "https://de.linkedin.com/jobs/view/key-account-executive-saas-at-arrow-electronics-4394982072?refId=gwrh96DkwvUjZ%2FdSwPAASw%3D%3D&trackingId=KUF%2FqW5doRiHEQofqTwcCA%3D%3D&position=3&pageNum=0",
+          "companyName": "Arrow Electronics",
+          "companyUrl": "https://www.linkedin.com/company/arrow-electronics?trk=public_jobs_jserp-result_job-search-card-subtitle",
+          "companyLogo": "https://media.licdn.com/dms/image/v2/C4E0BAQE9izZrjummQQ/company-logo_100_100/company-logo_100_100/0/1679065099095/arrow_electronics_logo?e=1778716800&v=beta&t=-0gHkVUwaBviYDJUzjgl0DvD2bGtS7nuMeOUXpR22V8",
+          "publishedAt": "2026-04-23T14:18:18.000Z",
+          "applyUrl": "https://careers.arrow.com/us/en/job/R242068/Key-Account-Executive---SaaS",
+          "location": "Germany",
           "contractType": "Full-time",
-          "experienceLevel": "Medior, Senior",
-          "jobDescription": "Stavíme komplexní softwarová řešení pro klienty po celém světě a do našeho týmu hledáme dravého parťáka, který si vezme na starost růst byznysu.Nejsme korporát, jsme parta profíků, co vyvíjí špičkový software s přesahem do AI.\n\nKoho hledáme? 🎯Zkušeného „lovce“ (huntera), který se vyzná v prodeji zakázkového vývoje software a má tah na branku.\n\nVáš profil:\n\n• Min. 3 roky v aktivním prodeji software (znalost prostředí zakázkového vývoje je nutnost).\n• Akviziční drajv: Lead gen, cold-calling a vyjednávání máte v krvi.\n• Angličtina na profi úrovni, bez té to nepůjde.\n• Tech-savvy: Rozumíte technologiím a baví vás využívat AI nástroje pro zefektivnění prodeje.\nCo budete dělat? 🛠️ \u0004\n\n• Aktivní akvizice nových klientů a vyhledávání obchodních příležitostí na globálním trhu (především v USA)\n• Příprava nabídek ve spolupráci s naším technickým týmem.\n• Rozšiřování sítě mezinárodních partnerů a účast na zahraničních akcích.\n• Podpora marketingu, který má hlavu a patu.\nProč k nám? ✨\n\n• Prodáváte práci špičkového týmu, který řeší náročné tech výzvy.\n• Žádný mikromanagement, ale reálný vliv na chod firmy a svoboda.\n• Možnost cestovat a budovat si kontakty po celém světě.\n• Hybridní režim nebo remote (office v Praze), jak vám vyhovuje.\n• Férové ohodnocení – 80 000–120 000 Kč fix + provize.\nChcete s námi stavět software, co dává smysl? Pošlete CV a pojďme se potkat!",
-          "salaryInfo": null,
-          "posterFullName": null,
-          "posterProfileUrl": null,
-          "sector": null,
-          "workMode": "Remote, Hybrid",
-          "employmentType": "Freelance",
-          "source": "startupjobscz"
+          "experienceLevel": "Mid-Senior level",
+          "jobDescription": "Position\n\nKey Account Executive - SaaS\n\nJob Description\n\nKey Account Executive - SaaS\n\nJoin the Team Powering Trusted Intelligence\n\nAt SiliconExpert, we’re transforming one of the world’s most complex systems through software — the global electronics supply chain.\n\nFor decades, engineers and procurement teams have battled overwhelming data, disconnected systems, and constant disruption. Our mission is to bring clarity to that complexity. With Trusted Intelligence, we’re empowering innovators with the foresight to make confident decisions that keep industries moving forward.\n\nAnd now, we’re growing.\n\nWe’re hiring SaaS sales professionals who are energized by solving big challenges, passionate about technology, and ready to help customers turn intelligence into action.\n\nIf C-level executives call you to solve their biggest business problems, and your personal mission is to impact how the world designs, builds, and delivers—let’s talk.\n\nJoin us. When intelligence is trusted, innovation never stops.\n\nPosition Overview: The SaaS Key Account Executive at SiliconExpert will be responsible for managing and growing relationships with key clients, ensuring their needs are met while driving revenue growth. This role requires a strategic thinker with excellent communication skills, a deep understanding of the assigned industry and/or electronics industry, and the ability to deliver tailored SaaS and data centric solutions to clients.\n\nKey Responsibilities\n\nDevelop and maintain strong relationships with our largest and most strategic accounts, including senior level stakeholders.Identify, qualify, and close strategic sales opportunities across your assigned accounts to drive global expansion and grow net revenue retention.Collaborate with internal teams, including sales, marketing, partnerships, and product development, to ensure client satisfaction and successful project delivery.Collaborate with partners to help uncover, position, and sell complex solutions which solve end to end workflows.Monitor market trends and competitor activities to identify new opportunities for growth.Understand and represent the voice of the customer to help shape product roadmap, and new strategic offerings.Prepare and deliver presentations, proposals, and reports to clients and senior stakeholders both remotely and on-site.Meet or exceed sales targets and contribute to the overall business objectives of SiliconExpert.\n\nQualifications\n\nBachelor's degree in Business, Marketing, or a related field; MBA is a plus.5-8 Years of SaaS sales experience; experience managing/selling into large/strategic customers a must.Experience/understanding of electrical components as they relate to one or more of the following industries is a major advantage: medical devices/healthcare, automotive/transportation, industrial manufacturing, semi-conductors, or contract manufacturing.Experience selling data/AI solutions a major plus.Experience closing 6 and/or 7 figure deal sizes (annualized) a must.Experience with MEDDIC or other sales methodology for selling into large, complex accounts.Proven experience selling complex solutions which include cross-functional alignment, and VP level or above signatory.Strong negotiation, problem-solving, and interpersonal skills.Naturally curious, emotionally intelligent, and willing to learn.Ability to analyze data and market trends to make informed decisions.Proficiency in CRM software (Salesforce, Hubspot) and Microsoft Office Suite.Willingness to travel as required.\n\nWhat is in it for you? \n\nAttractive employee compensation package - salary consists of base and variable compensation Company carReliable & trusting work environment Remote employment contractCooperative team with flat structures and communicationProfessional and personal development\n\nArrow is an equal opportunity employer and is committed to creating a diverse working environment by providing equal employment opportunities for all qualified persons.\n\nLocation:\n\nDE-Germany - Remote\n\nTime Type\n\nFull time\n\nJob Category\n\nSales\n\n",
+          "sector": "Sales and Business Development",
+          "workMode": "Remote",
+          "employmentType": "Full-time",
+          "source": "linkedin"
+        },
+        "pairedItem": {
+          "item": 0
         }
       }
     ]
   },
-  "versionId": "602e1561-e70d-4241-a30e-8be31176402a",
-  "activeVersionId": "602e1561-e70d-4241-a30e-8be31176402a",
+  "versionId": "d4ab9369-f2e4-42af-b339-5477dce444db",
+  "activeVersionId": "d4ab9369-f2e4-42af-b339-5477dce444db",
   "triggerCount": 0,
   "shared": [
     {
@@ -696,27 +776,11 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-01T06:32:46.000Z",
-    "createdAt": "2026-04-01T06:32:33.345Z",
-    "versionId": "602e1561-e70d-4241-a30e-8be31176402a",
+    "updatedAt": "2026-04-29T07:34:02.555Z",
+    "createdAt": "2026-04-29T07:34:01.638Z",
+    "versionId": "d4ab9369-f2e4-42af-b339-5477dce444db",
     "workflowId": "NBCVFrfmAz4h6S1a",
     "nodes": [
-      {
-        "parameters": {
-          "mode": "combine",
-          "combineBy": "combineByPosition",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.merge",
-        "typeVersion": 3.2,
-        "position": [
-          -1920,
-          832
-        ],
-        "id": "43100e07-e3b6-46ff-9fd5-d9aee3165dc5",
-        "name": "Merge",
-        "executeOnce": false
-      },
       {
         "parameters": {
           "conditions": {
@@ -753,8 +817,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          -1472,
-          832
+          -1360,
+          816
         ],
         "id": "e9731f1f-bb36-45b6-9879-614017e4319b",
         "name": "Is similar?"
@@ -764,8 +828,8 @@
         "type": "n8n-nodes-base.noOp",
         "typeVersion": 1,
         "position": [
-          -1248,
-          736
+          -1136,
+          720
         ],
         "id": "0d18f417-1cff-4c6a-b3fa-be817da36ca3",
         "name": "No Operation, do nothing1"
@@ -779,13 +843,14 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          -1696,
-          832
+          -1584,
+          816
         ],
         "id": "d2f07c8b-e6ac-4d72-8b8f-fe1b4d4bf077",
         "name": "Check description similarity",
         "alwaysOutputData": false,
         "retryOnFail": true,
+        "waitBetweenTries": 5000,
         "credentials": {
           "postgres": {
             "id": "wub5gbhgKNBgMsXa",
@@ -811,30 +876,26 @@
           "columns": {
             "mappingMode": "defineBelow",
             "value": {
-              "job_url": "={{ $('Merge').item.json.jobUrl }}",
-              "published_at": "={{ $('Merge').item.json.publishedAt }}",
-              "company_name": "={{ $('Merge').item.json.companyName }}",
-              "job_title": "={{ $('Merge').item.json.jobTitle }}",
-              "job_description": "={{ $('Merge').item.json.jobDescription }}",
-              "job_location": "={{ $('Merge').item.json.location }}",
-              "external_id": "={{ $('Merge').item.json.jobId }}",
-              "job_salary": "={{ $('Merge').item.json.salaryInfo }}",
-              "job_sector": "={{ $('Merge').item.json.sector }}",
-              "company_department": "={{ $('Merge').item.json.workType }}",
-              "contract_type": "={{ $('Merge').item.json.contractType }}",
+              "job_url": "={{ $('When Executed by Another Workflow').item.json.jobUrl }}",
+              "published_at": "={{ $('When Executed by Another Workflow').item.json.publishedAt }}",
+              "company_name": "={{ $('When Executed by Another Workflow').item.json.companyName }}",
+              "job_title": "={{ $('When Executed by Another Workflow').item.json.jobTitle }}",
+              "job_description": "={{ $('When Executed by Another Workflow').item.json.jobDescription }}",
+              "job_location": "={{ $('When Executed by Another Workflow').item.json.location }}",
+              "external_id": "={{ $('When Executed by Another Workflow').item.json.jobId }}",
+              "job_sector": "={{ $('When Executed by Another Workflow').item.json.sector }}",
+              "contract_type": "={{ $('When Executed by Another Workflow').item.json.contractType }}",
               "status": "new",
               "processed_at": "={{ $now.toISO() }}",
-              "company_url": "={{ $('Merge').item.json.companyUrl }}",
-              "poster_name": "={{ $('Merge').item.json.posterFullName }}",
-              "poster_linkedin": "={{ $('Merge').item.json.posterProfileUrl }}",
-              "company_logo": "={{ $('Merge').item.json.companyLogo }}",
-              "experience_level": "={{ $('Merge').item.json.experienceLevel }}",
-              "apply_url": "={{ $('Merge').item.json.applyUrl }}",
+              "company_url": "={{ $('When Executed by Another Workflow').item.json.companyUrl }}",
+              "company_logo": "={{ $('When Executed by Another Workflow').item.json.companyLogo }}",
+              "experience_level": "={{ $('When Executed by Another Workflow').item.json.experienceLevel }}",
+              "apply_url": "={{ $('When Executed by Another Workflow').item.json.applyUrl }}",
               "match_score": 0,
-              "description_vector": "={{ $('Merge').item.json.embedding.values }}",
-              "source": "={{ $('Merge').item.json.source }}",
-              "employment_type": "={{ $('Merge').item.json.employmentType }}",
-              "work_mode": "={{ $('Merge').item.json.workMode}}",
+              "description_vector": "={{ $('Vectorize job description').item.json.embedding.values }}",
+              "source": "={{ $('When Executed by Another Workflow').item.json.source }}",
+              "employment_type": "={{ $('When Executed by Another Workflow').item.json.employmentType }}",
+              "work_mode": "={{ $('When Executed by Another Workflow').item.json.workMode}}",
               "tech_score": 0
             },
             "matchingColumns": [
@@ -931,7 +992,8 @@
                 "defaultMatch": false,
                 "display": true,
                 "type": "string",
-                "canBeUsedToMatch": false
+                "canBeUsedToMatch": false,
+                "removed": true
               },
               {
                 "id": "company_department",
@@ -940,7 +1002,8 @@
                 "defaultMatch": false,
                 "display": true,
                 "type": "string",
-                "canBeUsedToMatch": false
+                "canBeUsedToMatch": false,
+                "removed": true
               },
               {
                 "id": "job_sector",
@@ -1003,7 +1066,8 @@
                 "defaultMatch": false,
                 "display": true,
                 "type": "string",
-                "canBeUsedToMatch": false
+                "canBeUsedToMatch": false,
+                "removed": true
               },
               {
                 "id": "poster_linkedin",
@@ -1012,7 +1076,8 @@
                 "defaultMatch": false,
                 "display": true,
                 "type": "string",
-                "canBeUsedToMatch": false
+                "canBeUsedToMatch": false,
+                "removed": true
               },
               {
                 "id": "company_logo",
@@ -1112,12 +1177,13 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          -1024,
-          928
+          -912,
+          912
         ],
         "id": "8f1cdc43-7257-4363-8577-b4e4ed62feb0",
         "name": "Upsert rows",
         "retryOnFail": true,
+        "waitBetweenTries": 5000,
         "credentials": {
           "postgres": {
             "id": "wub5gbhgKNBgMsXa",
@@ -1132,24 +1198,11 @@
         "type": "n8n-nodes-base.executeWorkflowTrigger",
         "typeVersion": 1.1,
         "position": [
-          -2368,
-          832
+          -2704,
+          720
         ],
         "id": "2491de5d-9dd8-4b55-b874-f1664388d992",
         "name": "When Executed by Another Workflow"
-      },
-      {
-        "parameters": {
-          "content": "## Expects standardized job JSON\nsee Upsert node"
-        },
-        "type": "n8n-nodes-base.stickyNote",
-        "typeVersion": 1,
-        "position": [
-          -2464,
-          1136
-        ],
-        "id": "efe780a1-bb73-4e23-bbb1-7c33de6b292c",
-        "name": "Sticky Note"
       },
       {
         "parameters": {
@@ -1159,19 +1212,20 @@
           "nodeCredentialType": "googlePalmApi",
           "sendBody": true,
           "specifyBody": "json",
-          "jsonBody": "={\n  \"content\": {\n    \"parts\": [\n      {\n        \"text\": {{ JSON.stringify($json.jobDescription) }}\n      }\n    ]\n  },\n\"outputDimensionality\": 1536\n}",
+          "jsonBody": "={\n  \"content\": {\n    \"parts\": [\n      {\n        \"text\": {{ JSON.stringify($('When Executed by Another Workflow').item.json.jobDescription) }}\n      }\n    ]\n  },\n\"outputDimensionality\": 1536\n}",
           "options": {}
         },
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          -2144,
-          904
+          -2032,
+          816
         ],
         "id": "ed986c05-e980-4cc9-893f-3f634476edcb",
         "name": "Vectorize job description",
         "executeOnce": false,
         "retryOnFail": true,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googlePalmApi": {
             "id": "vmrqCM7rVU8xOXMr",
@@ -1202,8 +1256,8 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          -800,
-          928
+          -688,
+          944
         ],
         "id": "b7d593f2-2513-4176-a972-91229b5a9eb9",
         "name": "Call 'score_reject_nonENCZ'"
@@ -1214,15 +1268,15 @@
             "values": [
               {
                 "key": "jobID",
-                "value": "={{ $('Merge').item.json.jobId }}"
+                "value": "={{ $('When Executed by Another Workflow').item.json.jobId }}"
               },
               {
                 "key": "jobTitle",
-                "value": "={{ $('Merge').item.json.jobTitle }}"
+                "value": "={{ $('When Executed by Another Workflow').item.json.jobTitle }}"
               },
               {
                 "key": "companyName",
-                "value": "={{ $('Merge').item.json.companyName }}"
+                "value": "={{ $('When Executed by Another Workflow').item.json.companyName }}"
               }
             ]
           }
@@ -1230,25 +1284,96 @@
         "type": "n8n-nodes-base.executionData",
         "typeVersion": 1.1,
         "position": [
-          -1248,
-          928
+          -1136,
+          912
         ],
         "id": "1868a76e-b3ef-48d7-a2d9-411301847e5f",
         "name": "Execution Data"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT id \nFROM job_leads \nWHERE job_title = '{{ $json.jobTitle }}'\nAND company_name = '{{ $json.companyName }}'\nLIMIT 1;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -2480,
+          720
+        ],
+        "id": "b67bada2-77a4-4427-8644-7f7f98fe8a45",
+        "name": "Check company and title similarity",
+        "alwaysOutputData": true,
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "12aab632-6a30-4d45-af69-629e385a7a98",
+                "leftValue": "={{ $json.id }}",
+                "rightValue": 0.95,
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -2256,
+          720
+        ],
+        "id": "a1439c1c-3343-4fa1-b862-18e257a3e358",
+        "name": "Exists?"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          -2032,
+          624
+        ],
+        "id": "2031bdfa-ab20-4928-a9b6-51ebccd6d168",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "jsCode": "const embeddings = $input.all();\n\nconst otherData = $('When Executed by Another Workflow').all();\n\nreturn embeddings.map((item, i) => ({\n  json: { ...otherData[i]?.json, ...item.json }\n}));"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -1808,
+          816
+        ],
+        "id": "33116627-287c-4f83-8107-54deda1492b5",
+        "name": "Merge payload"
       }
     ],
     "connections": {
-      "Merge": {
-        "main": [
-          [
-            {
-              "node": "Check description similarity",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
       "Is similar?": {
         "main": [
           [
@@ -1299,12 +1424,7 @@
         "main": [
           [
             {
-              "node": "Merge",
-              "type": "main",
-              "index": 0
-            },
-            {
-              "node": "Vectorize job description",
+              "node": "Check company and title similarity",
               "type": "main",
               "index": 0
             }
@@ -1315,9 +1435,9 @@
         "main": [
           [
             {
-              "node": "Merge",
+              "node": "Merge payload",
               "type": "main",
-              "index": 1
+              "index": 0
             }
           ]
         ]
@@ -1337,12 +1457,52 @@
             }
           ]
         ]
+      },
+      "Check company and title similarity": {
+        "main": [
+          [
+            {
+              "node": "Exists?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Exists?": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Vectorize job description",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge payload": {
+        "main": [
+          [
+            {
+              "node": "Check description similarity",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "d d",
-    "name": "Version 602e1561",
+    "name": "Version d4ab9369",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": [
     {
