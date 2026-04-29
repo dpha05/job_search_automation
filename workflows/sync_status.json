@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T07:35:46.066Z",
+  "updatedAt": "2026-04-29T08:46:37.632Z",
   "createdAt": "2026-03-06T12:22:31.762Z",
   "id": "7TRjT3YJDeAlSHqk",
   "name": "sync_status",
@@ -916,16 +916,16 @@
   },
   "tags": [
     {
+      "updatedAt": "2026-03-06T08:25:58.891Z",
+      "createdAt": "2026-03-06T08:24:24.741Z",
+      "id": "Vy45AkYeBcQCdNen",
+      "name": "sync_status"
+    },
+    {
       "updatedAt": "2026-02-25T07:33:28.018Z",
       "createdAt": "2026-02-25T07:33:28.018Z",
       "id": "IqRTP9BqhN0ja5Ww",
       "name": "prod"
-    },
-    {
-      "updatedAt": "2026-02-17T08:55:44.901Z",
-      "createdAt": "2026-02-17T08:55:44.901Z",
-      "id": "KfoxYHbtIHL4mStj",
-      "name": "sync"
     }
   ]
 }
