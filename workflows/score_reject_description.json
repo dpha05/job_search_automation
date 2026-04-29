@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-02T07:40:34.646Z",
+  "updatedAt": "2026-04-29T07:34:58.538Z",
   "createdAt": "2026-03-05T09:43:06.766Z",
   "id": "fShvCbZRgCtLGec8",
   "name": "score_reject_description",
@@ -45,6 +45,7 @@
       "id": "aeb0609f-b4c1-46af-8cdb-b868c396cedd",
       "name": "Update a row",
       "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "supabaseApi": {
           "id": "qB1TBV7vyX50RGhp",
@@ -102,8 +103,8 @@
       "name": "Check technicality - cosine",
       "alwaysOutputData": false,
       "retryOnFail": true,
-      "waitBetweenTries": 2000,
-      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "maxTries": 3,
       "credentials": {
         "postgres": {
           "id": "wub5gbhgKNBgMsXa",
@@ -129,7 +130,7 @@
       "id": "d9040b20-cad5-49ab-bc03-b980af1f059b",
       "name": "Check technicality - llm",
       "retryOnFail": true,
-      "waitBetweenTries": 4000
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -268,7 +269,7 @@
       "typeVersion": 1,
       "position": [
         2112,
-        -176
+        -192
       ],
       "id": "90cb680b-6679-414f-a001-da46722c4ef3",
       "name": "No Operation, do nothing"
@@ -733,8 +734,8 @@
       }
     ]
   },
-  "versionId": "233064ed-fd27-4471-9847-c2dbcc05c376",
-  "activeVersionId": "233064ed-fd27-4471-9847-c2dbcc05c376",
+  "versionId": "ce029dac-7231-401c-b33c-ad281ee753ae",
+  "activeVersionId": "ce029dac-7231-401c-b33c-ad281ee753ae",
   "triggerCount": 0,
   "shared": [
     {
@@ -746,9 +747,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-02T07:40:41.000Z",
-    "createdAt": "2026-04-02T07:40:34.647Z",
-    "versionId": "233064ed-fd27-4471-9847-c2dbcc05c376",
+    "updatedAt": "2026-04-29T07:34:59.377Z",
+    "createdAt": "2026-04-29T07:34:58.539Z",
+    "versionId": "ce029dac-7231-401c-b33c-ad281ee753ae",
     "workflowId": "fShvCbZRgCtLGec8",
     "nodes": [
       {
@@ -790,6 +791,7 @@
         "id": "aeb0609f-b4c1-46af-8cdb-b868c396cedd",
         "name": "Update a row",
         "retryOnFail": true,
+        "waitBetweenTries": 5000,
         "credentials": {
           "supabaseApi": {
             "id": "qB1TBV7vyX50RGhp",
@@ -847,8 +849,8 @@
         "name": "Check technicality - cosine",
         "alwaysOutputData": false,
         "retryOnFail": true,
-        "waitBetweenTries": 2000,
-        "maxTries": 5,
+        "waitBetweenTries": 5000,
+        "maxTries": 3,
         "credentials": {
           "postgres": {
             "id": "wub5gbhgKNBgMsXa",
@@ -874,7 +876,7 @@
         "id": "d9040b20-cad5-49ab-bc03-b980af1f059b",
         "name": "Check technicality - llm",
         "retryOnFail": true,
-        "waitBetweenTries": 4000
+        "waitBetweenTries": 5000
       },
       {
         "parameters": {
@@ -1013,7 +1015,7 @@
         "typeVersion": 1,
         "position": [
           2112,
-          -176
+          -192
         ],
         "id": "90cb680b-6679-414f-a001-da46722c4ef3",
         "name": "No Operation, do nothing"
@@ -1418,9 +1420,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version 233064ed",
+    "name": "Version ce029dac",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": [
     {
