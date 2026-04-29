@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-09T05:29:34.151Z",
+  "updatedAt": "2026-04-29T07:34:16.665Z",
   "createdAt": "2026-03-06T12:06:54.218Z",
   "id": "CmzQ2cHGnb3X3hIZ",
   "name": "scrape_startupjobscz",
@@ -21,7 +21,7 @@
       "typeVersion": 1.3,
       "position": [
         -2064,
-        216
+        224
       ],
       "id": "4c7d67d4-4f39-44e9-9ba0-bccd0b79849b",
       "name": "Schedule Trigger"
@@ -35,7 +35,7 @@
       "typeVersion": 1,
       "position": [
         -1168,
-        312
+        320
       ],
       "id": "e7a08412-be27-40d5-8c58-2eaf4a3a7f70",
       "name": "Split Out"
@@ -49,7 +49,7 @@
       "typeVersion": 2,
       "position": [
         176,
-        312
+        320
       ],
       "id": "cb0343b3-540e-4a0e-8815-9cb022095ea1",
       "name": "HTML parser job indicators"
@@ -63,7 +63,7 @@
       "typeVersion": 2,
       "position": [
         176,
-        744
+        752
       ],
       "id": "99bc5f24-13d1-4a42-8cfa-038e5b0d8157",
       "name": "HTML parser job description"
@@ -92,56 +92,14 @@
       "id": "e586b799-01c4-4ff1-b417-5388651612a1",
       "name": "Check for dupes",
       "alwaysOutputData": false,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "supabaseApi": {
           "id": "qB1TBV7vyX50RGhp",
           "name": "Supabase account"
         }
       }
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": false,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
-              "leftValue": "={{ $json.loc }}",
-              "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|platform-engineer).*",
-              "operator": {
-                "type": "string",
-                "operation": "regex"
-              }
-            },
-            {
-              "id": "6f924664-fa20-4947-af03-df2841af8012",
-              "leftValue": "={{ $json.loc }}",
-              "rightValue": ".*(sales|marketing|asistent|manual|legal|qa-engineer|obchodni|akvizicni|prodejni|account-manager|customer-success|qa-automation|test-automation|devops|lead|head|director|reditel|vedouci|full-stack|java|kotlin|swift|android|php|react-native).*",
-              "operator": {
-                "type": "string",
-                "operation": "notRegex"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {
-          "ignoreCase": true
-        }
-      },
-      "type": "n8n-nodes-base.filter",
-      "typeVersion": 2.3,
-      "position": [
-        -944,
-        312
-      ],
-      "id": "7660aeed-0fbb-40dd-bde1-8d7bb1034bfd",
-      "name": "Filter positive and negative"
     },
     {
       "parameters": {
@@ -158,7 +116,7 @@
       "typeVersion": 4.3,
       "position": [
         -1616,
-        312
+        320
       ],
       "id": "1fe8470f-d5ae-4dca-a8d5-df60b747c9ba",
       "name": "Fetch startupjobs.cz XML",
@@ -173,7 +131,7 @@
       "typeVersion": 1,
       "position": [
         -1392,
-        312
+        320
       ],
       "id": "0618f4dd-e1e3-48e8-be4d-0fd489dce69c",
       "name": "XML to JSON"
@@ -197,7 +155,7 @@
       "typeVersion": 3.2,
       "position": [
         -496,
-        312
+        320
       ],
       "id": "0797abc9-30d8-4e6d-85cc-8e715f78d32d",
       "name": "Keep non-dupes",
@@ -213,7 +171,7 @@
       "typeVersion": 4.3,
       "position": [
         -48,
-        504
+        512
       ],
       "id": "7f40e487-a0ca-4089-9b83-4785499b3598",
       "name": "Fetch raw job html",
@@ -228,7 +186,7 @@
       "typeVersion": 3,
       "position": [
         624,
-        552
+        560
       ],
       "id": "d736651f-c1d6-48a9-8972-716920107921",
       "name": "Loop Over Items"
@@ -255,7 +213,7 @@
       "typeVersion": 2,
       "position": [
         176,
-        552
+        560
       ],
       "id": "471ea6fd-4fe5-437f-8422-6b1fa748970d",
       "name": "HTML parser sidebar indicators"
@@ -271,7 +229,7 @@
       "typeVersion": 3.2,
       "position": [
         400,
-        536
+        544
       ],
       "id": "74fc931b-3110-4eb8-ae24-9b8c716d047b",
       "name": "Merge data"
@@ -464,7 +422,7 @@
       "typeVersion": 2.6,
       "position": [
         -1840,
-        312
+        320
       ],
       "id": "c3d3b9ab-6e83-4de4-ae9c-b8924c399327",
       "name": "update running status",
@@ -539,7 +497,7 @@
       "typeVersion": 2.6,
       "position": [
         848,
-        192
+        176
       ],
       "id": "eaf9f7c1-9c6e-4902-a0b2-6ec56103befc",
       "name": "update success status",
@@ -567,16 +525,20 @@
           "attemptToConvertTypes": false,
           "convertFieldsToString": true
         },
+        "mode": "each",
         "options": {}
       },
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
         1296,
-        600
+        608
       ],
       "id": "b30756e1-f525-4347-96a0-67b3310a2e24",
       "name": "Call '03_dedupe_upsert'",
+      "retryOnFail": false,
+      "waitBetweenTries": 5000,
+      "maxTries": 2,
       "onError": "continueErrorOutput"
     },
     {
@@ -587,7 +549,7 @@
       "typeVersion": 1.1,
       "position": [
         -2064,
-        408
+        416
       ],
       "id": "ffd38130-bb54-40ee-b75e-3c3173401979",
       "name": "When Executed by Another Workflow"
@@ -621,7 +583,7 @@
       "typeVersion": 2.3,
       "position": [
         -272,
-        312
+        320
       ],
       "id": "9ddb1b24-bec3-4492-87e6-6d1dca13b01a",
       "name": "If"
@@ -649,10 +611,54 @@
       "typeVersion": 1.3,
       "position": [
         1520,
-        600
+        608
       ],
       "id": "8967ac61-1c86-46b8-93d9-75461671c23b",
       "name": "Call 'error_global'"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
+              "leftValue": "={{ $json.loc }}",
+              "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|platform-engineer|n8n).*",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            },
+            {
+              "id": "6f924664-fa20-4947-af03-df2841af8012",
+              "leftValue": "={{ $json.loc }}",
+              "rightValue": ".*(sales-representative|assistant|manual|legal|qa-engineer|account-manager|account-executive|qa-automation|test-automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react-native|cloud|only|research|frontend|backend|forward|fde|fullstack|full-stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp).*",
+              "operator": {
+                "type": "string",
+                "operation": "notRegex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -912,
+        416
+      ],
+      "id": "fb79c1c1-9adc-4023-a94e-2940538c2d85",
+      "name": "Filter positive and negative1"
     }
   ],
   "connections": {
@@ -660,7 +666,7 @@
       "main": [
         [
           {
-            "node": "Filter positive and negative",
+            "node": "Filter positive and negative1",
             "type": "main",
             "index": 0
           }
@@ -696,22 +702,6 @@
             "node": "Keep non-dupes",
             "type": "main",
             "index": 0
-          }
-        ]
-      ]
-    },
-    "Filter positive and negative": {
-      "main": [
-        [
-          {
-            "node": "Check for dupes",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Keep non-dupes",
-            "type": "main",
-            "index": 1
           }
         ]
       ]
@@ -900,6 +890,22 @@
           }
         ]
       ]
+    },
+    "Filter positive and negative1": {
+      "main": [
+        [
+          {
+            "node": "Check for dupes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -917,8 +923,8 @@
   },
   "meta": null,
   "pinData": {},
-  "versionId": "49be411d-253e-41e5-a163-122584c457ae",
-  "activeVersionId": "49be411d-253e-41e5-a163-122584c457ae",
+  "versionId": "0a48cd25-a549-4253-8b5c-633db9baccf6",
+  "activeVersionId": "0a48cd25-a549-4253-8b5c-633db9baccf6",
   "triggerCount": 1,
   "shared": [
     {
@@ -930,9 +936,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-09T05:29:36.000Z",
-    "createdAt": "2026-04-09T05:29:34.152Z",
-    "versionId": "49be411d-253e-41e5-a163-122584c457ae",
+    "updatedAt": "2026-04-29T07:34:17.487Z",
+    "createdAt": "2026-04-29T07:34:16.667Z",
+    "versionId": "0a48cd25-a549-4253-8b5c-633db9baccf6",
     "workflowId": "CmzQ2cHGnb3X3hIZ",
     "nodes": [
       {
@@ -950,7 +956,7 @@
         "typeVersion": 1.3,
         "position": [
           -2064,
-          216
+          224
         ],
         "id": "4c7d67d4-4f39-44e9-9ba0-bccd0b79849b",
         "name": "Schedule Trigger"
@@ -964,7 +970,7 @@
         "typeVersion": 1,
         "position": [
           -1168,
-          312
+          320
         ],
         "id": "e7a08412-be27-40d5-8c58-2eaf4a3a7f70",
         "name": "Split Out"
@@ -978,7 +984,7 @@
         "typeVersion": 2,
         "position": [
           176,
-          312
+          320
         ],
         "id": "cb0343b3-540e-4a0e-8815-9cb022095ea1",
         "name": "HTML parser job indicators"
@@ -992,7 +998,7 @@
         "typeVersion": 2,
         "position": [
           176,
-          744
+          752
         ],
         "id": "99bc5f24-13d1-4a42-8cfa-038e5b0d8157",
         "name": "HTML parser job description"
@@ -1021,56 +1027,14 @@
         "id": "e586b799-01c4-4ff1-b417-5388651612a1",
         "name": "Check for dupes",
         "alwaysOutputData": false,
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
         "credentials": {
           "supabaseApi": {
             "id": "qB1TBV7vyX50RGhp",
             "name": "Supabase account"
           }
         }
-      },
-      {
-        "parameters": {
-          "conditions": {
-            "options": {
-              "caseSensitive": false,
-              "leftValue": "",
-              "typeValidation": "strict",
-              "version": 3
-            },
-            "conditions": [
-              {
-                "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
-                "leftValue": "={{ $json.loc }}",
-                "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|platform-engineer).*",
-                "operator": {
-                  "type": "string",
-                  "operation": "regex"
-                }
-              },
-              {
-                "id": "6f924664-fa20-4947-af03-df2841af8012",
-                "leftValue": "={{ $json.loc }}",
-                "rightValue": ".*(sales|marketing|asistent|manual|legal|qa-engineer|obchodni|akvizicni|prodejni|account-manager|customer-success|qa-automation|test-automation|devops|lead|head|director|reditel|vedouci|full-stack|java|kotlin|swift|android|php|react-native).*",
-                "operator": {
-                  "type": "string",
-                  "operation": "notRegex"
-                }
-              }
-            ],
-            "combinator": "and"
-          },
-          "options": {
-            "ignoreCase": true
-          }
-        },
-        "type": "n8n-nodes-base.filter",
-        "typeVersion": 2.3,
-        "position": [
-          -944,
-          312
-        ],
-        "id": "7660aeed-0fbb-40dd-bde1-8d7bb1034bfd",
-        "name": "Filter positive and negative"
       },
       {
         "parameters": {
@@ -1087,7 +1051,7 @@
         "typeVersion": 4.3,
         "position": [
           -1616,
-          312
+          320
         ],
         "id": "1fe8470f-d5ae-4dca-a8d5-df60b747c9ba",
         "name": "Fetch startupjobs.cz XML",
@@ -1102,7 +1066,7 @@
         "typeVersion": 1,
         "position": [
           -1392,
-          312
+          320
         ],
         "id": "0618f4dd-e1e3-48e8-be4d-0fd489dce69c",
         "name": "XML to JSON"
@@ -1126,7 +1090,7 @@
         "typeVersion": 3.2,
         "position": [
           -496,
-          312
+          320
         ],
         "id": "0797abc9-30d8-4e6d-85cc-8e715f78d32d",
         "name": "Keep non-dupes",
@@ -1142,7 +1106,7 @@
         "typeVersion": 4.3,
         "position": [
           -48,
-          504
+          512
         ],
         "id": "7f40e487-a0ca-4089-9b83-4785499b3598",
         "name": "Fetch raw job html",
@@ -1157,7 +1121,7 @@
         "typeVersion": 3,
         "position": [
           624,
-          552
+          560
         ],
         "id": "d736651f-c1d6-48a9-8972-716920107921",
         "name": "Loop Over Items"
@@ -1184,7 +1148,7 @@
         "typeVersion": 2,
         "position": [
           176,
-          552
+          560
         ],
         "id": "471ea6fd-4fe5-437f-8422-6b1fa748970d",
         "name": "HTML parser sidebar indicators"
@@ -1200,7 +1164,7 @@
         "typeVersion": 3.2,
         "position": [
           400,
-          536
+          544
         ],
         "id": "74fc931b-3110-4eb8-ae24-9b8c716d047b",
         "name": "Merge data"
@@ -1393,7 +1357,7 @@
         "typeVersion": 2.6,
         "position": [
           -1840,
-          312
+          320
         ],
         "id": "c3d3b9ab-6e83-4de4-ae9c-b8924c399327",
         "name": "update running status",
@@ -1468,7 +1432,7 @@
         "typeVersion": 2.6,
         "position": [
           848,
-          192
+          176
         ],
         "id": "eaf9f7c1-9c6e-4902-a0b2-6ec56103befc",
         "name": "update success status",
@@ -1496,16 +1460,20 @@
             "attemptToConvertTypes": false,
             "convertFieldsToString": true
           },
+          "mode": "each",
           "options": {}
         },
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
           1296,
-          600
+          608
         ],
         "id": "b30756e1-f525-4347-96a0-67b3310a2e24",
         "name": "Call '03_dedupe_upsert'",
+        "retryOnFail": false,
+        "waitBetweenTries": 5000,
+        "maxTries": 2,
         "onError": "continueErrorOutput"
       },
       {
@@ -1516,7 +1484,7 @@
         "typeVersion": 1.1,
         "position": [
           -2064,
-          408
+          416
         ],
         "id": "ffd38130-bb54-40ee-b75e-3c3173401979",
         "name": "When Executed by Another Workflow"
@@ -1550,7 +1518,7 @@
         "typeVersion": 2.3,
         "position": [
           -272,
-          312
+          320
         ],
         "id": "9ddb1b24-bec3-4492-87e6-6d1dca13b01a",
         "name": "If"
@@ -1578,10 +1546,54 @@
         "typeVersion": 1.3,
         "position": [
           1520,
-          600
+          608
         ],
         "id": "8967ac61-1c86-46b8-93d9-75461671c23b",
         "name": "Call 'error_global'"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
+                "leftValue": "={{ $json.loc }}",
+                "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|platform-engineer|n8n).*",
+                "operator": {
+                  "type": "string",
+                  "operation": "regex"
+                }
+              },
+              {
+                "id": "6f924664-fa20-4947-af03-df2841af8012",
+                "leftValue": "={{ $json.loc }}",
+                "rightValue": ".*(sales-representative|assistant|manual|legal|qa-engineer|account-manager|account-executive|qa-automation|test-automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react-native|cloud|only|research|frontend|backend|forward|fde|fullstack|full-stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp).*",
+                "operator": {
+                  "type": "string",
+                  "operation": "notRegex"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {
+            "ignoreCase": true
+          }
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          -912,
+          416
+        ],
+        "id": "fb79c1c1-9adc-4023-a94e-2940538c2d85",
+        "name": "Filter positive and negative1"
       }
     ],
     "connections": {
@@ -1589,7 +1601,7 @@
         "main": [
           [
             {
-              "node": "Filter positive and negative",
+              "node": "Filter positive and negative1",
               "type": "main",
               "index": 0
             }
@@ -1625,22 +1637,6 @@
               "node": "Keep non-dupes",
               "type": "main",
               "index": 0
-            }
-          ]
-        ]
-      },
-      "Filter positive and negative": {
-        "main": [
-          [
-            {
-              "node": "Check for dupes",
-              "type": "main",
-              "index": 0
-            },
-            {
-              "node": "Keep non-dupes",
-              "type": "main",
-              "index": 1
             }
           ]
         ]
@@ -1829,25 +1825,41 @@
             }
           ]
         ]
+      },
+      "Filter positive and negative1": {
+        "main": [
+          [
+            {
+              "node": "Check for dupes",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
       }
     },
     "authors": "d d",
-    "name": "Version 49be411d",
+    "name": "Version 0a48cd25",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": [
-    {
-      "updatedAt": "2026-03-06T08:15:29.125Z",
-      "createdAt": "2026-03-06T08:15:29.125Z",
-      "id": "HuLsG0yIk4pVyhRG",
-      "name": "startupjobscz"
-    },
     {
       "updatedAt": "2026-02-25T07:33:28.018Z",
       "createdAt": "2026-02-25T07:33:28.018Z",
       "id": "IqRTP9BqhN0ja5Ww",
       "name": "prod"
+    },
+    {
+      "updatedAt": "2026-03-06T08:15:29.125Z",
+      "createdAt": "2026-03-06T08:15:29.125Z",
+      "id": "HuLsG0yIk4pVyhRG",
+      "name": "startupjobscz"
     },
     {
       "updatedAt": "2026-03-06T13:15:28.248Z",
