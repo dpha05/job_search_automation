@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-20T14:28:54.171Z",
+  "updatedAt": "2026-04-29T07:35:31.975Z",
   "createdAt": "2026-03-06T12:17:00.099Z",
   "id": "f8XfKM6wxcwHySTx",
   "name": "sync_clean_inactive",
@@ -73,6 +73,7 @@
       ],
       "id": "01b30b26-05c7-468e-9e3e-23eb8490cb54",
       "name": "Update a row",
+      "retryOnFail": true,
       "credentials": {
         "supabaseApi": {
           "id": "qB1TBV7vyX50RGhp",
@@ -110,6 +111,7 @@
       ],
       "id": "73a25cbd-b8ad-4774-9a90-8cc320439cb9",
       "name": "Update a row1",
+      "retryOnFail": true,
       "credentials": {
         "supabaseApi": {
           "id": "qB1TBV7vyX50RGhp",
@@ -131,7 +133,7 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const html = ($json.data);\nconst url = $('Loop Over Items').item.json.job_url;\n\nlet isActive = false;\n\nif (url.includes('linkedin.com')) {\n  isActive = html.includes('apply-button');\n}\n\nelse if (url.includes('startupjobs.cz')) {\n  isActive = !html.includes('Nabídce vypršela platnost nebo již není aktuální');\n}\n\nelse {\n  isActive = true;\n}\n\nreturn {\n  id: $('Loop Over Items').item.json.id,\n  is_active: isActive,\n};"
+        "jsCode": "const html = ($json.data);\nconst url = $('Loop Over Items').item.json.job_url;\n\nlet isActive = false;\n\nif (url.includes('linkedin')) {\n  isActive = html.includes('apply-button');\n}\n\nelse if (url.includes('startupjobs.cz')) {\n  isActive = !html.includes('Nabídce vypršela platnost nebo již není aktuální');\n}\n\nelse {\n  isActive = true;\n}\n\nreturn {\n  id: $('Loop Over Items').item.json.id,\n  is_active: isActive,\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -172,6 +174,8 @@
       "id": "70de704e-e99d-4253-8c44-40bb17f6b478",
       "name": "Get Raw HTML",
       "alwaysOutputData": true,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "onError": "continueRegularOutput"
     },
     {
@@ -346,7 +350,7 @@
       "typeVersion": 2.6,
       "position": [
         1280,
-        -336
+        -320
       ],
       "id": "53b60322-11a7-4876-b750-3f222d62a16f",
       "name": "update success status",
@@ -384,6 +388,8 @@
       ],
       "id": "5b80d1fc-acf1-4570-aa66-b060642c6174",
       "name": "Get Due Rows",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "postgres": {
           "id": "wub5gbhgKNBgMsXa",
@@ -592,8 +598,8 @@
       }
     ]
   },
-  "versionId": "d24a9716-46de-451e-9e2b-919cf56b1cb2",
-  "activeVersionId": "d24a9716-46de-451e-9e2b-919cf56b1cb2",
+  "versionId": "19408f96-ec90-47ff-8e9d-27152e4b3488",
+  "activeVersionId": "19408f96-ec90-47ff-8e9d-27152e4b3488",
   "triggerCount": 1,
   "shared": [
     {
@@ -605,9 +611,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-20T14:28:56.000Z",
-    "createdAt": "2026-03-20T14:28:54.172Z",
-    "versionId": "d24a9716-46de-451e-9e2b-919cf56b1cb2",
+    "updatedAt": "2026-04-29T07:35:32.821Z",
+    "createdAt": "2026-04-29T07:35:31.977Z",
+    "versionId": "19408f96-ec90-47ff-8e9d-27152e4b3488",
     "workflowId": "f8XfKM6wxcwHySTx",
     "nodes": [
       {
@@ -677,6 +683,7 @@
         ],
         "id": "01b30b26-05c7-468e-9e3e-23eb8490cb54",
         "name": "Update a row",
+        "retryOnFail": true,
         "credentials": {
           "supabaseApi": {
             "id": "qB1TBV7vyX50RGhp",
@@ -714,6 +721,7 @@
         ],
         "id": "73a25cbd-b8ad-4774-9a90-8cc320439cb9",
         "name": "Update a row1",
+        "retryOnFail": true,
         "credentials": {
           "supabaseApi": {
             "id": "qB1TBV7vyX50RGhp",
@@ -735,7 +743,7 @@
       {
         "parameters": {
           "mode": "runOnceForEachItem",
-          "jsCode": "const html = ($json.data);\nconst url = $('Loop Over Items').item.json.job_url;\n\nlet isActive = false;\n\nif (url.includes('linkedin.com')) {\n  isActive = html.includes('apply-button');\n}\n\nelse if (url.includes('startupjobs.cz')) {\n  isActive = !html.includes('Nabídce vypršela platnost nebo již není aktuální');\n}\n\nelse {\n  isActive = true;\n}\n\nreturn {\n  id: $('Loop Over Items').item.json.id,\n  is_active: isActive,\n};"
+          "jsCode": "const html = ($json.data);\nconst url = $('Loop Over Items').item.json.job_url;\n\nlet isActive = false;\n\nif (url.includes('linkedin')) {\n  isActive = html.includes('apply-button');\n}\n\nelse if (url.includes('startupjobs.cz')) {\n  isActive = !html.includes('Nabídce vypršela platnost nebo již není aktuální');\n}\n\nelse {\n  isActive = true;\n}\n\nreturn {\n  id: $('Loop Over Items').item.json.id,\n  is_active: isActive,\n};"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -776,6 +784,8 @@
         "id": "70de704e-e99d-4253-8c44-40bb17f6b478",
         "name": "Get Raw HTML",
         "alwaysOutputData": true,
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
         "onError": "continueRegularOutput"
       },
       {
@@ -950,7 +960,7 @@
         "typeVersion": 2.6,
         "position": [
           1280,
-          -336
+          -320
         ],
         "id": "53b60322-11a7-4876-b750-3f222d62a16f",
         "name": "update success status",
@@ -988,6 +998,8 @@
         ],
         "id": "5b80d1fc-acf1-4570-aa66-b060642c6174",
         "name": "Get Due Rows",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
         "credentials": {
           "postgres": {
             "id": "wub5gbhgKNBgMsXa",
@@ -1159,9 +1171,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version d24a9716",
+    "name": "Version 19408f96",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": [
     {
@@ -1175,12 +1187,6 @@
       "createdAt": "2026-02-17T08:55:44.901Z",
       "id": "KfoxYHbtIHL4mStj",
       "name": "sync"
-    },
-    {
-      "updatedAt": "2026-03-06T08:25:52.467Z",
-      "createdAt": "2026-03-06T08:25:21.473Z",
-      "id": "ddAL7doZ15c2KR1t",
-      "name": "clean_inactive"
     }
   ]
 }
