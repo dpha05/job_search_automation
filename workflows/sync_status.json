@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T08:46:37.632Z",
+  "updatedAt": "2026-05-05T06:21:14.638Z",
   "createdAt": "2026-03-06T12:22:31.762Z",
   "id": "7TRjT3YJDeAlSHqk",
   "name": "sync_status",
@@ -350,6 +350,25 @@
       ],
       "id": "d7817c2a-42ce-449f-a52d-5a49e0074495",
       "name": "Call 'error_global'"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -304,
+        -208
+      ],
+      "id": "d5d7c8eb-e3ee-4f1a-8543-68450d08e007",
+      "name": "Schedule Trigger"
     }
   ],
   "connections": {
@@ -439,6 +458,17 @@
           }
         ]
       ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "update running status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -456,9 +486,9 @@
   },
   "meta": null,
   "pinData": {},
-  "versionId": "ea55a877-c138-44bd-b9b9-e228d660fdb4",
-  "activeVersionId": "ea55a877-c138-44bd-b9b9-e228d660fdb4",
-  "triggerCount": 0,
+  "versionId": "4724b158-8419-4225-a97a-24f69378ee2b",
+  "activeVersionId": "4724b158-8419-4225-a97a-24f69378ee2b",
+  "triggerCount": 1,
   "shared": [
     {
       "updatedAt": "2026-03-06T12:22:31.764Z",
@@ -469,9 +499,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-29T07:35:46.863Z",
-    "createdAt": "2026-04-29T07:35:46.067Z",
-    "versionId": "ea55a877-c138-44bd-b9b9-e228d660fdb4",
+    "updatedAt": "2026-05-05T06:21:20.806Z",
+    "createdAt": "2026-05-05T06:21:14.639Z",
+    "versionId": "4724b158-8419-4225-a97a-24f69378ee2b",
     "workflowId": "7TRjT3YJDeAlSHqk",
     "nodes": [
       {
@@ -818,6 +848,25 @@
         ],
         "id": "d7817c2a-42ce-449f-a52d-5a49e0074495",
         "name": "Call 'error_global'"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 9
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -304,
+          -208
+        ],
+        "id": "d5d7c8eb-e3ee-4f1a-8543-68450d08e007",
+        "name": "Schedule Trigger"
       }
     ],
     "connections": {
@@ -907,12 +956,23 @@
             }
           ]
         ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "update running status",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "d d",
-    "name": "Version ea55a877",
+    "name": "Version 4724b158",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": [
     {
