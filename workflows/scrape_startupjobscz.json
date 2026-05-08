@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T07:34:16.665Z",
+  "updatedAt": "2026-05-05T06:19:27.844Z",
   "createdAt": "2026-03-06T12:06:54.218Z",
   "id": "CmzQ2cHGnb3X3hIZ",
   "name": "scrape_startupjobscz",
@@ -11,8 +11,7 @@
         "rule": {
           "interval": [
             {
-              "triggerAtHour": 8,
-              "triggerAtMinute": 15
+              "triggerAtHour": 8
             }
           ]
         }
@@ -923,8 +922,8 @@
   },
   "meta": null,
   "pinData": {},
-  "versionId": "0a48cd25-a549-4253-8b5c-633db9baccf6",
-  "activeVersionId": "0a48cd25-a549-4253-8b5c-633db9baccf6",
+  "versionId": "7ac6f3b9-6a6d-4b00-858d-ed097855ddbe",
+  "activeVersionId": "7ac6f3b9-6a6d-4b00-858d-ed097855ddbe",
   "triggerCount": 1,
   "shared": [
     {
@@ -936,9 +935,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-29T07:34:17.487Z",
-    "createdAt": "2026-04-29T07:34:16.667Z",
-    "versionId": "0a48cd25-a549-4253-8b5c-633db9baccf6",
+    "updatedAt": "2026-05-05T06:19:28.717Z",
+    "createdAt": "2026-05-05T06:19:27.846Z",
+    "versionId": "7ac6f3b9-6a6d-4b00-858d-ed097855ddbe",
     "workflowId": "CmzQ2cHGnb3X3hIZ",
     "nodes": [
       {
@@ -946,8 +945,7 @@
           "rule": {
             "interval": [
               {
-                "triggerAtHour": 8,
-                "triggerAtMinute": 15
+                "triggerAtHour": 8
               }
             ]
           }
@@ -1844,9 +1842,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version 0a48cd25",
+    "name": "Version 7ac6f3b9",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": [
     {
