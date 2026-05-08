@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T07:35:39.746Z",
+  "updatedAt": "2026-05-05T06:20:30.050Z",
   "createdAt": "2026-03-27T11:57:18.131Z",
   "id": "z38m1K07JSAoJ9TT",
   "name": "sync_last_success",
@@ -12,7 +12,7 @@
           "interval": [
             {
               "field": "cronExpression",
-              "expression": "0 10-23 * * *"
+              "expression": "0 9-23 * * *"
             }
           ]
         }
@@ -413,8 +413,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "8821221b-93ab-4ba3-8dbb-06d599b017b6",
-  "activeVersionId": "8821221b-93ab-4ba3-8dbb-06d599b017b6",
+  "versionId": "fb297aef-3d0d-413b-875a-e8d1aeddab1b",
+  "activeVersionId": "fb297aef-3d0d-413b-875a-e8d1aeddab1b",
   "triggerCount": 1,
   "shared": [
     {
@@ -426,9 +426,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-29T07:35:40.585Z",
-    "createdAt": "2026-04-29T07:35:39.748Z",
-    "versionId": "8821221b-93ab-4ba3-8dbb-06d599b017b6",
+    "updatedAt": "2026-05-05T06:20:32.162Z",
+    "createdAt": "2026-05-05T06:20:30.052Z",
+    "versionId": "fb297aef-3d0d-413b-875a-e8d1aeddab1b",
     "workflowId": "z38m1K07JSAoJ9TT",
     "nodes": [
       {
@@ -437,7 +437,7 @@
             "interval": [
               {
                 "field": "cronExpression",
-                "expression": "0 10-23 * * *"
+                "expression": "0 9-23 * * *"
               }
             ]
           }
@@ -822,9 +822,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version 8821221b",
+    "name": "Version fb297aef",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": [
     {
