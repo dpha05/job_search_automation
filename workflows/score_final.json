@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T07:34:50.220Z",
+  "updatedAt": "2026-05-05T06:31:02.683Z",
   "createdAt": "2026-03-05T09:43:45.214Z",
   "id": "gHdlEKX8TSjpy2ON",
   "name": "score_final",
@@ -244,7 +244,7 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const pillarScore = $input.item.json.final_weighted_score;\nconst bonusScore = $input.item.json.total_score;\nconst mission = $input.item.json.mission_weighted;\nconst responsibility = $input.item.json.responsibility_weighted;\n\nconst pillarMultiplier = 300;\n\nconst pillarScoreMultiplied = Math.round(pillarScore * pillarMultiplier);\nlet finalSumScore = pillarScoreMultiplied + bonusScore;\n\nlet signalTier = 'low';\n\nif (mission >= 0.3 && responsibility >= 0.3) {\n  signalTier = 'rare';\n} else if (finalSumScore >= 400) {\n  signalTier = 'high';\n} else if (finalSumScore >= 280) {\n  signalTier = 'mid';\n}\n\nreturn {\n  signal_tier: signalTier,\n  match_score: finalSumScore,\n  job_url:$('Standardize input').item.json.job_url,\n  metadata: {\n    scores: {\n      mission,\n      responsibility,\n      pillar: pillarScoreMultiplied,\n      bonus: bonusScore,\n    },\n    flags: {\n      remote_5_5: $json.bonus.remote_5_5,\n      remote_4_1: $json.bonus.remote_4_1,\n      remote_3_2: $json.bonus.remote_3_2,\n      salary_120k_plus: $json.bonus.salary_120k_plus,\n      salary_100k_120k: $json.bonus.salary_100k_120k,\n      salary_90k_100k: $json.bonus.salary_90k_100k,\n      team_under_5: $json.bonus.team_under_5,\n      equity: $json.bonus.has_equity,\n      car: $json.bonus.has_car,\n      n8n: $json.bonus.uses_n8n,\n      agents: $json.bonus.uses_agents,\n      result_driven: $json.bonus.is_result_driven,\n      flat_hierarchy: $json.bonus.is_flat_hierarchy\n    }\n  }\n}\n;"
+        "jsCode": "const pillarScore = $input.item.json.final_weighted_score;\nconst bonusScore = $input.item.json.total_score;\nconst mission = $input.item.json.mission_weighted;\nconst responsibility = $input.item.json.responsibility_weighted;\n\nconst pillarMultiplier = 300;\n\nconst pillarScoreMultiplied = Math.round(pillarScore * pillarMultiplier);\nlet finalSumScore = pillarScoreMultiplied + bonusScore;\n\nlet signalTier = 'low';\n\nif (mission >= 0.3 && responsibility >= 0.3) {\n  signalTier = 'rare';\n} else if (finalSumScore >= 450) {\n  signalTier = 'high';\n} else if (finalSumScore >= 280) {\n  signalTier = 'mid';\n}\n\nreturn {\n  signal_tier: signalTier,\n  match_score: finalSumScore,\n  job_url:$('Standardize input').item.json.job_url,\n  metadata: {\n    scores: {\n      mission,\n      responsibility,\n      pillar: pillarScoreMultiplied,\n      bonus: bonusScore,\n    },\n    flags: {\n      remote_5_5: $json.bonus.remote_5_5,\n      remote_4_1: $json.bonus.remote_4_1,\n      remote_3_2: $json.bonus.remote_3_2,\n      salary_120k_plus: $json.bonus.salary_120k_plus,\n      salary_100k_120k: $json.bonus.salary_100k_120k,\n      salary_90k_100k: $json.bonus.salary_90k_100k,\n      team_under_5: $json.bonus.team_under_5,\n      equity: $json.bonus.has_equity,\n      car: $json.bonus.has_car,\n      n8n: $json.bonus.uses_n8n,\n      agents: $json.bonus.uses_agents,\n      result_driven: $json.bonus.is_result_driven,\n      flat_hierarchy: $json.bonus.is_flat_hierarchy\n    }\n  }\n}\n;"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -805,8 +805,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "58c7fa9f-eed3-4dd9-b292-58eac28f3c95",
-  "activeVersionId": "58c7fa9f-eed3-4dd9-b292-58eac28f3c95",
+  "versionId": "744484b1-d065-46b5-ab03-d9013a13f0d7",
+  "activeVersionId": "744484b1-d065-46b5-ab03-d9013a13f0d7",
   "triggerCount": 0,
   "shared": [
     {
@@ -818,9 +818,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-29T07:34:51.206Z",
-    "createdAt": "2026-04-29T07:34:50.221Z",
-    "versionId": "58c7fa9f-eed3-4dd9-b292-58eac28f3c95",
+    "updatedAt": "2026-05-05T06:31:03.609Z",
+    "createdAt": "2026-05-05T06:31:02.684Z",
+    "versionId": "744484b1-d065-46b5-ab03-d9013a13f0d7",
     "workflowId": "gHdlEKX8TSjpy2ON",
     "nodes": [
       {
@@ -1061,7 +1061,7 @@
       {
         "parameters": {
           "mode": "runOnceForEachItem",
-          "jsCode": "const pillarScore = $input.item.json.final_weighted_score;\nconst bonusScore = $input.item.json.total_score;\nconst mission = $input.item.json.mission_weighted;\nconst responsibility = $input.item.json.responsibility_weighted;\n\nconst pillarMultiplier = 300;\n\nconst pillarScoreMultiplied = Math.round(pillarScore * pillarMultiplier);\nlet finalSumScore = pillarScoreMultiplied + bonusScore;\n\nlet signalTier = 'low';\n\nif (mission >= 0.3 && responsibility >= 0.3) {\n  signalTier = 'rare';\n} else if (finalSumScore >= 400) {\n  signalTier = 'high';\n} else if (finalSumScore >= 280) {\n  signalTier = 'mid';\n}\n\nreturn {\n  signal_tier: signalTier,\n  match_score: finalSumScore,\n  job_url:$('Standardize input').item.json.job_url,\n  metadata: {\n    scores: {\n      mission,\n      responsibility,\n      pillar: pillarScoreMultiplied,\n      bonus: bonusScore,\n    },\n    flags: {\n      remote_5_5: $json.bonus.remote_5_5,\n      remote_4_1: $json.bonus.remote_4_1,\n      remote_3_2: $json.bonus.remote_3_2,\n      salary_120k_plus: $json.bonus.salary_120k_plus,\n      salary_100k_120k: $json.bonus.salary_100k_120k,\n      salary_90k_100k: $json.bonus.salary_90k_100k,\n      team_under_5: $json.bonus.team_under_5,\n      equity: $json.bonus.has_equity,\n      car: $json.bonus.has_car,\n      n8n: $json.bonus.uses_n8n,\n      agents: $json.bonus.uses_agents,\n      result_driven: $json.bonus.is_result_driven,\n      flat_hierarchy: $json.bonus.is_flat_hierarchy\n    }\n  }\n}\n;"
+          "jsCode": "const pillarScore = $input.item.json.final_weighted_score;\nconst bonusScore = $input.item.json.total_score;\nconst mission = $input.item.json.mission_weighted;\nconst responsibility = $input.item.json.responsibility_weighted;\n\nconst pillarMultiplier = 300;\n\nconst pillarScoreMultiplied = Math.round(pillarScore * pillarMultiplier);\nlet finalSumScore = pillarScoreMultiplied + bonusScore;\n\nlet signalTier = 'low';\n\nif (mission >= 0.3 && responsibility >= 0.3) {\n  signalTier = 'rare';\n} else if (finalSumScore >= 450) {\n  signalTier = 'high';\n} else if (finalSumScore >= 280) {\n  signalTier = 'mid';\n}\n\nreturn {\n  signal_tier: signalTier,\n  match_score: finalSumScore,\n  job_url:$('Standardize input').item.json.job_url,\n  metadata: {\n    scores: {\n      mission,\n      responsibility,\n      pillar: pillarScoreMultiplied,\n      bonus: bonusScore,\n    },\n    flags: {\n      remote_5_5: $json.bonus.remote_5_5,\n      remote_4_1: $json.bonus.remote_4_1,\n      remote_3_2: $json.bonus.remote_3_2,\n      salary_120k_plus: $json.bonus.salary_120k_plus,\n      salary_100k_120k: $json.bonus.salary_100k_120k,\n      salary_90k_100k: $json.bonus.salary_90k_100k,\n      team_under_5: $json.bonus.team_under_5,\n      equity: $json.bonus.has_equity,\n      car: $json.bonus.has_car,\n      n8n: $json.bonus.uses_n8n,\n      agents: $json.bonus.uses_agents,\n      result_driven: $json.bonus.is_result_driven,\n      flat_hierarchy: $json.bonus.is_flat_hierarchy\n    }\n  }\n}\n;"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -1610,9 +1610,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version 58c7fa9f",
+    "name": "Version 744484b1",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": [
     {
