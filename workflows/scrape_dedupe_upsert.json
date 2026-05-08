@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T07:34:01.636Z",
+  "updatedAt": "2026-05-07T07:46:30.423Z",
   "createdAt": "2026-01-23T07:30:24.776Z",
   "id": "NBCVFrfmAz4h6S1a",
   "name": "scrape_dedupe_upsert",
@@ -518,7 +518,7 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT id \nFROM job_leads \nWHERE job_title = '{{ $json.jobTitle }}'\nAND company_name = '{{ $json.companyName }}'\nLIMIT 1;",
+        "query": "SELECT id \nFROM job_leads \nWHERE job_title = '{{ $json.jobTitle.replace(\"'\", \"''\") }}'\nAND company_name = '{{ $json.companyName.replace(\"'\", \"''\") }}'\nLIMIT 1;",
         "options": {}
       },
       "type": "n8n-nodes-base.postgres",
@@ -730,7 +730,8 @@
     "timeSavedMode": "fixed",
     "timezone": "Europe/Prague",
     "callerPolicy": "workflowsFromSameOwner",
-    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg"
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg",
+    "binaryMode": "separate"
   },
   "staticData": null,
   "meta": {
@@ -740,22 +741,25 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "jobId": "4394982072",
-          "jobTitle": "Key Account Executive - SaaS",
-          "jobUrl": "https://de.linkedin.com/jobs/view/key-account-executive-saas-at-arrow-electronics-4394982072?refId=gwrh96DkwvUjZ%2FdSwPAASw%3D%3D&trackingId=KUF%2FqW5doRiHEQofqTwcCA%3D%3D&position=3&pageNum=0",
-          "companyName": "Arrow Electronics",
-          "companyUrl": "https://www.linkedin.com/company/arrow-electronics?trk=public_jobs_jserp-result_job-search-card-subtitle",
-          "companyLogo": "https://media.licdn.com/dms/image/v2/C4E0BAQE9izZrjummQQ/company-logo_100_100/company-logo_100_100/0/1679065099095/arrow_electronics_logo?e=1778716800&v=beta&t=-0gHkVUwaBviYDJUzjgl0DvD2bGtS7nuMeOUXpR22V8",
-          "publishedAt": "2026-04-23T14:18:18.000Z",
-          "applyUrl": "https://careers.arrow.com/us/en/job/R242068/Key-Account-Executive---SaaS",
-          "location": "Germany",
-          "contractType": "Full-time",
-          "experienceLevel": "Mid-Senior level",
-          "jobDescription": "Position\n\nKey Account Executive - SaaS\n\nJob Description\n\nKey Account Executive - SaaS\n\nJoin the Team Powering Trusted Intelligence\n\nAt SiliconExpert, we’re transforming one of the world’s most complex systems through software — the global electronics supply chain.\n\nFor decades, engineers and procurement teams have battled overwhelming data, disconnected systems, and constant disruption. Our mission is to bring clarity to that complexity. With Trusted Intelligence, we’re empowering innovators with the foresight to make confident decisions that keep industries moving forward.\n\nAnd now, we’re growing.\n\nWe’re hiring SaaS sales professionals who are energized by solving big challenges, passionate about technology, and ready to help customers turn intelligence into action.\n\nIf C-level executives call you to solve their biggest business problems, and your personal mission is to impact how the world designs, builds, and delivers—let’s talk.\n\nJoin us. When intelligence is trusted, innovation never stops.\n\nPosition Overview: The SaaS Key Account Executive at SiliconExpert will be responsible for managing and growing relationships with key clients, ensuring their needs are met while driving revenue growth. This role requires a strategic thinker with excellent communication skills, a deep understanding of the assigned industry and/or electronics industry, and the ability to deliver tailored SaaS and data centric solutions to clients.\n\nKey Responsibilities\n\nDevelop and maintain strong relationships with our largest and most strategic accounts, including senior level stakeholders.Identify, qualify, and close strategic sales opportunities across your assigned accounts to drive global expansion and grow net revenue retention.Collaborate with internal teams, including sales, marketing, partnerships, and product development, to ensure client satisfaction and successful project delivery.Collaborate with partners to help uncover, position, and sell complex solutions which solve end to end workflows.Monitor market trends and competitor activities to identify new opportunities for growth.Understand and represent the voice of the customer to help shape product roadmap, and new strategic offerings.Prepare and deliver presentations, proposals, and reports to clients and senior stakeholders both remotely and on-site.Meet or exceed sales targets and contribute to the overall business objectives of SiliconExpert.\n\nQualifications\n\nBachelor's degree in Business, Marketing, or a related field; MBA is a plus.5-8 Years of SaaS sales experience; experience managing/selling into large/strategic customers a must.Experience/understanding of electrical components as they relate to one or more of the following industries is a major advantage: medical devices/healthcare, automotive/transportation, industrial manufacturing, semi-conductors, or contract manufacturing.Experience selling data/AI solutions a major plus.Experience closing 6 and/or 7 figure deal sizes (annualized) a must.Experience with MEDDIC or other sales methodology for selling into large, complex accounts.Proven experience selling complex solutions which include cross-functional alignment, and VP level or above signatory.Strong negotiation, problem-solving, and interpersonal skills.Naturally curious, emotionally intelligent, and willing to learn.Ability to analyze data and market trends to make informed decisions.Proficiency in CRM software (Salesforce, Hubspot) and Microsoft Office Suite.Willingness to travel as required.\n\nWhat is in it for you? \n\nAttractive employee compensation package - salary consists of base and variable compensation Company carReliable & trusting work environment Remote employment contractCooperative team with flat structures and communicationProfessional and personal development\n\nArrow is an equal opportunity employer and is committed to creating a diverse working environment by providing equal employment opportunities for all qualified persons.\n\nLocation:\n\nDE-Germany - Remote\n\nTime Type\n\nFull time\n\nJob Category\n\nSales\n\n",
-          "sector": "Sales and Business Development",
-          "workMode": "Remote",
-          "employmentType": "Full-time",
-          "source": "linkedin"
+          "jobId": "d2f9dc93-d10e-45b7-9217-32d8ef6a53f9",
+          "jobTitle": "IT Automation Engineer",
+          "jobUrl": "https://jobs.ashbyhq.com/hilberts/15ac92cf-a46d-49cf-9e31-71a2864229b4",
+          "companyName": "Hilbert's AI",
+          "companyUrl": "hilberts.ai",
+          "companyLogo": "",
+          "publishedAt": "2026-05-06T23:13:47.000Z",
+          "applyUrl": "",
+          "location": "Berlin / remote",
+          "contractType": "",
+          "experienceLevel": "",
+          "jobDescription": "The Mission: Build the Internal OS for Autonomous Growth At Hilbert’s AI, we shorten \"months\" to \"minutes.\" That speed shouldn't just apply to our customers—it must be our internal reality. We are looking for an IT Automation Engineer who views internal processes as a product and manual tasks as technical debt. You aren't just \"managing\" IT; you are building the \"Internal Operating System\" of the company. We don’t automate processes just to check a compliance box; we do it because manual execution is a failure of design. You will own the end-to-end lifecycle of every tool, identity, and access point, ensuring that as we scale, our overhead stays at zero. The Hard Problem: Zero-Touch Scaling In a traditional company, onboarding a new engineer takes days of manual provisioning. At Hilbert, that is unacceptable. The challenge is building a \"Zero-Touch\" environment where identity, security, and hardware management are orchestrated via code. You must balance the \"Move Fast\" culture of a startup with the \"Lockdown\" requirements of a Fortune 500 enterprise. Our Current Hurdles Identity Orchestration: We need our identity stack (Okta/Google/SAML) to be a source of truth that triggers everything from Slack channel invites to AWS IAM roles automatically. The Compliance Paradox: We view SOC2 and ISO27001 not as paperwork, but as an engineering challenge. You will build the systems that collect evidence and enforce security policies in real-time, so audits become a non-event. SaaS Sprawl Control: We use a high-performance stack (Linear, Slack, Notion, GitHub, etc.). You will build the integrations and \"Glue Code\" that ensure these tools talk to each other and that access is revoked or granted instantly based on role. Hardware as Code: Whether an employee is in San Francisco, Istanbul, or London, their machine should arrive pre-configured, encrypted, and ready to push code in 5 minutes. You’ll own the MDM (Mobile Device Management) automation. Who You Are (The Profile) The \"Automation First\" Skeptic: If you have to do something twice, you’re already writing a script to do it a third time. You find manual dashboards offensive. The IT Software Engineer: You are comfortable in Python, or Javascript . You don't just use tools; you hit their APIs to build custom workflows. You understand GitOps and believe IT infrastructure should be version-controlled. Architectural Mindset: You understand the \"Why\" behind security. You know that a convoluted password policy is less effective than a well-implemented WebAuth / Passkey flow. Ambiguity Enthusiast: We are growing fast. You won't have a manual. You are the person who writes the manual by building the system that makes the manual obsolete. What You’ll Own Lifecycle Automation: Design and maintain the systems that handle the full employee lifecycle (Joiners/Movers/Leavers) with minimal manual intervention. Security Infrastructure: Own the implementation of Zero Trust architecture, VPN setups, and automated vulnerability scanning across our fleet. Tooling Ecosystem: Act as the \"Product Manager\" for our internal stack. Evaluate, deploy, and automate the \"correct\" tools, not just the easiest ones. Internal Superpowers: Build custom Slack bots or internal CLI tools that allow our engineers to self-serve their IT needs without ever opening a ticket. Bonus Points Infrastructure as Code (IaC): You’ve used Terraform or Pulumi to manage SaaS providers or cloud resources. Security Pro: You have experience navigating a SOC2 audit by using automation tools. API Junkie: You have a portfolio of \"glue\" scripts (Zapier, n8n, or custom scripts) that have saved teams hundreds of hours. Apple Ecosystem Mastery: Deep knowledge of MDM platforms. Location San Francisco, Europe, or Istanbul. At least 5 hours overlap with PST timezone (7am-5pm). Compensation Competitive salary + equity package. Performance-based bonuses tied to the efficiency and \"uptime\" of our internal systems. The Hiring Journey Short form → Intro Call → Automation/Scripting Challenge → Team conversations → Offer Fast, human, no bureaucracy.",
+          "salaryInfo": [],
+          "posterFullName": "",
+          "posterProfileUrl": "",
+          "sector": "",
+          "workMode": "",
+          "employmentType": "",
+          "source": "trueup"
         },
         "pairedItem": {
           "item": 0
@@ -763,8 +767,8 @@
       }
     ]
   },
-  "versionId": "d4ab9369-f2e4-42af-b339-5477dce444db",
-  "activeVersionId": "d4ab9369-f2e4-42af-b339-5477dce444db",
+  "versionId": "51500b93-fad9-4c76-8607-501a141a7000",
+  "activeVersionId": "51500b93-fad9-4c76-8607-501a141a7000",
   "triggerCount": 0,
   "shared": [
     {
@@ -776,9 +780,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-29T07:34:02.555Z",
-    "createdAt": "2026-04-29T07:34:01.638Z",
-    "versionId": "d4ab9369-f2e4-42af-b339-5477dce444db",
+    "updatedAt": "2026-05-07T07:46:51.932Z",
+    "createdAt": "2026-05-07T07:46:29.883Z",
+    "versionId": "51500b93-fad9-4c76-8607-501a141a7000",
     "workflowId": "NBCVFrfmAz4h6S1a",
     "nodes": [
       {
@@ -1293,7 +1297,7 @@
       {
         "parameters": {
           "operation": "executeQuery",
-          "query": "SELECT id \nFROM job_leads \nWHERE job_title = '{{ $json.jobTitle }}'\nAND company_name = '{{ $json.companyName }}'\nLIMIT 1;",
+          "query": "SELECT id \nFROM job_leads \nWHERE job_title = '{{ $json.jobTitle.replace(\"'\", \"''\") }}'\nAND company_name = '{{ $json.companyName.replace(\"'\", \"''\") }}'\nLIMIT 1;",
           "options": {}
         },
         "type": "n8n-nodes-base.postgres",
@@ -1500,7 +1504,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version d4ab9369",
+    "name": "Version 51500b93",
     "description": "",
     "autosaved": false
   },
