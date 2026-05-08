@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T08:47:25.634Z",
+  "updatedAt": "2026-05-05T06:20:14.721Z",
   "createdAt": "2026-03-06T12:17:00.099Z",
   "id": "f8XfKM6wxcwHySTx",
   "name": "sync_clean_inactive",
@@ -11,8 +11,7 @@
         "rule": {
           "interval": [
             {
-              "triggerAtHour": 9,
-              "triggerAtMinute": 10
+              "triggerAtHour": 9
             }
           ]
         }
@@ -598,8 +597,8 @@
       }
     ]
   },
-  "versionId": "19408f96-ec90-47ff-8e9d-27152e4b3488",
-  "activeVersionId": "19408f96-ec90-47ff-8e9d-27152e4b3488",
+  "versionId": "492818c0-c06c-47da-bd37-98aff8a9edec",
+  "activeVersionId": "492818c0-c06c-47da-bd37-98aff8a9edec",
   "triggerCount": 1,
   "shared": [
     {
@@ -611,9 +610,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-29T07:35:32.821Z",
-    "createdAt": "2026-04-29T07:35:31.977Z",
-    "versionId": "19408f96-ec90-47ff-8e9d-27152e4b3488",
+    "updatedAt": "2026-05-05T06:20:15.999Z",
+    "createdAt": "2026-05-05T06:20:14.723Z",
+    "versionId": "492818c0-c06c-47da-bd37-98aff8a9edec",
     "workflowId": "f8XfKM6wxcwHySTx",
     "nodes": [
       {
@@ -621,8 +620,7 @@
           "rule": {
             "interval": [
               {
-                "triggerAtHour": 9,
-                "triggerAtMinute": 10
+                "triggerAtHour": 9
               }
             ]
           }
@@ -1171,9 +1169,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version 19408f96",
+    "name": "Version 492818c0",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": [
     {
