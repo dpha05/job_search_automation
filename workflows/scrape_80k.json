@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T07:33:50.683Z",
+  "updatedAt": "2026-05-05T06:19:16.073Z",
   "createdAt": "2026-03-30T13:48:44.213Z",
   "id": "bwoDzWtxf2Y9ZtCQ",
   "name": "scrape_80k",
@@ -436,8 +436,7 @@
         "rule": {
           "interval": [
             {
-              "triggerAtHour": 8,
-              "triggerAtMinute": 7
+              "triggerAtHour": 8
             }
           ]
         }
@@ -958,8 +957,8 @@
       }
     ]
   },
-  "versionId": "57b5c36e-6e04-4ce8-b847-017084a3cb33",
-  "activeVersionId": "57b5c36e-6e04-4ce8-b847-017084a3cb33",
+  "versionId": "8667be54-c6f3-410c-bbf4-e185c312e188",
+  "activeVersionId": "8667be54-c6f3-410c-bbf4-e185c312e188",
   "triggerCount": 1,
   "shared": [
     {
@@ -971,9 +970,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-29T07:33:52.085Z",
-    "createdAt": "2026-04-29T07:33:50.685Z",
-    "versionId": "57b5c36e-6e04-4ce8-b847-017084a3cb33",
+    "updatedAt": "2026-05-05T06:19:17.489Z",
+    "createdAt": "2026-05-05T06:19:16.075Z",
+    "versionId": "8667be54-c6f3-410c-bbf4-e185c312e188",
     "workflowId": "bwoDzWtxf2Y9ZtCQ",
     "nodes": [
       {
@@ -1406,8 +1405,7 @@
           "rule": {
             "interval": [
               {
-                "triggerAtHour": 8,
-                "triggerAtMinute": 7
+                "triggerAtHour": 8
               }
             ]
           }
@@ -1900,9 +1898,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version 57b5c36e",
+    "name": "Version 8667be54",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": [
     {
