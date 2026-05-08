@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T07:45:44.603Z",
+  "updatedAt": "2026-05-05T06:19:01.514Z",
   "createdAt": "2026-04-09T05:08:27.839Z",
   "id": "kcE1S4NAllBaR6zT",
   "name": "scrape_linkedin_main",
@@ -11,8 +11,7 @@
         "rule": {
           "interval": [
             {
-              "triggerAtHour": 8,
-              "triggerAtMinute": 20
+              "triggerAtHour": 8
             }
           ]
         }
@@ -289,7 +288,7 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const inputPrevious = $input.item.json;\n\nconst keywords = [\n  \"AI engineer\",\n  \"AI solutions\",\n  \"AI Agent\",\n  \"AI consultant\",\n  \"n8n\",\n  \"MLOps\",\n];\n\nconst url_keywords = keywords.map(k => encodeURIComponent(k));\n\nreturn {\n  ...inputPrevious,\n  url_keywords \n};"
+        "jsCode": "const inputPrevious = $input.item.json;\n\nconst keywords = [\n  \"AI engineer\",\n  \"AI solutions\",\n  \"AI Agent\",\n  \"AI consultant\",\n  \"n8n\",\n  \"MLOps\",\n  \"Automation engineer\"\n];\n\nconst url_keywords = keywords.map(k => encodeURIComponent(k));\n\nreturn {\n  ...inputPrevious,\n  url_keywords \n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -506,8 +505,8 @@
       }
     ]
   },
-  "versionId": "841e5611-0eb3-41be-830a-b917561e757a",
-  "activeVersionId": "841e5611-0eb3-41be-830a-b917561e757a",
+  "versionId": "4ceaf938-0370-416e-900d-96610e5783f0",
+  "activeVersionId": "4ceaf938-0370-416e-900d-96610e5783f0",
   "triggerCount": 1,
   "shared": [
     {
@@ -519,9 +518,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-29T07:45:47.333Z",
-    "createdAt": "2026-04-29T07:45:28.056Z",
-    "versionId": "841e5611-0eb3-41be-830a-b917561e757a",
+    "updatedAt": "2026-05-05T06:19:07.656Z",
+    "createdAt": "2026-05-05T06:19:01.517Z",
+    "versionId": "4ceaf938-0370-416e-900d-96610e5783f0",
     "workflowId": "kcE1S4NAllBaR6zT",
     "nodes": [
       {
@@ -529,8 +528,7 @@
           "rule": {
             "interval": [
               {
-                "triggerAtHour": 8,
-                "triggerAtMinute": 20
+                "triggerAtHour": 8
               }
             ]
           }
@@ -807,7 +805,7 @@
       {
         "parameters": {
           "mode": "runOnceForEachItem",
-          "jsCode": "const inputPrevious = $input.item.json;\n\nconst keywords = [\n  \"AI engineer\",\n  \"AI solutions\",\n  \"AI Agent\",\n  \"AI consultant\",\n  \"n8n\",\n  \"MLOps\",\n];\n\nconst url_keywords = keywords.map(k => encodeURIComponent(k));\n\nreturn {\n  ...inputPrevious,\n  url_keywords \n};"
+          "jsCode": "const inputPrevious = $input.item.json;\n\nconst keywords = [\n  \"AI engineer\",\n  \"AI solutions\",\n  \"AI Agent\",\n  \"AI consultant\",\n  \"n8n\",\n  \"MLOps\",\n  \"Automation engineer\"\n];\n\nconst url_keywords = keywords.map(k => encodeURIComponent(k));\n\nreturn {\n  ...inputPrevious,\n  url_keywords \n};"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -987,7 +985,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 841e5611",
+    "name": "Version 4ceaf938",
     "description": "",
     "autosaved": true
   },
