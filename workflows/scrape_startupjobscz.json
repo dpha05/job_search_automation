@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T06:19:27.844Z",
+  "updatedAt": "2026-05-11T06:21:02.436Z",
   "createdAt": "2026-03-06T12:06:54.218Z",
   "id": "CmzQ2cHGnb3X3hIZ",
   "name": "scrape_startupjobscz",
@@ -11,7 +11,8 @@
         "rule": {
           "interval": [
             {
-              "triggerAtHour": 8
+              "triggerAtHour": 8,
+              "triggerAtMinute": 10
             }
           ]
         }
@@ -913,7 +914,8 @@
     "timeSavedMode": "fixed",
     "timezone": "Europe/Prague",
     "executionOrder": "v1",
-    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg"
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg",
+    "binaryMode": "separate"
   },
   "staticData": {
     "node:Schedule Trigger": {
@@ -922,8 +924,8 @@
   },
   "meta": null,
   "pinData": {},
-  "versionId": "7ac6f3b9-6a6d-4b00-858d-ed097855ddbe",
-  "activeVersionId": "7ac6f3b9-6a6d-4b00-858d-ed097855ddbe",
+  "versionId": "0720aa0f-a757-4e20-88fb-2bec290595af",
+  "activeVersionId": "0720aa0f-a757-4e20-88fb-2bec290595af",
   "triggerCount": 1,
   "shared": [
     {
@@ -935,9 +937,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-05T06:19:28.717Z",
-    "createdAt": "2026-05-05T06:19:27.846Z",
-    "versionId": "7ac6f3b9-6a6d-4b00-858d-ed097855ddbe",
+    "updatedAt": "2026-05-11T06:21:04.087Z",
+    "createdAt": "2026-05-11T06:21:02.438Z",
+    "versionId": "0720aa0f-a757-4e20-88fb-2bec290595af",
     "workflowId": "CmzQ2cHGnb3X3hIZ",
     "nodes": [
       {
@@ -945,7 +947,8 @@
           "rule": {
             "interval": [
               {
-                "triggerAtHour": 8
+                "triggerAtHour": 8,
+                "triggerAtMinute": 10
               }
             ]
           }
@@ -1842,7 +1845,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 7ac6f3b9",
+    "name": "Version 0720aa0f",
     "description": "",
     "autosaved": true
   },
