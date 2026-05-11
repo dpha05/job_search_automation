@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-08T07:36:00.753Z",
+  "updatedAt": "2026-05-11T13:19:48.287Z",
   "createdAt": "2026-04-01T07:32:52.973Z",
   "id": "6ZaKoDnZGnMsZnWr",
   "name": "score_filter_title_description",
@@ -8,7 +8,7 @@
   "nodes": [
     {
       "parameters": {
-        "jsCode": "const items = $('Standardize input').all();\n\nconst hardReject = [\n'director', 'assistant', 'recruiter', 'intern',  'stáž', 'graduate', 'account manager', 'account executive', 'head', 'sales representative', 'ředitel', 'vedoucí', 'legal', 'prodej','seo', 'lead', 'principal', 'staff', 'part-time', 'part time', 'junior', 'fde', 'student', 'sales executive', 'chief', 'research',\n\n'java', 'php', 'c++', 'c#', '.net', 'kotlin', 'rust', 'golang', 'ios', 'android', 'swift', 'react native', 'qa automation', 'test automation', 'kubernetes', 'manual tester', 'ruby', 'fullstack', 'full-stack', 'full stack'\n];\n\nreturn items.map(item => {\n  const title = (item.json.job_title || \"\").toLowerCase();\n\n  let newStatus = 'filtered';\n  \n  const isHardReject = hardReject.some(word => title.includes(word));\n  \n  if (isHardReject) {\n    newStatus = 'rejected_title';\n  }\n  else {\n    newStatus = 'passed_title';\n  }\n\n  return {\n    json: {\n      ...item.json,\n      status: newStatus,\n    }\n  };\n});"
+        "jsCode": "const items = $('Standardize input').all();\n\nconst hardReject = [\n'director', 'assistant', 'recruiter', 'intern',  'stáž', 'graduate', 'account manager', 'account executive', 'head', 'sales representative', 'ředitel', 'vedoucí', 'legal', 'prodej','seo', 'lead', 'principal', 'staff', 'part-time', 'part time', 'junior', 'fde', 'student', 'sales executive', 'chief', 'research', 'founding',\n\n'java', 'php', 'c++', 'c#', '.net', 'kotlin', 'rust', 'golang', 'ios', 'android', 'swift', 'react native', 'qa automation', 'test automation', 'kubernetes', 'manual tester', 'ruby', 'fullstack', 'full-stack', 'full stack'\n];\n\nreturn items.map(item => {\n  const title = (item.json.job_title || \"\").toLowerCase();\n\n  let newStatus = 'filtered';\n  \n  const isHardReject = hardReject.some(word => title.includes(word));\n  \n  if (isHardReject) {\n    newStatus = 'rejected_title';\n  }\n  else {\n    newStatus = 'passed_title';\n  }\n\n  return {\n    json: {\n      ...item.json,\n      status: newStatus,\n    }\n  };\n});"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -527,8 +527,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "5a74009e-57f9-4cb7-8ba1-85830b6b9535",
-  "activeVersionId": "5a74009e-57f9-4cb7-8ba1-85830b6b9535",
+  "versionId": "ae9434ca-c3da-47f7-8a0a-341ef30f061d",
+  "activeVersionId": "ae9434ca-c3da-47f7-8a0a-341ef30f061d",
   "triggerCount": 0,
   "shared": [
     {
@@ -540,14 +540,14 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-08T07:36:03.699Z",
-    "createdAt": "2026-05-08T07:36:00.755Z",
-    "versionId": "5a74009e-57f9-4cb7-8ba1-85830b6b9535",
+    "updatedAt": "2026-05-11T13:19:52.418Z",
+    "createdAt": "2026-05-11T13:19:48.288Z",
+    "versionId": "ae9434ca-c3da-47f7-8a0a-341ef30f061d",
     "workflowId": "6ZaKoDnZGnMsZnWr",
     "nodes": [
       {
         "parameters": {
-          "jsCode": "const items = $('Standardize input').all();\n\nconst hardReject = [\n'director', 'assistant', 'recruiter', 'intern',  'stáž', 'graduate', 'account manager', 'account executive', 'head', 'sales representative', 'ředitel', 'vedoucí', 'legal', 'prodej','seo', 'lead', 'principal', 'staff', 'part-time', 'part time', 'junior', 'fde', 'student', 'sales executive', 'chief', 'research',\n\n'java', 'php', 'c++', 'c#', '.net', 'kotlin', 'rust', 'golang', 'ios', 'android', 'swift', 'react native', 'qa automation', 'test automation', 'kubernetes', 'manual tester', 'ruby', 'fullstack', 'full-stack', 'full stack'\n];\n\nreturn items.map(item => {\n  const title = (item.json.job_title || \"\").toLowerCase();\n\n  let newStatus = 'filtered';\n  \n  const isHardReject = hardReject.some(word => title.includes(word));\n  \n  if (isHardReject) {\n    newStatus = 'rejected_title';\n  }\n  else {\n    newStatus = 'passed_title';\n  }\n\n  return {\n    json: {\n      ...item.json,\n      status: newStatus,\n    }\n  };\n});"
+          "jsCode": "const items = $('Standardize input').all();\n\nconst hardReject = [\n'director', 'assistant', 'recruiter', 'intern',  'stáž', 'graduate', 'account manager', 'account executive', 'head', 'sales representative', 'ředitel', 'vedoucí', 'legal', 'prodej','seo', 'lead', 'principal', 'staff', 'part-time', 'part time', 'junior', 'fde', 'student', 'sales executive', 'chief', 'research', 'founding',\n\n'java', 'php', 'c++', 'c#', '.net', 'kotlin', 'rust', 'golang', 'ios', 'android', 'swift', 'react native', 'qa automation', 'test automation', 'kubernetes', 'manual tester', 'ruby', 'fullstack', 'full-stack', 'full stack'\n];\n\nreturn items.map(item => {\n  const title = (item.json.job_title || \"\").toLowerCase();\n\n  let newStatus = 'filtered';\n  \n  const isHardReject = hardReject.some(word => title.includes(word));\n  \n  if (isHardReject) {\n    newStatus = 'rejected_title';\n  }\n  else {\n    newStatus = 'passed_title';\n  }\n\n  return {\n    json: {\n      ...item.json,\n      status: newStatus,\n    }\n  };\n});"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -1053,7 +1053,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 5a74009e",
+    "name": "Version ae9434ca",
     "description": "",
     "autosaved": true
   },
