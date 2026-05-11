@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T07:34:30.954Z",
+  "updatedAt": "2026-05-11T06:20:24.155Z",
   "createdAt": "2026-03-13T09:00:43.409Z",
   "id": "uwgMqfMmHqoIMgocF5zaH",
   "name": "scrape_trueup",
@@ -781,7 +781,8 @@
         "rule": {
           "interval": [
             {
-              "triggerAtHour": 8
+              "triggerAtHour": 8,
+              "triggerAtMinute": 5
             }
           ]
         }
@@ -1363,8 +1364,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "4b24df46-bc03-4c71-940f-7bba9d7bf468",
-  "activeVersionId": "4b24df46-bc03-4c71-940f-7bba9d7bf468",
+  "versionId": "7fa6d464-c097-4ec5-a044-9fd1dbc9ed13",
+  "activeVersionId": "7fa6d464-c097-4ec5-a044-9fd1dbc9ed13",
   "triggerCount": 1,
   "shared": [
     {
@@ -1376,9 +1377,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-29T07:34:31.986Z",
-    "createdAt": "2026-04-29T07:34:30.955Z",
-    "versionId": "4b24df46-bc03-4c71-940f-7bba9d7bf468",
+    "updatedAt": "2026-05-11T06:20:24.157Z",
+    "createdAt": "2026-05-11T06:20:24.157Z",
+    "versionId": "7fa6d464-c097-4ec5-a044-9fd1dbc9ed13",
     "workflowId": "uwgMqfMmHqoIMgocF5zaH",
     "nodes": [
       {
@@ -2156,7 +2157,8 @@
           "rule": {
             "interval": [
               {
-                "triggerAtHour": 8
+                "triggerAtHour": 8,
+                "triggerAtMinute": 5
               }
             ]
           }
@@ -2721,9 +2723,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version 4b24df46",
-    "description": "",
-    "autosaved": false
+    "name": null,
+    "description": null,
+    "autosaved": true
   },
   "tags": [
     {
