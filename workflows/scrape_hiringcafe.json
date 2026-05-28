@@ -1,0 +1,2988 @@
+{
+  "updatedAt": "2026-05-27T08:02:35.088Z",
+  "createdAt": "2026-05-21T06:50:22.364Z",
+  "id": "mlWiyg2HcVQmPbFu",
+  "name": "scrape_hiringcafe",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "fieldToSplitOut": "pageProps.ssrHits",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        16,
+        -912
+      ],
+      "id": "a19304ae-9a76-47a0-b13c-431068f5dc2d",
+      "name": "Split Out",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "job_leads",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "={{ $json.apply_url }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        464,
+        -992
+      ],
+      "id": "9d1c042a-cbf8-40f6-a7f1-890ee22260ac",
+      "name": "Check for dupes",
+      "alwaysOutputData": false,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "job_url",
+              "field2": "url"
+            }
+          ]
+        },
+        "joinMode": "keepNonMatches",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        688,
+        -912
+      ],
+      "id": "6756b738-b7cf-421c-8c55-856d9faa9adc",
+      "name": "Keep non-dupes",
+      "executeOnce": false,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1136,
+        -848
+      ],
+      "id": "b0b975da-b7ec-47f9-9984-9f86d3ee4df4",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "const platformName = \"hiringcafe\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2704,
+        -1056
+      ],
+      "id": "627f8092-e245-4173-8b9c-f780864387a2",
+      "name": "add source"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
+              "name": "jobId",
+              "value": "={{ $('Switch').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
+              "name": "jobTitle",
+              "value": "={{ $('Switch').item.json.job_information.title }}",
+              "type": "string"
+            },
+            {
+              "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
+              "name": "jobUrl",
+              "value": "={{ $('Switch').item.json.apply_url }}",
+              "type": "string"
+            },
+            {
+              "id": "a7609c01-4e31-43a0-940d-b97171f0123a",
+              "name": "companyName",
+              "value": "={{ $('Switch').item.json.board_token }}",
+              "type": "string"
+            },
+            {
+              "id": "51e71c18-177a-4370-a63d-25f8001fce8e",
+              "name": "companyUrl",
+              "value": "={{ $('Switch').item.json.enriched_company_data.homepage_uri }}",
+              "type": "string"
+            },
+            {
+              "id": "ce6bae6a-2e69-4671-b2d3-08f6ff27fd81",
+              "name": "companyLogo",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "0103b2e7-89df-48b2-a1dc-4b91932b8495",
+              "name": "publishedAt",
+              "value": "={{ $('Switch').item.json.v5_processed_job_data.estimated_publish_date }}",
+              "type": "string"
+            },
+            {
+              "id": "b8611d60-09ec-409e-a0c0-8a6d7da87ea0",
+              "name": "applyUrl",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "008246ee-3829-4a26-af95-544f914e1fe9",
+              "name": "location",
+              "value": "={{ $('Switch').item.json.v5_processed_job_data.workplace_countries[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "949e43c8-0db8-420e-a39d-6be73d8c5efc",
+              "name": "contractType",
+              "value": "={{ $('Switch').item.json.v5_processed_job_data.commitment[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "7e313d83-31bb-455f-83df-1c2bb8ef992d",
+              "name": "experienceLevel",
+              "value": "={{ $('Switch').item.json.v5_processed_job_data.seniority_level }}",
+              "type": "string"
+            },
+            {
+              "id": "30f4be42-bf3a-459d-bbb3-5000af3a21de",
+              "name": "jobDescription",
+              "value": "={{ $json.jobDescription }}",
+              "type": "string"
+            },
+            {
+              "id": "8a24969d-d6b7-49d3-8013-91bfa60e7b89",
+              "name": "salaryInfo",
+              "value": "[]",
+              "type": "array"
+            },
+            {
+              "id": "87782311-7ad5-4821-aea4-7d293c6b4f59",
+              "name": "posterFullName",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "160cbda5-0d12-4d1a-a654-13a3e1ad720f",
+              "name": "posterProfileUrl",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "1e0e0a25-7bb2-443e-be17-220d44d95d92",
+              "name": "sector",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "d7ecf8bd-46b7-414c-8862-41811f709f0a",
+              "name": "workMode",
+              "value": "={{ $('Switch').item.json.v5_processed_job_data.workplace_type }}",
+              "type": "string"
+            },
+            {
+              "id": "a43ad1be-2936-4dd3-ba10-fd613008347d",
+              "name": "employmentType",
+              "value": "=",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2480,
+        -1056
+      ],
+      "id": "470d03ae-72d6-4fd9-90ce-51e1db88e51d",
+      "name": "Standardize output (**adjust fields**)"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "completed",
+            "last_success_at": "={{ $now.toISO() }}",
+            "workflow_tag": "hiringcafe"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1360,
+        -1392
+      ],
+      "id": "14ef6b60-a36e-4166-8386-5bb73267f244",
+      "name": "update success status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NBCVFrfmAz4h6S1a",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NBCVFrfmAz4h6S1a",
+          "cachedResultName": "scrape_dedupe_upsert"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        2928,
+        -624
+      ],
+      "id": "a09ab6bb-bb00-4c42-91df-c14d2536f067",
+      "name": "Call '03_dedupe_upsert'",
+      "retryOnFail": false,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        -1392
+      ],
+      "id": "7d6ff09b-defe-465d-815d-6a237dcb204a",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const rawData = $input.item.json.data;\n\nconst startMarker = '\"description\":\"';\nconst endMarker = '\",\"directApply\"';\n\nlet jobDescription = \"\";\n\nif (rawData.includes(startMarker) && rawData.includes(endMarker)) {\n    jobDescription = rawData.split(startMarker)[1].split(endMarker)[0];\n\n    jobDescription = jobDescription\n        .replace(/\\\\n/g, ' ')        // Remove newlines\n        .replace(/\\\\\"/g, '\"')        // Fix escaped quotes\n        .replace(/<[^>]*>/g, ' ')    // Remove all HTML tags (<p>, <strong>, etc.)\n        .replace(/&nbsp;/g, ' ')     // Fix spaces\n        .replace(/&amp;/g, '&')      // Fix ampersands\n        .replace(/\\s+/g, ' ')        // Collapse extra white space\n        .trim();\n}\n\nreturn {\n    jobDescription: jobDescription\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2032,
+        -1248
+      ],
+      "id": "7e92d539-d5b6-4c70-a9f4-77eb23a8f796",
+      "name": "HTML parser job description"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.apply_url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1808,
+        -1248
+      ],
+      "id": "c8c15f21-3e5a-431a-bd03-7e7d6e25c83e",
+      "name": "Fetch raw job html",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.apply_url }}",
+                    "rightValue": "ashby",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "eae4b983-e0f5-4531-b41d-d2cacc77d3ec"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "deaea76f-d534-418f-a180-98372fccdfa5",
+                    "leftValue": "={{ $json.apply_url }}",
+                    "rightValue": "greenhouse",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c5503eaa-e52c-434a-b13d-896dbc158053",
+                    "leftValue": "={{ $json.apply_url }}",
+                    "rightValue": "(ashby\ngreenhouse)",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notRegex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1360,
+        -1072
+      ],
+      "id": "583c81cf-c66d-410d-886e-37e8bc8ffed6",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.apply_url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1808,
+        -1056
+      ],
+      "id": "e31d606c-bd38-4ccf-9f10-2c47bd284203",
+      "name": "Fetch raw job html1",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const html = $input.item.json.data;\n\nconst greenhouseRegex = /class=\\\"job__description body\\\">([\\s\\S]*?)<div class=\\\"divider\\\"/;\nconst match = html.match(greenhouseRegex);\n\nlet jobDescription = \"\";\n\nif (match && match[1]) {\n    jobDescription = match[1];\n    \n    jobDescription = jobDescription\n        .replace(/<\\/p>/g, '\\n\\n')\n        .replace(/<\\/li>/g, '\\n')\n        .replace(/<[^>]*>?/gm, '') // Remove all remaining tags\n        .replace(/&nbsp;/g, ' ')   // Fix non-breaking spaces\n        .replace(/&amp;/g, '&');   // Fix ampersands\n}\n\nreturn {\n    jobDescription: jobDescription.trim()\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2032,
+        -1056
+      ],
+      "id": "feda7724-1d5b-43a8-98e9-22e68bf14f0a",
+      "name": "HTML parser job description1"
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/{{ $json.apply_url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1808,
+        -768
+      ],
+      "id": "d5e273fd-437b-4664-9aec-20d6ba2d7c98",
+      "name": "Jina fetch job text",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "job_leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "={{ $('Switch').item.json.apply_url }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "failed_jina"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2032,
+        -672
+      ],
+      "id": "2f70280e-49f1-490a-8606-8a8067146813",
+      "name": "Update a row",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const raw = $input.item.json.data || \"\"; \n\nreturn { \n    jobDescription: raw.split(\"Markdown Content:\")[1]?.trim() || raw \n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2032,
+        -864
+      ],
+      "id": "8a9e949d-6627-4cd7-bfe0-1163ab3569b4",
+      "name": "Payload parser job description"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "running",
+            "workflow_tag": "hiringcafe"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1328,
+        -960
+      ],
+      "id": "a7724552-1671-4c35-aa5b-882eb77cac45",
+      "name": "update running status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1584,
+        -768
+      ],
+      "id": "1267961b-4540-4c73-bcb6-1482f862063f",
+      "name": "Wait",
+      "webhookId": "d2261c98-4489-4413-95ac-56459e1e0db7"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2256,
+        -1056
+      ],
+      "id": "1db4d15d-d9f6-4607-8dce-7719c28bb487",
+      "name": "No Operation, do nothing1"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8,
+              "triggerAtMinute": 17
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1552,
+        -1056
+      ],
+      "id": "057c7190-1da2-4ae7-8bc6-2726b419e5a5",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "8a02f61d-5d91-4c1a-bff6-75756b8b6646",
+              "leftValue": "={{ $json.apply_url }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        912,
+        -912
+      ],
+      "id": "513fdcd1-3a8c-4a9e-a414-8ff70100f794",
+      "name": "If empty"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1552,
+        -864
+      ],
+      "id": "e4a4dbfa-436f-4ca8-9b92-98c4fff805e9",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+          "cachedResultName": "error_global"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        3152,
+        -624
+      ],
+      "id": "f60ba2a0-df11-4c36-b60b-6aef0d89ad00",
+      "name": "Call 'error_global'"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://hiring.cafe/_next/data/{{ $('Extract buildId').item.json.buildId }}/index.json?searchState=%7B%22searchQuery%22%3A%22{{ $json.url_keywords[0] }}%22%2C%22commitmentTypes%22%3A%5B%22Full+Time%22%2C%22Contract%22%5D%2C%22locations%22%3A%5B%7B%22id%22%3A%22ZRY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Czechia%22%2C%22short_name%22%3A%22CZ%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Czechia%22%2C%22population%22%3A10625695%2C%22workplace_types%22%3A%5B%22Hybrid%22%2C%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%2C%7B%22id%22%3A%22ZhY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Germany%22%2C%22short_name%22%3A%22DE%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Germany%22%2C%22population%22%3A82927922%2C%22workplace_types%22%3A%5B%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%5D%2C%22dateFetchedPastNDays%22%3A4%2C%22seniorityLevel%22%3A%5B%22No+Prior+Experience+Required%22%2C%22Entry+Level%22%2C%22Mid+Level%22%5D%7D",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"searchQuery\":\"ai engineer\",\"commitmentTypes\":[\"Full Time\",\"Contract\"],\"locations\":[{\"id\":\"ZRY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Czechia\",\"short_name\":\"CZ\",\"types\":[\"country\"]}],\"formatted_address\":\"Czechia\",\"population\":10625695,\"workplace_types\":[\"Hybrid\",\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}},{\"id\":\"ZhY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Germany\",\"short_name\":\"DE\",\"types\":[\"country\"]}],\"formatted_address\":\"Germany\",\"population\":82927922,\"workplace_types\":[\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}}],\"dateFetchedPastNDays\":4,\"seniorityLevel\":[\"No Prior Experience Required\",\"Entry Level\",\"Mid Level\"]}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -432,
+        -1488
+      ],
+      "id": "e1299b8f-20b7-4759-b660-fe9f2fcc0cbd",
+      "name": "Scrape url ai engineer",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
+              "leftValue": "={{ $json.job_information.title }}",
+              "rightValue": ".*(\\b(ai|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n|solutions|consultant|ml-?ops|ai-?ops|orchestrat\\w+|integrations?)\\b).*",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            },
+            {
+              "id": "6f924664-fa20-4947-af03-df2841af8012",
+              "leftValue": "={{ $json.job_information.title }}",
+              "rightValue": ".*(\\b(sales[- ]representative|assistant|manual|legal|qa[- ]engineer|qa[- ]automation|account[- ]manager|account[- ]executive|test[- ]automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react[- ]native|cloud|only|research|frontend|backend|forward|fde|fullstack|full[- ]stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp)\\b).*",
+              "operator": {
+                "type": "string",
+                "operation": "notRegex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        240,
+        -912
+      ],
+      "id": "5146ea4d-12a3-47ae-8856-e4d3f199c81d",
+      "name": "Filter positive and negative",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://hiring.cafe/_next/data/{{ $('Extract buildId').item.json.buildId }}/index.json?searchState=%7B%22searchQuery%22%3A%22{{ $json.url_keywords[1] }}%22%2C%22commitmentTypes%22%3A%5B%22Full+Time%22%2C%22Contract%22%5D%2C%22locations%22%3A%5B%7B%22id%22%3A%22ZRY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Czechia%22%2C%22short_name%22%3A%22CZ%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Czechia%22%2C%22population%22%3A10625695%2C%22workplace_types%22%3A%5B%22Hybrid%22%2C%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%2C%7B%22id%22%3A%22ZhY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Germany%22%2C%22short_name%22%3A%22DE%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Germany%22%2C%22population%22%3A82927922%2C%22workplace_types%22%3A%5B%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%5D%2C%22dateFetchedPastNDays%22%3A4%2C%22seniorityLevel%22%3A%5B%22No+Prior+Experience+Required%22%2C%22Entry+Level%22%2C%22Mid+Level%22%5D%7D",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"searchQuery\":\"ai solutions\",\"commitmentTypes\":[\"Full Time\",\"Contract\"],\"locations\":[{\"id\":\"ZRY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Czechia\",\"short_name\":\"CZ\",\"types\":[\"country\"]}],\"formatted_address\":\"Czechia\",\"population\":10625695,\"workplace_types\":[\"Hybrid\",\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}},{\"id\":\"ZhY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Germany\",\"short_name\":\"DE\",\"types\":[\"country\"]}],\"formatted_address\":\"Germany\",\"population\":82927922,\"workplace_types\":[\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}}],\"dateFetchedPastNDays\":4,\"seniorityLevel\":[\"No Prior Experience Required\",\"Entry Level\",\"Mid Level\"]}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -432,
+        -1296
+      ],
+      "id": "33e2a625-7a11-4c71-82fa-42e95f62c1b8",
+      "name": "Scrape url ai solutions",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://hiring.cafe/_next/data/{{ $('Extract buildId').item.json.buildId }}/index.json?searchState=%7B%22searchQuery%22%3A%22{{ $json.url_keywords[2] }}%22%2C%22commitmentTypes%22%3A%5B%22Full+Time%22%2C%22Contract%22%5D%2C%22locations%22%3A%5B%7B%22id%22%3A%22ZRY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Czechia%22%2C%22short_name%22%3A%22CZ%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Czechia%22%2C%22population%22%3A10625695%2C%22workplace_types%22%3A%5B%22Hybrid%22%2C%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%2C%7B%22id%22%3A%22ZhY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Germany%22%2C%22short_name%22%3A%22DE%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Germany%22%2C%22population%22%3A82927922%2C%22workplace_types%22%3A%5B%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%5D%2C%22dateFetchedPastNDays%22%3A4%2C%22seniorityLevel%22%3A%5B%22No+Prior+Experience+Required%22%2C%22Entry+Level%22%2C%22Mid+Level%22%5D%7D",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"searchQuery\":\"ai agent\",\"commitmentTypes\":[\"Full Time\",\"Contract\"],\"locations\":[{\"id\":\"ZRY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Czechia\",\"short_name\":\"CZ\",\"types\":[\"country\"]}],\"formatted_address\":\"Czechia\",\"population\":10625695,\"workplace_types\":[\"Hybrid\",\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}},{\"id\":\"ZhY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Germany\",\"short_name\":\"DE\",\"types\":[\"country\"]}],\"formatted_address\":\"Germany\",\"population\":82927922,\"workplace_types\":[\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}}],\"dateFetchedPastNDays\":4,\"seniorityLevel\":[\"No Prior Experience Required\",\"Entry Level\",\"Mid Level\"]}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -432,
+        -1104
+      ],
+      "id": "28366a5a-1ca6-4fe1-8845-ac8d58a9659d",
+      "name": "Scrape url ai agent",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://hiring.cafe/_next/data/{{ $('Extract buildId').item.json.buildId }}/index.json?searchState=%7B%22searchQuery%22%3A%22{{ $json.url_keywords[3] }}%22%2C%22commitmentTypes%22%3A%5B%22Full+Time%22%2C%22Contract%22%5D%2C%22locations%22%3A%5B%7B%22id%22%3A%22ZRY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Czechia%22%2C%22short_name%22%3A%22CZ%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Czechia%22%2C%22population%22%3A10625695%2C%22workplace_types%22%3A%5B%22Hybrid%22%2C%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%2C%7B%22id%22%3A%22ZhY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Germany%22%2C%22short_name%22%3A%22DE%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Germany%22%2C%22population%22%3A82927922%2C%22workplace_types%22%3A%5B%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%5D%2C%22dateFetchedPastNDays%22%3A4%2C%22seniorityLevel%22%3A%5B%22No+Prior+Experience+Required%22%2C%22Entry+Level%22%2C%22Mid+Level%22%5D%7D",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"searchQuery\":\"ai consultant\",\"commitmentTypes\":[\"Full Time\",\"Contract\"],\"locations\":[{\"id\":\"ZRY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Czechia\",\"short_name\":\"CZ\",\"types\":[\"country\"]}],\"formatted_address\":\"Czechia\",\"population\":10625695,\"workplace_types\":[\"Hybrid\",\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}},{\"id\":\"ZhY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Germany\",\"short_name\":\"DE\",\"types\":[\"country\"]}],\"formatted_address\":\"Germany\",\"population\":82927922,\"workplace_types\":[\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}}],\"dateFetchedPastNDays\":4,\"seniorityLevel\":[\"No Prior Experience Required\",\"Entry Level\",\"Mid Level\"]}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -432,
+        -912
+      ],
+      "id": "fe8f8210-ccfc-47e4-bb54-9304755b8e38",
+      "name": "Scrape url ai consultant",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://hiring.cafe/_next/data/{{ $('Extract buildId').item.json.buildId }}/index.json?searchState=%7B%22searchQuery%22%3A%22{{ $json.url_keywords[4] }}%22%2C%22commitmentTypes%22%3A%5B%22Full+Time%22%2C%22Contract%22%5D%2C%22locations%22%3A%5B%7B%22id%22%3A%22ZRY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Czechia%22%2C%22short_name%22%3A%22CZ%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Czechia%22%2C%22population%22%3A10625695%2C%22workplace_types%22%3A%5B%22Hybrid%22%2C%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%2C%7B%22id%22%3A%22ZhY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Germany%22%2C%22short_name%22%3A%22DE%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Germany%22%2C%22population%22%3A82927922%2C%22workplace_types%22%3A%5B%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%5D%2C%22dateFetchedPastNDays%22%3A4%2C%22seniorityLevel%22%3A%5B%22No+Prior+Experience+Required%22%2C%22Entry+Level%22%2C%22Mid+Level%22%5D%7D",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"searchQuery\":\"n8n\",\"commitmentTypes\":[\"Full Time\",\"Contract\"],\"locations\":[{\"id\":\"ZRY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Czechia\",\"short_name\":\"CZ\",\"types\":[\"country\"]}],\"formatted_address\":\"Czechia\",\"population\":10625695,\"workplace_types\":[\"Hybrid\",\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}},{\"id\":\"ZhY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Germany\",\"short_name\":\"DE\",\"types\":[\"country\"]}],\"formatted_address\":\"Germany\",\"population\":82927922,\"workplace_types\":[\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}}],\"dateFetchedPastNDays\":4,\"seniorityLevel\":[\"No Prior Experience Required\",\"Entry Level\",\"Mid Level\"]}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -432,
+        -720
+      ],
+      "id": "606ae00d-165d-40ce-a19d-418b53a6a4f6",
+      "name": "Scrape url n8n",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://hiring.cafe/_next/data/{{ $('Extract buildId').item.json.buildId }}/index.json?searchState=%7B%22searchQuery%22%3A%22{{ $json.url_keywords[5] }}%22%2C%22commitmentTypes%22%3A%5B%22Full+Time%22%2C%22Contract%22%5D%2C%22locations%22%3A%5B%7B%22id%22%3A%22ZRY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Czechia%22%2C%22short_name%22%3A%22CZ%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Czechia%22%2C%22population%22%3A10625695%2C%22workplace_types%22%3A%5B%22Hybrid%22%2C%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%2C%7B%22id%22%3A%22ZhY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Germany%22%2C%22short_name%22%3A%22DE%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Germany%22%2C%22population%22%3A82927922%2C%22workplace_types%22%3A%5B%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%5D%2C%22dateFetchedPastNDays%22%3A4%2C%22seniorityLevel%22%3A%5B%22No+Prior+Experience+Required%22%2C%22Entry+Level%22%2C%22Mid+Level%22%5D%7D",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"searchQuery\":\"mlops\",\"commitmentTypes\":[\"Full Time\",\"Contract\"],\"locations\":[{\"id\":\"ZRY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Czechia\",\"short_name\":\"CZ\",\"types\":[\"country\"]}],\"formatted_address\":\"Czechia\",\"population\":10625695,\"workplace_types\":[\"Hybrid\",\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}},{\"id\":\"ZhY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Germany\",\"short_name\":\"DE\",\"types\":[\"country\"]}],\"formatted_address\":\"Germany\",\"population\":82927922,\"workplace_types\":[\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}}],\"dateFetchedPastNDays\":4,\"seniorityLevel\":[\"No Prior Experience Required\",\"Entry Level\",\"Mid Level\"]}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -432,
+        -528
+      ],
+      "id": "db19870e-e86b-409b-9077-cff773de2654",
+      "name": "Scrape url mlops",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://hiring.cafe/_next/data/{{ $('Extract buildId').item.json.buildId }}/index.json?searchState=%7B%22searchQuery%22%3A%22{{ $json.url_keywords[6] }}%22%2C%22commitmentTypes%22%3A%5B%22Full+Time%22%2C%22Contract%22%5D%2C%22locations%22%3A%5B%7B%22id%22%3A%22ZRY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Czechia%22%2C%22short_name%22%3A%22CZ%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Czechia%22%2C%22population%22%3A10625695%2C%22workplace_types%22%3A%5B%22Hybrid%22%2C%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%2C%7B%22id%22%3A%22ZhY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Germany%22%2C%22short_name%22%3A%22DE%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Germany%22%2C%22population%22%3A82927922%2C%22workplace_types%22%3A%5B%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%5D%2C%22dateFetchedPastNDays%22%3A4%2C%22seniorityLevel%22%3A%5B%22No+Prior+Experience+Required%22%2C%22Entry+Level%22%2C%22Mid+Level%22%5D%7D",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"searchQuery\":\"automation engineer\",\"commitmentTypes\":[\"Full Time\",\"Contract\"],\"locations\":[{\"id\":\"ZRY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Czechia\",\"short_name\":\"CZ\",\"types\":[\"country\"]}],\"formatted_address\":\"Czechia\",\"population\":10625695,\"workplace_types\":[\"Hybrid\",\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}},{\"id\":\"ZhY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Germany\",\"short_name\":\"DE\",\"types\":[\"country\"]}],\"formatted_address\":\"Germany\",\"population\":82927922,\"workplace_types\":[\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}}],\"dateFetchedPastNDays\":4,\"seniorityLevel\":[\"No Prior Experience Required\",\"Entry Level\",\"Mid Level\"]}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -432,
+        -336
+      ],
+      "id": "17257614-9f4d-4bd0-8aec-3944107f342f",
+      "name": "Scrape url automation engineer",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "numberInputs": 7
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -208,
+        -992
+      ],
+      "id": "89fb47bf-ba90-4e74-a4ed-dda36cda4359",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const inputPrevious = $input.item.json;\n\nconst keywords = [\n  \"AI engineer\",\n  \"AI solutions\",\n  \"AI Agent\",\n  \"AI consultant\",\n  \"n8n\",\n  \"MLOps\",\n  \"Automation engineer\"\n];\n\nconst url_keywords = keywords.map(k => encodeURIComponent(k).replace(/%20/g, '+'));\n\nreturn {\n  url_keywords \n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -656,
+        -960
+      ],
+      "id": "d7ec7076-109f-4b02-86c3-3a23a18dd4b7",
+      "name": "Set Keywords"
+    },
+    {
+      "parameters": {
+        "url": "https://hiring.cafe/",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1104,
+        -960
+      ],
+      "id": "d3cdf1f9-a161-45f7-a99b-ed77f137e0d0",
+      "name": "Get HTML"
+    },
+    {
+      "parameters": {
+        "jsCode": "const payload = $input.item.json.data || \"\"; \n\nconst regex = /\"buildId\":\"([^\"]+)\"/;\nconst match = payload.match(regex);\n\nreturn {\n  buildId: match ? match[1] : \"NOT_FOUND\",\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        -960
+      ],
+      "id": "eb8a2d94-3c79-45c1-9bcf-8467e0c65086",
+      "name": "Extract buildId"
+    }
+  ],
+  "connections": {
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter positive and negative",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for dupes": {
+      "main": [
+        [
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep non-dupes": {
+      "main": [
+        [
+          {
+            "node": "If empty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "update success status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add source": {
+      "main": [
+        [
+          {
+            "node": "Call '03_dedupe_upsert'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Standardize output (**adjust fields**)": {
+      "main": [
+        [
+          {
+            "node": "add source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call '03_dedupe_upsert'": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call 'error_global'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update success status": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML parser job description": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch raw job html": {
+      "main": [
+        [
+          {
+            "node": "HTML parser job description",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Fetch raw job html",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch raw job html1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch raw job html1": {
+      "main": [
+        [
+          {
+            "node": "HTML parser job description1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML parser job description1": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Jina fetch job text": {
+      "main": [
+        [
+          {
+            "node": "Payload parser job description",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Payload parser job description": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update running status": {
+      "main": [
+        [
+          {
+            "node": "Get HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Jina fetch job text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing1": {
+      "main": [
+        [
+          {
+            "node": "Standardize output (**adjust fields**)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "update running status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If empty": {
+      "main": [
+        [
+          {
+            "node": "update success status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "update running status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape url ai engineer": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter positive and negative": {
+      "main": [
+        [
+          {
+            "node": "Check for dupes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Scrape url ai solutions": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Scrape url ai agent": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Scrape url ai consultant": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Scrape url n8n": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Scrape url mlops": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "Scrape url automation engineer": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 6
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Keywords": {
+      "main": [
+        [
+          {
+            "node": "Scrape url ai engineer",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Scrape url ai solutions",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Scrape url ai agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Scrape url ai consultant",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Scrape url n8n",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Scrape url mlops",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Scrape url automation engineer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get HTML": {
+      "main": [
+        [
+          {
+            "node": "Extract buildId",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract buildId": {
+      "main": [
+        [
+          {
+            "node": "Set Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg",
+    "timezone": "Europe/Prague",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "0fe7b41c-d9dc-45ee-a352-37cb55804d25",
+  "activeVersionId": "0fe7b41c-d9dc-45ee-a352-37cb55804d25",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-05-21T06:50:22.364Z",
+      "createdAt": "2026-05-21T06:50:22.364Z",
+      "role": "workflow:owner",
+      "workflowId": "mlWiyg2HcVQmPbFu",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-05-27T08:02:51.528Z",
+    "createdAt": "2026-05-27T08:02:35.089Z",
+    "versionId": "0fe7b41c-d9dc-45ee-a352-37cb55804d25",
+    "workflowId": "mlWiyg2HcVQmPbFu",
+    "nodes": [
+      {
+        "parameters": {
+          "fieldToSplitOut": "pageProps.ssrHits",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          16,
+          -912
+        ],
+        "id": "a19304ae-9a76-47a0-b13c-431068f5dc2d",
+        "name": "Split Out",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "job_leads",
+          "returnAll": true,
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "job_url",
+                "condition": "eq",
+                "keyValue": "={{ $json.apply_url }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          464,
+          -992
+        ],
+        "id": "9d1c042a-cbf8-40f6-a7f1-890ee22260ac",
+        "name": "Check for dupes",
+        "alwaysOutputData": false,
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "advanced": true,
+          "mergeByFields": {
+            "values": [
+              {
+                "field1": "job_url",
+                "field2": "url"
+              }
+            ]
+          },
+          "joinMode": "keepNonMatches",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          688,
+          -912
+        ],
+        "id": "6756b738-b7cf-421c-8c55-856d9faa9adc",
+        "name": "Keep non-dupes",
+        "executeOnce": false,
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          1136,
+          -848
+        ],
+        "id": "b0b975da-b7ec-47f9-9984-9f86d3ee4df4",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "jsCode": "const platformName = \"hiringcafe\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2704,
+          -1056
+        ],
+        "id": "627f8092-e245-4173-8b9c-f780864387a2",
+        "name": "add source"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
+                "name": "jobId",
+                "value": "={{ $('Switch').item.json.id }}",
+                "type": "string"
+              },
+              {
+                "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
+                "name": "jobTitle",
+                "value": "={{ $('Switch').item.json.job_information.title }}",
+                "type": "string"
+              },
+              {
+                "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
+                "name": "jobUrl",
+                "value": "={{ $('Switch').item.json.apply_url }}",
+                "type": "string"
+              },
+              {
+                "id": "a7609c01-4e31-43a0-940d-b97171f0123a",
+                "name": "companyName",
+                "value": "={{ $('Switch').item.json.board_token }}",
+                "type": "string"
+              },
+              {
+                "id": "51e71c18-177a-4370-a63d-25f8001fce8e",
+                "name": "companyUrl",
+                "value": "={{ $('Switch').item.json.enriched_company_data.homepage_uri }}",
+                "type": "string"
+              },
+              {
+                "id": "ce6bae6a-2e69-4671-b2d3-08f6ff27fd81",
+                "name": "companyLogo",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "0103b2e7-89df-48b2-a1dc-4b91932b8495",
+                "name": "publishedAt",
+                "value": "={{ $('Switch').item.json.v5_processed_job_data.estimated_publish_date }}",
+                "type": "string"
+              },
+              {
+                "id": "b8611d60-09ec-409e-a0c0-8a6d7da87ea0",
+                "name": "applyUrl",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "008246ee-3829-4a26-af95-544f914e1fe9",
+                "name": "location",
+                "value": "={{ $('Switch').item.json.v5_processed_job_data.workplace_countries[0] }}",
+                "type": "string"
+              },
+              {
+                "id": "949e43c8-0db8-420e-a39d-6be73d8c5efc",
+                "name": "contractType",
+                "value": "={{ $('Switch').item.json.v5_processed_job_data.commitment[0] }}",
+                "type": "string"
+              },
+              {
+                "id": "7e313d83-31bb-455f-83df-1c2bb8ef992d",
+                "name": "experienceLevel",
+                "value": "={{ $('Switch').item.json.v5_processed_job_data.seniority_level }}",
+                "type": "string"
+              },
+              {
+                "id": "30f4be42-bf3a-459d-bbb3-5000af3a21de",
+                "name": "jobDescription",
+                "value": "={{ $json.jobDescription }}",
+                "type": "string"
+              },
+              {
+                "id": "8a24969d-d6b7-49d3-8013-91bfa60e7b89",
+                "name": "salaryInfo",
+                "value": "[]",
+                "type": "array"
+              },
+              {
+                "id": "87782311-7ad5-4821-aea4-7d293c6b4f59",
+                "name": "posterFullName",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "160cbda5-0d12-4d1a-a654-13a3e1ad720f",
+                "name": "posterProfileUrl",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "1e0e0a25-7bb2-443e-be17-220d44d95d92",
+                "name": "sector",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "d7ecf8bd-46b7-414c-8862-41811f709f0a",
+                "name": "workMode",
+                "value": "={{ $('Switch').item.json.v5_processed_job_data.workplace_type }}",
+                "type": "string"
+              },
+              {
+                "id": "a43ad1be-2936-4dd3-ba10-fd613008347d",
+                "name": "employmentType",
+                "value": "=",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2480,
+          -1056
+        ],
+        "id": "470d03ae-72d6-4fd9-90ce-51e1db88e51d",
+        "name": "Standardize output (**adjust fields**)"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "completed",
+              "last_success_at": "={{ $now.toISO() }}",
+              "workflow_tag": "hiringcafe"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          1360,
+          -1392
+        ],
+        "id": "14ef6b60-a36e-4166-8386-5bb73267f244",
+        "name": "update success status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "NBCVFrfmAz4h6S1a",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/NBCVFrfmAz4h6S1a",
+            "cachedResultName": "scrape_dedupe_upsert"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          2928,
+          -624
+        ],
+        "id": "a09ab6bb-bb00-4c42-91df-c14d2536f067",
+        "name": "Call '03_dedupe_upsert'",
+        "retryOnFail": false,
+        "maxTries": 2,
+        "waitBetweenTries": 5000,
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          1584,
+          -1392
+        ],
+        "id": "7d6ff09b-defe-465d-815d-6a237dcb204a",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const rawData = $input.item.json.data;\n\nconst startMarker = '\"description\":\"';\nconst endMarker = '\",\"directApply\"';\n\nlet jobDescription = \"\";\n\nif (rawData.includes(startMarker) && rawData.includes(endMarker)) {\n    jobDescription = rawData.split(startMarker)[1].split(endMarker)[0];\n\n    jobDescription = jobDescription\n        .replace(/\\\\n/g, ' ')        // Remove newlines\n        .replace(/\\\\\"/g, '\"')        // Fix escaped quotes\n        .replace(/<[^>]*>/g, ' ')    // Remove all HTML tags (<p>, <strong>, etc.)\n        .replace(/&nbsp;/g, ' ')     // Fix spaces\n        .replace(/&amp;/g, '&')      // Fix ampersands\n        .replace(/\\s+/g, ' ')        // Collapse extra white space\n        .trim();\n}\n\nreturn {\n    jobDescription: jobDescription\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2032,
+          -1248
+        ],
+        "id": "7e92d539-d5b6-4c70-a9f4-77eb23a8f796",
+        "name": "HTML parser job description"
+      },
+      {
+        "parameters": {
+          "url": "={{ $json.apply_url }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1808,
+          -1248
+        ],
+        "id": "c8c15f21-3e5a-431a-bd03-7e7d6e25c83e",
+        "name": "Fetch raw job html",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.apply_url }}",
+                      "rightValue": "ashby",
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "id": "eae4b983-e0f5-4531-b41d-d2cacc77d3ec"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "deaea76f-d534-418f-a180-98372fccdfa5",
+                      "leftValue": "={{ $json.apply_url }}",
+                      "rightValue": "greenhouse",
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "c5503eaa-e52c-434a-b13d-896dbc158053",
+                      "leftValue": "={{ $json.apply_url }}",
+                      "rightValue": "(ashby\ngreenhouse)",
+                      "operator": {
+                        "type": "string",
+                        "operation": "notRegex"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          1360,
+          -1072
+        ],
+        "id": "583c81cf-c66d-410d-886e-37e8bc8ffed6",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "url": "={{ $json.apply_url }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1808,
+          -1056
+        ],
+        "id": "e31d606c-bd38-4ccf-9f10-2c47bd284203",
+        "name": "Fetch raw job html1",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const html = $input.item.json.data;\n\nconst greenhouseRegex = /class=\\\"job__description body\\\">([\\s\\S]*?)<div class=\\\"divider\\\"/;\nconst match = html.match(greenhouseRegex);\n\nlet jobDescription = \"\";\n\nif (match && match[1]) {\n    jobDescription = match[1];\n    \n    jobDescription = jobDescription\n        .replace(/<\\/p>/g, '\\n\\n')\n        .replace(/<\\/li>/g, '\\n')\n        .replace(/<[^>]*>?/gm, '') // Remove all remaining tags\n        .replace(/&nbsp;/g, ' ')   // Fix non-breaking spaces\n        .replace(/&amp;/g, '&');   // Fix ampersands\n}\n\nreturn {\n    jobDescription: jobDescription.trim()\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2032,
+          -1056
+        ],
+        "id": "feda7724-1d5b-43a8-98e9-22e68bf14f0a",
+        "name": "HTML parser job description1"
+      },
+      {
+        "parameters": {
+          "url": "=https://r.jina.ai/{{ $json.apply_url }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1808,
+          -768
+        ],
+        "id": "d5e273fd-437b-4664-9aec-20d6ba2d7c98",
+        "name": "Jina fetch job text",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "job_leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "job_url",
+                "condition": "eq",
+                "keyValue": "={{ $('Switch').item.json.apply_url }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "status",
+                "fieldValue": "failed_jina"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          2032,
+          -672
+        ],
+        "id": "2f70280e-49f1-490a-8606-8a8067146813",
+        "name": "Update a row",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const raw = $input.item.json.data || \"\"; \n\nreturn { \n    jobDescription: raw.split(\"Markdown Content:\")[1]?.trim() || raw \n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2032,
+          -864
+        ],
+        "id": "8a9e949d-6627-4cd7-bfe0-1163ab3569b4",
+        "name": "Payload parser job description"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "running",
+              "workflow_tag": "hiringcafe"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -1328,
+          -960
+        ],
+        "id": "a7724552-1671-4c35-aa5b-882eb77cac45",
+        "name": "update running status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1584,
+          -768
+        ],
+        "id": "1267961b-4540-4c73-bcb6-1482f862063f",
+        "name": "Wait",
+        "webhookId": "d2261c98-4489-4413-95ac-56459e1e0db7"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          2256,
+          -1056
+        ],
+        "id": "1db4d15d-d9f6-4607-8dce-7719c28bb487",
+        "name": "No Operation, do nothing1"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 8,
+                "triggerAtMinute": 17
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -1552,
+          -1056
+        ],
+        "id": "057c7190-1da2-4ae7-8bc6-2726b419e5a5",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "8a02f61d-5d91-4c1a-bff6-75756b8b6646",
+                "leftValue": "={{ $json.apply_url }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "empty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          912,
+          -912
+        ],
+        "id": "513fdcd1-3a8c-4a9e-a414-8ff70100f794",
+        "name": "If empty"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -1552,
+          -864
+        ],
+        "id": "e4a4dbfa-436f-4ca8-9b92-98c4fff805e9",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+            "cachedResultName": "error_global"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          3152,
+          -624
+        ],
+        "id": "f60ba2a0-df11-4c36-b60b-6aef0d89ad00",
+        "name": "Call 'error_global'"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://hiring.cafe/_next/data/{{ $('Extract buildId').item.json.buildId }}/index.json?searchState=%7B%22searchQuery%22%3A%22{{ $json.url_keywords[0] }}%22%2C%22commitmentTypes%22%3A%5B%22Full+Time%22%2C%22Contract%22%5D%2C%22locations%22%3A%5B%7B%22id%22%3A%22ZRY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Czechia%22%2C%22short_name%22%3A%22CZ%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Czechia%22%2C%22population%22%3A10625695%2C%22workplace_types%22%3A%5B%22Hybrid%22%2C%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%2C%7B%22id%22%3A%22ZhY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Germany%22%2C%22short_name%22%3A%22DE%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Germany%22%2C%22population%22%3A82927922%2C%22workplace_types%22%3A%5B%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%5D%2C%22dateFetchedPastNDays%22%3A4%2C%22seniorityLevel%22%3A%5B%22No+Prior+Experience+Required%22%2C%22Entry+Level%22%2C%22Mid+Level%22%5D%7D",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\"searchQuery\":\"ai engineer\",\"commitmentTypes\":[\"Full Time\",\"Contract\"],\"locations\":[{\"id\":\"ZRY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Czechia\",\"short_name\":\"CZ\",\"types\":[\"country\"]}],\"formatted_address\":\"Czechia\",\"population\":10625695,\"workplace_types\":[\"Hybrid\",\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}},{\"id\":\"ZhY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Germany\",\"short_name\":\"DE\",\"types\":[\"country\"]}],\"formatted_address\":\"Germany\",\"population\":82927922,\"workplace_types\":[\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}}],\"dateFetchedPastNDays\":4,\"seniorityLevel\":[\"No Prior Experience Required\",\"Entry Level\",\"Mid Level\"]}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -432,
+          -1488
+        ],
+        "id": "e1299b8f-20b7-4759-b660-fe9f2fcc0cbd",
+        "name": "Scrape url ai engineer",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
+                "leftValue": "={{ $json.job_information.title }}",
+                "rightValue": ".*(\\b(ai|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n|solutions|consultant|ml-?ops|ai-?ops|orchestrat\\w+|integrations?)\\b).*",
+                "operator": {
+                  "type": "string",
+                  "operation": "regex"
+                }
+              },
+              {
+                "id": "6f924664-fa20-4947-af03-df2841af8012",
+                "leftValue": "={{ $json.job_information.title }}",
+                "rightValue": ".*(\\b(sales[- ]representative|assistant|manual|legal|qa[- ]engineer|qa[- ]automation|account[- ]manager|account[- ]executive|test[- ]automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react[- ]native|cloud|only|research|frontend|backend|forward|fde|fullstack|full[- ]stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp)\\b).*",
+                "operator": {
+                  "type": "string",
+                  "operation": "notRegex"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {
+            "ignoreCase": true
+          }
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          240,
+          -912
+        ],
+        "id": "5146ea4d-12a3-47ae-8856-e4d3f199c81d",
+        "name": "Filter positive and negative",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://hiring.cafe/_next/data/{{ $('Extract buildId').item.json.buildId }}/index.json?searchState=%7B%22searchQuery%22%3A%22{{ $json.url_keywords[1] }}%22%2C%22commitmentTypes%22%3A%5B%22Full+Time%22%2C%22Contract%22%5D%2C%22locations%22%3A%5B%7B%22id%22%3A%22ZRY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Czechia%22%2C%22short_name%22%3A%22CZ%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Czechia%22%2C%22population%22%3A10625695%2C%22workplace_types%22%3A%5B%22Hybrid%22%2C%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%2C%7B%22id%22%3A%22ZhY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Germany%22%2C%22short_name%22%3A%22DE%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Germany%22%2C%22population%22%3A82927922%2C%22workplace_types%22%3A%5B%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%5D%2C%22dateFetchedPastNDays%22%3A4%2C%22seniorityLevel%22%3A%5B%22No+Prior+Experience+Required%22%2C%22Entry+Level%22%2C%22Mid+Level%22%5D%7D",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\"searchQuery\":\"ai solutions\",\"commitmentTypes\":[\"Full Time\",\"Contract\"],\"locations\":[{\"id\":\"ZRY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Czechia\",\"short_name\":\"CZ\",\"types\":[\"country\"]}],\"formatted_address\":\"Czechia\",\"population\":10625695,\"workplace_types\":[\"Hybrid\",\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}},{\"id\":\"ZhY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Germany\",\"short_name\":\"DE\",\"types\":[\"country\"]}],\"formatted_address\":\"Germany\",\"population\":82927922,\"workplace_types\":[\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}}],\"dateFetchedPastNDays\":4,\"seniorityLevel\":[\"No Prior Experience Required\",\"Entry Level\",\"Mid Level\"]}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -432,
+          -1296
+        ],
+        "id": "33e2a625-7a11-4c71-82fa-42e95f62c1b8",
+        "name": "Scrape url ai solutions",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://hiring.cafe/_next/data/{{ $('Extract buildId').item.json.buildId }}/index.json?searchState=%7B%22searchQuery%22%3A%22{{ $json.url_keywords[2] }}%22%2C%22commitmentTypes%22%3A%5B%22Full+Time%22%2C%22Contract%22%5D%2C%22locations%22%3A%5B%7B%22id%22%3A%22ZRY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Czechia%22%2C%22short_name%22%3A%22CZ%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Czechia%22%2C%22population%22%3A10625695%2C%22workplace_types%22%3A%5B%22Hybrid%22%2C%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%2C%7B%22id%22%3A%22ZhY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Germany%22%2C%22short_name%22%3A%22DE%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Germany%22%2C%22population%22%3A82927922%2C%22workplace_types%22%3A%5B%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%5D%2C%22dateFetchedPastNDays%22%3A4%2C%22seniorityLevel%22%3A%5B%22No+Prior+Experience+Required%22%2C%22Entry+Level%22%2C%22Mid+Level%22%5D%7D",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\"searchQuery\":\"ai agent\",\"commitmentTypes\":[\"Full Time\",\"Contract\"],\"locations\":[{\"id\":\"ZRY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Czechia\",\"short_name\":\"CZ\",\"types\":[\"country\"]}],\"formatted_address\":\"Czechia\",\"population\":10625695,\"workplace_types\":[\"Hybrid\",\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}},{\"id\":\"ZhY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Germany\",\"short_name\":\"DE\",\"types\":[\"country\"]}],\"formatted_address\":\"Germany\",\"population\":82927922,\"workplace_types\":[\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}}],\"dateFetchedPastNDays\":4,\"seniorityLevel\":[\"No Prior Experience Required\",\"Entry Level\",\"Mid Level\"]}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -432,
+          -1104
+        ],
+        "id": "28366a5a-1ca6-4fe1-8845-ac8d58a9659d",
+        "name": "Scrape url ai agent",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://hiring.cafe/_next/data/{{ $('Extract buildId').item.json.buildId }}/index.json?searchState=%7B%22searchQuery%22%3A%22{{ $json.url_keywords[3] }}%22%2C%22commitmentTypes%22%3A%5B%22Full+Time%22%2C%22Contract%22%5D%2C%22locations%22%3A%5B%7B%22id%22%3A%22ZRY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Czechia%22%2C%22short_name%22%3A%22CZ%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Czechia%22%2C%22population%22%3A10625695%2C%22workplace_types%22%3A%5B%22Hybrid%22%2C%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%2C%7B%22id%22%3A%22ZhY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Germany%22%2C%22short_name%22%3A%22DE%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Germany%22%2C%22population%22%3A82927922%2C%22workplace_types%22%3A%5B%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%5D%2C%22dateFetchedPastNDays%22%3A4%2C%22seniorityLevel%22%3A%5B%22No+Prior+Experience+Required%22%2C%22Entry+Level%22%2C%22Mid+Level%22%5D%7D",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\"searchQuery\":\"ai consultant\",\"commitmentTypes\":[\"Full Time\",\"Contract\"],\"locations\":[{\"id\":\"ZRY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Czechia\",\"short_name\":\"CZ\",\"types\":[\"country\"]}],\"formatted_address\":\"Czechia\",\"population\":10625695,\"workplace_types\":[\"Hybrid\",\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}},{\"id\":\"ZhY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Germany\",\"short_name\":\"DE\",\"types\":[\"country\"]}],\"formatted_address\":\"Germany\",\"population\":82927922,\"workplace_types\":[\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}}],\"dateFetchedPastNDays\":4,\"seniorityLevel\":[\"No Prior Experience Required\",\"Entry Level\",\"Mid Level\"]}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -432,
+          -912
+        ],
+        "id": "fe8f8210-ccfc-47e4-bb54-9304755b8e38",
+        "name": "Scrape url ai consultant",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://hiring.cafe/_next/data/{{ $('Extract buildId').item.json.buildId }}/index.json?searchState=%7B%22searchQuery%22%3A%22{{ $json.url_keywords[4] }}%22%2C%22commitmentTypes%22%3A%5B%22Full+Time%22%2C%22Contract%22%5D%2C%22locations%22%3A%5B%7B%22id%22%3A%22ZRY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Czechia%22%2C%22short_name%22%3A%22CZ%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Czechia%22%2C%22population%22%3A10625695%2C%22workplace_types%22%3A%5B%22Hybrid%22%2C%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%2C%7B%22id%22%3A%22ZhY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Germany%22%2C%22short_name%22%3A%22DE%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Germany%22%2C%22population%22%3A82927922%2C%22workplace_types%22%3A%5B%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%5D%2C%22dateFetchedPastNDays%22%3A4%2C%22seniorityLevel%22%3A%5B%22No+Prior+Experience+Required%22%2C%22Entry+Level%22%2C%22Mid+Level%22%5D%7D",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\"searchQuery\":\"n8n\",\"commitmentTypes\":[\"Full Time\",\"Contract\"],\"locations\":[{\"id\":\"ZRY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Czechia\",\"short_name\":\"CZ\",\"types\":[\"country\"]}],\"formatted_address\":\"Czechia\",\"population\":10625695,\"workplace_types\":[\"Hybrid\",\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}},{\"id\":\"ZhY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Germany\",\"short_name\":\"DE\",\"types\":[\"country\"]}],\"formatted_address\":\"Germany\",\"population\":82927922,\"workplace_types\":[\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}}],\"dateFetchedPastNDays\":4,\"seniorityLevel\":[\"No Prior Experience Required\",\"Entry Level\",\"Mid Level\"]}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -432,
+          -720
+        ],
+        "id": "606ae00d-165d-40ce-a19d-418b53a6a4f6",
+        "name": "Scrape url n8n",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://hiring.cafe/_next/data/{{ $('Extract buildId').item.json.buildId }}/index.json?searchState=%7B%22searchQuery%22%3A%22{{ $json.url_keywords[5] }}%22%2C%22commitmentTypes%22%3A%5B%22Full+Time%22%2C%22Contract%22%5D%2C%22locations%22%3A%5B%7B%22id%22%3A%22ZRY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Czechia%22%2C%22short_name%22%3A%22CZ%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Czechia%22%2C%22population%22%3A10625695%2C%22workplace_types%22%3A%5B%22Hybrid%22%2C%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%2C%7B%22id%22%3A%22ZhY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Germany%22%2C%22short_name%22%3A%22DE%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Germany%22%2C%22population%22%3A82927922%2C%22workplace_types%22%3A%5B%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%5D%2C%22dateFetchedPastNDays%22%3A4%2C%22seniorityLevel%22%3A%5B%22No+Prior+Experience+Required%22%2C%22Entry+Level%22%2C%22Mid+Level%22%5D%7D",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\"searchQuery\":\"mlops\",\"commitmentTypes\":[\"Full Time\",\"Contract\"],\"locations\":[{\"id\":\"ZRY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Czechia\",\"short_name\":\"CZ\",\"types\":[\"country\"]}],\"formatted_address\":\"Czechia\",\"population\":10625695,\"workplace_types\":[\"Hybrid\",\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}},{\"id\":\"ZhY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Germany\",\"short_name\":\"DE\",\"types\":[\"country\"]}],\"formatted_address\":\"Germany\",\"population\":82927922,\"workplace_types\":[\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}}],\"dateFetchedPastNDays\":4,\"seniorityLevel\":[\"No Prior Experience Required\",\"Entry Level\",\"Mid Level\"]}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -432,
+          -528
+        ],
+        "id": "db19870e-e86b-409b-9077-cff773de2654",
+        "name": "Scrape url mlops",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://hiring.cafe/_next/data/{{ $('Extract buildId').item.json.buildId }}/index.json?searchState=%7B%22searchQuery%22%3A%22{{ $json.url_keywords[6] }}%22%2C%22commitmentTypes%22%3A%5B%22Full+Time%22%2C%22Contract%22%5D%2C%22locations%22%3A%5B%7B%22id%22%3A%22ZRY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Czechia%22%2C%22short_name%22%3A%22CZ%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Czechia%22%2C%22population%22%3A10625695%2C%22workplace_types%22%3A%5B%22Hybrid%22%2C%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%2C%7B%22id%22%3A%22ZhY1yZQBoEtHp_8UEq3V%22%2C%22types%22%3A%5B%22country%22%5D%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22Germany%22%2C%22short_name%22%3A%22DE%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22formatted_address%22%3A%22Germany%22%2C%22population%22%3A82927922%2C%22workplace_types%22%3A%5B%22Remote%22%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%5D%2C%22dateFetchedPastNDays%22%3A4%2C%22seniorityLevel%22%3A%5B%22No+Prior+Experience+Required%22%2C%22Entry+Level%22%2C%22Mid+Level%22%5D%7D",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\"searchQuery\":\"automation engineer\",\"commitmentTypes\":[\"Full Time\",\"Contract\"],\"locations\":[{\"id\":\"ZRY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Czechia\",\"short_name\":\"CZ\",\"types\":[\"country\"]}],\"formatted_address\":\"Czechia\",\"population\":10625695,\"workplace_types\":[\"Hybrid\",\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}},{\"id\":\"ZhY1yZQBoEtHp_8UEq3V\",\"types\":[\"country\"],\"address_components\":[{\"long_name\":\"Germany\",\"short_name\":\"DE\",\"types\":[\"country\"]}],\"formatted_address\":\"Germany\",\"population\":82927922,\"workplace_types\":[\"Remote\"],\"options\":{\"flexible_regions\":[\"anywhere_in_continent\",\"anywhere_in_world\"]}}],\"dateFetchedPastNDays\":4,\"seniorityLevel\":[\"No Prior Experience Required\",\"Entry Level\",\"Mid Level\"]}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -432,
+          -336
+        ],
+        "id": "17257614-9f4d-4bd0-8aec-3944107f342f",
+        "name": "Scrape url automation engineer",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "numberInputs": 7
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -208,
+          -992
+        ],
+        "id": "89fb47bf-ba90-4e74-a4ed-dda36cda4359",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const inputPrevious = $input.item.json;\n\nconst keywords = [\n  \"AI engineer\",\n  \"AI solutions\",\n  \"AI Agent\",\n  \"AI consultant\",\n  \"n8n\",\n  \"MLOps\",\n  \"Automation engineer\"\n];\n\nconst url_keywords = keywords.map(k => encodeURIComponent(k).replace(/%20/g, '+'));\n\nreturn {\n  url_keywords \n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -656,
+          -960
+        ],
+        "id": "d7ec7076-109f-4b02-86c3-3a23a18dd4b7",
+        "name": "Set Keywords"
+      },
+      {
+        "parameters": {
+          "url": "https://hiring.cafe/",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+              }
+            ]
+          },
+          "options": {
+            "response": {
+              "response": {
+                "responseFormat": "text"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -1104,
+          -960
+        ],
+        "id": "d3cdf1f9-a161-45f7-a99b-ed77f137e0d0",
+        "name": "Get HTML"
+      },
+      {
+        "parameters": {
+          "jsCode": "const payload = $input.item.json.data || \"\"; \n\nconst regex = /\"buildId\":\"([^\"]+)\"/;\nconst match = payload.match(regex);\n\nreturn {\n  buildId: match ? match[1] : \"NOT_FOUND\",\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -880,
+          -960
+        ],
+        "id": "eb8a2d94-3c79-45c1-9bcf-8467e0c65086",
+        "name": "Extract buildId"
+      }
+    ],
+    "connections": {
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Filter positive and negative",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check for dupes": {
+        "main": [
+          [
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Keep non-dupes": {
+        "main": [
+          [
+            {
+              "node": "If empty",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "update success status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "add source": {
+        "main": [
+          [
+            {
+              "node": "Call '03_dedupe_upsert'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Standardize output (**adjust fields**)": {
+        "main": [
+          [
+            {
+              "node": "add source",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call '03_dedupe_upsert'": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Call 'error_global'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update success status": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTML parser job description": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch raw job html": {
+        "main": [
+          [
+            {
+              "node": "HTML parser job description",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Fetch raw job html",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Fetch raw job html1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch raw job html1": {
+        "main": [
+          [
+            {
+              "node": "HTML parser job description1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTML parser job description1": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Jina fetch job text": {
+        "main": [
+          [
+            {
+              "node": "Payload parser job description",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Update a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Payload parser job description": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update running status": {
+        "main": [
+          [
+            {
+              "node": "Get HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Jina fetch job text",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "No Operation, do nothing1": {
+        "main": [
+          [
+            {
+              "node": "Standardize output (**adjust fields**)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "update running status",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If empty": {
+        "main": [
+          [
+            {
+              "node": "update success status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "update running status",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Scrape url ai engineer": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter positive and negative": {
+        "main": [
+          [
+            {
+              "node": "Check for dupes",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Scrape url ai solutions": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Scrape url ai agent": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 2
+            }
+          ]
+        ]
+      },
+      "Scrape url ai consultant": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 3
+            }
+          ]
+        ]
+      },
+      "Scrape url n8n": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 4
+            }
+          ]
+        ]
+      },
+      "Scrape url mlops": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 5
+            }
+          ]
+        ]
+      },
+      "Scrape url automation engineer": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 6
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set Keywords": {
+        "main": [
+          [
+            {
+              "node": "Scrape url ai engineer",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Scrape url ai solutions",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Scrape url ai agent",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Scrape url ai consultant",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Scrape url n8n",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Scrape url mlops",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Scrape url automation engineer",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get HTML": {
+        "main": [
+          [
+            {
+              "node": "Extract buildId",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract buildId": {
+        "main": [
+          [
+            {
+              "node": "Set Keywords",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update a row": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "d d",
+    "name": "Version 0fe7b41c",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-05-26T06:42:56.201Z",
+      "createdAt": "2026-05-26T06:42:56.201Z",
+      "id": "BMdcnEx5nnrZmKVS",
+      "name": "hiringcafe"
+    },
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-03-06T13:15:28.248Z",
+      "createdAt": "2026-01-22T12:40:37.040Z",
+      "id": "mcS1gLAfDII7yoGe",
+      "name": "scrape"
+    }
+  ]
+}
