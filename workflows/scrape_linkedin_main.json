@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T06:19:01.514Z",
+  "updatedAt": "2026-05-25T08:08:03.800Z",
   "createdAt": "2026-04-09T05:08:27.839Z",
   "id": "kcE1S4NAllBaR6zT",
   "name": "scrape_linkedin_main",
@@ -11,7 +11,8 @@
         "rule": {
           "interval": [
             {
-              "triggerAtHour": 8
+              "triggerAtHour": 8,
+              "triggerAtMinute": 1
             }
           ]
         }
@@ -20,7 +21,7 @@
       "typeVersion": 1.3,
       "position": [
         -5824,
-        1136
+        1088
       ],
       "id": "3e4e6bd9-eef5-450b-96a0-4fe2c9df6c6a",
       "name": "Schedule Trigger"
@@ -288,7 +289,7 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const inputPrevious = $input.item.json;\n\nconst keywords = [\n  \"AI engineer\",\n  \"AI solutions\",\n  \"AI Agent\",\n  \"AI consultant\",\n  \"n8n\",\n  \"MLOps\",\n  \"Automation engineer\"\n];\n\nconst url_keywords = keywords.map(k => encodeURIComponent(k));\n\nreturn {\n  ...inputPrevious,\n  url_keywords \n};"
+        "jsCode": "const inputPrevious = $input.item.json;\n\nconst keywords = [\n  \"AI engineer\",\n  //\"AI solutions\",\n  \"AI Agent\",\n  //\"AI consultant\",\n  //\"n8n\",\n  \"MLOps\",\n  //\"Automation engineer\"\n];\n\nconst url_keywords = keywords.map(k => encodeURIComponent(k));\n\nreturn {\n  ...inputPrevious,\n  url_keywords \n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -302,7 +303,7 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const item = $input.item.json;\n\nconst keywords = item.url_keywords;\n\nconst urlArray = keywords.map(kw => {\n  return `https://www.linkedin.com/jobs/search?keywords=${kw}&location=${item.country}&geoId=${item.geoId}&f_JT=F%2CC&f_E=3%2C4&f_TPR=${item.publishedAtString}&f_WT=2&position=1&pageNum=0`;\n});\n\nreturn {\n  ...item,\n  urlArray\n};"
+        "jsCode": "const item = $input.item.json;\nconst keywords = item.url_keywords;\n\nconst urlArray = keywords.map(kw => {\n  let workType = \"2\"; \n  \n  if (item.geoId === \"104508036\") {\n    workType = \"2%2C3\"; \n  }\n\n  return `https://www.linkedin.com/jobs/search?keywords=${kw}&geoId=${item.geoId}&f_JT=F%2CC&f_E=3%2C4&f_TPR=${item.publishedAtString}&f_WT=${workType}&position=1&pageNum=0`;\n});\n\nreturn {\n  ...item,\n  urlArray\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -315,7 +316,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const timeRange = $input.first().json;\n\nconst countries = [\n  // Account 1: DACH (Heavyweight)\n  { country: \"Germany\", geoId: \"101282230\", group: \"Account_4\" },\n  { country: \"Austria\", geoId: \"100932847\", group: \"Account_4\" },\n  { country: \"Switzerland\", geoId: \"106693272\", group: \"Account_4\" },\n\n  // Account 2: CEE & South (Medium-High)\n  { country: \"Czechia\", geoId: \"102122229\", group: \"Account_4\" },\n  { country: \"Slovakia\", geoId: \"105615792\", group: \"Account_4\" },\n  /* { country: \"Spain\", geoId: \"105646813\", group: \"Account_2\" },\n  { country: \"Portugal\", geoId: \"100363830\", group: \"Account_2\" },\n  { country: \"Italy\", geoId: \"103350119\", group: \"Account_2\" },\n\n  // Account 3: Poland & North (High Density)\n  { country: \"Poland\", geoId: \"105072130\", group: \"Account_3\" },\n  { country: \"Sweden\", geoId: \"100645604\", group: \"Account_3\" },\n  { country: \"Norway\", geoId: \"103819153\", group: \"Account_3\" },\n  { country: \"Denmark\", geoId: \"104514075\", group: \"Account_3\" },\n  { country: \"Finland\", geoId: \"100456013\", group: \"Account_3\" },\n  { country: \"Estonia\", geoId: \"104642055\", group: \"Account_3\" },\n\n  // Account 4: West & Balkans (The Rest)\n  { country: \"France\", geoId: \"105015875\", group: \"Account_4\" },\n  { country: \"Netherlands\", geoId: \"102890719\", group: \"Account_4\" },\n  { country: \"Belgium\", geoId: \"100565514\", group: \"Account_4\" },\n  { country: \"Hungary\", geoId: \"104481001\", group: \"Account_4\" },\n  { country: \"Turkey\", geoId: \"102105699\", group: \"Account_4\" } */\n];\n\nreturn countries.map(c => ({\n  ...c,\n  ...timeRange\n}));"
+        "jsCode": "const timeRange = $input.first().json;\n\nconst countries = [\n\n  { country: \"Germany\", geoId: \"101282230\", group: \"Account_1\" },\n  { country: \"Austria\", geoId: \"103883259\", group: \"Account_1\" },\n  { country: \"Switzerland\", geoId: \"106693272\", group: \"Account_1\" },\n\n  { country: \"Czechia\", geoId: \"104508036\", group: \"Account_2\" },\n  { country: \"Slovakia\", geoId: \"106131491\", group: \"Account_2\" },\n  { country: \"Poland\", geoId: \"105072130\", group: \"Account_2\" },\n\n  { country: \"Sweden\", geoId: \"105117694\", group: \"Account_3\" },\n  { country: \"Norway\", geoId: \"103819153\", group: \"Account_3\" },\n  { country: \"Denmark\", geoId: \"104514075\", group: \"Account_3\" },\n  { country: \"Finland\", geoId: \"100456013\", group: \"Account_3\" },\n\n\n  { country: \"France\", geoId: \"105015875\", group: \"Account_4\" },\n  { country: \"Netherlands\", geoId: \"102890719\", group: \"Account_4\" },\n  { country: \"Belgium\", geoId: \"100565514\", group: \"Account_4\" },\n  { country: \"Luxembourg\", geoId: \"104042105\", group: \"Account_4\" }\n];\n\nreturn countries.map(c => ({\n  ...c,\n  ...timeRange\n}));"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -324,21 +325,7 @@
         1248
       ],
       "id": "0fd03770-5f6a-4bd3-a04e-5072b817f3a2",
-      "name": "Set Location and Accounts Temporary"
-    },
-    {
-      "parameters": {
-        "jsCode": "const timeRange = $input.first().json;\n\nconst countries = [\n  // Account 1: DACH (Heavyweight)\n  { country: \"Germany\", geoId: \"101282230\", group: \"Account_1\" },\n  { country: \"Austria\", geoId: \"100932847\", group: \"Account_1\" },\n  { country: \"Switzerland\", geoId: \"106693272\", group: \"Account_1\" },\n\n  // Account 2: CEE & South (Medium-High)\n  { country: \"Czechia\", geoId: \"102122229\", group: \"Account_2\" },\n  { country: \"Slovakia\", geoId: \"105615792\", group: \"Account_2\" },\n  { country: \"Spain\", geoId: \"105646813\", group: \"Account_2\" },\n  { country: \"Portugal\", geoId: \"100363830\", group: \"Account_2\" },\n  { country: \"Italy\", geoId: \"103350119\", group: \"Account_2\" },\n\n  // Account 3: Poland & North (High Density)\n  { country: \"Poland\", geoId: \"105072130\", group: \"Account_3\" },\n  { country: \"Sweden\", geoId: \"100645604\", group: \"Account_3\" },\n  { country: \"Norway\", geoId: \"103819153\", group: \"Account_3\" },\n  { country: \"Denmark\", geoId: \"104514075\", group: \"Account_3\" },\n  { country: \"Finland\", geoId: \"100456013\", group: \"Account_3\" },\n  { country: \"Estonia\", geoId: \"104642055\", group: \"Account_3\" },\n\n  // Account 4: West & Balkans (The Rest)\n  { country: \"France\", geoId: \"105015875\", group: \"Account_4\" },\n  { country: \"Netherlands\", geoId: \"102890719\", group: \"Account_4\" },\n  { country: \"Belgium\", geoId: \"100565514\", group: \"Account_4\" },\n  { country: \"Hungary\", geoId: \"104481001\", group: \"Account_4\" },\n  { country: \"Turkey\", geoId: \"102105699\", group: \"Account_4\" }\n];\n\nreturn countries.map(c => ({\n  ...c,\n  ...timeRange\n}));"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -5824,
-        1552
-      ],
-      "id": "92684762-5f37-4842-ac12-3eabcc181c91",
-      "name": "Set Location and Accounts1_resets 9/5",
-      "disabled": true
+      "name": "Set Location and Accounts"
     }
   ],
   "connections": {
@@ -357,7 +344,7 @@
       "main": [
         [
           {
-            "node": "Set Location and Accounts Temporary",
+            "node": "Set Location and Accounts",
             "type": "main",
             "index": 0
           }
@@ -455,7 +442,7 @@
         ]
       ]
     },
-    "Set Location and Accounts Temporary": {
+    "Set Location and Accounts": {
       "main": [
         [
           {
@@ -473,7 +460,8 @@
     "timeSavedMode": "fixed",
     "timezone": "Europe/Prague",
     "executionOrder": "v1",
-    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg"
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg",
+    "binaryMode": "separate"
   },
   "staticData": {
     "node:Schedule Trigger": {
@@ -505,8 +493,8 @@
       }
     ]
   },
-  "versionId": "4ceaf938-0370-416e-900d-96610e5783f0",
-  "activeVersionId": "4ceaf938-0370-416e-900d-96610e5783f0",
+  "versionId": "3d6d20a6-74a5-45c4-88f4-8843e6323506",
+  "activeVersionId": "3d6d20a6-74a5-45c4-88f4-8843e6323506",
   "triggerCount": 1,
   "shared": [
     {
@@ -518,9 +506,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-05T06:19:07.656Z",
-    "createdAt": "2026-05-05T06:19:01.517Z",
-    "versionId": "4ceaf938-0370-416e-900d-96610e5783f0",
+    "updatedAt": "2026-05-25T08:08:11.729Z",
+    "createdAt": "2026-05-25T08:08:03.801Z",
+    "versionId": "3d6d20a6-74a5-45c4-88f4-8843e6323506",
     "workflowId": "kcE1S4NAllBaR6zT",
     "nodes": [
       {
@@ -528,7 +516,8 @@
           "rule": {
             "interval": [
               {
-                "triggerAtHour": 8
+                "triggerAtHour": 8,
+                "triggerAtMinute": 1
               }
             ]
           }
@@ -537,7 +526,7 @@
         "typeVersion": 1.3,
         "position": [
           -5824,
-          1136
+          1088
         ],
         "id": "3e4e6bd9-eef5-450b-96a0-4fe2c9df6c6a",
         "name": "Schedule Trigger"
@@ -805,7 +794,7 @@
       {
         "parameters": {
           "mode": "runOnceForEachItem",
-          "jsCode": "const inputPrevious = $input.item.json;\n\nconst keywords = [\n  \"AI engineer\",\n  \"AI solutions\",\n  \"AI Agent\",\n  \"AI consultant\",\n  \"n8n\",\n  \"MLOps\",\n  \"Automation engineer\"\n];\n\nconst url_keywords = keywords.map(k => encodeURIComponent(k));\n\nreturn {\n  ...inputPrevious,\n  url_keywords \n};"
+          "jsCode": "const inputPrevious = $input.item.json;\n\nconst keywords = [\n  \"AI engineer\",\n  //\"AI solutions\",\n  \"AI Agent\",\n  //\"AI consultant\",\n  //\"n8n\",\n  \"MLOps\",\n  //\"Automation engineer\"\n];\n\nconst url_keywords = keywords.map(k => encodeURIComponent(k));\n\nreturn {\n  ...inputPrevious,\n  url_keywords \n};"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -819,7 +808,7 @@
       {
         "parameters": {
           "mode": "runOnceForEachItem",
-          "jsCode": "const item = $input.item.json;\n\nconst keywords = item.url_keywords;\n\nconst urlArray = keywords.map(kw => {\n  return `https://www.linkedin.com/jobs/search?keywords=${kw}&location=${item.country}&geoId=${item.geoId}&f_JT=F%2CC&f_E=3%2C4&f_TPR=${item.publishedAtString}&f_WT=2&position=1&pageNum=0`;\n});\n\nreturn {\n  ...item,\n  urlArray\n};"
+          "jsCode": "const item = $input.item.json;\nconst keywords = item.url_keywords;\n\nconst urlArray = keywords.map(kw => {\n  let workType = \"2\"; \n  \n  if (item.geoId === \"104508036\") {\n    workType = \"2%2C3\"; \n  }\n\n  return `https://www.linkedin.com/jobs/search?keywords=${kw}&geoId=${item.geoId}&f_JT=F%2CC&f_E=3%2C4&f_TPR=${item.publishedAtString}&f_WT=${workType}&position=1&pageNum=0`;\n});\n\nreturn {\n  ...item,\n  urlArray\n};"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -832,7 +821,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const timeRange = $input.first().json;\n\nconst countries = [\n  // Account 1: DACH (Heavyweight)\n  { country: \"Germany\", geoId: \"101282230\", group: \"Account_4\" },\n  { country: \"Austria\", geoId: \"100932847\", group: \"Account_4\" },\n  { country: \"Switzerland\", geoId: \"106693272\", group: \"Account_4\" },\n\n  // Account 2: CEE & South (Medium-High)\n  { country: \"Czechia\", geoId: \"102122229\", group: \"Account_4\" },\n  { country: \"Slovakia\", geoId: \"105615792\", group: \"Account_4\" },\n  /* { country: \"Spain\", geoId: \"105646813\", group: \"Account_2\" },\n  { country: \"Portugal\", geoId: \"100363830\", group: \"Account_2\" },\n  { country: \"Italy\", geoId: \"103350119\", group: \"Account_2\" },\n\n  // Account 3: Poland & North (High Density)\n  { country: \"Poland\", geoId: \"105072130\", group: \"Account_3\" },\n  { country: \"Sweden\", geoId: \"100645604\", group: \"Account_3\" },\n  { country: \"Norway\", geoId: \"103819153\", group: \"Account_3\" },\n  { country: \"Denmark\", geoId: \"104514075\", group: \"Account_3\" },\n  { country: \"Finland\", geoId: \"100456013\", group: \"Account_3\" },\n  { country: \"Estonia\", geoId: \"104642055\", group: \"Account_3\" },\n\n  // Account 4: West & Balkans (The Rest)\n  { country: \"France\", geoId: \"105015875\", group: \"Account_4\" },\n  { country: \"Netherlands\", geoId: \"102890719\", group: \"Account_4\" },\n  { country: \"Belgium\", geoId: \"100565514\", group: \"Account_4\" },\n  { country: \"Hungary\", geoId: \"104481001\", group: \"Account_4\" },\n  { country: \"Turkey\", geoId: \"102105699\", group: \"Account_4\" } */\n];\n\nreturn countries.map(c => ({\n  ...c,\n  ...timeRange\n}));"
+          "jsCode": "const timeRange = $input.first().json;\n\nconst countries = [\n\n  { country: \"Germany\", geoId: \"101282230\", group: \"Account_1\" },\n  { country: \"Austria\", geoId: \"103883259\", group: \"Account_1\" },\n  { country: \"Switzerland\", geoId: \"106693272\", group: \"Account_1\" },\n\n  { country: \"Czechia\", geoId: \"104508036\", group: \"Account_2\" },\n  { country: \"Slovakia\", geoId: \"106131491\", group: \"Account_2\" },\n  { country: \"Poland\", geoId: \"105072130\", group: \"Account_2\" },\n\n  { country: \"Sweden\", geoId: \"105117694\", group: \"Account_3\" },\n  { country: \"Norway\", geoId: \"103819153\", group: \"Account_3\" },\n  { country: \"Denmark\", geoId: \"104514075\", group: \"Account_3\" },\n  { country: \"Finland\", geoId: \"100456013\", group: \"Account_3\" },\n\n\n  { country: \"France\", geoId: \"105015875\", group: \"Account_4\" },\n  { country: \"Netherlands\", geoId: \"102890719\", group: \"Account_4\" },\n  { country: \"Belgium\", geoId: \"100565514\", group: \"Account_4\" },\n  { country: \"Luxembourg\", geoId: \"104042105\", group: \"Account_4\" }\n];\n\nreturn countries.map(c => ({\n  ...c,\n  ...timeRange\n}));"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -841,21 +830,7 @@
           1248
         ],
         "id": "0fd03770-5f6a-4bd3-a04e-5072b817f3a2",
-        "name": "Set Location and Accounts Temporary"
-      },
-      {
-        "parameters": {
-          "jsCode": "const timeRange = $input.first().json;\n\nconst countries = [\n  // Account 1: DACH (Heavyweight)\n  { country: \"Germany\", geoId: \"101282230\", group: \"Account_1\" },\n  { country: \"Austria\", geoId: \"100932847\", group: \"Account_1\" },\n  { country: \"Switzerland\", geoId: \"106693272\", group: \"Account_1\" },\n\n  // Account 2: CEE & South (Medium-High)\n  { country: \"Czechia\", geoId: \"102122229\", group: \"Account_2\" },\n  { country: \"Slovakia\", geoId: \"105615792\", group: \"Account_2\" },\n  { country: \"Spain\", geoId: \"105646813\", group: \"Account_2\" },\n  { country: \"Portugal\", geoId: \"100363830\", group: \"Account_2\" },\n  { country: \"Italy\", geoId: \"103350119\", group: \"Account_2\" },\n\n  // Account 3: Poland & North (High Density)\n  { country: \"Poland\", geoId: \"105072130\", group: \"Account_3\" },\n  { country: \"Sweden\", geoId: \"100645604\", group: \"Account_3\" },\n  { country: \"Norway\", geoId: \"103819153\", group: \"Account_3\" },\n  { country: \"Denmark\", geoId: \"104514075\", group: \"Account_3\" },\n  { country: \"Finland\", geoId: \"100456013\", group: \"Account_3\" },\n  { country: \"Estonia\", geoId: \"104642055\", group: \"Account_3\" },\n\n  // Account 4: West & Balkans (The Rest)\n  { country: \"France\", geoId: \"105015875\", group: \"Account_4\" },\n  { country: \"Netherlands\", geoId: \"102890719\", group: \"Account_4\" },\n  { country: \"Belgium\", geoId: \"100565514\", group: \"Account_4\" },\n  { country: \"Hungary\", geoId: \"104481001\", group: \"Account_4\" },\n  { country: \"Turkey\", geoId: \"102105699\", group: \"Account_4\" }\n];\n\nreturn countries.map(c => ({\n  ...c,\n  ...timeRange\n}));"
-        },
-        "type": "n8n-nodes-base.code",
-        "typeVersion": 2,
-        "position": [
-          -5824,
-          1552
-        ],
-        "id": "92684762-5f37-4842-ac12-3eabcc181c91",
-        "name": "Set Location and Accounts1_resets 9/5",
-        "disabled": true
+        "name": "Set Location and Accounts"
       }
     ],
     "connections": {
@@ -874,7 +849,7 @@
         "main": [
           [
             {
-              "node": "Set Location and Accounts Temporary",
+              "node": "Set Location and Accounts",
               "type": "main",
               "index": 0
             }
@@ -972,7 +947,7 @@
           ]
         ]
       },
-      "Set Location and Accounts Temporary": {
+      "Set Location and Accounts": {
         "main": [
           [
             {
@@ -985,16 +960,16 @@
       }
     },
     "authors": "d d",
-    "name": "Version 4ceaf938",
+    "name": "Version 3d6d20a6",
     "description": "",
     "autosaved": true
   },
   "tags": [
     {
-      "updatedAt": "2026-02-25T07:33:28.018Z",
-      "createdAt": "2026-02-25T07:33:28.018Z",
-      "id": "IqRTP9BqhN0ja5Ww",
-      "name": "prod"
+      "updatedAt": "2026-03-06T13:15:28.248Z",
+      "createdAt": "2026-01-22T12:40:37.040Z",
+      "id": "mcS1gLAfDII7yoGe",
+      "name": "scrape"
     },
     {
       "updatedAt": "2026-03-05T15:02:23.016Z",
@@ -1003,10 +978,10 @@
       "name": "linkedin"
     },
     {
-      "updatedAt": "2026-03-06T13:15:28.248Z",
-      "createdAt": "2026-01-22T12:40:37.040Z",
-      "id": "mcS1gLAfDII7yoGe",
-      "name": "scrape"
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
     }
   ]
 }
