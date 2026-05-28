@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-11T06:20:24.155Z",
+  "updatedAt": "2026-05-27T08:03:30.976Z",
   "createdAt": "2026-03-13T09:00:43.409Z",
   "id": "uwgMqfMmHqoIMgocF5zaH",
   "name": "scrape_trueup",
@@ -782,7 +782,7 @@
           "interval": [
             {
               "triggerAtHour": 8,
-              "triggerAtMinute": 5
+              "triggerAtMinute": 4
             }
           ]
         }
@@ -856,7 +856,7 @@
             {
               "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
               "leftValue": "={{ $json.title }}",
-              "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n).*",
+              "rightValue": ".*(\\b(ai|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n|solutions|consultant|ml-?ops|ai-?ops|orchestrat\\w+|integrations?)\\b).*",
               "operator": {
                 "type": "string",
                 "operation": "regex"
@@ -865,7 +865,7 @@
             {
               "id": "6f924664-fa20-4947-af03-df2841af8012",
               "leftValue": "={{ $json.title }}",
-              "rightValue": ".*(sales-representative|assistant|manual|legal|qa-engineer|account-manager|account-executive|qa-automation|test-automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react-native|cloud|only|research|frontend|backend|forward|fde|fullstack|full-stack|junior|ruby|rust|acquisition).*",
+              "rightValue": ".*(\\b(sales[- ]representative|assistant|manual|legal|qa[- ]engineer|qa[- ]automation|account[- ]manager|account[- ]executive|test[- ]automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react[- ]native|cloud|only|research|frontend|backend|forward|fde|fullstack|full[- ]stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp)\\b).*",
               "operator": {
                 "type": "string",
                 "operation": "notRegex"
@@ -885,7 +885,8 @@
         -1328
       ],
       "id": "c9ffade3-36be-488f-b7af-2f090bb95d31",
-      "name": "Filter positive and negative1"
+      "name": "Filter positive and negative1",
+      "alwaysOutputData": true
     },
     {
       "parameters": {
@@ -1364,8 +1365,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "7fa6d464-c097-4ec5-a044-9fd1dbc9ed13",
-  "activeVersionId": "7fa6d464-c097-4ec5-a044-9fd1dbc9ed13",
+  "versionId": "4b3ad9ea-dcbb-4523-a544-b4333b06de84",
+  "activeVersionId": "4b3ad9ea-dcbb-4523-a544-b4333b06de84",
   "triggerCount": 1,
   "shared": [
     {
@@ -1377,9 +1378,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-11T06:20:24.157Z",
-    "createdAt": "2026-05-11T06:20:24.157Z",
-    "versionId": "7fa6d464-c097-4ec5-a044-9fd1dbc9ed13",
+    "updatedAt": "2026-05-27T08:03:32.283Z",
+    "createdAt": "2026-05-27T08:03:30.977Z",
+    "versionId": "4b3ad9ea-dcbb-4523-a544-b4333b06de84",
     "workflowId": "uwgMqfMmHqoIMgocF5zaH",
     "nodes": [
       {
@@ -2158,7 +2159,7 @@
             "interval": [
               {
                 "triggerAtHour": 8,
-                "triggerAtMinute": 5
+                "triggerAtMinute": 4
               }
             ]
           }
@@ -2232,7 +2233,7 @@
               {
                 "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
                 "leftValue": "={{ $json.title }}",
-                "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n).*",
+                "rightValue": ".*(\\b(ai|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n|solutions|consultant|ml-?ops|ai-?ops|orchestrat\\w+|integrations?)\\b).*",
                 "operator": {
                   "type": "string",
                   "operation": "regex"
@@ -2241,7 +2242,7 @@
               {
                 "id": "6f924664-fa20-4947-af03-df2841af8012",
                 "leftValue": "={{ $json.title }}",
-                "rightValue": ".*(sales-representative|assistant|manual|legal|qa-engineer|account-manager|account-executive|qa-automation|test-automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react-native|cloud|only|research|frontend|backend|forward|fde|fullstack|full-stack|junior|ruby|rust|acquisition).*",
+                "rightValue": ".*(\\b(sales[- ]representative|assistant|manual|legal|qa[- ]engineer|qa[- ]automation|account[- ]manager|account[- ]executive|test[- ]automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react[- ]native|cloud|only|research|frontend|backend|forward|fde|fullstack|full[- ]stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp)\\b).*",
                 "operator": {
                   "type": "string",
                   "operation": "notRegex"
@@ -2261,7 +2262,8 @@
           -1328
         ],
         "id": "c9ffade3-36be-488f-b7af-2f090bb95d31",
-        "name": "Filter positive and negative1"
+        "name": "Filter positive and negative1",
+        "alwaysOutputData": true
       },
       {
         "parameters": {
@@ -2723,16 +2725,16 @@
       }
     },
     "authors": "d d",
-    "name": null,
-    "description": null,
+    "name": "Version 4b3ad9ea",
+    "description": "",
     "autosaved": true
   },
   "tags": [
     {
-      "updatedAt": "2026-02-25T07:33:28.018Z",
-      "createdAt": "2026-02-25T07:33:28.018Z",
-      "id": "IqRTP9BqhN0ja5Ww",
-      "name": "prod"
+      "updatedAt": "2026-03-06T13:15:28.248Z",
+      "createdAt": "2026-01-22T12:40:37.040Z",
+      "id": "mcS1gLAfDII7yoGe",
+      "name": "scrape"
     },
     {
       "updatedAt": "2026-03-30T13:28:38.256Z",
@@ -2741,10 +2743,10 @@
       "name": "trueup"
     },
     {
-      "updatedAt": "2026-03-06T13:15:28.248Z",
-      "createdAt": "2026-01-22T12:40:37.040Z",
-      "id": "mcS1gLAfDII7yoGe",
-      "name": "scrape"
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
     }
   ]
 }
