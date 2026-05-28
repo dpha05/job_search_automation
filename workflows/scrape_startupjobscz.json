@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-11T06:21:02.436Z",
+  "updatedAt": "2026-05-27T08:03:13.546Z",
   "createdAt": "2026-03-06T12:06:54.218Z",
   "id": "CmzQ2cHGnb3X3hIZ",
   "name": "scrape_startupjobscz",
@@ -12,7 +12,7 @@
           "interval": [
             {
               "triggerAtHour": 8,
-              "triggerAtMinute": 10
+              "triggerAtMinute": 11
             }
           ]
         }
@@ -629,7 +629,7 @@
             {
               "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
               "leftValue": "={{ $json.loc }}",
-              "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|platform-engineer|n8n).*",
+              "rightValue": "\\b(ai|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n|solutions|consultant|ml-?ops|ai-?ops|orchestrat\\w+|integrations?)\\b",
               "operator": {
                 "type": "string",
                 "operation": "regex"
@@ -638,7 +638,7 @@
             {
               "id": "6f924664-fa20-4947-af03-df2841af8012",
               "leftValue": "={{ $json.loc }}",
-              "rightValue": ".*(sales-representative|assistant|manual|legal|qa-engineer|account-manager|account-executive|qa-automation|test-automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react-native|cloud|only|research|frontend|backend|forward|fde|fullstack|full-stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp).*",
+              "rightValue": ".*(\\b(sales[- ]representative|assistant|manual|legal|qa[- ]engineer|qa[- ]automation|account[- ]manager|account[- ]executive|test[- ]automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react[- ]native|cloud|only|research|frontend|backend|forward|fde|fullstack|full[- ]stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp)\\b).*",
               "operator": {
                 "type": "string",
                 "operation": "notRegex"
@@ -658,7 +658,8 @@
         416
       ],
       "id": "fb79c1c1-9adc-4023-a94e-2940538c2d85",
-      "name": "Filter positive and negative1"
+      "name": "Filter positive and negative1",
+      "alwaysOutputData": true
     }
   ],
   "connections": {
@@ -924,8 +925,8 @@
   },
   "meta": null,
   "pinData": {},
-  "versionId": "0720aa0f-a757-4e20-88fb-2bec290595af",
-  "activeVersionId": "0720aa0f-a757-4e20-88fb-2bec290595af",
+  "versionId": "f3feaf43-0fbb-4873-a1d3-21b2735b2c42",
+  "activeVersionId": "f3feaf43-0fbb-4873-a1d3-21b2735b2c42",
   "triggerCount": 1,
   "shared": [
     {
@@ -937,9 +938,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-11T06:21:04.087Z",
-    "createdAt": "2026-05-11T06:21:02.438Z",
-    "versionId": "0720aa0f-a757-4e20-88fb-2bec290595af",
+    "updatedAt": "2026-05-27T08:03:15.093Z",
+    "createdAt": "2026-05-27T08:03:13.548Z",
+    "versionId": "f3feaf43-0fbb-4873-a1d3-21b2735b2c42",
     "workflowId": "CmzQ2cHGnb3X3hIZ",
     "nodes": [
       {
@@ -948,7 +949,7 @@
             "interval": [
               {
                 "triggerAtHour": 8,
-                "triggerAtMinute": 10
+                "triggerAtMinute": 11
               }
             ]
           }
@@ -1565,7 +1566,7 @@
               {
                 "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
                 "leftValue": "={{ $json.loc }}",
-                "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|platform-engineer|n8n).*",
+                "rightValue": "\\b(ai|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n|solutions|consultant|ml-?ops|ai-?ops|orchestrat\\w+|integrations?)\\b",
                 "operator": {
                   "type": "string",
                   "operation": "regex"
@@ -1574,7 +1575,7 @@
               {
                 "id": "6f924664-fa20-4947-af03-df2841af8012",
                 "leftValue": "={{ $json.loc }}",
-                "rightValue": ".*(sales-representative|assistant|manual|legal|qa-engineer|account-manager|account-executive|qa-automation|test-automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react-native|cloud|only|research|frontend|backend|forward|fde|fullstack|full-stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp).*",
+                "rightValue": ".*(\\b(sales[- ]representative|assistant|manual|legal|qa[- ]engineer|qa[- ]automation|account[- ]manager|account[- ]executive|test[- ]automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react[- ]native|cloud|only|research|frontend|backend|forward|fde|fullstack|full[- ]stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp)\\b).*",
                 "operator": {
                   "type": "string",
                   "operation": "notRegex"
@@ -1594,7 +1595,8 @@
           416
         ],
         "id": "fb79c1c1-9adc-4023-a94e-2940538c2d85",
-        "name": "Filter positive and negative1"
+        "name": "Filter positive and negative1",
+        "alwaysOutputData": true
       }
     ],
     "connections": {
@@ -1845,16 +1847,16 @@
       }
     },
     "authors": "d d",
-    "name": "Version 0720aa0f",
+    "name": "Version f3feaf43",
     "description": "",
     "autosaved": true
   },
   "tags": [
     {
-      "updatedAt": "2026-02-25T07:33:28.018Z",
-      "createdAt": "2026-02-25T07:33:28.018Z",
-      "id": "IqRTP9BqhN0ja5Ww",
-      "name": "prod"
+      "updatedAt": "2026-03-06T13:15:28.248Z",
+      "createdAt": "2026-01-22T12:40:37.040Z",
+      "id": "mcS1gLAfDII7yoGe",
+      "name": "scrape"
     },
     {
       "updatedAt": "2026-03-06T08:15:29.125Z",
@@ -1863,10 +1865,10 @@
       "name": "startupjobscz"
     },
     {
-      "updatedAt": "2026-03-06T13:15:28.248Z",
-      "createdAt": "2026-01-22T12:40:37.040Z",
-      "id": "mcS1gLAfDII7yoGe",
-      "name": "scrape"
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
     }
   ]
 }
