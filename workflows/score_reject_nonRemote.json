@@ -1,0 +1,1539 @@
+{
+  "updatedAt": "2026-05-26T05:49:58.524Z",
+  "createdAt": "2026-05-22T07:04:14.555Z",
+  "id": "gcNgbF4QWJ8Fcxry",
+  "name": "score_reject_nonRemote",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -704,
+        -744
+      ],
+      "id": "7fec5472-d90f-4be9-8ad0-c5ad7c1ed902",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7e6f82e4-042a-49fe-b7d9-34eafdead4e7",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "98dd640c-efc3-4cc2-8f45-442711c3aaf6",
+              "name": "published_at",
+              "value": "={{ $json.published_at }}",
+              "type": "string"
+            },
+            {
+              "id": "ddc97d13-cf78-4120-af9c-2135094c68e5",
+              "name": "company_name",
+              "value": "={{ $json.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "d83105f2-d36e-4f58-a304-048d6b1cea81",
+              "name": "job_title",
+              "value": "={{ $json.job_title }}",
+              "type": "string"
+            },
+            {
+              "id": "98472579-8758-49e7-afb3-4c9cccec75bc",
+              "name": "job_url",
+              "value": "={{ $json.job_url }}",
+              "type": "string"
+            },
+            {
+              "id": "b750dd49-51e3-4f87-a61a-c4c33978f17d",
+              "name": "match_score",
+              "value": "={{ $json.match_score }}",
+              "type": "number"
+            },
+            {
+              "id": "9988f698-c59a-4a5c-8162-81c45b75e224",
+              "name": "job_description",
+              "value": "={{ $json.job_description }}",
+              "type": "string"
+            },
+            {
+              "id": "5804039c-ea1b-43fd-8c6b-bb4b3cbcbdbb",
+              "name": "job_location",
+              "value": "={{ $json.job_location }}",
+              "type": "string"
+            },
+            {
+              "id": "429a78c3-9b24-4a4f-96c3-43aaee37d6c3",
+              "name": "external_id",
+              "value": "={{ $json.external_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b775719f-125e-463c-ae72-458bc4659483",
+              "name": "job_salary",
+              "value": "={{ $json.job_salary }}",
+              "type": "string"
+            },
+            {
+              "id": "ee82521f-b573-4d52-aa26-4e46c5a5a0a3",
+              "name": "company_department",
+              "value": "={{ $json.company_department }}",
+              "type": "string"
+            },
+            {
+              "id": "667763ef-6bbf-422e-b98a-44bb51b835bb",
+              "name": "job_sector",
+              "value": "={{ $json.job_sector }}",
+              "type": "string"
+            },
+            {
+              "id": "e02990cc-70a0-4672-a050-6280df10fdb8",
+              "name": "contract_type",
+              "value": "={{ $json.contract_type }}",
+              "type": "string"
+            },
+            {
+              "id": "3d532878-6ff8-4d21-9bea-fd927ab38bd9",
+              "name": "signal_tier",
+              "value": "={{ $json.signal_tier }}",
+              "type": "string"
+            },
+            {
+              "id": "45833e66-5531-4b1f-b56c-3401f31448c8",
+              "name": "status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "49c83c67-536e-42be-a041-4b247875218b",
+              "name": "processed_at",
+              "value": "={{ $json.processed_at }}",
+              "type": "string"
+            },
+            {
+              "id": "e36b8eb9-3dc9-406b-aa74-0ba4839ff0eb",
+              "name": "company_url",
+              "value": "={{ $json.company_url }}",
+              "type": "string"
+            },
+            {
+              "id": "80d94137-bddf-4264-80c3-d0eb5ecda587",
+              "name": "poster_name",
+              "value": "={{ $json.poster_name }}",
+              "type": "string"
+            },
+            {
+              "id": "cf1fb289-8821-4cbf-bdea-814ee646ed9e",
+              "name": "poster_linkedin",
+              "value": "={{ $json.poster_linkedin }}",
+              "type": "string"
+            },
+            {
+              "id": "f7041f7f-79c8-4f8d-a280-56a151df3885",
+              "name": "company_logo",
+              "value": "={{ $json.company_logo }}",
+              "type": "string"
+            },
+            {
+              "id": "4dc74732-aa86-4718-9e3f-f2ac23552cda",
+              "name": "experience_level",
+              "value": "={{ $json.experience_level }}",
+              "type": "string"
+            },
+            {
+              "id": "ccbbece4-e599-4a22-91fd-6d5a4425240f",
+              "name": "apply_url",
+              "value": "={{ $json.apply_url }}",
+              "type": "string"
+            },
+            {
+              "id": "9c881010-3c28-4f7e-a5fd-da3e9f6814d2",
+              "name": "source",
+              "value": "={{ $json.source }}",
+              "type": "string"
+            },
+            {
+              "id": "7c61ac99-d19a-48ed-94a0-754f00eba142",
+              "name": "description_vector",
+              "value": "={{ $json.description_vector }}",
+              "type": "string"
+            },
+            {
+              "id": "83620fee-933a-4de4-9652-91faa26f6260",
+              "name": "employment_type",
+              "value": "={{ $json.employment_type }}",
+              "type": "string"
+            },
+            {
+              "id": "e70e38db-bc1d-4bf4-807f-55155ff0ed8c",
+              "name": "work_mode",
+              "value": "={{ $json.work_mode }}",
+              "type": "string"
+            },
+            {
+              "id": "2fd7e6b1-856b-4d4a-b90d-7d177318cbe2",
+              "name": "metadata",
+              "value": "={{ $json.metadata }}",
+              "type": "string"
+            },
+            {
+              "id": "7b1de7ac-addb-4f76-a3bf-959d7acafff6",
+              "name": "tech_score",
+              "value": "={{ $json.tech_score }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -480,
+        -744
+      ],
+      "id": "db5642dd-d3ca-45e7-9b63-7e17204b0db8",
+      "name": "Standardize input"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.job_url }}",
+                    "rightValue": ".*(cz\\.linkedin\\.com|startupjobs\\.cz).*",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    },
+                    "id": "19ef129e-bf1e-4ff3-acff-5341e1fa2304"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "cz"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "06290577-d9b3-410c-9a4a-a1834d9b324e",
+                    "leftValue": "={{ $json.job_url }}",
+                    "rightValue": "^(?!.*cz\\.linkedin\\.com).*linkedin\\.com.*",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "linkedin_rest"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c190ab58-9982-42e7-9332-c7c18709c877",
+                    "leftValue": "={{ $json.job_url }}",
+                    "rightValue": "^(?!.*(linkedin\\.com|startupjobs\\.cz)).*$",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "rest"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -256,
+        -760
+      ],
+      "id": "f0670cf2-3d80-40c8-a817-2319ca4d6519",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "713ecdaa-1f68-4094-bedc-d9662150afaa",
+              "leftValue": "={{ $json.job_url }}",
+              "rightValue": "de.linkedin",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        192,
+        -868
+      ],
+      "id": "38d542e8-6654-4dff-bf62-b635512a9780",
+      "name": "Is DE?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ec5f48d6-a679-428b-9e50-30ec709ffb32",
+              "leftValue": "={{ $json.job_title }}",
+              "rightValue": "remote",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "914a8218-20a3-4b0f-aaf7-f16d70ffc4f0",
+              "leftValue": "={{ $json.work_mode }}",
+              "rightValue": "remote",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -32,
+        -744
+      ],
+      "id": "4fa97925-1770-4181-8617-6bcb59eb397c",
+      "name": "Has remote title or mode?"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"thought_process\": {\n      \"type\": \"string\",\n      \"description\": \"Brief explanation of why the geographic flags were set, specifically citing any mentions of 'EMEA', 'Hybrid', or specific country mandates.\"\n    },\n    \"is_fully_remote\": {\n      \"type\": \"string\",\n      \"enum\": [\"Yes\", \"No\"],\n      \"description\": \"Set to 'Yes' only if the job is explicitly 100% remote. Set to 'No' if it mentions hybrid, on-site, office-based, or is completely silent about remote work.\"\n    },\n    \"relocation_mandatory\": {\n      \"type\": \"string\",\n      \"enum\": [\"Yes\", \"No\"],\n      \"description\": \"Set to 'Yes' if the text requires moving to a specific city/country. Set to 'No' if relocation is not mentioned.\"\n    },\n    \"country_bound_remote\": {\n      \"type\": \"string\",\n      \"enum\": [\"Yes\", \"No\"],\n      \"description\": \"Set to 'Yes' if remote work is restricted to residents of one single country. Set to 'No' if it is global or region-wide (e.g., EMEA, Europe, LATAM).\"\n    }\n  },\n  \"required\": [\n    \"thought_process\",\n    \"is_fully_remote\",\n    \"relocation_mandatory\",\n    \"country_bound_remote\"\n  ]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        552,
+        -520
+      ],
+      "id": "ddbf981f-233d-4c46-9985-c8e496ee7e31",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        424,
+        -520
+      ],
+      "id": "40ed08ab-9895-450e-884c-ff6d916ac67e",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "WHKYJmDyVoPXPzmK",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Reference Calibration (Verification Benchmarks):\n\nExample 1: \"AI Lead (Hybrid) - Berlin\" \n-> is_fully_remote: \"No\", relocation_mandatory: \"No\", country_bound_remote: \"No\"\n\nExample 2: \"Senior Dev - Remote (UK Only)\" \n-> is_fully_remote: \"Yes\", relocation_mandatory: \"No\", country_bound_remote: \"Yes\"\n\nExample 3: \"Applied AI Engineer - Remote EMEA\" \n-> is_fully_remote: \"Yes\", relocation_mandatory: \"No\", country_bound_remote: \"No\" (EMEA is a region, not a single country)\n\nTask: Analyze the following job data:\n\nMetadata Location: {{ $json.job_location }}\nTitle: {{ $json.job_title }}\nDescription: {{ $json.job_description }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "<system_instructions>\n<persona>\nGeographic and Remote Work Auditor. You are the first-line filter for a global job scraping engine. Your goal is to identify if a job is truly accessible to a location-independent worker.\n</persona>\n\n<task>\nAnalyze the Job Metadata, Title, and Description to evaluate three binary conditions: Remote status, Relocation requirements, and Country-specific restrictions.\n</task>\n\n<logic_rules>\n1. FULLY REMOTE: \n- \"Yes\" if the role is 100% remote/work-from-home.\n- \"No\" if the role is \"Hybrid,\" \"Office-based,\" \"On-site,\" or if it mentions \"X days in the office.\"\n2. RELOCATION:\n- \"Yes\" if moving to a specific city/country is mandatory.\n- \"No\" if relocation is never mentioned.\n3. COUNTRY-BOUND:\n- \"Yes\" if remote work is restricted to a SINGLE specific country's tax residency (e.g., \"Must be in US\").\n- \"No\" if the role is \"Global,\" \"EMEA,\" \"Worldwide,\" or lacks country restrictions. Regional zones (EMEA/APAC) are NOT country-bound.\n</logic_rules>\n\n<constraints>\n- Respond ONLY with valid JSON.\n- Include a brief \"thought_process\" field (max 2 sentences) to explain the geographic logic.\n- Strictly use \"Yes\" or \"No\" strings for Boolean fields.\n</constraints>\n</system_instructions>"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        416,
+        -744
+      ],
+      "id": "dbb521ce-e3f3-4106-9fef-c127fc07d501",
+      "name": "Check fully remote+relocation+country bound"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a8f92cca-ee89-4d5d-9a26-8298d8409605",
+              "leftValue": "={{ $json.output.is_fully_remote }}",
+              "rightValue": "Yes",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "6e02cb2c-feb6-4b5c-97fa-008ad22dfe23",
+              "leftValue": "={{ $json.output.relocation_mandatory }}",
+              "rightValue": "No",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "83872f26-c9b9-40bd-a9c8-1e06760db516",
+              "leftValue": "={{ $json.output.country_bound_remote }}",
+              "rightValue": "No",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        768,
+        -744
+      ],
+      "id": "2633aaac-c1ee-4a65-b666-8ab9d87f3156",
+      "name": "Is remote+no relocation+no country bound?"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "6ZaKoDnZGnMsZnWr",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/6ZaKoDnZGnMsZnWr",
+          "cachedResultName": "score_filter_fasttrack"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1216,
+        -992
+      ],
+      "id": "1e1ed255-a3ed-4df8-ab78-4bb3039a07c0",
+      "name": "Call 'score_filter_fasttrack'"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "job_leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "={{ $('Standardize input').item.json.job_url }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "rejected_remote"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        992,
+        -544
+      ],
+      "id": "be76c362-6f2c-4908-b298-14ac70f42dd6",
+      "name": "Update status1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "job_leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "={{ $('Standardize input').item.json.job_url }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "passed_remote"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        992,
+        -992
+      ],
+      "id": "538657be-08e8-4b1e-91c4-40d1019c57af",
+      "name": "Update status",
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Standardize input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Standardize input": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Update status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Has remote title or mode?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check fully remote+relocation+country bound",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is DE?": {
+      "main": [
+        [
+          {
+            "node": "Update status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check fully remote+relocation+country bound",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has remote title or mode?": {
+      "main": [
+        [
+          {
+            "node": "Is DE?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update status1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Check fully remote+relocation+country bound",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Check fully remote+relocation+country bound",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check fully remote+relocation+country bound": {
+      "main": [
+        [
+          {
+            "node": "Is remote+no relocation+no country bound?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is remote+no relocation+no country bound?": {
+      "main": [
+        [
+          {
+            "node": "Update status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update status1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update status": {
+      "main": [
+        [
+          {
+            "node": "Call 'score_filter_fasttrack'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "Europe/Prague",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "id": "d672de1c-747c-4c07-9b59-c187d85eb99c",
+          "published_at": "2026-05-21T16:44:49+02:00",
+          "company_name": "DPG Media Nederland",
+          "job_title": "Product Owner GenAI",
+          "job_url": "https://be.linkedin.com/jobs/view/product-owner-genai-at-dpg-media-nederland-4404433740?position=18&pageNum=0&refId=RIAApdsJoObgPVoyR8ThDQ%3D%3D&trackingId=TFv9N6sst39D9vz6wA%2F7oA%3D%3D",
+          "match_score": 0,
+          "job_description": "Antwerp/Amsterdam - Are you a technical product owner with a passion for the rapidly evolving world of Artificial Intelligence? DPG Media is taking a massive leap forward by establishing a brand-new GenAI Center of Excellence, and we are looking for a Product Owner to help build the foundation.\n\nIn this role, you won't just be using AI—you will be building the very infrastructure that enables our journalists, editors, and creators to redefine the future of media. If you enjoy the speed of a startup but want to make an impact on a scale that reaches millions of people every day, this is your chance to be at the forefront of the most exciting technological shift in our industry.\n\nWhat will you do?\n\nAs our Technical Product Owner, you will be the architect of the roadmap for our centralized GenAI Platform. We are a large-scale media company operating across multiple countries and independent business units. Your goal is to turn \"AI potential\" into a robust, scalable, and developer-friendly platform that empowers our different brands to build the future of media. You will guide a high-performing team of AI Engineers and Full-Stack Developers, ensuring they are focused on the highest-impact features while navigating the complexities of a multi-tenant, international organization.\n\nYour role is essential in creating a scalable foundation; without this platform, our business domains would lack the tools to innovate with AI, stalling our mission to remain a frontrunner in the media landscape.\n\nYou are also involved in:\n\nRoadmap Strategy: Define and own the product vision for the GenAI platform, balancing foundational infrastructure with the specific needs of independent business units. Keep a strong platform focus, to ensure the platform can be broadly used.Backlog & Structure: Translate complex business requirements into clear, technical user stories and manage a structured sprint process for 6-7 engineers.Stakeholder navigation: Act as the primary interface for \"customers\" (e.g., Newsrooms, Marketing, Product Teams) across different countries to understand their pain points and prioritize platform features. Enablement: Ensure the platform isn't just \"built,\" but \"adopted.\" You will define the developer experience and documentation that makes it easy for other teams to build on your platform. Value Orchestration: Manage the balance between \"bleeding-edge\" AI experimentation and the stability/security required by a major media enterprise.\n\nWhat does the department look like?\n\nWe are the GenAI Center of Excellence – a brand-new, ambitious team of 10+ professionals leading the AI transformation of DPG Media. We operate according to a \"Domain-Owned, Centrally Enabled\" model: we build the technology, expertise, and governance that allow our business domains (such as News Media, Audio & Video, and Advertising) to independently develop and deploy AI solutions.\n\nThree complementary teams: We consist of the GenAI Platform team (infrastructure), Platform Enablement (business solutions), and Organization Enablement (strategy and governance). Pioneers in media & AI: We work on cutting-edge applications like Editorial Co-Pilots and AI-driven video production that impact millions of users. Hybrid team of doers: We combine experienced tech veterans with media experts who are hands-on, pragmatic, and driven to learn. Startup mentality within corporate stability: You get the energy and autonomy of a startup, backed by the resources and scale of a major European media company. Direct impact & visibility: You actively shape how DPG Media embraces AI, presenting to executives and seeing your work used by 90% of the Dutch population.\n\nWho are you?\n\nDegree in computer science, artificial intelligence, a related field, or relevant prior experience4+ years of full Product Management, preferably related to platform development including stakeholder management, setting product vision, structuring & owning the product backlog and leading the team to create maximum valueExperience with Product Management and Agile principlesEnjoys working on a variety of technologies and productsPre-existing knowledge or experience with (Gen)AIA natural interest in news\n\nWhat do we offer ?\n\nAt DPG Media, we are open to all talent in society. Regardless of your background, we invite you to apply for this position. We believe that the differences between colleagues are exactly what lead to surprising insights and innovative solutions—which aligns perfectly with our identity as an organization.\n\nWe are curious to know who you are and the unique qualities and experience you bring to the table. If you’d like to learn more about our inclusive work environment, click here!\n\nAt DPG Media, you’ll join an inspiring work environment that is constantly in motion. Through our DPG Academy, we offer a variety of courses, giving you every opportunity to reach your full potential!\n\n💰 Competitive salary tailored to your professional experience.📝 Work-life balance: A 36-hour workweek in the Netherlands or a 38-hour workweek in Belgium.📝 Hybrid working: We embrace hybrid work; you’ll coordinate with your team to decide which days you'll be in the office.💰 Profit sharing: An annual bonus based on the overall performance of DPG Media.🎓 Growth opportunities: Plenty of room to develop your skills, both on the job and online via the DPG Academy.🎉 Personalized holidays: The flexibility to swap standard public holidays for your own cultural celebrations!🏢 An amazing workspace: Whether in Amsterdam, Vilvoorde, or Antwerp, you’ll feel right at home with spontaneous drinks, team outings, and our legendary staff parties!",
+          "job_location": "Antwerp, Flemish Region, Belgium",
+          "external_id": "4404433740",
+          "job_salary": null,
+          "company_department": null,
+          "job_sector": "Product Management and Marketing",
+          "contract_type": "Full-time",
+          "signal_tier": null,
+          "status": "passed",
+          "processed_at": "2026-05-22T09:33:39.782+02:00",
+          "company_url": "https://nl.linkedin.com/company/dpg-media-nl?trk=public_jobs_jserp-result_job-search-card-subtitle",
+          "poster_name": null,
+          "poster_linkedin": null,
+          "company_logo": "https://media.licdn.com/dms/image/v2/C4E0BAQFnjM8hH5MaZQ/company-logo_100_100/company-logo_100_100/0/1651583316826/dpg_media_nl_logo?e=2147483647&v=beta&t=p3kk3WAT6o6BQWYKpo6z5yVIDIrQY9KOZC90d85eVKo",
+          "experience_level": "Not Applicable",
+          "apply_url": "https://vacatures.dpgmedia.nl/o/product-owner-genai?source=LinkedIn",
+          "source": "linkedin",
+          "description_vector": "[0.023348007,0.002403775,0.028763596,-0.063068494,-0.015957676,0.018616868,0.007260913,-0.0023084537,0.028495735,0.0029035562,-0.0064498526,-0.017387358,0.013018524,0.017518789,0.11698397,0.0077369106,0.020572092,0.0027462526,0.015789576,-0.015841922,0.024017254,0.011275753,0.019190127,-0.03789592,-0.02550589,-0.0026418476,0.0106695015,0.025484202,0.032164056,-0.015856156,0.005319165,0.016791826,0.005329612,0.035173673,-0.011589609,0.022520179,0.005970082,-0.015258904,0.0050972602,0.0164537,-0.007115033,0.01442636,-0.026697142,-0.027158458,-0.017145418,-0.030151766,-0.011278394,-0.017064037,-0.010127632,-0.015922925,-0.01039868,-0.013527379,-0.01710629,-0.17062382,-0.012204121,0.0034757918,0.0037085973,-0.031067394,0.021392053,-0.025008133,0.005598822,0.046204038,-0.017991683,-0.042194527,0.0005012962,0.004757451,-0.00054344785,0.00027667778,0.019844167,-0.010976011,0.005411911,0.023905862,-0.013835127,-0.021038258,0.0075967987,-0.016347952,0.001979186,-0.018633664,0.0153652,0.027738214,0.01063201,-0.001709972,-0.00089376007,-0.01572884,0.018723888,0.0007638211,0.013750623,-0.023205247,0.020818314,-0.026418151,0.0077967397,-0.009009271,0.01799454,0.013602832,-0.0057955566,-0.03316086,-0.00051011716,0.0046657473,0.02288355,-0.014564091,-0.005457319,-0.005427529,0.010343025,-0.028555963,0.008554039,0.0062628603,-0.012600511,-0.03572209,-0.020587655,-0.0046680374,0.008482347,-0.013276491,-0.0011411379,0.014104313,0.0009994252,-0.14155386,0.0259622,0.0012274433,0.008918726,-0.010891332,-0.009969687,-0.028233405,0.030824605,0.0025411001,-0.001195708,-0.011049897,-0.013207294,0.010078789,-0.01783601,-0.018531084,-0.02954493,-0.018577183,0.014466707,-0.012522417,-0.006200827,0.04490149,0.022311596,-0.0023606312,0.0090095755,-0.016363315,0.009928826,0.008466102,-0.0022995386,0.02164041,-0.009526881,-0.017431494,-0.017863743,0.0017772319,0.038543016,-0.015668677,0.003730429,-0.03541729,-0.013702117,0.014175181,0.011429736,-0.026128748,-0.034888092,0.004059334,-0.007094168,0.019965567,-0.030665126,-0.011870831,-0.006709766,0.031922758,0.044086155,0.014342245,-0.014067405,0.008356304,0.012826114,0.03366022,0.006053892,-0.02425166,-0.034808654,-0.0012606579,0.0021066093,0.004844397,0.019431159,0.018125681,0.0038549192,-0.039790235,0.02810946,0.04037124,0.0070517818,-0.01961666,0.0027408083,0.011613648,-0.0061939005,0.0043800436,0.017127384,-0.013098282,0.020181201,0.023445893,0.0049760942,-0.011051634,0.024737163,-0.0108253,-0.014066157,-0.0010742015,0.004354032,0.0076853465,0.0123103345,-0.008242738,-0.01702789,-0.017488597,0.00768036,-0.009944106,0.012943645,0.0023421468,-0.0063006817,-0.0017463968,0.0038793334,-0.017598242,-0.0014956897,-0.011619366,-0.010946455,-0.044707708,-0.019299986,-0.023998186,-0.006888083,0.0017264728,-0.004338299,-0.017125051,0.010925623,0.012898573,0.005860695,-0.005523375,0.004317404,-0.012009116,0.03300809,-0.016170623,-0.0061598727,-0.006956225,0.015502483,0.00075057865,0.010350895,0.015519634,0.01855328,0.0028356174,0.01526539,-0.002395597,0.007823999,0.0056048045,-0.023565723,0.03998159,-0.010137084,-0.029797511,-0.0020390155,0.0016326829,0.004019577,0.009983201,-0.024093278,-0.035672933,0.014402855,0.020121276,-0.029433124,-0.0074748457,0.004076776,-0.026050739,0.012014424,-0.008660692,-0.030429782,0.019728817,0.0016255529,0.009243002,0.0013436916,-0.032256138,0.025806813,-0.006487406,-0.0006871078,-0.0010116878,0.018979674,0.004424837,-1.6818725e-05,-0.014937642,0.0008675914,-0.003553293,-0.029224297,0.008399983,0.021138625,-0.025254115,-0.014360969,0.01696883,0.01086797,-0.017740449,-0.0053759874,0.017041022,-0.023541236,-0.018768547,0.0031760137,-0.016932495,0.01587616,0.02470472,-0.0015815749,-0.0050436673,0.026795082,0.012696496,0.0056492356,0.0009376847,-0.013276152,0.005864327,0.030172981,-0.01683615,0.010935892,0.046904944,-0.011237225,0.0065946346,0.010569322,0.043919083,0.01969613,0.014445452,0.005983257,0.003073485,-0.027465835,-0.014491527,0.021149859,-0.009687437,0.008722737,0.005454514,-0.006828917,0.007736089,0.012687453,-0.008257844,0.0049306406,0.027494002,0.004720725,0.013880857,-0.0030140206,0.03045919,0.019640643,-0.004717809,-0.008864121,-0.02109477,0.002128185,-0.024269594,0.020658297,0.011526362,0.008551875,-0.010264475,0.013407887,0.0010710481,0.016447632,-0.019658634,0.0030677167,-0.032001227,-0.0064994995,0.008284279,0.009690929,-0.009462704,0.0041145287,-0.04273684,0.00132046,-0.017118242,-0.0109182075,-0.0071086925,-0.011109325,0.010238837,0.011393246,-0.002193755,-0.011144288,0.04482735,0.010994269,-0.008439093,0.01086094,-0.029456018,-0.01547788,0.008090397,0.0008969571,0.004265382,0.0050138975,0.00038008392,-0.00043126123,-0.015563172,0.0019228153,0.013747962,0.0035835416,0.0014101737,-0.019944077,-0.02441703,0.007557654,0.010391898,0.0018020883,0.015229763,0.016649975,-0.034282964,-0.0030153033,0.024311272,0.010402478,0.017841836,0.033284836,0.037342276,-0.011784845,-0.011719027,0.014457864,0.0066025737,-0.01777591,0.030328285,-0.018238368,-0.02095047,-0.019913875,0.007088311,-0.004042077,0.018469425,0.017283399,0.0028917475,-0.003664567,0.006678234,-0.010532774,0.024720673,-0.012878401,-0.0050561796,-0.03337217,0.006506364,0.019364271,0.01361269,0.011647128,-0.00064115715,-0.015447497,-0.0006287446,0.020426277,0.0316062,-0.018514095,0.017838892,-0.01277142,0.00024244316,0.0007012337,0.007900624,-0.011813644,-0.01958561,0.016421797,0.020295158,-0.013297505,0.002352906,-0.019696154,0.0016892824,-0.03008874,-0.011656259,-0.013260671,-0.031912245,-0.022969576,-0.027691722,0.025653396,-0.00945346,0.026214132,-0.01774313,0.0061938334,0.006825591,0.011886589,-0.002319759,-0.0074197175,0.0076712267,0.021504557,0.024524335,0.0017356123,-0.010844545,-0.041570697,-0.015022247,-0.008712223,-0.0063931127,0.012275804,-0.011707463,-0.026549486,0.008910261,0.013835245,0.003198153,-0.019546635,-0.00975632,0.012896269,-0.002244274,0.012394697,0.034291316,0.014297618,0.015935054,0.014619562,0.0011883011,-0.020623924,-0.0019449542,0.026055353,-0.035000633,0.0226936,0.01402058,0.0033305364,-0.003275382,-0.020270301,-0.0181397,0.002404932,0.035637766,-0.0054321755,0.0142157795,-0.009116212,-0.005615461,0.028361822,0.0064327023,0.030520435,-0.010413058,0.012236684,0.010841709,-0.000928947,-0.02355789,-0.013895678,0.023065131,-0.0018619056,0.0011000365,-0.004346679,-0.0001762663,0.0078242095,-0.026212998,-0.0076429904,-0.02736975,0.036024597,0.009473271,-0.021253647,-0.010899169,0.009835155,-0.0030794006,0.008646463,-0.010844762,-0.005974134,-0.017732212,0.009877052,-0.0028470084,0.020258864,0.02024199,-0.025852142,-0.025979778,-0.004821895,0.0066440604,0.015279803,0.017071366,0.022580404,0.016712308,-0.0042373003,0.0041562645,0.0063281073,-0.013482493,-0.015063151,-0.005741181,0.015753653,0.029499354,0.0034760104,0.0045761806,-0.008861765,0.011369204,-0.0021116175,-0.049705047,0.03575081,-0.078288004,-0.007978464,0.0348651,0.0013808808,-0.00845762,-0.0033569632,-0.0020005358,-0.007630876,0.034073938,0.019709606,-0.0018125426,0.0059559094,-0.0012511543,0.0020085683,0.0008786508,-0.0062171197,0.0012477266,-0.021435654,0.002225609,-0.012701794,0.02847285,-0.0015837629,-0.016599555,-0.0075025377,-0.009738218,-0.0033638144,0.0015449901,0.0015211623,0.0059267534,0.028333025,-0.03772921,0.0030858398,-0.011423831,0.021013182,0.0079174545,0.011966231,0.009310523,-0.01569609,-0.020338075,0.012681182,0.009440593,-0.0015936036,-0.047616635,-0.007985961,0.0055315318,0.012223851,0.024701025,-0.0038682264,0.0101195825,0.034942683,-0.025582006,-0.012190616,-0.006456411,-0.010199653,-0.00068485475,0.016316757,-0.01082642,0.011291758,0.012800945,-0.0015288813,-0.011316605,-0.025215939,0.018135393,0.019075321,-0.029169943,0.0071911938,0.013115316,0.014512889,-0.008830826,0.015859753,0.002913026,-0.034946598,0.0018996696,0.007229179,0.0006088412,0.011440844,0.020094894,0.033107754,0.025387725,-0.00050295057,-0.00014505943,0.011813622,-0.09368891,-0.010937148,-0.0190726,-0.009383073,-0.009940247,-0.0032261773,0.009288591,-0.0009816042,0.004260723,-0.007946009,0.0023939838,0.014154018,-0.004274809,0.006240207,0.0048269434,0.04268874,0.008591424,-0.00687456,-0.013473116,0.015372929,0.008330113,-0.0020924683,-0.010476164,-0.008587233,-0.025979577,0.011737084,-0.015377834,0.0013285631,-0.0048341425,-0.009679965,-0.017586777,-0.12792061,0.022906065,-0.027596729,0.009359666,-0.00016717397,-0.007502202,0.0072189905,-0.0009947541,-0.006923117,-0.021066042,0.008006929,-0.029625647,-0.04749881,0.0028339264,-0.011820831,0.12860075,-0.024842335,0.009971547,-0.013642601,-0.030750936,-0.017385017,-0.0076492764,-0.012508657,-0.0048691593,0.010076199,-0.0039580544,0.002451263,0.0031894487,-0.019418187,0.023666011,-0.012175969,0.0007535859,-0.02974639,-0.003735362,0.020373523,-0.026590236,-0.009638971,-0.01521942,0.013492408,0.02370371,0.0059989607,0.01544501,-0.00021233672,0.0018452342,0.0007256094,-0.033965956,-0.00923813,0.010584963,-0.017038042,-0.020109065,-0.013038877,-0.08798258,0.015116541,0.013687889,-0.0021453055,0.0042452146,0.014280028,0.0029392745,0.025590016,0.0024541463,0.01290872,0.013981375,-0.016001733,0.011215466,-0.0018034359,-0.008114885,0.0099933315,-0.007620964,0.019291313,-0.00037233744,0.032754816,0.0043730307,0.0035918811,-0.0076466333,-0.004158695,-0.008609222,0.018126735,0.024579747,0.018846434,-0.013157446,-0.0056148316,-0.0100252535,0.025466831,0.007151387,-0.008028819,0.012772814,-0.006778521,-0.0023791364,-0.0051551377,-0.0030241834,-0.011557221,-0.00076231774,0.010647718,0.008707588,0.004651164,0.017767895,0.01734666,0.020465154,0.012076531,-0.010659868,-0.0073939003,-0.017627267,-0.0071042366,-0.007446188,-0.008207791,-0.0053407056,-0.03350754,0.0036229999,0.001109187,0.0075687557,0.0012360943,0.014810255,-0.00058632187,-0.020932656,-0.015139068,0.007510992,0.004465346,-0.008869131,0.007870658,-0.010085314,0.012560594,0.019605462,-0.016130317,0.0019224524,0.0018785055,-0.0015917135,0.0039487104,-0.004966398,-0.004242569,-0.0066429214,0.006995244,0.00074552436,0.008624452,0.0013316538,0.0022503538,-0.015743406,-0.021127148,-0.0029375835,0.00073244097,-0.00889699,0.015286915,-0.0026079167,-0.0054813214,-0.0014439453,0.0056877485,-0.003933168,0.0015226431,0.007513732,0.012575047,0.0024240126,0.0044720266,-0.0057290755,0.009239257,-0.012494523,0.0008214331,0.009088723,-0.0049986416,-0.0037145785,0.010255726,-0.026390791,0.013456195,-0.016968174,0.009160165,-0.000981048,0.0024376446,0.017494427,0.01469697,-0.010879948,-0.011197921,0.014966732,-0.00023681464,-0.006810147,0.006544954,-0.02152623,0.0036155784,0.0043865284,-0.011225572,0.0017360875,-0.007477475,0.0042653144,-0.016891092,-0.012680713,0.0036246905,-0.0035107273,-0.008285355,0.0041110343,-0.005234398,0.010026948,-0.0033555494,0.02039994,-0.005798036,-0.02444427,0.017562708,-0.030632095,-0.0019933973,0.004768087,-0.016293244,-0.0058114408,-0.0070645367,-0.005284638,-0.0073790536,-0.031637114,0.004824259,-0.008799694,-0.0069822925,0.0003814453,0.005208123,0.00517827,0.0035908294,-0.0002753688,-0.00030767923,0.0126356855,-0.00882977,0.0022817936,-0.008454056,-0.0035789618,0.006255116,0.018305505,-0.0012935044,-0.011623668,-0.005803192,-0.006249465,0.012298725,0.017162107,0.0055602607,0.010458085,0.0014691409,0.019512065,0.0019587455,0.012850701,0.02031251,-0.009068177,0.017774997,0.008262599,-0.006978915,0.029696768,-0.0052171587,0.009423153,0.0026997933,0.010845972,-0.0038101175,0.0114938365,-0.007683494,0.0007499363,-0.00518904,-0.010130056,-0.0045254533,-0.003156321,-0.009838561,0.014295356,0.017721795,0.0055129784,0.007917538,0.021112688,-0.019624917,-0.02175554,-0.024363356,0.0043642665,0.0012800349,0.0049486356,0.0018942638,0.005480207,-0.017273849,-0.0063911276,0.0127475085,0.0011056035,-0.0031880054,-0.0003945706,0.0040387507,0.004688051,-0.008841749,0.0104301805,0.010281375,-0.00022701341,-0.014312196,-0.007268156,-0.0009947361,-0.0020790591,0.005294233,0.0009021833,0.0268789,-0.012407218,-0.0019207792,-0.00570359,-0.004445941,-0.007077717,0.023266409,0.0011049911,0.004324577,0.0050144494,0.007015783,0.023592262,0.0015085866,0.007792378,0.0058170506,0.017410379,-0.011781913,-0.0032436457,0.0024341128,-0.006065646,0.0099652745,-0.004122242,-0.014675716,-0.014003894,0.01392614,-0.027341535,0.016944174,0.00079436356,0.014382779,0.0022814767,0.10199873,0.012879722,0.020910181,0.007936256,-0.002746519,0.0036959094,0.010913303,-0.024223622,0.0042136265,0.0042066993,0.007339518,-0.009870281,-0.0025671467,-0.010556294,0.007222791,-0.0027155369,-0.0069804247,0.011518688,-0.011697674,-0.0033633073,-0.0134151075,-0.0038372192,0.006319974,-0.02804738,0.009642112,-0.012228384,0.0009393884,-0.0023045836,-0.026026445,0.008010844,0.0044409363,0.002735984,-0.02316569,0.0011024629,0.0003920209,0.0144409165,-0.021711178,0.015793601,0.0006584253,-0.0078052115,0.023658834,0.015028953,-0.0033408396,0.0006335106,0.011457958,0.023748407,0.012018709,-0.009409013,0.0033328433,-0.020608928,-0.011954494,0.0002108192,-0.005277274,0.008492601,-0.007184107,0.0054315575,0.016256236,-0.0033835722,-0.008591094,-0.0016999217,0.01276219,0.0053966157,-0.006080793,0.008532834,-8.862373e-05,-0.020811507,0.0017691193,-0.005783099,0.00024959422,0.009083702,-0.0067520174,0.027971128,-0.0033073556,0.011229152,0.03076644,-0.004442243,0.0049898885,-0.0065579684,0.005353873,-0.010752985,0.0068455217,0.0098482305,-0.01777894,0.006393756,0.0017319837,-0.0027026194,0.006489076,-0.0024212636,-0.0077188616,0.0028206338,-0.006795212,-0.013686371,0.017640203,-0.011843691,-0.018793944,0.0031854569,0.044705294,0.0075161085,0.013214407,0.004384169,0.006514489,-0.0018618813,0.0028874665,0.016188243,0.023411453,-0.0053173057,0.0068247323,0.0126325395,0.002066052,0.0025968405,-0.0033752425,-0.015384257,-0.004319938,-0.0015802608,-0.019636245,0.0067753964,-0.004508835,0.0063539925,-0.0031303521,0.014875002,-0.0040969066,-0.0072500166,-0.0060206125,0.03398974,0.013637321,-0.01185729,0.005340238,0.014658455,-0.0007659697,0.01885294,-0.008028025,-0.000151129,-0.010708472,0.01746594,-0.013773412,0.0023000569,0.020300994,0.009196552,0.0011553318,0.0031294741,-0.004068655,0.01220524,-0.026387367,-0.006959038,0.009099041,0.00027588423,-0.011341229,0.012853438,0.00022202438,-0.0035398758,-0.0072306925,0.0197497,-0.00949953,0.016070059,0.006871873,-0.004037348,0.0014698787,-0.0015575622,-0.00010737061,0.009918481,-0.0038891148,0.012783469,-0.0033759102,0.010666126,-0.007709524,-0.0029673455,-0.0011796373,0.0090021845,-0.011642406,-0.005113707,0.001522386,7.617284e-05,0.026169306,-0.0066469563,-0.011232764,-0.007911269,-0.0092282,-0.0075955526,-0.013198695,0.013063478,0.0023435156,0.0050840694,0.0045369966,-0.002962344,-0.0070353127,-0.0028378363,-0.00065201113,-0.012762585,0.0013559774,0.00879817,-0.003258711,0.005603078,0.009876743,-0.0024277,-0.003404067,-0.0016764979,-0.0075170114,0.006989946,0.0023162107,0.00812104,0.020303925,-0.013161205,0.006181207,-0.013940419,-0.009035036,-0.0021583987,0.0019482335,0.0078999,-0.007763184,-0.018681098,-0.016825404,-0.020318953,-0.0073585035,0.0133069,-0.030215573,-0.00886794,0.015804796,0.010717492,-0.010523308,-0.009002015,-0.010588366,-0.007689986,0.009247005,-0.0175313,0.0046560424,0.0027202924,0.001425229,-0.008014113,0.011946938,-0.009032964,-0.011994365,0.008933394,2.1906628e-05,0.010230841,0.0007771803,-0.016417047,-0.0020496373,-0.009885499,0.011804832,-0.0010999535,0.0012885975,0.0023425436,0.00080412277,-0.013002932,-0.006108702,-0.015598569,-0.0076291338,0.0022678608,0.016679248,-0.0235663,-0.020728307,-0.014110193,0.0032992319,0.011608394,0.017588317,0.0057310467,-0.0035272236,-0.07133809,0.008450792,0.010298239,0.018286694,-0.008500476,0.006215201,-3.696317e-05,-0.010400534,-0.0054240543,0.01515528,0.013035006,0.014017947,0.0066629583,0.0045194943,-0.0024690405,-0.0038857495,0.014416589,-0.00016802472,-0.003319405,0.00042154107,-0.017005421,-0.012619047,-0.01251236,0.0023803911,-0.011343069,-0.0039910236,0.0099721635,0.008019595,0.0019995389,-0.010474453,0.007890368,0.011913615,-0.017097684,-0.0071517285,-0.014537365,-0.01232888,0.007736637,-0.01861068,7.864656e-05,-0.0027886096,0.017258659,-0.014652092,0.00886783,0.028983727,0.019136647,-0.0066412576,0.01002517,-0.022115743,0.010385735,-0.012072703,-0.002990643,0.019063542,-0.002459818,0.013332742,-0.013951341,-0.009456589,0.012773269,0.013304322,-0.005233004,-0.0055856,-0.009198278,0.0025029501,0.008067085,-0.00015907963,-0.015271083,-0.0037262586,0.022346523,-0.009843434,0.005486253,0.03261179,0.010159362,0.009015603,-0.016714647,-0.009878583,0.012444434,0.00037976739,0.022885298,0.013938797,-0.015922049,0.018717509,0.01053565,0.00797016,0.0113725625,-0.0018758267,-0.0064577768,0.010495695,-0.01549511,-0.017612364,-0.015462907,0.007928244,-0.009243317,0.0031926476,-0.011908182,0.01063653,-0.0012253907,-0.0028999285,0.008880358,0.006939738,0.00873843,0.017134689,0.007581198,0.0050695366,0.012715053,0.019861933,-0.014548062,0.010240055,0.0049521015,0.012645228,-0.017653396,0.00036324412,-0.0077770157,0.00975799,0.011081008,-0.0047999965,-0.0061925696,-0.00861648,-0.012315065,-0.00642948,-0.0013335515,0.010279329,-0.018616544,0.021120483,0.00083216873,-0.010110816,-0.0027420875,0.0118169,0.0028054384,0.01588357,0.025251642,0.00083198637,-0.0028308735,-0.0053443518,0.007924196,-0.00070029177,-0.008341101,0.020421235,0.0059602386,-0.0021986305,0.0006403252,-0.002377393,0.017407535,-0.00046816014,-0.006589271,-0.027099993,0.0032974004,0.0053394455,-0.016610589,-0.006808178,-0.008164505,-6.612118e-05,0.0075920834,0.014250607,0.0026495373,0.0130392695,0.0034981885,0.0022761044,0.0064997803,-0.015468192,0.014498238,-0.0030091961,0.020575251,6.992846e-05,0.009380881,-0.0021614912,-0.018701458,0.016110633,-0.013386554,-0.015482601,-0.019286053,0.003252614,0.0018539293,-0.0050514974,-0.0054118796,-0.00096466806,0.017517991,-0.008377656,-0.0021169512,0.0006934715,-0.013761825,0.0065570353,-0.0001512712,0.013799628,0.009757659,0.0151241915,0.0055655153,-0.013385175,0.0019367477,0.00094698224,0.012564087,0.010225321,-0.0013552337,0.007883789,0.0050824215,0.0049020206,-0.014135623,-0.007271678,0.0050912616,0.014576605,-0.006305344,0.01689873,-0.0026906666,-0.020805037,0.007836454,-0.010908019,-0.017059578,-0.108887814,-0.0012606077,-0.0062889033,-0.004605414,-0.0075442516,0.0038394246,-0.014745786,0.009070885,-0.0044668103,0.00017465485,0.007260173,-0.0008140385,-0.0005842775,-0.016903,0.009295025,-0.023776768,-0.010201685,-0.006733492,0.0037815059,0.012572244,0.008178351,0.018325832,-0.037376504,0.0030374415,-0.0020055682,-0.01120939,-0.009995437,-0.010248931,0.009537407,-0.01600787,-0.0107965125,-0.008237872,0.0025070903,0.00089782267,0.020701818,-0.008601273,0.008780136,-0.013335577,-0.13905676,0.0059650433,-0.007321978,-0.0062650368,-0.0010842984,0.0054435413,0.0020361226,0.0012805985,-0.013640384,-0.006368938,0.00027060293,0.0018908257,-0.017992215,-0.008746114,0.011226981,0.01666942,0.001366924,-3.461234e-05,-0.010166846,0.0130676115,0.0050098184,-0.0028902828,0.00016095141,0.023362502,0.012096038,0.01625421,0.0025982233,0.008254599,0.00170693,-0.005148866,-0.006006672,-0.00024541072,-0.0066599725,-0.004053952,0.0015204039,0.0045280773,0.000115201416,-0.013112788,-0.0075465064,0.015551507,0.02331626,-0.022847373,0.00096959557,-0.0011878118,0.0016754633,0.013955393,-0.0024000027,-0.0069426317,0.017667675,0.0015710231,0.00010625031,-0.0060915886,-0.012071098,-0.015326482,-0.0067967447,0.0018197065,-0.0048239348,0.00011728614,0.0005644764,0.0061362647,-0.011858633,-0.0030633328,0.0024575382,-0.011719345,0.012695969,0.015199176,-0.006356898,0.0096971225]",
+          "employment_type": "Full-time",
+          "work_mode": null,
+          "metadata": null,
+          "tech_score": "32",
+          "responsibility_score": 55,
+          "application_stage": "lead",
+          "ideal_score": 82
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "982ad508-e0e8-45fe-9cc3-d53751781572",
+  "activeVersionId": "982ad508-e0e8-45fe-9cc3-d53751781572",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-05-22T07:04:14.555Z",
+      "createdAt": "2026-05-22T07:04:14.555Z",
+      "role": "workflow:owner",
+      "workflowId": "gcNgbF4QWJ8Fcxry",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-05-26T05:49:01.838Z",
+    "createdAt": "2026-05-26T05:48:59.928Z",
+    "versionId": "982ad508-e0e8-45fe-9cc3-d53751781572",
+    "workflowId": "gcNgbF4QWJ8Fcxry",
+    "nodes": [
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -704,
+          -744
+        ],
+        "id": "7fec5472-d90f-4be9-8ad0-c5ad7c1ed902",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "7e6f82e4-042a-49fe-b7d9-34eafdead4e7",
+                "name": "id",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              },
+              {
+                "id": "98dd640c-efc3-4cc2-8f45-442711c3aaf6",
+                "name": "published_at",
+                "value": "={{ $json.published_at }}",
+                "type": "string"
+              },
+              {
+                "id": "ddc97d13-cf78-4120-af9c-2135094c68e5",
+                "name": "company_name",
+                "value": "={{ $json.company_name }}",
+                "type": "string"
+              },
+              {
+                "id": "d83105f2-d36e-4f58-a304-048d6b1cea81",
+                "name": "job_title",
+                "value": "={{ $json.job_title }}",
+                "type": "string"
+              },
+              {
+                "id": "98472579-8758-49e7-afb3-4c9cccec75bc",
+                "name": "job_url",
+                "value": "={{ $json.job_url }}",
+                "type": "string"
+              },
+              {
+                "id": "b750dd49-51e3-4f87-a61a-c4c33978f17d",
+                "name": "match_score",
+                "value": "={{ $json.match_score }}",
+                "type": "number"
+              },
+              {
+                "id": "9988f698-c59a-4a5c-8162-81c45b75e224",
+                "name": "job_description",
+                "value": "={{ $json.job_description }}",
+                "type": "string"
+              },
+              {
+                "id": "5804039c-ea1b-43fd-8c6b-bb4b3cbcbdbb",
+                "name": "job_location",
+                "value": "={{ $json.job_location }}",
+                "type": "string"
+              },
+              {
+                "id": "429a78c3-9b24-4a4f-96c3-43aaee37d6c3",
+                "name": "external_id",
+                "value": "={{ $json.external_id }}",
+                "type": "string"
+              },
+              {
+                "id": "b775719f-125e-463c-ae72-458bc4659483",
+                "name": "job_salary",
+                "value": "={{ $json.job_salary }}",
+                "type": "string"
+              },
+              {
+                "id": "ee82521f-b573-4d52-aa26-4e46c5a5a0a3",
+                "name": "company_department",
+                "value": "={{ $json.company_department }}",
+                "type": "string"
+              },
+              {
+                "id": "667763ef-6bbf-422e-b98a-44bb51b835bb",
+                "name": "job_sector",
+                "value": "={{ $json.job_sector }}",
+                "type": "string"
+              },
+              {
+                "id": "e02990cc-70a0-4672-a050-6280df10fdb8",
+                "name": "contract_type",
+                "value": "={{ $json.contract_type }}",
+                "type": "string"
+              },
+              {
+                "id": "3d532878-6ff8-4d21-9bea-fd927ab38bd9",
+                "name": "signal_tier",
+                "value": "={{ $json.signal_tier }}",
+                "type": "string"
+              },
+              {
+                "id": "45833e66-5531-4b1f-b56c-3401f31448c8",
+                "name": "status",
+                "value": "={{ $json.status }}",
+                "type": "string"
+              },
+              {
+                "id": "49c83c67-536e-42be-a041-4b247875218b",
+                "name": "processed_at",
+                "value": "={{ $json.processed_at }}",
+                "type": "string"
+              },
+              {
+                "id": "e36b8eb9-3dc9-406b-aa74-0ba4839ff0eb",
+                "name": "company_url",
+                "value": "={{ $json.company_url }}",
+                "type": "string"
+              },
+              {
+                "id": "80d94137-bddf-4264-80c3-d0eb5ecda587",
+                "name": "poster_name",
+                "value": "={{ $json.poster_name }}",
+                "type": "string"
+              },
+              {
+                "id": "cf1fb289-8821-4cbf-bdea-814ee646ed9e",
+                "name": "poster_linkedin",
+                "value": "={{ $json.poster_linkedin }}",
+                "type": "string"
+              },
+              {
+                "id": "f7041f7f-79c8-4f8d-a280-56a151df3885",
+                "name": "company_logo",
+                "value": "={{ $json.company_logo }}",
+                "type": "string"
+              },
+              {
+                "id": "4dc74732-aa86-4718-9e3f-f2ac23552cda",
+                "name": "experience_level",
+                "value": "={{ $json.experience_level }}",
+                "type": "string"
+              },
+              {
+                "id": "ccbbece4-e599-4a22-91fd-6d5a4425240f",
+                "name": "apply_url",
+                "value": "={{ $json.apply_url }}",
+                "type": "string"
+              },
+              {
+                "id": "9c881010-3c28-4f7e-a5fd-da3e9f6814d2",
+                "name": "source",
+                "value": "={{ $json.source }}",
+                "type": "string"
+              },
+              {
+                "id": "7c61ac99-d19a-48ed-94a0-754f00eba142",
+                "name": "description_vector",
+                "value": "={{ $json.description_vector }}",
+                "type": "string"
+              },
+              {
+                "id": "83620fee-933a-4de4-9652-91faa26f6260",
+                "name": "employment_type",
+                "value": "={{ $json.employment_type }}",
+                "type": "string"
+              },
+              {
+                "id": "e70e38db-bc1d-4bf4-807f-55155ff0ed8c",
+                "name": "work_mode",
+                "value": "={{ $json.work_mode }}",
+                "type": "string"
+              },
+              {
+                "id": "2fd7e6b1-856b-4d4a-b90d-7d177318cbe2",
+                "name": "metadata",
+                "value": "={{ $json.metadata }}",
+                "type": "string"
+              },
+              {
+                "id": "7b1de7ac-addb-4f76-a3bf-959d7acafff6",
+                "name": "tech_score",
+                "value": "={{ $json.tech_score }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -480,
+          -744
+        ],
+        "id": "db5642dd-d3ca-45e7-9b63-7e17204b0db8",
+        "name": "Standardize input"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.job_url }}",
+                      "rightValue": ".*(cz\\.linkedin\\.com|startupjobs\\.cz).*",
+                      "operator": {
+                        "type": "string",
+                        "operation": "regex"
+                      },
+                      "id": "19ef129e-bf1e-4ff3-acff-5341e1fa2304"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "cz"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "06290577-d9b3-410c-9a4a-a1834d9b324e",
+                      "leftValue": "={{ $json.job_url }}",
+                      "rightValue": "^(?!.*cz\\.linkedin\\.com).*linkedin\\.com.*",
+                      "operator": {
+                        "type": "string",
+                        "operation": "regex"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "linkedin_rest"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "c190ab58-9982-42e7-9332-c7c18709c877",
+                      "leftValue": "={{ $json.job_url }}",
+                      "rightValue": "^(?!.*(linkedin\\.com|startupjobs\\.cz)).*$",
+                      "operator": {
+                        "type": "string",
+                        "operation": "regex"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "rest"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          -256,
+          -760
+        ],
+        "id": "f0670cf2-3d80-40c8-a817-2319ca4d6519",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "713ecdaa-1f68-4094-bedc-d9662150afaa",
+                "leftValue": "={{ $json.job_url }}",
+                "rightValue": "de.linkedin",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {
+            "ignoreCase": true
+          }
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          192,
+          -868
+        ],
+        "id": "38d542e8-6654-4dff-bf62-b635512a9780",
+        "name": "Is DE?"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "ec5f48d6-a679-428b-9e50-30ec709ffb32",
+                "leftValue": "={{ $json.job_title }}",
+                "rightValue": "remote",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              },
+              {
+                "id": "914a8218-20a3-4b0f-aaf7-f16d70ffc4f0",
+                "leftValue": "={{ $json.work_mode }}",
+                "rightValue": "remote",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {
+            "ignoreCase": true
+          }
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -32,
+          -744
+        ],
+        "id": "4fa97925-1770-4181-8617-6bcb59eb397c",
+        "name": "Has remote title or mode?"
+      },
+      {
+        "parameters": {
+          "schemaType": "manual",
+          "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"thought_process\": {\n      \"type\": \"string\",\n      \"description\": \"Brief explanation of why the geographic flags were set, specifically citing any mentions of 'EMEA', 'Hybrid', or specific country mandates.\"\n    },\n    \"is_fully_remote\": {\n      \"type\": \"string\",\n      \"enum\": [\"Yes\", \"No\"],\n      \"description\": \"Set to 'Yes' only if the job is explicitly 100% remote. Set to 'No' if it mentions hybrid, on-site, office-based, or is completely silent about remote work.\"\n    },\n    \"relocation_mandatory\": {\n      \"type\": \"string\",\n      \"enum\": [\"Yes\", \"No\"],\n      \"description\": \"Set to 'Yes' if the text requires moving to a specific city/country. Set to 'No' if relocation is not mentioned.\"\n    },\n    \"country_bound_remote\": {\n      \"type\": \"string\",\n      \"enum\": [\"Yes\", \"No\"],\n      \"description\": \"Set to 'Yes' if remote work is restricted to residents of one single country. Set to 'No' if it is global or region-wide (e.g., EMEA, Europe, LATAM).\"\n    }\n  },\n  \"required\": [\n    \"thought_process\",\n    \"is_fully_remote\",\n    \"relocation_mandatory\",\n    \"country_bound_remote\"\n  ]\n}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.3,
+        "position": [
+          552,
+          -520
+        ],
+        "id": "ddbf981f-233d-4c46-9985-c8e496ee7e31",
+        "name": "Structured Output Parser"
+      },
+      {
+        "parameters": {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+        "typeVersion": 1,
+        "position": [
+          424,
+          -520
+        ],
+        "id": "40ed08ab-9895-450e-884c-ff6d916ac67e",
+        "name": "Groq Chat Model",
+        "credentials": {
+          "groqApi": {
+            "id": "WHKYJmDyVoPXPzmK",
+            "name": "Groq account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Reference Calibration (Verification Benchmarks):\n\nExample 1: \"AI Lead (Hybrid) - Berlin\" \n-> is_fully_remote: \"No\", relocation_mandatory: \"No\", country_bound_remote: \"No\"\n\nExample 2: \"Senior Dev - Remote (UK Only)\" \n-> is_fully_remote: \"Yes\", relocation_mandatory: \"No\", country_bound_remote: \"Yes\"\n\nExample 3: \"Applied AI Engineer - Remote EMEA\" \n-> is_fully_remote: \"Yes\", relocation_mandatory: \"No\", country_bound_remote: \"No\" (EMEA is a region, not a single country)\n\nTask: Analyze the following job data:\n\nMetadata Location: {{ $json.job_location }}\nTitle: {{ $json.job_title }}\nDescription: {{ $json.job_description }}",
+          "hasOutputParser": true,
+          "options": {
+            "systemMessage": "<system_instructions>\n<persona>\nGeographic and Remote Work Auditor. You are the first-line filter for a global job scraping engine. Your goal is to identify if a job is truly accessible to a location-independent worker.\n</persona>\n\n<task>\nAnalyze the Job Metadata, Title, and Description to evaluate three binary conditions: Remote status, Relocation requirements, and Country-specific restrictions.\n</task>\n\n<logic_rules>\n1. FULLY REMOTE: \n- \"Yes\" if the role is 100% remote/work-from-home.\n- \"No\" if the role is \"Hybrid,\" \"Office-based,\" \"On-site,\" or if it mentions \"X days in the office.\"\n2. RELOCATION:\n- \"Yes\" if moving to a specific city/country is mandatory.\n- \"No\" if relocation is never mentioned.\n3. COUNTRY-BOUND:\n- \"Yes\" if remote work is restricted to a SINGLE specific country's tax residency (e.g., \"Must be in US\").\n- \"No\" if the role is \"Global,\" \"EMEA,\" \"Worldwide,\" or lacks country restrictions. Regional zones (EMEA/APAC) are NOT country-bound.\n</logic_rules>\n\n<constraints>\n- Respond ONLY with valid JSON.\n- Include a brief \"thought_process\" field (max 2 sentences) to explain the geographic logic.\n- Strictly use \"Yes\" or \"No\" strings for Boolean fields.\n</constraints>\n</system_instructions>"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          416,
+          -744
+        ],
+        "id": "dbb521ce-e3f3-4106-9fef-c127fc07d501",
+        "name": "Check fully remote+relocation+country bound"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a8f92cca-ee89-4d5d-9a26-8298d8409605",
+                "leftValue": "={{ $json.output.is_fully_remote }}",
+                "rightValue": "Yes",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "6e02cb2c-feb6-4b5c-97fa-008ad22dfe23",
+                "leftValue": "={{ $json.output.relocation_mandatory }}",
+                "rightValue": "No",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "83872f26-c9b9-40bd-a9c8-1e06760db516",
+                "leftValue": "={{ $json.output.country_bound_remote }}",
+                "rightValue": "No",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          768,
+          -744
+        ],
+        "id": "2633aaac-c1ee-4a65-b666-8ab9d87f3156",
+        "name": "Is remote+no relocation+no country bound?"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "6ZaKoDnZGnMsZnWr",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/6ZaKoDnZGnMsZnWr",
+            "cachedResultName": "score_filter_fasttrack"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          1216,
+          -992
+        ],
+        "id": "1e1ed255-a3ed-4df8-ab78-4bb3039a07c0",
+        "name": "Call 'score_filter_fasttrack'"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "job_leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "job_url",
+                "condition": "eq",
+                "keyValue": "={{ $('Standardize input').item.json.job_url }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "status",
+                "fieldValue": "rejected_remote"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          992,
+          -544
+        ],
+        "id": "be76c362-6f2c-4908-b298-14ac70f42dd6",
+        "name": "Update status1",
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "job_leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "job_url",
+                "condition": "eq",
+                "keyValue": "={{ $('Standardize input').item.json.job_url }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "status",
+                "fieldValue": "passed_remote"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          992,
+          -992
+        ],
+        "id": "538657be-08e8-4b1e-91c4-40d1019c57af",
+        "name": "Update status",
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Standardize input",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Standardize input": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Update status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Has remote title or mode?",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Check fully remote+relocation+country bound",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Is DE?": {
+        "main": [
+          [
+            {
+              "node": "Update status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Check fully remote+relocation+country bound",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Has remote title or mode?": {
+        "main": [
+          [
+            {
+              "node": "Is DE?",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Update status1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "Check fully remote+relocation+country bound",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Groq Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Check fully remote+relocation+country bound",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check fully remote+relocation+country bound": {
+        "main": [
+          [
+            {
+              "node": "Is remote+no relocation+no country bound?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Is remote+no relocation+no country bound?": {
+        "main": [
+          [
+            {
+              "node": "Update status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Update status1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update status": {
+        "main": [
+          [
+            {
+              "node": "Call 'score_filter_fasttrack'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "d d",
+    "name": "Version 982ad508",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-03-06T13:15:23.201Z",
+      "createdAt": "2026-01-26T08:43:12.205Z",
+      "id": "q3Jm1TtyectpAeLG",
+      "name": "score"
+    }
+  ]
+}
