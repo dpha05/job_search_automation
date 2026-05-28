@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-07T07:46:30.423Z",
+  "updatedAt": "2026-05-19T07:28:10.856Z",
   "createdAt": "2026-01-23T07:30:24.776Z",
   "id": "NBCVFrfmAz4h6S1a",
   "name": "scrape_dedupe_upsert",
@@ -460,35 +460,6 @@
     },
     {
       "parameters": {
-        "workflowId": {
-          "__rl": true,
-          "value": "dknMuvBL2PSXQfLG",
-          "mode": "list",
-          "cachedResultUrl": "/workflow/dknMuvBL2PSXQfLG",
-          "cachedResultName": "score_reject_nonENCZ"
-        },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
-        },
-        "mode": "each",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.3,
-      "position": [
-        -688,
-        944
-      ],
-      "id": "b7d593f2-2513-4176-a972-91229b5a9eb9",
-      "name": "Call 'score_reject_nonENCZ'"
-    },
-    {
-      "parameters": {
         "dataToSave": {
           "values": [
             {
@@ -596,6 +567,35 @@
       ],
       "id": "33116627-287c-4f83-8107-54deda1492b5",
       "name": "Merge payload"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "dknMuvBL2PSXQfLG",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/dknMuvBL2PSXQfLG",
+          "cachedResultName": "score_reject_title+nonENCZ"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -688,
+        912
+      ],
+      "id": "b7d593f2-2513-4176-a972-91229b5a9eb9",
+      "name": "Call 'score_reject_title+nonENCZ'"
     }
   ],
   "connections": {
@@ -637,7 +637,7 @@
       "main": [
         [
           {
-            "node": "Call 'score_reject_nonENCZ'",
+            "node": "Call 'score_reject_title+nonENCZ'",
             "type": "main",
             "index": 0
           }
@@ -665,11 +665,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "Call 'score_reject_nonENCZ'": {
-      "main": [
-        []
       ]
     },
     "Execution Data": {
@@ -722,6 +717,11 @@
           }
         ]
       ]
+    },
+    "Call 'score_reject_title+nonENCZ'": {
+      "main": [
+        []
+      ]
     }
   },
   "settings": {
@@ -767,8 +767,8 @@
       }
     ]
   },
-  "versionId": "51500b93-fad9-4c76-8607-501a141a7000",
-  "activeVersionId": "51500b93-fad9-4c76-8607-501a141a7000",
+  "versionId": "6bc77d1d-14e2-479f-b9c3-7959b92fc46a",
+  "activeVersionId": "6bc77d1d-14e2-479f-b9c3-7959b92fc46a",
   "triggerCount": 0,
   "shared": [
     {
@@ -780,9 +780,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-07T07:46:51.932Z",
-    "createdAt": "2026-05-07T07:46:29.883Z",
-    "versionId": "51500b93-fad9-4c76-8607-501a141a7000",
+    "updatedAt": "2026-05-19T07:28:11.721Z",
+    "createdAt": "2026-05-19T07:28:10.857Z",
+    "versionId": "6bc77d1d-14e2-479f-b9c3-7959b92fc46a",
     "workflowId": "NBCVFrfmAz4h6S1a",
     "nodes": [
       {
@@ -1239,35 +1239,6 @@
       },
       {
         "parameters": {
-          "workflowId": {
-            "__rl": true,
-            "value": "dknMuvBL2PSXQfLG",
-            "mode": "list",
-            "cachedResultUrl": "/workflow/dknMuvBL2PSXQfLG",
-            "cachedResultName": "score_reject_nonENCZ"
-          },
-          "workflowInputs": {
-            "mappingMode": "defineBelow",
-            "value": {},
-            "matchingColumns": [],
-            "schema": [],
-            "attemptToConvertTypes": false,
-            "convertFieldsToString": true
-          },
-          "mode": "each",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.executeWorkflow",
-        "typeVersion": 1.3,
-        "position": [
-          -688,
-          944
-        ],
-        "id": "b7d593f2-2513-4176-a972-91229b5a9eb9",
-        "name": "Call 'score_reject_nonENCZ'"
-      },
-      {
-        "parameters": {
           "dataToSave": {
             "values": [
               {
@@ -1375,6 +1346,35 @@
         ],
         "id": "33116627-287c-4f83-8107-54deda1492b5",
         "name": "Merge payload"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "dknMuvBL2PSXQfLG",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/dknMuvBL2PSXQfLG",
+            "cachedResultName": "score_reject_title+nonENCZ"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -688,
+          912
+        ],
+        "id": "b7d593f2-2513-4176-a972-91229b5a9eb9",
+        "name": "Call 'score_reject_title+nonENCZ'"
       }
     ],
     "connections": {
@@ -1416,7 +1416,7 @@
         "main": [
           [
             {
-              "node": "Call 'score_reject_nonENCZ'",
+              "node": "Call 'score_reject_title+nonENCZ'",
               "type": "main",
               "index": 0
             }
@@ -1444,11 +1444,6 @@
               "index": 0
             }
           ]
-        ]
-      },
-      "Call 'score_reject_nonENCZ'": {
-        "main": [
-          []
         ]
       },
       "Execution Data": {
@@ -1501,25 +1496,30 @@
             }
           ]
         ]
+      },
+      "Call 'score_reject_title+nonENCZ'": {
+        "main": [
+          []
+        ]
       }
     },
     "authors": "d d",
-    "name": "Version 51500b93",
+    "name": "Version 6bc77d1d",
     "description": "",
     "autosaved": false
   },
   "tags": [
     {
-      "updatedAt": "2026-02-25T07:33:28.018Z",
-      "createdAt": "2026-02-25T07:33:28.018Z",
-      "id": "IqRTP9BqhN0ja5Ww",
-      "name": "prod"
-    },
-    {
       "updatedAt": "2026-03-06T13:15:28.248Z",
       "createdAt": "2026-01-22T12:40:37.040Z",
       "id": "mcS1gLAfDII7yoGe",
       "name": "scrape"
+    },
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
     }
   ]
 }
