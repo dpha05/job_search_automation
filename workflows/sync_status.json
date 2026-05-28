@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T06:21:14.638Z",
+  "updatedAt": "2026-05-12T06:36:59.480Z",
   "createdAt": "2026-03-06T12:22:31.762Z",
   "id": "7TRjT3YJDeAlSHqk",
   "name": "sync_status",
@@ -356,7 +356,8 @@
         "rule": {
           "interval": [
             {
-              "triggerAtHour": 9
+              "triggerAtHour": 9,
+              "triggerAtMinute": 1
             }
           ]
         }
@@ -364,7 +365,7 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.3,
       "position": [
-        -304,
+        -320,
         -208
       ],
       "id": "d5d7c8eb-e3ee-4f1a-8543-68450d08e007",
@@ -477,7 +478,8 @@
     "timeSavedMode": "fixed",
     "timezone": "Europe/Prague",
     "executionOrder": "v1",
-    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg"
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg",
+    "binaryMode": "separate"
   },
   "staticData": {
     "node:Schedule Trigger": {
@@ -486,8 +488,8 @@
   },
   "meta": null,
   "pinData": {},
-  "versionId": "4724b158-8419-4225-a97a-24f69378ee2b",
-  "activeVersionId": "4724b158-8419-4225-a97a-24f69378ee2b",
+  "versionId": "07e508ef-1440-45c8-a7c3-5739b94834c2",
+  "activeVersionId": "07e508ef-1440-45c8-a7c3-5739b94834c2",
   "triggerCount": 1,
   "shared": [
     {
@@ -499,9 +501,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-05T06:21:20.806Z",
-    "createdAt": "2026-05-05T06:21:14.639Z",
-    "versionId": "4724b158-8419-4225-a97a-24f69378ee2b",
+    "updatedAt": "2026-05-12T06:37:00.651Z",
+    "createdAt": "2026-05-12T06:36:59.481Z",
+    "versionId": "07e508ef-1440-45c8-a7c3-5739b94834c2",
     "workflowId": "7TRjT3YJDeAlSHqk",
     "nodes": [
       {
@@ -854,7 +856,8 @@
           "rule": {
             "interval": [
               {
-                "triggerAtHour": 9
+                "triggerAtHour": 9,
+                "triggerAtMinute": 1
               }
             ]
           }
@@ -862,7 +865,7 @@
         "type": "n8n-nodes-base.scheduleTrigger",
         "typeVersion": 1.3,
         "position": [
-          -304,
+          -320,
           -208
         ],
         "id": "d5d7c8eb-e3ee-4f1a-8543-68450d08e007",
@@ -970,22 +973,22 @@
       }
     },
     "authors": "d d",
-    "name": "Version 4724b158",
+    "name": "Version 07e508ef",
     "description": "",
     "autosaved": true
   },
   "tags": [
     {
-      "updatedAt": "2026-03-06T08:25:58.891Z",
-      "createdAt": "2026-03-06T08:24:24.741Z",
-      "id": "Vy45AkYeBcQCdNen",
-      "name": "sync_status"
-    },
-    {
       "updatedAt": "2026-02-25T07:33:28.018Z",
       "createdAt": "2026-02-25T07:33:28.018Z",
       "id": "IqRTP9BqhN0ja5Ww",
       "name": "prod"
+    },
+    {
+      "updatedAt": "2026-03-06T08:25:58.891Z",
+      "createdAt": "2026-03-06T08:24:24.741Z",
+      "id": "Vy45AkYeBcQCdNen",
+      "name": "sync_status"
     }
   ]
 }
