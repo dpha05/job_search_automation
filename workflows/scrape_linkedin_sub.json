@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T07:45:19.330Z",
+  "updatedAt": "2026-05-20T13:53:43.897Z",
   "createdAt": "2026-04-09T05:51:04.224Z",
   "id": "wNboRo0fZW6VwYW8",
   "name": "scrape_linkedin_sub",
@@ -13,7 +13,7 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -5056,
+        -5088,
         1456
       ],
       "id": "fc5dc16f-f18d-4f69-bed7-1c55a5f86d5c",
@@ -130,7 +130,8 @@
         "actorId": {
           "__rl": true,
           "value": "https://console.apify.com/actors/hKByXkMQaC5Qt9UMN/input",
-          "mode": "url"
+          "mode": "url",
+          "__regex": "https://console.apify.com/actors/([a-zA-Z0-9]+).*"
         },
         "customBody": "={\n    \"count\": 150,\n    \"scrapeCompany\": false,\n    \"splitByLocation\": false,\n    \"urls\": {{ JSON.stringify($json.urlArray) }}\n}"
       },
@@ -150,8 +151,7 @@
           "id": "i5PH9MrmLNn1QJba",
           "name": "Apify account"
         }
-      },
-      "disabled": true
+      }
     },
     {
       "parameters": {
@@ -179,8 +179,7 @@
           "id": "Z9ZzwclUGcruR8o6",
           "name": "Apify account 2"
         }
-      },
-      "disabled": true
+      }
     },
     {
       "parameters": {
@@ -209,7 +208,6 @@
           "name": "Apify account 3"
         }
       },
-      "disabled": true,
       "onError": "continueRegularOutput"
     },
     {
@@ -656,7 +654,8 @@
     "timeSavedMode": "fixed",
     "timezone": "Europe/Prague",
     "executionOrder": "v1",
-    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg"
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg",
+    "binaryMode": "separate"
   },
   "staticData": {
     "node:Schedule Trigger": {
@@ -697,8 +696,8 @@
       }
     ]
   },
-  "versionId": "167d0418-1b6b-42e8-8511-1275ae236500",
-  "activeVersionId": "167d0418-1b6b-42e8-8511-1275ae236500",
+  "versionId": "ce505b70-85d7-493e-ba3a-6caf1fb18236",
+  "activeVersionId": "ce505b70-85d7-493e-ba3a-6caf1fb18236",
   "triggerCount": 0,
   "shared": [
     {
@@ -710,9 +709,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-29T07:44:57.844Z",
-    "createdAt": "2026-04-28T08:23:08.266Z",
-    "versionId": "167d0418-1b6b-42e8-8511-1275ae236500",
+    "updatedAt": "2026-05-20T13:53:45.567Z",
+    "createdAt": "2026-05-20T13:53:43.899Z",
+    "versionId": "ce505b70-85d7-493e-ba3a-6caf1fb18236",
     "workflowId": "wNboRo0fZW6VwYW8",
     "nodes": [
       {
@@ -722,7 +721,7 @@
         "type": "n8n-nodes-base.executeWorkflowTrigger",
         "typeVersion": 1.1,
         "position": [
-          -5056,
+          -5088,
           1456
         ],
         "id": "fc5dc16f-f18d-4f69-bed7-1c55a5f86d5c",
@@ -839,7 +838,8 @@
           "actorId": {
             "__rl": true,
             "value": "https://console.apify.com/actors/hKByXkMQaC5Qt9UMN/input",
-            "mode": "url"
+            "mode": "url",
+            "__regex": "https://console.apify.com/actors/([a-zA-Z0-9]+).*"
           },
           "customBody": "={\n    \"count\": 150,\n    \"scrapeCompany\": false,\n    \"splitByLocation\": false,\n    \"urls\": {{ JSON.stringify($json.urlArray) }}\n}"
         },
@@ -859,8 +859,7 @@
             "id": "i5PH9MrmLNn1QJba",
             "name": "Apify account"
           }
-        },
-        "disabled": true
+        }
       },
       {
         "parameters": {
@@ -888,8 +887,7 @@
             "id": "Z9ZzwclUGcruR8o6",
             "name": "Apify account 2"
           }
-        },
-        "disabled": true
+        }
       },
       {
         "parameters": {
@@ -918,7 +916,6 @@
             "name": "Apify account 3"
           }
         },
-        "disabled": true,
         "onError": "continueRegularOutput"
       },
       {
@@ -1360,16 +1357,16 @@
       }
     },
     "authors": "d d",
-    "name": "Version 167d0418",
+    "name": "Version ce505b70",
     "description": "",
     "autosaved": true
   },
   "tags": [
     {
-      "updatedAt": "2026-02-25T07:33:28.018Z",
-      "createdAt": "2026-02-25T07:33:28.018Z",
-      "id": "IqRTP9BqhN0ja5Ww",
-      "name": "prod"
+      "updatedAt": "2026-03-06T13:15:28.248Z",
+      "createdAt": "2026-01-22T12:40:37.040Z",
+      "id": "mcS1gLAfDII7yoGe",
+      "name": "scrape"
     },
     {
       "updatedAt": "2026-03-05T15:02:23.016Z",
@@ -1378,10 +1375,10 @@
       "name": "linkedin"
     },
     {
-      "updatedAt": "2026-03-06T13:15:28.248Z",
-      "createdAt": "2026-01-22T12:40:37.040Z",
-      "id": "mcS1gLAfDII7yoGe",
-      "name": "scrape"
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
     }
   ]
 }
