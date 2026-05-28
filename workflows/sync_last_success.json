@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T06:20:30.050Z",
+  "updatedAt": "2026-05-22T07:53:58.847Z",
   "createdAt": "2026-03-27T11:57:18.131Z",
   "id": "z38m1K07JSAoJ9TT",
   "name": "sync_last_success",
@@ -12,7 +12,7 @@
           "interval": [
             {
               "field": "cronExpression",
-              "expression": "0 9-23 * * *"
+              "expression": "30 9-23 * * *"
             }
           ]
         }
@@ -20,7 +20,7 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.3,
       "position": [
-        -304,
+        -320,
         -144
       ],
       "id": "ecbdcf5e-a6ce-499d-b574-a0683f923a48",
@@ -232,8 +232,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        1728,
-        208
+        1760,
+        112
       ],
       "id": "042d468e-bd61-4c5d-b6e3-8dbbd1fadf08",
       "name": "Reset Retry Count",
@@ -402,7 +402,8 @@
     "timeSavedMode": "fixed",
     "timezone": "Europe/Prague",
     "executionOrder": "v1",
-    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg"
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg",
+    "binaryMode": "separate"
   },
   "staticData": {
     "node:Schedule Trigger": {
@@ -413,8 +414,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "fb297aef-3d0d-413b-875a-e8d1aeddab1b",
-  "activeVersionId": "fb297aef-3d0d-413b-875a-e8d1aeddab1b",
+  "versionId": "56a8e2ff-1dfb-4f27-88e4-e442de0f8a6f",
+  "activeVersionId": "56a8e2ff-1dfb-4f27-88e4-e442de0f8a6f",
   "triggerCount": 1,
   "shared": [
     {
@@ -426,9 +427,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-05T06:20:32.162Z",
-    "createdAt": "2026-05-05T06:20:30.052Z",
-    "versionId": "fb297aef-3d0d-413b-875a-e8d1aeddab1b",
+    "updatedAt": "2026-05-22T07:54:03.143Z",
+    "createdAt": "2026-05-22T07:53:58.848Z",
+    "versionId": "56a8e2ff-1dfb-4f27-88e4-e442de0f8a6f",
     "workflowId": "z38m1K07JSAoJ9TT",
     "nodes": [
       {
@@ -437,7 +438,7 @@
             "interval": [
               {
                 "field": "cronExpression",
-                "expression": "0 9-23 * * *"
+                "expression": "30 9-23 * * *"
               }
             ]
           }
@@ -445,7 +446,7 @@
         "type": "n8n-nodes-base.scheduleTrigger",
         "typeVersion": 1.3,
         "position": [
-          -304,
+          -320,
           -144
         ],
         "id": "ecbdcf5e-a6ce-499d-b574-a0683f923a48",
@@ -657,8 +658,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          1728,
-          208
+          1760,
+          112
         ],
         "id": "042d468e-bd61-4c5d-b6e3-8dbbd1fadf08",
         "name": "Reset Retry Count",
@@ -822,22 +823,22 @@
       }
     },
     "authors": "d d",
-    "name": "Version fb297aef",
+    "name": "Version 56a8e2ff",
     "description": "",
     "autosaved": true
   },
   "tags": [
     {
-      "updatedAt": "2026-02-25T07:33:28.018Z",
-      "createdAt": "2026-02-25T07:33:28.018Z",
-      "id": "IqRTP9BqhN0ja5Ww",
-      "name": "prod"
-    },
-    {
       "updatedAt": "2026-02-17T08:55:44.901Z",
       "createdAt": "2026-02-17T08:55:44.901Z",
       "id": "KfoxYHbtIHL4mStj",
       "name": "sync"
+    },
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
     }
   ]
 }
