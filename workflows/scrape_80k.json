@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-11T06:21:14.577Z",
+  "updatedAt": "2026-05-27T08:03:01.563Z",
   "createdAt": "2026-03-30T13:48:44.213Z",
   "id": "bwoDzWtxf2Y9ZtCQ",
   "name": "scrape_80k",
@@ -437,7 +437,7 @@
           "interval": [
             {
               "triggerAtHour": 8,
-              "triggerAtMinute": 15
+              "triggerAtMinute": 14
             }
           ]
         }
@@ -636,7 +636,7 @@
             {
               "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
               "leftValue": "={{ $json.title }}",
-              "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n).*",
+              "rightValue": ".*(\\b(ai|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n|solutions|consultant|ml-?ops|ai-?ops|orchestrat\\w+|integrations?)\\b).*",
               "operator": {
                 "type": "string",
                 "operation": "regex"
@@ -645,7 +645,7 @@
             {
               "id": "6f924664-fa20-4947-af03-df2841af8012",
               "leftValue": "={{ $json.title }}",
-              "rightValue": ".*(sales-representative|assistant|manual|legal|qa-engineer|account-manager|account-executive|qa-automation|test-automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react-native|cloud|only|research|frontend|backend|forward|fde|fullstack|full-stack|junior|ruby|rust|acquisition).*",
+              "rightValue": ".*(\\b(sales[- ]representative|assistant|manual|legal|qa[- ]engineer|qa[- ]automation|account[- ]manager|account[- ]executive|test[- ]automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react[- ]native|cloud|only|research|frontend|backend|forward|fde|fullstack|full[- ]stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp)\\b).*",
               "operator": {
                 "type": "string",
                 "operation": "notRegex"
@@ -665,7 +665,8 @@
         -1504
       ],
       "id": "dc679b3f-98b3-4ede-b3d4-f43c39b11b03",
-      "name": "Filter positive and negative"
+      "name": "Filter positive and negative",
+      "alwaysOutputData": true
     },
     {
       "parameters": {
@@ -958,8 +959,8 @@
       }
     ]
   },
-  "versionId": "033f2c8c-f908-40d0-9204-4da447b71ce4",
-  "activeVersionId": "033f2c8c-f908-40d0-9204-4da447b71ce4",
+  "versionId": "3a937341-03b1-4a40-b163-af9c03772147",
+  "activeVersionId": "3a937341-03b1-4a40-b163-af9c03772147",
   "triggerCount": 1,
   "shared": [
     {
@@ -971,9 +972,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-11T06:21:15.621Z",
-    "createdAt": "2026-05-11T06:21:14.578Z",
-    "versionId": "033f2c8c-f908-40d0-9204-4da447b71ce4",
+    "updatedAt": "2026-05-27T08:03:03.100Z",
+    "createdAt": "2026-05-27T08:03:01.565Z",
+    "versionId": "3a937341-03b1-4a40-b163-af9c03772147",
     "workflowId": "bwoDzWtxf2Y9ZtCQ",
     "nodes": [
       {
@@ -1407,7 +1408,7 @@
             "interval": [
               {
                 "triggerAtHour": 8,
-                "triggerAtMinute": 15
+                "triggerAtMinute": 14
               }
             ]
           }
@@ -1606,7 +1607,7 @@
               {
                 "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
                 "leftValue": "={{ $json.title }}",
-                "rightValue": ".*(\\bai\\b|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n).*",
+                "rightValue": ".*(\\b(ai|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n|solutions|consultant|ml-?ops|ai-?ops|orchestrat\\w+|integrations?)\\b).*",
                 "operator": {
                   "type": "string",
                   "operation": "regex"
@@ -1615,7 +1616,7 @@
               {
                 "id": "6f924664-fa20-4947-af03-df2841af8012",
                 "leftValue": "={{ $json.title }}",
-                "rightValue": ".*(sales-representative|assistant|manual|legal|qa-engineer|account-manager|account-executive|qa-automation|test-automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react-native|cloud|only|research|frontend|backend|forward|fde|fullstack|full-stack|junior|ruby|rust|acquisition).*",
+                "rightValue": ".*(\\b(sales[- ]representative|assistant|manual|legal|qa[- ]engineer|qa[- ]automation|account[- ]manager|account[- ]executive|test[- ]automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react[- ]native|cloud|only|research|frontend|backend|forward|fde|fullstack|full[- ]stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp)\\b).*",
                 "operator": {
                   "type": "string",
                   "operation": "notRegex"
@@ -1635,7 +1636,8 @@
           -1504
         ],
         "id": "dc679b3f-98b3-4ede-b3d4-f43c39b11b03",
-        "name": "Filter positive and negative"
+        "name": "Filter positive and negative",
+        "alwaysOutputData": true
       },
       {
         "parameters": {
@@ -1900,16 +1902,16 @@
       }
     },
     "authors": "d d",
-    "name": "Version 033f2c8c",
+    "name": "Version 3a937341",
     "description": "",
     "autosaved": true
   },
   "tags": [
     {
-      "updatedAt": "2026-02-25T07:33:28.018Z",
-      "createdAt": "2026-02-25T07:33:28.018Z",
-      "id": "IqRTP9BqhN0ja5Ww",
-      "name": "prod"
+      "updatedAt": "2026-04-01T05:45:31.081Z",
+      "createdAt": "2026-04-01T05:45:31.081Z",
+      "id": "2uAPCRPXB7OJNxsp",
+      "name": "80k"
     },
     {
       "updatedAt": "2026-03-06T13:15:28.248Z",
@@ -1918,10 +1920,10 @@
       "name": "scrape"
     },
     {
-      "updatedAt": "2026-04-01T05:45:31.081Z",
-      "createdAt": "2026-04-01T05:45:31.081Z",
-      "id": "2uAPCRPXB7OJNxsp",
-      "name": "80k"
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
     }
   ]
 }
