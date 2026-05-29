@@ -1,0 +1,1692 @@
+{
+  "updatedAt": "2026-05-29T07:57:22.039Z",
+  "createdAt": "2026-05-29T07:16:32.036Z",
+  "id": "8KTpxZipjRPoZRgp",
+  "name": "scrape_stepstone",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8,
+              "triggerAtMinute": 13
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -7232,
+        1584
+      ],
+      "id": "23b01381-76c7-428d-9348-a9eabd236070",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "running",
+            "workflow_tag": "stepstone"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -7008,
+        1680
+      ],
+      "id": "f0351506-6014-45f6-846e-18f2c383053b",
+      "name": "update running status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "completed",
+            "last_success_at": "={{ $now.toISO() }}",
+            "workflow_tag": "stepstone"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -6336,
+        1536
+      ],
+      "id": "dc5f6961-feb4-4bcd-af95-a6fd269c388b",
+      "name": "update success status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -7232,
+        1776
+      ],
+      "id": "3c3e32a9-b9b1-4dc3-8ecf-b86acc50b48e",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const platformName = \"stepstone\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5216,
+        1680
+      ],
+      "id": "cbe9012b-749a-4385-b739-3b57812c119a",
+      "name": "add source"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
+              "name": "jobId",
+              "value": "={{ $('Is empty?').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
+              "name": "jobTitle",
+              "value": "={{ $('Is empty?').item.json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
+              "name": "jobUrl",
+              "value": "=https://www.stepstone.de{{ $('Is empty?').item.json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "d7ac7ab9-4e9f-44e2-a188-a6f8cbbb580c",
+              "name": "companyName",
+              "value": "={{ $('Is empty?').item.json.companyName }}",
+              "type": "string"
+            },
+            {
+              "id": "51e71c18-177a-4370-a63d-25f8001fce8e",
+              "name": "companyUrl",
+              "value": "={{ $('Is empty?').item.json.companyUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "ce6bae6a-2e69-4671-b2d3-08f6ff27fd81",
+              "name": "companyLogo",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "0103b2e7-89df-48b2-a1dc-4b91932b8495",
+              "name": "publishedAt",
+              "value": "={{ $('Is empty?').item.json.datePosted }}",
+              "type": "string"
+            },
+            {
+              "id": "b8611d60-09ec-409e-a0c0-8a6d7da87ea0",
+              "name": "applyUrl",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "008246ee-3829-4a26-af95-544f914e1fe9",
+              "name": "location",
+              "value": "={{ $('Is empty?').item.json.location }}",
+              "type": "string"
+            },
+            {
+              "id": "949e43c8-0db8-420e-a39d-6be73d8c5efc",
+              "name": "contractType",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "388f52b8-c592-4c8c-8464-5be8d77b995e",
+              "name": "experienceLevel",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "30f4be42-bf3a-459d-bbb3-5000af3a21de",
+              "name": "jobDescription",
+              "value": "={{ $json.jobDescription }}",
+              "type": "string"
+            },
+            {
+              "id": "1e0e0a25-7bb2-443e-be17-220d44d95d92",
+              "name": "sector",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "d7ecf8bd-46b7-414c-8862-41811f709f0a",
+              "name": "workMode",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "a43ad1be-2936-4dd3-ba10-fd613008347d",
+              "name": "employmentType",
+              "value": "=",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -5440,
+        1680
+      ],
+      "id": "4a0030c1-09af-49c7-837e-ab030d758d85",
+      "name": "Standardize output (**adjust fields**)"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NBCVFrfmAz4h6S1a",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NBCVFrfmAz4h6S1a",
+          "cachedResultName": "scrape_dedupe_upsert"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -4992,
+        1904
+      ],
+      "id": "f6f94430-ed85-4b83-9373-952f00555007",
+      "name": "Call '03_dedupe_upsert'",
+      "retryOnFail": false,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "198c51cc-2a2e-491d-9e8a-f21b8211f184",
+              "leftValue": "={{ $json.title }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -6560,
+        1680
+      ],
+      "id": "aa0223b7-ed33-47c9-80f2-67bba3a6e9eb",
+      "name": "Is empty?"
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "https://console.apify.com/actors/pIVhuvHZkW2Llfjrr/input",
+          "mode": "url"
+        },
+        "customBody": "={\n    \"category\": \"verwaltung\",\n    \"includeRelatedJobs\": false,\n    \"maxItems\": 100,\n    \"proxy\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ]\n    },\n    \"startUrls\": [\n        {\n            \"url\": \"https://www.stepstone.de/work/full-time/ai-engineerai-agentmlopsai-consultantai-solutionsn8n/in-europe?whereType=autosuggest&radius=30&action=facet_selected%3bage%3bage_7&q=%28ai+engineer%29%2c%28ai+agent%29%2c%28mlops%29%2c%28ai+consultant%29%2c%28ai+solutions%29%2c%28n8n%29&ag=age_7&fdl=en&wfh=1&searchOrigin=Resultlist_top-search\"\n        }\n    ]\n}",
+        "timeout": {}
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        -6784,
+        1680
+      ],
+      "id": "5b350fb1-589a-4c2b-9dfa-8eb25481ffc2",
+      "name": "Scrape stepstone",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "apifyApi": {
+          "id": "sM1rbuMNJA46PCpB",
+          "name": "Apify account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/https://www.stepstone.de{{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -5888,
+        1824
+      ],
+      "id": "c72aaa44-ed2c-4664-b61a-e98de41cc8cc",
+      "name": "Jina fetch job text",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "job_leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "=https://www.stepstone.de{{ $('Is empty?').item.json.url }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "failed_jina"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -5664,
+        1872
+      ],
+      "id": "49464c40-031d-4dec-8b5a-22184e5ab1ea",
+      "name": "Update a row",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const raw = $input.item.json.data || \"\"; \n\nreturn { \n    jobDescription: raw.split(\"Markdown Content:\")[1]?.trim() || raw \n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5664,
+        1680
+      ],
+      "id": "cd0acc74-61d7-494c-b810-9b0f1050f635",
+      "name": "Payload parser job description"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -6112,
+        1824
+      ],
+      "id": "b06a51fd-2382-4720-af24-c08301426e34",
+      "name": "Wait",
+      "webhookId": "0ea4137f-7603-4c4f-a8fd-ae89ebd7721b"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+          "cachedResultName": "error_global"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -4768,
+        1904
+      ],
+      "id": "e3bd1eab-f923-4df8-8f09-3ae9d72a13ea",
+      "name": "Call 'error_global'"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -6112,
+        1584
+      ],
+      "id": "d51ae933-4b4b-4cc9-a611-533d366a7a45",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -6336,
+        1776
+      ],
+      "id": "8d55d99b-6a52-4f2d-a259-f7870c6de7b3",
+      "name": "Loop Over Items"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "update running status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update running status": {
+      "main": [
+        [
+          {
+            "node": "Scrape stepstone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update success status": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "update running status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add source": {
+      "main": [
+        [
+          {
+            "node": "Call '03_dedupe_upsert'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Standardize output (**adjust fields**)": {
+      "main": [
+        [
+          {
+            "node": "add source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call '03_dedupe_upsert'": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call 'error_global'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is empty?": {
+      "main": [
+        [
+          {
+            "node": "update success status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape stepstone": {
+      "main": [
+        [
+          {
+            "node": "Is empty?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Jina fetch job text": {
+      "main": [
+        [
+          {
+            "node": "Payload parser job description",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Jina fetch job text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Payload parser job description": {
+      "main": [
+        [
+          {
+            "node": "Standardize output (**adjust fields**)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "Europe/Prague",
+    "executionOrder": "v1",
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg",
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-04-24T08:49:12.349+02:00",
+          "Readable date": "April 24th 2026, 8:49:12 am",
+          "Readable time": "8:49:12 am",
+          "Day of week": "Friday",
+          "Year": "2026",
+          "Month": "April",
+          "Day of month": "24",
+          "Hour": "08",
+          "Minute": "49",
+          "Second": "12",
+          "Timezone": "Europe/Prague (UTC+02:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Scrape stepstone": [
+      {
+        "json": {
+          "id": 14011352,
+          "title": "Staff Engineer (gn) - Data & AI Focus",
+          "labels": [],
+          "url": "/jobs--Staff-Engineer-gn-Data-AI-Focus-bundesweit-Home-Office-The-Quality-Group-GmbH--14011352-inline.html?rltr=1_1_25_seorl_m_0_0_0_0_0_0",
+          "companyId": 323179,
+          "companyName": "The Quality Group GmbH",
+          "companyUrl": "https://www.stepstone.de/cmp/en/the-quality-group-gmbh-323179/work",
+          "companyLogoUrl": "https://www.stepstone.de/upload_DE/logo/F/logoThe-Quality-Group-GmbH-323179DE-2308031124.gif",
+          "datePosted": "2026-05-27T11:02:36+02:00",
+          "location": "bundesweit, Home-Office",
+          "isAnonymous": false,
+          "salary": "",
+          "postCode": null,
+          "partnership": {
+            "isPartnershipJob": false,
+            "showPartnershipLabel": false,
+            "isBackfilled": false,
+            "sourceSiteFriendlyName": "",
+            "isCrossPosted": false
+          },
+          "unifiedSalary": {
+            "min": null,
+            "max": null,
+            "currency": null,
+            "period": null,
+            "salaryAvailable": true,
+            "salaryType": null
+          },
+          "workFromHome": "2",
+          "metaData": {
+            "positionOnPage": 1,
+            "positionAbsolute": 1
+          },
+          "harmonisedId": "811e7eee-faf2-4272-85ba-16c760d630a5",
+          "jobPostingSequence": null,
+          "periodPostedDate": null,
+          "publishFromDate": null,
+          "publishToDate": null,
+          "hasFuturePosting": false,
+          "fingerprintCount": null,
+          "section": "main",
+          "topLabels": [],
+          "skills": [],
+          "textSnippet": "As <strong>Staff Engineer</strong> (gn) - AI & Data Focus, you will help shape our architectural direction, strengthen our engineering foundations, and accelerate the responsible adoption of AI across teams. * You collaborate closely with Product, Engineering, Data, and other <strong>Staff Engineers</strong> to align on architectural decisions and technical direction * You already work as a <strong>Staff Engineer</strong> and have impact on department level, not only within your team * You support <strong>engineers</strong> hands-on in designing and implementing high-quality services, distributed systems, and data pipelines - At TQG, you are not just a “super-senior <strong>engineer”</strong> – you are a force multiplier, influencing how our engineering organization builds systems, scales architecture, and adopts AI responsibly over time. * The Quality Group GmbH * bundesweit, Home-Office * Feste Anstellung * Homeoffice möglich, Vollzeit - Sei einer der ersten Bewerber",
+          "cvToJobScore": null,
+          "isHighlighted": false,
+          "isSponsored": false,
+          "travelTime": null,
+          "unifiedTravelTime": null,
+          "isTopJob": false,
+          "isTrafficFromPartner": false
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": 14054626,
+          "title": "Healthcare Event Manager - Key Pharma Account (f/m/d)",
+          "labels": [
+            {
+              "label": "Easy Apply",
+              "type": "QUICK_APPLY"
+            }
+          ],
+          "url": "/jobs--Healthcare-Event-Manager-Key-Pharma-Account-f-m-d-bundesweit-Home-Office-EGG-GmbH--14054626-inline.html?rltr=2_2_25_seorl_m_0_0_0_0_1_0",
+          "companyId": 397833,
+          "companyName": "EGG GmbH",
+          "companyUrl": "https://www.stepstone.de/cmp/en/egg-gmbh-397833/work",
+          "companyLogoUrl": "https://www.stepstone.de/upload_DE/logo/8/logoEGG-GmbH-397833DE-2505281414.gif",
+          "datePosted": "2026-05-22T15:41:26+02:00",
+          "location": "bundesweit, Home-Office",
+          "isAnonymous": false,
+          "salary": "",
+          "postCode": null,
+          "partnership": {
+            "isPartnershipJob": false,
+            "showPartnershipLabel": false,
+            "isBackfilled": false,
+            "sourceSiteFriendlyName": "",
+            "isCrossPosted": false
+          },
+          "unifiedSalary": {
+            "min": null,
+            "max": null,
+            "currency": null,
+            "period": null,
+            "salaryAvailable": true,
+            "salaryType": null
+          },
+          "workFromHome": "2",
+          "metaData": {
+            "positionOnPage": 2,
+            "positionAbsolute": 2
+          },
+          "harmonisedId": "583fccd3-6804-4641-86fa-dad89f2eaab3",
+          "jobPostingSequence": null,
+          "periodPostedDate": null,
+          "publishFromDate": null,
+          "publishToDate": null,
+          "hasFuturePosting": false,
+          "fingerprintCount": null,
+          "section": "main",
+          "topLabels": [],
+          "skills": [],
+          "textSnippet": "In this role, you will work 100% on one of our <strong>key</strong> pharmaceutical clients * Significant experience managing events for pharmaceutical and/or <strong>healthcare</strong> clients and strong knowledge of industry regulations and protocols * EGG GmbH * bundesweit, Home-Office * Feste Anstellung * Homeoffice möglich, Vollzeit - Schnelle Bewerbung - About egg - At egg, ideas, feedback, and curiosity are part of everyday work. We value open conversations, shared accountability, and continuous learning. Our teams are made up of people from diverse backgrounds and experiences. Inclusion and diversity are core to how we think, create, and grow. We welcome applications from people of all genders and identities, BIPOC communities, LGBTQ2S+ individuals, and people with visible and non‑visible disabilities. As an ESG‑driven company, we are committed to making a positive impact on both people and the planet. Founded in 2000 - Co-workers 200+",
+          "cvToJobScore": null,
+          "isHighlighted": false,
+          "isSponsored": false,
+          "travelTime": null,
+          "unifiedTravelTime": null,
+          "isTopJob": false,
+          "isTrafficFromPartner": false
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": 13996035,
+          "title": "Sales Development Manager (100%)",
+          "labels": [],
+          "url": "/jobs--Sales-Development-Manager-100-Leipzig-Berlin-Dresden-Potsdam-Halle-Cotbus-Home-Office-Kolb-Distribution-Ltd--13996035-inline.html?rltr=3_3_25_seorl_m_0_0_0_0_0_0",
+          "companyId": 107781,
+          "companyName": "Kolb Distribution Ltd.  ",
+          "companyUrl": "https://www.stepstone.de/cmp/en/kolb-distribution-ltd-107781/work",
+          "companyLogoUrl": "https://www.stepstone.de/upload_DE/logo/K/logoKolb-Distribution-Ltd-107781DE.gif",
+          "datePosted": "2026-05-22T12:03:10+02:00",
+          "location": "Leipzig, Berlin, Dresden, Potsdam, Halle, Cotbus, Home-Office",
+          "isAnonymous": false,
+          "salary": "",
+          "postCode": null,
+          "partnership": {
+            "isPartnershipJob": false,
+            "showPartnershipLabel": false,
+            "isBackfilled": false,
+            "sourceSiteFriendlyName": "",
+            "isCrossPosted": false
+          },
+          "unifiedSalary": {
+            "min": null,
+            "max": null,
+            "currency": null,
+            "period": null,
+            "salaryAvailable": true,
+            "salaryType": null
+          },
+          "workFromHome": "2",
+          "metaData": {
+            "positionOnPage": 3,
+            "positionAbsolute": 3
+          },
+          "harmonisedId": "b9ffdd89-e346-4610-8c11-55ca40828d04",
+          "jobPostingSequence": null,
+          "periodPostedDate": null,
+          "publishFromDate": null,
+          "publishToDate": null,
+          "hasFuturePosting": false,
+          "fingerprintCount": null,
+          "section": "main",
+          "topLabels": [],
+          "skills": [],
+          "textSnippet": "New customers acquisition and <strong>sales</strong> <strong>development</strong> in Eastern Europe region * International <strong>sales</strong> of KLK Kolb's chemical surfactant portfolio * Volume, turnover and contribution margin - responsible for the allocated customers in coordination with and as specified by the Business <strong>Manager</strong> * Providing intensive application-related consulting and support to existing and new customers in close cooperation with Product Management, Marketing, Research & <strong>Development</strong> and other business units * Assuring sustainable, profitable growth in the corresponding markets through actively collaborating in the <strong>development</strong> and implementation of operational measures and projects in cooperation with the appropriate internal departments * Market and competitor observation and market potential analyses; developing authoritative plans on short and mid-term business <strong>development</strong>",
+          "cvToJobScore": null,
+          "isHighlighted": false,
+          "isSponsored": false,
+          "travelTime": null,
+          "unifiedTravelTime": null,
+          "isTopJob": false,
+          "isTrafficFromPartner": false
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "28b26dbd-df28-451c-bb3d-d1f870b8ef28",
+  "activeVersionId": "28b26dbd-df28-451c-bb3d-d1f870b8ef28",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-05-29T07:16:32.036Z",
+      "createdAt": "2026-05-29T07:16:32.036Z",
+      "role": "workflow:owner",
+      "workflowId": "8KTpxZipjRPoZRgp",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-05-29T07:57:28.704Z",
+    "createdAt": "2026-05-29T07:57:22.040Z",
+    "versionId": "28b26dbd-df28-451c-bb3d-d1f870b8ef28",
+    "workflowId": "8KTpxZipjRPoZRgp",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 8,
+                "triggerAtMinute": 13
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -7232,
+          1584
+        ],
+        "id": "23b01381-76c7-428d-9348-a9eabd236070",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "running",
+              "workflow_tag": "stepstone"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -7008,
+          1680
+        ],
+        "id": "f0351506-6014-45f6-846e-18f2c383053b",
+        "name": "update running status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "completed",
+              "last_success_at": "={{ $now.toISO() }}",
+              "workflow_tag": "stepstone"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -6336,
+          1536
+        ],
+        "id": "dc5f6961-feb4-4bcd-af95-a6fd269c388b",
+        "name": "update success status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -7232,
+          1776
+        ],
+        "id": "3c3e32a9-b9b1-4dc3-8ecf-b86acc50b48e",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "jsCode": "const platformName = \"stepstone\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -5216,
+          1680
+        ],
+        "id": "cbe9012b-749a-4385-b739-3b57812c119a",
+        "name": "add source"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
+                "name": "jobId",
+                "value": "={{ $('Is empty?').item.json.id }}",
+                "type": "string"
+              },
+              {
+                "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
+                "name": "jobTitle",
+                "value": "={{ $('Is empty?').item.json.title }}",
+                "type": "string"
+              },
+              {
+                "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
+                "name": "jobUrl",
+                "value": "=https://www.stepstone.de{{ $('Is empty?').item.json.url }}",
+                "type": "string"
+              },
+              {
+                "id": "d7ac7ab9-4e9f-44e2-a188-a6f8cbbb580c",
+                "name": "companyName",
+                "value": "={{ $('Is empty?').item.json.companyName }}",
+                "type": "string"
+              },
+              {
+                "id": "51e71c18-177a-4370-a63d-25f8001fce8e",
+                "name": "companyUrl",
+                "value": "={{ $('Is empty?').item.json.companyUrl }}",
+                "type": "string"
+              },
+              {
+                "id": "ce6bae6a-2e69-4671-b2d3-08f6ff27fd81",
+                "name": "companyLogo",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "0103b2e7-89df-48b2-a1dc-4b91932b8495",
+                "name": "publishedAt",
+                "value": "={{ $('Is empty?').item.json.datePosted }}",
+                "type": "string"
+              },
+              {
+                "id": "b8611d60-09ec-409e-a0c0-8a6d7da87ea0",
+                "name": "applyUrl",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "008246ee-3829-4a26-af95-544f914e1fe9",
+                "name": "location",
+                "value": "={{ $('Is empty?').item.json.location }}",
+                "type": "string"
+              },
+              {
+                "id": "949e43c8-0db8-420e-a39d-6be73d8c5efc",
+                "name": "contractType",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "388f52b8-c592-4c8c-8464-5be8d77b995e",
+                "name": "experienceLevel",
+                "value": "",
+                "type": "string"
+              },
+              {
+                "id": "30f4be42-bf3a-459d-bbb3-5000af3a21de",
+                "name": "jobDescription",
+                "value": "={{ $json.jobDescription }}",
+                "type": "string"
+              },
+              {
+                "id": "1e0e0a25-7bb2-443e-be17-220d44d95d92",
+                "name": "sector",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "d7ecf8bd-46b7-414c-8862-41811f709f0a",
+                "name": "workMode",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "a43ad1be-2936-4dd3-ba10-fd613008347d",
+                "name": "employmentType",
+                "value": "=",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -5440,
+          1680
+        ],
+        "id": "4a0030c1-09af-49c7-837e-ab030d758d85",
+        "name": "Standardize output (**adjust fields**)"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "NBCVFrfmAz4h6S1a",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/NBCVFrfmAz4h6S1a",
+            "cachedResultName": "scrape_dedupe_upsert"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -4992,
+          1904
+        ],
+        "id": "f6f94430-ed85-4b83-9373-952f00555007",
+        "name": "Call '03_dedupe_upsert'",
+        "retryOnFail": false,
+        "maxTries": 2,
+        "waitBetweenTries": 5000,
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "198c51cc-2a2e-491d-9e8a-f21b8211f184",
+                "leftValue": "={{ $json.title }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "empty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -6560,
+          1680
+        ],
+        "id": "aa0223b7-ed33-47c9-80f2-67bba3a6e9eb",
+        "name": "Is empty?"
+      },
+      {
+        "parameters": {
+          "operation": "Run actor and get dataset",
+          "actorId": {
+            "__rl": true,
+            "value": "https://console.apify.com/actors/pIVhuvHZkW2Llfjrr/input",
+            "mode": "url"
+          },
+          "customBody": "={\n    \"category\": \"verwaltung\",\n    \"includeRelatedJobs\": false,\n    \"maxItems\": 100,\n    \"proxy\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ]\n    },\n    \"startUrls\": [\n        {\n            \"url\": \"https://www.stepstone.de/work/full-time/ai-engineerai-agentmlopsai-consultantai-solutionsn8n/in-europe?whereType=autosuggest&radius=30&action=facet_selected%3bage%3bage_7&q=%28ai+engineer%29%2c%28ai+agent%29%2c%28mlops%29%2c%28ai+consultant%29%2c%28ai+solutions%29%2c%28n8n%29&ag=age_7&fdl=en&wfh=1&searchOrigin=Resultlist_top-search\"\n        }\n    ]\n}",
+          "timeout": {}
+        },
+        "type": "@apify/n8n-nodes-apify.apify",
+        "typeVersion": 1,
+        "position": [
+          -6784,
+          1680
+        ],
+        "id": "5b350fb1-589a-4c2b-9dfa-8eb25481ffc2",
+        "name": "Scrape stepstone",
+        "executeOnce": false,
+        "retryOnFail": true,
+        "alwaysOutputData": true,
+        "credentials": {
+          "apifyApi": {
+            "id": "sM1rbuMNJA46PCpB",
+            "name": "Apify account 4"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "url": "=https://r.jina.ai/https://www.stepstone.de{{ $json.url }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -5888,
+          1824
+        ],
+        "id": "c72aaa44-ed2c-4664-b61a-e98de41cc8cc",
+        "name": "Jina fetch job text",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "job_leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "job_url",
+                "condition": "eq",
+                "keyValue": "=https://www.stepstone.de{{ $('Is empty?').item.json.url }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "status",
+                "fieldValue": "failed_jina"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -5664,
+          1872
+        ],
+        "id": "49464c40-031d-4dec-8b5a-22184e5ab1ea",
+        "name": "Update a row",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const raw = $input.item.json.data || \"\"; \n\nreturn { \n    jobDescription: raw.split(\"Markdown Content:\")[1]?.trim() || raw \n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -5664,
+          1680
+        ],
+        "id": "cd0acc74-61d7-494c-b810-9b0f1050f635",
+        "name": "Payload parser job description"
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          -6112,
+          1824
+        ],
+        "id": "b06a51fd-2382-4720-af24-c08301426e34",
+        "name": "Wait",
+        "webhookId": "0ea4137f-7603-4c4f-a8fd-ae89ebd7721b"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+            "cachedResultName": "error_global"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -4768,
+          1904
+        ],
+        "id": "e3bd1eab-f923-4df8-8f09-3ae9d72a13ea",
+        "name": "Call 'error_global'"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          -6112,
+          1584
+        ],
+        "id": "d51ae933-4b4b-4cc9-a611-533d366a7a45",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "options": {
+            "reset": false
+          }
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -6336,
+          1776
+        ],
+        "id": "8d55d99b-6a52-4f2d-a259-f7870c6de7b3",
+        "name": "Loop Over Items"
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "update running status",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update running status": {
+        "main": [
+          [
+            {
+              "node": "Scrape stepstone",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update success status": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "update running status",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "add source": {
+        "main": [
+          [
+            {
+              "node": "Call '03_dedupe_upsert'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Standardize output (**adjust fields**)": {
+        "main": [
+          [
+            {
+              "node": "add source",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call '03_dedupe_upsert'": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Call 'error_global'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Is empty?": {
+        "main": [
+          [
+            {
+              "node": "update success status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Scrape stepstone": {
+        "main": [
+          [
+            {
+              "node": "Is empty?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Jina fetch job text": {
+        "main": [
+          [
+            {
+              "node": "Payload parser job description",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Update a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Jina fetch job text",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Payload parser job description": {
+        "main": [
+          [
+            {
+              "node": "Standardize output (**adjust fields**)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "d d",
+    "name": "Version 28b26dbd",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-03-06T13:15:28.248Z",
+      "createdAt": "2026-01-22T12:40:37.040Z",
+      "id": "mcS1gLAfDII7yoGe",
+      "name": "scrape"
+    },
+    {
+      "updatedAt": "2026-05-29T07:56:39.111Z",
+      "createdAt": "2026-05-29T07:56:39.111Z",
+      "id": "MZkwRg2fhlMO5ALM",
+      "name": "stepstone"
+    }
+  ]
+}
