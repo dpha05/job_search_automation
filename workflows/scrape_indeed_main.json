@@ -1,0 +1,937 @@
+{
+  "updatedAt": "2026-05-29T07:24:03.071Z",
+  "createdAt": "2026-05-28T06:08:08.988Z",
+  "id": "xgaJoQysb6pVTNeV",
+  "name": "scrape_indeed_main",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8,
+              "triggerAtMinute": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -5824,
+        1056
+      ],
+      "id": "8b34d49f-ba9a-4dc0-964a-76ec673f7e70",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "const today = new Date().getDay();\nlet publishedAtString = \"1\"; \n\nif (today === 1) { \n  publishedAtString = \"3\"; \n}\n\nreturn {\n  publishedAtString\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5376,
+        1200
+      ],
+      "id": "956e795a-a248-4b9a-a3c1-2e64a50fa80c",
+      "name": "Calculate Time Range"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "running",
+            "workflow_tag": "indeed"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -5600,
+        1200
+      ],
+      "id": "3ae05ac5-4acc-4d20-8096-519fae4ab356",
+      "name": "update running status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "completed",
+            "last_success_at": "={{ $now.toISO() }}",
+            "workflow_tag": "indeed"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -4480,
+        1056
+      ],
+      "id": "561c9b84-6902-46f6-b63c-c73441522c60",
+      "name": "update success status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -5824,
+        1248
+      ],
+      "id": "6406cc14-c49e-4433-8c54-32e1d611297f",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+          "cachedResultName": "error_global"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -4256,
+        1248
+      ],
+      "id": "74eeb851-bbd4-4505-9d5d-fb9158242aa8",
+      "name": "Call 'error_global'"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -4256,
+        1056
+      ],
+      "id": "b47075ad-d995-48c5-86ee-330a79278c4a",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const inputPrevious = $input.item.json;\n\nconst keywords = [\n  \"AI engineer\",\n  \"AI solutions\",\n  \"AI Agent\",\n  \"AI consultant\",\n  \"n8n\",\n  \"MLOps\",\n  \"Automation engineer\"\n];\n\nreturn {\n  ...inputPrevious,\n  keywords \n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4928,
+        1200
+      ],
+      "id": "6a07e70e-9608-4dce-8816-8e195a7a1fa9",
+      "name": "Set Keywords"
+    },
+    {
+      "parameters": {
+        "jsCode": "const timeRange = $input.first().json;\n\nconst countries = [\n\n  { country: \"Germany\", countryCode: \"de\" },\n  { country: \"Austria\", countryCode: \"at\" },\n  { country: \"Switzerland\", countryCode: \"ch\" },\n\n  { country: \"Czechia\", countryCode: \"cz\" },\n  { country: \"Poland\", countryCode: \"pl\" },\n\n  { country: \"Sweden\", countryCode: \"se\" },\n  { country: \"Norway\", countryCode: \"no\" },\n  { country: \"Denmark\", countryCode: \"dk\" },\n  { country: \"Finland\", countryCode: \"fi\" },\n\n\n  { country: \"France\", countryCode: \"fr\" },\n  { country: \"Netherlands\", countryCode: \"nl\" },\n  { country: \"Belgium\", countryCode: \"be\" },\n  { country: \"Luxembourg\", countryCode: \"lu\" }\n];\n\n\n\n\n\nreturn countries.map(c => ({\n  ...c,\n  ...timeRange\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5152,
+        1200
+      ],
+      "id": "caa96367-ebb3-4366-8a12-503c56b9ff61",
+      "name": "Set Location and Accounts"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "BvCJELJG4Xv1E9mE",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/BvCJELJG4Xv1E9mE",
+          "cachedResultName": "scrape_indeed_sub"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -4480,
+        1248
+      ],
+      "id": "c96a141e-0817-4c02-8697-658b3a780109",
+      "name": "Call 'scrape_indeed_sub'",
+      "retryOnFail": false,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -4704,
+        1200
+      ],
+      "id": "9e4bb701-de9e-4688-b03f-92bd0039d933",
+      "name": "Loop Over Items"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "update running status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Time Range": {
+      "main": [
+        [
+          {
+            "node": "Set Location and Accounts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update running status": {
+      "main": [
+        [
+          {
+            "node": "Calculate Time Range",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update success status": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "update running status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Keywords": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Location and Accounts": {
+      "main": [
+        [
+          {
+            "node": "Set Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'scrape_indeed_sub'": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call 'error_global'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "update success status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call 'scrape_indeed_sub'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "Europe/Prague",
+    "executionOrder": "v1",
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg",
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-04-24T08:49:12.349+02:00",
+          "Readable date": "April 24th 2026, 8:49:12 am",
+          "Readable time": "8:49:12 am",
+          "Day of week": "Friday",
+          "Year": "2026",
+          "Month": "April",
+          "Day of month": "24",
+          "Hour": "08",
+          "Minute": "49",
+          "Second": "12",
+          "Timezone": "Europe/Prague (UTC+02:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "02f85eba-9ca7-4c0f-903d-1c9850579a79",
+  "activeVersionId": "02f85eba-9ca7-4c0f-903d-1c9850579a79",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-05-28T06:08:08.988Z",
+      "createdAt": "2026-05-28T06:08:08.988Z",
+      "role": "workflow:owner",
+      "workflowId": "xgaJoQysb6pVTNeV",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-05-29T07:24:03.917Z",
+    "createdAt": "2026-05-29T07:22:40.339Z",
+    "versionId": "02f85eba-9ca7-4c0f-903d-1c9850579a79",
+    "workflowId": "xgaJoQysb6pVTNeV",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 8,
+                "triggerAtMinute": 10
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -5824,
+          1056
+        ],
+        "id": "8b34d49f-ba9a-4dc0-964a-76ec673f7e70",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "jsCode": "const today = new Date().getDay();\nlet publishedAtString = \"1\"; \n\nif (today === 1) { \n  publishedAtString = \"3\"; \n}\n\nreturn {\n  publishedAtString\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -5376,
+          1200
+        ],
+        "id": "956e795a-a248-4b9a-a3c1-2e64a50fa80c",
+        "name": "Calculate Time Range"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "running",
+              "workflow_tag": "indeed"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -5600,
+          1200
+        ],
+        "id": "3ae05ac5-4acc-4d20-8096-519fae4ab356",
+        "name": "update running status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "completed",
+              "last_success_at": "={{ $now.toISO() }}",
+              "workflow_tag": "indeed"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -4480,
+          1056
+        ],
+        "id": "561c9b84-6902-46f6-b63c-c73441522c60",
+        "name": "update success status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -5824,
+          1248
+        ],
+        "id": "6406cc14-c49e-4433-8c54-32e1d611297f",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+            "cachedResultName": "error_global"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -4256,
+          1248
+        ],
+        "id": "74eeb851-bbd4-4505-9d5d-fb9158242aa8",
+        "name": "Call 'error_global'"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          -4256,
+          1056
+        ],
+        "id": "b47075ad-d995-48c5-86ee-330a79278c4a",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const inputPrevious = $input.item.json;\n\nconst keywords = [\n  \"AI engineer\",\n  \"AI solutions\",\n  \"AI Agent\",\n  \"AI consultant\",\n  \"n8n\",\n  \"MLOps\",\n  \"Automation engineer\"\n];\n\nreturn {\n  ...inputPrevious,\n  keywords \n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -4928,
+          1200
+        ],
+        "id": "6a07e70e-9608-4dce-8816-8e195a7a1fa9",
+        "name": "Set Keywords"
+      },
+      {
+        "parameters": {
+          "jsCode": "const timeRange = $input.first().json;\n\nconst countries = [\n\n  { country: \"Germany\", countryCode: \"de\" },\n  { country: \"Austria\", countryCode: \"at\" },\n  { country: \"Switzerland\", countryCode: \"ch\" },\n\n  { country: \"Czechia\", countryCode: \"cz\" },\n  { country: \"Poland\", countryCode: \"pl\" },\n\n  { country: \"Sweden\", countryCode: \"se\" },\n  { country: \"Norway\", countryCode: \"no\" },\n  { country: \"Denmark\", countryCode: \"dk\" },\n  { country: \"Finland\", countryCode: \"fi\" },\n\n\n  { country: \"France\", countryCode: \"fr\" },\n  { country: \"Netherlands\", countryCode: \"nl\" },\n  { country: \"Belgium\", countryCode: \"be\" },\n  { country: \"Luxembourg\", countryCode: \"lu\" }\n];\n\n\n\n\n\nreturn countries.map(c => ({\n  ...c,\n  ...timeRange\n}));"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -5152,
+          1200
+        ],
+        "id": "caa96367-ebb3-4366-8a12-503c56b9ff61",
+        "name": "Set Location and Accounts"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "BvCJELJG4Xv1E9mE",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/BvCJELJG4Xv1E9mE",
+            "cachedResultName": "scrape_indeed_sub"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -4480,
+          1248
+        ],
+        "id": "c96a141e-0817-4c02-8697-658b3a780109",
+        "name": "Call 'scrape_indeed_sub'",
+        "retryOnFail": false,
+        "maxTries": 2,
+        "waitBetweenTries": 5000,
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -4704,
+          1200
+        ],
+        "id": "9e4bb701-de9e-4688-b03f-92bd0039d933",
+        "name": "Loop Over Items"
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "update running status",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Calculate Time Range": {
+        "main": [
+          [
+            {
+              "node": "Set Location and Accounts",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update running status": {
+        "main": [
+          [
+            {
+              "node": "Calculate Time Range",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update success status": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "update running status",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set Keywords": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set Location and Accounts": {
+        "main": [
+          [
+            {
+              "node": "Set Keywords",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'scrape_indeed_sub'": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Call 'error_global'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "update success status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Call 'scrape_indeed_sub'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "d d",
+    "name": "Version 02f85eba",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-03-06T13:15:28.248Z",
+      "createdAt": "2026-01-22T12:40:37.040Z",
+      "id": "mcS1gLAfDII7yoGe",
+      "name": "scrape"
+    },
+    {
+      "updatedAt": "2026-05-29T07:23:02.686Z",
+      "createdAt": "2026-05-29T07:23:02.686Z",
+      "id": "fOOdR2vfU4O7lAfj",
+      "name": "indeed"
+    }
+  ]
+}
