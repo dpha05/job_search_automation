@@ -1616,16 +1616,16 @@
   },
   "tags": [
     {
-      "updatedAt": "2026-03-06T13:15:23.201Z",
-      "createdAt": "2026-01-26T08:43:12.205Z",
-      "id": "q3Jm1TtyectpAeLG",
-      "name": "score"
-    },
-    {
       "updatedAt": "2026-02-25T07:33:28.018Z",
       "createdAt": "2026-02-25T07:33:28.018Z",
       "id": "IqRTP9BqhN0ja5Ww",
       "name": "prod"
+    },
+    {
+      "updatedAt": "2026-03-06T13:15:23.201Z",
+      "createdAt": "2026-01-26T08:43:12.205Z",
+      "id": "q3Jm1TtyectpAeLG",
+      "name": "score"
     }
   ]
 }
