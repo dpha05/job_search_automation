@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-27T08:02:35.088Z",
+  "updatedAt": "2026-06-05T07:20:46.639Z",
   "createdAt": "2026-05-21T06:50:22.364Z",
   "id": "mlWiyg2HcVQmPbFu",
   "name": "scrape_hiringcafe",
@@ -14,7 +14,7 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        16,
+        224,
         -912
       ],
       "id": "a19304ae-9a76-47a0-b13c-431068f5dc2d",
@@ -39,7 +39,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        464,
+        672,
         -992
       ],
       "id": "9d1c042a-cbf8-40f6-a7f1-890ee22260ac",
@@ -72,7 +72,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        688,
+        896,
         -912
       ],
       "id": "6756b738-b7cf-421c-8c55-856d9faa9adc",
@@ -87,7 +87,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        1136,
+        1344,
         -848
       ],
       "id": "b0b975da-b7ec-47f9-9984-9f86d3ee4df4",
@@ -100,7 +100,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2704,
+        2912,
         -1056
       ],
       "id": "627f8092-e245-4173-8b9c-f780864387a2",
@@ -225,7 +225,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2480,
+        2688,
         -1056
       ],
       "id": "470d03ae-72d6-4fd9-90ce-51e1db88e51d",
@@ -294,7 +294,7 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        1360,
+        1568,
         -1392
       ],
       "id": "14ef6b60-a36e-4166-8386-5bb73267f244",
@@ -329,7 +329,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        2928,
+        3136,
         -624
       ],
       "id": "a09ab6bb-bb00-4c42-91df-c14d2536f067",
@@ -344,7 +344,7 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        1584,
+        1792,
         -1392
       ],
       "id": "7d6ff09b-defe-465d-815d-6a237dcb204a",
@@ -358,7 +358,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2032,
+        2240,
         -1248
       ],
       "id": "7e92d539-d5b6-4c70-a9f4-77eb23a8f796",
@@ -372,7 +372,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1808,
+        2016,
         -1248
       ],
       "id": "c8c15f21-3e5a-431a-bd03-7e7d6e25c83e",
@@ -457,7 +457,7 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        1360,
+        1568,
         -1072
       ],
       "id": "583c81cf-c66d-410d-886e-37e8bc8ffed6",
@@ -471,7 +471,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1808,
+        2016,
         -1056
       ],
       "id": "e31d606c-bd38-4ccf-9f10-2c47bd284203",
@@ -487,7 +487,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2032,
+        2240,
         -1056
       ],
       "id": "feda7724-1d5b-43a8-98e9-22e68bf14f0a",
@@ -501,7 +501,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1808,
+        2016,
         -768
       ],
       "id": "d5e273fd-437b-4664-9aec-20d6ba2d7c98",
@@ -535,7 +535,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2032,
+        2240,
         -672
       ],
       "id": "2f70280e-49f1-490a-8606-8a8067146813",
@@ -557,7 +557,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2032,
+        2240,
         -864
       ],
       "id": "8a9e949d-6627-4cd7-bfe0-1163ab3569b4",
@@ -644,7 +644,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1584,
+        1792,
         -768
       ],
       "id": "1267961b-4540-4c73-bcb6-1482f862063f",
@@ -656,7 +656,7 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        2256,
+        2464,
         -1056
       ],
       "id": "1db4d15d-d9f6-4607-8dce-7719c28bb487",
@@ -710,7 +710,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        912,
+        1120,
         -912
       ],
       "id": "513fdcd1-3a8c-4a9e-a414-8ff70100f794",
@@ -751,7 +751,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        3152,
+        3360,
         -624
       ],
       "id": "f60ba2a0-df11-4c36-b60b-6aef0d89ad00",
@@ -769,7 +769,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -432,
+        -224,
         -1488
       ],
       "id": "e1299b8f-20b7-4759-b660-fe9f2fcc0cbd",
@@ -815,7 +815,7 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        240,
+        448,
         -912
       ],
       "id": "5146ea4d-12a3-47ae-8856-e4d3f199c81d",
@@ -834,7 +834,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -432,
+        -224,
         -1296
       ],
       "id": "33e2a625-7a11-4c71-82fa-42e95f62c1b8",
@@ -854,7 +854,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -432,
+        -224,
         -1104
       ],
       "id": "28366a5a-1ca6-4fe1-8845-ac8d58a9659d",
@@ -874,7 +874,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -432,
+        -224,
         -912
       ],
       "id": "fe8f8210-ccfc-47e4-bb54-9304755b8e38",
@@ -894,7 +894,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -432,
+        -224,
         -720
       ],
       "id": "606ae00d-165d-40ce-a19d-418b53a6a4f6",
@@ -914,7 +914,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -432,
+        -224,
         -528
       ],
       "id": "db19870e-e86b-409b-9077-cff773de2654",
@@ -934,7 +934,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -432,
+        -224,
         -336
       ],
       "id": "17257614-9f4d-4bd0-8aec-3944107f342f",
@@ -949,7 +949,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        -208,
+        0,
         -992
       ],
       "id": "89fb47bf-ba90-4e74-a4ed-dda36cda4359",
@@ -963,7 +963,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -656,
+        -448,
         -960
       ],
       "id": "d7ec7076-109f-4b02-86c3-3a23a18dd4b7",
@@ -971,13 +971,21 @@
     },
     {
       "parameters": {
-        "url": "https://hiring.cafe/",
+        "url": "https://txtify.it/https://hiring.cafe",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "User-Agent",
               "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+            },
+            {
+              "name": "Accept",
+              "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "en-US,en;q=0.9"
             }
           ]
         },
@@ -996,7 +1004,8 @@
         -960
       ],
       "id": "d3cdf1f9-a161-45f7-a99b-ed77f137e0d0",
-      "name": "Get HTML"
+      "name": "Get HTML",
+      "disabled": true
     },
     {
       "parameters": {
@@ -1005,11 +1014,46 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -880,
+        -672,
         -960
       ],
       "id": "eb8a2d94-3c79-45c1-9bcf-8467e0c65086",
       "name": "Extract buildId"
+    },
+    {
+      "parameters": {
+        "url": "https://api.scraperapi.com",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "url",
+              "value": "https://hiring.cafe/"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -896,
+        -960
+      ],
+      "id": "6b39631c-319c-468d-9018-4bb5881d5f27",
+      "name": "GET HTML1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "oGTjX94cN1PIy8AK",
+          "name": "Tavily search API"
+        },
+        "httpQueryAuth": {
+          "id": "pOMn589Uc8daUwig",
+          "name": "ScraperAPI"
+        }
+      }
     }
   ],
   "connections": {
@@ -1435,7 +1479,7 @@
       "main": [
         [
           {
-            "node": "Extract buildId",
+            "node": "GET HTML1",
             "type": "main",
             "index": 0
           }
@@ -1463,6 +1507,17 @@
           }
         ]
       ]
+    },
+    "GET HTML1": {
+      "main": [
+        [
+          {
+            "node": "Extract buildId",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1482,9 +1537,30 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "0fe7b41c-d9dc-45ee-a352-37cb55804d25",
-  "activeVersionId": "0fe7b41c-d9dc-45ee-a352-37cb55804d25",
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-06-05T08:17:47.008+02:00",
+          "Readable date": "June 5th 2026, 8:17:47 am",
+          "Readable time": "8:17:47 am",
+          "Day of week": "Friday",
+          "Year": "2026",
+          "Month": "June",
+          "Day of month": "05",
+          "Hour": "08",
+          "Minute": "17",
+          "Second": "47",
+          "Timezone": "Europe/Prague (UTC+02:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "56b2beaa-52ff-490f-a1b3-16504a675765",
+  "activeVersionId": "56b2beaa-52ff-490f-a1b3-16504a675765",
   "triggerCount": 1,
   "shared": [
     {
@@ -1496,9 +1572,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-27T08:02:51.528Z",
-    "createdAt": "2026-05-27T08:02:35.089Z",
-    "versionId": "0fe7b41c-d9dc-45ee-a352-37cb55804d25",
+    "updatedAt": "2026-06-05T07:21:51.632Z",
+    "createdAt": "2026-06-05T07:20:46.642Z",
+    "versionId": "56b2beaa-52ff-490f-a1b3-16504a675765",
     "workflowId": "mlWiyg2HcVQmPbFu",
     "nodes": [
       {
@@ -1509,7 +1585,7 @@
         "type": "n8n-nodes-base.splitOut",
         "typeVersion": 1,
         "position": [
-          16,
+          224,
           -912
         ],
         "id": "a19304ae-9a76-47a0-b13c-431068f5dc2d",
@@ -1534,7 +1610,7 @@
         "type": "n8n-nodes-base.supabase",
         "typeVersion": 1,
         "position": [
-          464,
+          672,
           -992
         ],
         "id": "9d1c042a-cbf8-40f6-a7f1-890ee22260ac",
@@ -1567,7 +1643,7 @@
         "type": "n8n-nodes-base.merge",
         "typeVersion": 3.2,
         "position": [
-          688,
+          896,
           -912
         ],
         "id": "6756b738-b7cf-421c-8c55-856d9faa9adc",
@@ -1582,7 +1658,7 @@
         "type": "n8n-nodes-base.splitInBatches",
         "typeVersion": 3,
         "position": [
-          1136,
+          1344,
           -848
         ],
         "id": "b0b975da-b7ec-47f9-9984-9f86d3ee4df4",
@@ -1595,7 +1671,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          2704,
+          2912,
           -1056
         ],
         "id": "627f8092-e245-4173-8b9c-f780864387a2",
@@ -1720,7 +1796,7 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          2480,
+          2688,
           -1056
         ],
         "id": "470d03ae-72d6-4fd9-90ce-51e1db88e51d",
@@ -1789,7 +1865,7 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          1360,
+          1568,
           -1392
         ],
         "id": "14ef6b60-a36e-4166-8386-5bb73267f244",
@@ -1824,7 +1900,7 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          2928,
+          3136,
           -624
         ],
         "id": "a09ab6bb-bb00-4c42-91df-c14d2536f067",
@@ -1839,7 +1915,7 @@
         "type": "n8n-nodes-base.noOp",
         "typeVersion": 1,
         "position": [
-          1584,
+          1792,
           -1392
         ],
         "id": "7d6ff09b-defe-465d-815d-6a237dcb204a",
@@ -1853,7 +1929,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          2032,
+          2240,
           -1248
         ],
         "id": "7e92d539-d5b6-4c70-a9f4-77eb23a8f796",
@@ -1867,7 +1943,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          1808,
+          2016,
           -1248
         ],
         "id": "c8c15f21-3e5a-431a-bd03-7e7d6e25c83e",
@@ -1952,7 +2028,7 @@
         "type": "n8n-nodes-base.switch",
         "typeVersion": 3.4,
         "position": [
-          1360,
+          1568,
           -1072
         ],
         "id": "583c81cf-c66d-410d-886e-37e8bc8ffed6",
@@ -1966,7 +2042,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          1808,
+          2016,
           -1056
         ],
         "id": "e31d606c-bd38-4ccf-9f10-2c47bd284203",
@@ -1982,7 +2058,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          2032,
+          2240,
           -1056
         ],
         "id": "feda7724-1d5b-43a8-98e9-22e68bf14f0a",
@@ -1996,7 +2072,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          1808,
+          2016,
           -768
         ],
         "id": "d5e273fd-437b-4664-9aec-20d6ba2d7c98",
@@ -2030,7 +2106,7 @@
         "type": "n8n-nodes-base.supabase",
         "typeVersion": 1,
         "position": [
-          2032,
+          2240,
           -672
         ],
         "id": "2f70280e-49f1-490a-8606-8a8067146813",
@@ -2052,7 +2128,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          2032,
+          2240,
           -864
         ],
         "id": "8a9e949d-6627-4cd7-bfe0-1163ab3569b4",
@@ -2139,7 +2215,7 @@
         "type": "n8n-nodes-base.wait",
         "typeVersion": 1.1,
         "position": [
-          1584,
+          1792,
           -768
         ],
         "id": "1267961b-4540-4c73-bcb6-1482f862063f",
@@ -2151,7 +2227,7 @@
         "type": "n8n-nodes-base.noOp",
         "typeVersion": 1,
         "position": [
-          2256,
+          2464,
           -1056
         ],
         "id": "1db4d15d-d9f6-4607-8dce-7719c28bb487",
@@ -2205,7 +2281,7 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          912,
+          1120,
           -912
         ],
         "id": "513fdcd1-3a8c-4a9e-a414-8ff70100f794",
@@ -2246,7 +2322,7 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          3152,
+          3360,
           -624
         ],
         "id": "f60ba2a0-df11-4c36-b60b-6aef0d89ad00",
@@ -2264,7 +2340,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          -432,
+          -224,
           -1488
         ],
         "id": "e1299b8f-20b7-4759-b660-fe9f2fcc0cbd",
@@ -2310,7 +2386,7 @@
         "type": "n8n-nodes-base.filter",
         "typeVersion": 2.3,
         "position": [
-          240,
+          448,
           -912
         ],
         "id": "5146ea4d-12a3-47ae-8856-e4d3f199c81d",
@@ -2329,7 +2405,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          -432,
+          -224,
           -1296
         ],
         "id": "33e2a625-7a11-4c71-82fa-42e95f62c1b8",
@@ -2349,7 +2425,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          -432,
+          -224,
           -1104
         ],
         "id": "28366a5a-1ca6-4fe1-8845-ac8d58a9659d",
@@ -2369,7 +2445,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          -432,
+          -224,
           -912
         ],
         "id": "fe8f8210-ccfc-47e4-bb54-9304755b8e38",
@@ -2389,7 +2465,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          -432,
+          -224,
           -720
         ],
         "id": "606ae00d-165d-40ce-a19d-418b53a6a4f6",
@@ -2409,7 +2485,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          -432,
+          -224,
           -528
         ],
         "id": "db19870e-e86b-409b-9077-cff773de2654",
@@ -2429,7 +2505,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          -432,
+          -224,
           -336
         ],
         "id": "17257614-9f4d-4bd0-8aec-3944107f342f",
@@ -2444,7 +2520,7 @@
         "type": "n8n-nodes-base.merge",
         "typeVersion": 3.2,
         "position": [
-          -208,
+          0,
           -992
         ],
         "id": "89fb47bf-ba90-4e74-a4ed-dda36cda4359",
@@ -2458,7 +2534,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          -656,
+          -448,
           -960
         ],
         "id": "d7ec7076-109f-4b02-86c3-3a23a18dd4b7",
@@ -2466,13 +2542,21 @@
       },
       {
         "parameters": {
-          "url": "https://hiring.cafe/",
+          "url": "https://txtify.it/https://hiring.cafe",
           "sendHeaders": true,
           "headerParameters": {
             "parameters": [
               {
                 "name": "User-Agent",
                 "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+              },
+              {
+                "name": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8"
+              },
+              {
+                "name": "Accept-Language",
+                "value": "en-US,en;q=0.9"
               }
             ]
           },
@@ -2491,7 +2575,8 @@
           -960
         ],
         "id": "d3cdf1f9-a161-45f7-a99b-ed77f137e0d0",
-        "name": "Get HTML"
+        "name": "Get HTML",
+        "disabled": true
       },
       {
         "parameters": {
@@ -2500,11 +2585,46 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          -880,
+          -672,
           -960
         ],
         "id": "eb8a2d94-3c79-45c1-9bcf-8467e0c65086",
         "name": "Extract buildId"
+      },
+      {
+        "parameters": {
+          "url": "https://api.scraperapi.com",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpQueryAuth",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "url",
+                "value": "https://hiring.cafe/"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -896,
+          -960
+        ],
+        "id": "6b39631c-319c-468d-9018-4bb5881d5f27",
+        "name": "GET HTML1",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "oGTjX94cN1PIy8AK",
+            "name": "Tavily search API"
+          },
+          "httpQueryAuth": {
+            "id": "pOMn589Uc8daUwig",
+            "name": "ScraperAPI"
+          }
+        }
       }
     ],
     "connections": {
@@ -2930,7 +3050,7 @@
         "main": [
           [
             {
-              "node": "Extract buildId",
+              "node": "GET HTML1",
               "type": "main",
               "index": 0
             }
@@ -2958,10 +3078,21 @@
             }
           ]
         ]
+      },
+      "GET HTML1": {
+        "main": [
+          [
+            {
+              "node": "Extract buildId",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "d d",
-    "name": "Version 0fe7b41c",
+    "name": "Version 56b2beaa",
     "description": "",
     "autosaved": true
   },
