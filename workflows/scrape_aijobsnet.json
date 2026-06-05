@@ -1,0 +1,3097 @@
+{
+  "updatedAt": "2026-06-05T06:41:44.148Z",
+  "createdAt": "2026-06-01T07:41:45.981Z",
+  "id": "Cr884axFy4iD9gIi",
+  "name": "scrape_aijobsnet",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -5584,
+        2880
+      ],
+      "id": "eb8a93f0-6016-4a3b-99f9-e2e0205774b2",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "running",
+            "workflow_tag": "aijobsnet"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -5360,
+        2784
+      ],
+      "id": "e5aa603c-bd48-4b3b-9262-a37f7a504d2f",
+      "name": "update running status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8,
+              "triggerAtMinute": 16
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -5584,
+        2688
+      ],
+      "id": "eae35b87-1b7c-4ce5-81d1-0e8d0887cb50",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "const htmlString = items[0].json.data || \"\";\n\nconst jobRegex = /<a class=\"[^\"]*stretched-link\"[^>]*href=\"([^\"]+)\"[^>]*>([\\s\\S]*?)<\\/a>/g;\n\nconst processedLeads = [];\nlet match;\n\nwhile ((match = jobRegex.exec(htmlString)) !== null) {\n    const urlPath = match[1].trim();\n    \n    const cleanTitle = match[2].replace(/\\s+/g, ' ').trim();\n    \n    processedLeads.push({\n        json: {\n            title: cleanTitle,\n            url: `https://aijobs.net${urlPath}`\n        }\n    });\n}\n\nreturn processedLeads;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4912,
+        2592
+      ],
+      "id": "af5a7ba7-277d-4631-83a3-69b01c98b7c9",
+      "name": "Parse HTML"
+    },
+    {
+      "parameters": {
+        "jsCode": "const htmlString = items[0].json.data || \"\";\n\nconst jobRegex = /<a class=\"[^\"]*stretched-link\"[^>]*href=\"([^\"]+)\"[^>]*>([\\s\\S]*?)<\\/a>/g;\n\nconst processedLeads = [];\nlet match;\n\nwhile ((match = jobRegex.exec(htmlString)) !== null) {\n    const urlPath = match[1].trim();\n    \n    const cleanTitle = match[2].replace(/\\s+/g, ' ').trim();\n    \n    processedLeads.push({\n        json: {\n            title: cleanTitle,\n            url: `https://aijobs.net${urlPath}`\n        }\n    });\n}\n\n// Return data formatted properly for the next n8n node execution\nreturn processedLeads;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4912,
+        2784
+      ],
+      "id": "7d858801-6ab5-46df-a0c5-26e271a0828c",
+      "name": "Parse HTML1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const htmlString = items[0].json.data || \"\";\n\nconst jobRegex = /<a class=\"[^\"]*stretched-link\"[^>]*href=\"([^\"]+)\"[^>]*>([\\s\\S]*?)<\\/a>/g;\n\nconst processedLeads = [];\nlet match;\n\nwhile ((match = jobRegex.exec(htmlString)) !== null) {\n    const urlPath = match[1].trim();\n    \n    const cleanTitle = match[2].replace(/\\s+/g, ' ').trim();\n    \n    processedLeads.push({\n        json: {\n            title: cleanTitle,\n            url: `https://aijobs.net${urlPath}`\n        }\n    });\n}\n\n// Return data formatted properly for the next n8n node execution\nreturn processedLeads;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4912,
+        2976
+      ],
+      "id": "4b47671f-a4b7-4195-a2ef-915d464d58de",
+      "name": "Parse HTML2"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -4688,
+        2864
+      ],
+      "id": "b0f0e601-60e7-423c-b86d-9b5db2c0a17a",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "url": "https://aijobs.net/jobs/role-ai-engineer/?page=1",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -5136,
+        2592
+      ],
+      "id": "6ea6bc6f-a5e5-444e-8bb7-be80ac2d8b4b",
+      "name": "GET AI engineer roles page 1"
+    },
+    {
+      "parameters": {
+        "url": "https://aijobs.net/jobs/role-ai-engineer/?page=2",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -5136,
+        2784
+      ],
+      "id": "4f237972-ad7a-434d-8f9a-8b111c824da9",
+      "name": "GET AI engineer roles page 2"
+    },
+    {
+      "parameters": {
+        "url": "https://aijobs.net/jobs/role-ai-engineer/?page=3",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -5136,
+        2976
+      ],
+      "id": "fdd806c2-7b11-4272-87e4-b9809dc7aa62",
+      "name": "GET AI engineer roles page 3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
+              "leftValue": "={{ $json.title }}",
+              "rightValue": "\\b(ai|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n|solutions|consultant|ml-?ops|ai-?ops|orchestrat\\w+|integrations?)\\b",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            },
+            {
+              "id": "6f924664-fa20-4947-af03-df2841af8012",
+              "leftValue": "={{ $json.title }}",
+              "rightValue": ".*(\\b(sales[- ]representative|assistant|manual|legal|qa[- ]engineer|qa[- ]automation|account[- ]manager|account[- ]executive|test[- ]automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react[- ]native|cloud|only|research|frontend|backend|forward|fde|fullstack|full[- ]stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp|intern)\\b).*",
+              "operator": {
+                "type": "string",
+                "operation": "notRegex"
+              }
+            },
+            {
+              "id": "3635173c-29a1-45e6-b7bf-29287af6b5bd",
+              "leftValue": "={{ $json.url }}",
+              "rightValue": "\\b(germany|berlin|munich|munchen|frankfurt|austria|vienna|switzerland|zurich|geneva|czech|czechia|prague|poland|warsaw|slovakia|bratislava|france|paris|puteaux|belgium|brussels|bruxelles|netherlands|amsterdam|eindhoven|luxembourg|norway|oslo|sweden|stockholm|goteborg|denmark|copenhagen|finland|helsinki|italy|milan|milano|roma|rome|portugal|lisbon|lisboa|spain|madrid|emea|europe|remote)\\b",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            },
+            {
+              "id": "dd6e5294-494d-4e34-ba5b-06245c95d727",
+              "leftValue": "={{ $json.url }}",
+              "rightValue": "\\b(united-states|usa|us-market|india|hyderabad|pune|bangalore|australia|sydney|melbourne|canada|ontario|latam|brazil|argentina|singapore|vietnam|london|united-kingdom|uk|ireland|dublin)\\b",
+              "operator": {
+                "type": "string",
+                "operation": "notRegex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -4464,
+        2880
+      ],
+      "id": "1c2d8789-a306-4a3a-a96c-379fb4c2ff73",
+      "name": "Filter positive and negative",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.data }}",
+                    "rightValue": "ashby",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "eae4b983-e0f5-4531-b41d-d2cacc77d3ec"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ashby"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "deaea76f-d534-418f-a180-98372fccdfa5",
+                    "leftValue": "={{ $json.data }}",
+                    "rightValue": "greenhouse",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "greenhouse"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "602c85e9-319e-487a-a508-c1e8fece0bc8",
+                    "leftValue": "={{ $json.data }}",
+                    "rightValue": "lever.co",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "lever"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c5503eaa-e52c-434a-b13d-896dbc158053",
+                    "leftValue": "={{ $json.data }}",
+                    "rightValue": "(ashby\ngreenhouse\nlever.co)",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notRegex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "other"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -2672,
+        2584
+      ],
+      "id": "6d7981da-0ef0-4550-a872-14b3ccd06092",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const html = $input.item.json.data;\n\nconst greenhouseRegex = /class=\\\"job__description body\\\">([\\s\\S]*?)<div class=\\\"divider\\\"/;\nconst match = html.match(greenhouseRegex);\n\nlet jobDescription = \"\";\n\nif (match && match[1]) {\n    jobDescription = match[1];\n    \n    jobDescription = jobDescription\n        .replace(/<\\/p>/g, '\\n\\n')\n        .replace(/<\\/li>/g, '\\n')\n        .replace(/<[^>]*>?/gm, '') // Remove all remaining tags\n        .replace(/&nbsp;/g, ' ')   // Fix non-breaking spaces\n        .replace(/&amp;/g, '&');   // Fix ampersands\n}\n\nreturn {\n    jobDescription: jobDescription.trim()\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2000,
+        2400
+      ],
+      "id": "fb8f56a1-42bd-44ef-ae31-cbdc72d52bba",
+      "name": "HTML parser job description1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "job_leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "={{ $('Is empty?').item.json.url }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "failed_jina"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -2224,
+        3024
+      ],
+      "id": "497772fe-e64b-41a8-a40f-b829e6da6c5b",
+      "name": "Update a row",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const raw = $input.item.json.data || \"\"; \n\nreturn { \n    jobDescription: raw.split(\"Markdown Content:\")[1]?.trim() || raw \n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2224,
+        2832
+      ],
+      "id": "1d7cfc99-a7c2-4f52-a25e-8106b17b9c4e",
+      "name": "Payload parser job description"
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/{{ $('Parse apply url+cookie+info').item.json.applyUrl }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Set-Cookie",
+              "value": "=csrftoken={{ $('Parse apply url+cookie+info').item.json.csrfToken }}; domain=aijobs.net"
+            },
+            {
+              "name": "Accept",
+              "value": "text/plain"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2448,
+        2928
+      ],
+      "id": "70d33523-8768-43bd-865c-442baa94c7e7",
+      "name": "Fetch jina jd",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "alwaysOutputData": false,
+      "credentials": {
+        "jinaAiApi": {
+          "id": "fLi72fy5jW9GoCUq",
+          "name": "Jina AI account"
+        },
+        "httpHeaderAuth": {
+          "id": "twQBaXk2I9XcVvG6",
+          "name": "Header Auth account: Jina"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -3568,
+        3288
+      ],
+      "id": "998494a7-6721-49ed-a004-0f1f62f2fe1e",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.applyUrl }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "en-US,en;q=0.5"
+            },
+            {
+              "name": "Sec-Fetch-Mode",
+              "value": "navigate"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "Cookie",
+              "value": "={{ $json.sessionCookie }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2896,
+        2832
+      ],
+      "id": "4a8637a5-681d-41cc-81de-cf6ff6ed84bd",
+      "name": "Fetch raw job html+cookie",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          },
+          "sendCredentialsOnCrossOriginRedirect": false
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -3344,
+        2832
+      ],
+      "id": "d3372220-3bb5-40ca-9a8f-69a2436a52e6",
+      "name": "Fetch raw job html",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "completed",
+            "last_success_at": "={{ $now.toISO() }}",
+            "workflow_tag": "aijobsnet"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3344,
+        2616
+      ],
+      "id": "f2d5afd3-4a33-468f-8f22-41e9aec21733",
+      "name": "update success status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "58004939-129c-4399-aa16-66308a911a43",
+              "leftValue": "={{ $json.title }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -3792,
+        2880
+      ],
+      "id": "53ec19fe-1a97-45cc-b578-f5dcc9be44da",
+      "name": "Is empty?"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "job_leads",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "={{ $json.url }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -4240,
+        2808
+      ],
+      "id": "517de186-634f-4f9d-b370-1200808a9fe0",
+      "name": "Check for dupes",
+      "alwaysOutputData": false,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const rawData = $input.item.json.data;\n\nconst startMarker = '\"description\":\"';\nconst endMarker = '\",\"directApply\"';\n\nlet jobDescription = \"\";\n\nif (rawData.includes(startMarker) && rawData.includes(endMarker)) {\n    jobDescription = rawData.split(startMarker)[1].split(endMarker)[0];\n\n    jobDescription = jobDescription\n        .replace(/\\\\n/g, ' ')        // Remove newlines\n        .replace(/\\\\\"/g, '\"')        // Fix escaped quotes\n        .replace(/<[^>]*>/g, ' ')    // Remove all HTML tags (<p>, <strong>, etc.)\n        .replace(/&nbsp;/g, ' ')     // Fix spaces\n        .replace(/&amp;/g, '&')      // Fix ampersands\n        .replace(/\\s+/g, ' ')        // Collapse extra white space\n        .trim();\n}\n\nreturn {\n    jobDescription: jobDescription\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2000,
+        2208
+      ],
+      "id": "8fdf9d56-7194-4259-98e8-56ea5788fb36",
+      "name": "HTML parser job description"
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $input.item.json.data || \"\";\nconst leverRegex = /<div[^>]*data-qa=\"job-description\"[^>]*>([\\s\\S]*?)<div[^>]*data-qa=\"btn-apply-bottom\"/i;\nlet match = html.match(leverRegex);\n\nif (match && match[1]) {\n    let cleanText = match[1];\n\n    // Remove HTML tags, replacing them with newlines for block elements\n    cleanText = cleanText.replace(/<(div|p|li|h3|h2)[^>]*>/gi, \"\\n\");\n    cleanText = cleanText.replace(/<[^>]*>/g, \"\");\n\n    // Clean up escaped HTML entities\n    cleanText = cleanText.replace(/&nbsp;/g, \" \")\n                         .replace(/&amp;/g, \"&\")\n                         .replace(/&lt;/g, \"<\")\n                         .replace(/&gt;/g, \">\");\n\n    // Remove excessive whitespace\n    cleanText = cleanText.replace(/\\n\\s*\\n/g, \"\\n\\n\").trim();\n\n    return { jobDescription: cleanText };\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2000,
+        2592
+      ],
+      "id": "b9745310-8e55-4968-8fa6-fb2d573b8d8c",
+      "name": "HTML parser job description2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -1776,
+        2504
+      ],
+      "id": "85ed5d88-9bfd-484e-b0b4-c8350bfe33dd",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
+              "name": "jobId",
+              "value": "={{ $('Parse apply url+cookie+info').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
+              "name": "jobTitle",
+              "value": "={{ $('Is empty?').item.json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
+              "name": "jobUrl",
+              "value": "={{ $('Is empty?').item.json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "a7609c01-4e31-43a0-940d-b97171f0123a",
+              "name": "companyName",
+              "value": "={{ $('Parse apply url+cookie+info').item.json.companyName }}",
+              "type": "string"
+            },
+            {
+              "id": "51e71c18-177a-4370-a63d-25f8001fce8e",
+              "name": "companyUrl",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "ce6bae6a-2e69-4671-b2d3-08f6ff27fd81",
+              "name": "companyLogo",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "0103b2e7-89df-48b2-a1dc-4b91932b8495",
+              "name": "publishedAt",
+              "value": "={{ $('Parse apply url+cookie+info').item.json.publishedAt }}",
+              "type": "string"
+            },
+            {
+              "id": "b8611d60-09ec-409e-a0c0-8a6d7da87ea0",
+              "name": "applyUrl",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "008246ee-3829-4a26-af95-544f914e1fe9",
+              "name": "location",
+              "value": "={{ $('Parse apply url+cookie+info').item.json.location }}",
+              "type": "string"
+            },
+            {
+              "id": "949e43c8-0db8-420e-a39d-6be73d8c5efc",
+              "name": "contractType",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "7e313d83-31bb-455f-83df-1c2bb8ef992d",
+              "name": "experienceLevel",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "30f4be42-bf3a-459d-bbb3-5000af3a21de",
+              "name": "jobDescription",
+              "value": "={{ $json.jobDescription }}",
+              "type": "string"
+            },
+            {
+              "id": "8a24969d-d6b7-49d3-8013-91bfa60e7b89",
+              "name": "salaryInfo",
+              "value": "[]",
+              "type": "array"
+            },
+            {
+              "id": "87782311-7ad5-4821-aea4-7d293c6b4f59",
+              "name": "posterFullName",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "160cbda5-0d12-4d1a-a654-13a3e1ad720f",
+              "name": "posterProfileUrl",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "1e0e0a25-7bb2-443e-be17-220d44d95d92",
+              "name": "sector",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "d7ecf8bd-46b7-414c-8862-41811f709f0a",
+              "name": "workMode",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "a43ad1be-2936-4dd3-ba10-fd613008347d",
+              "name": "employmentType",
+              "value": "=",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1552,
+        2504
+      ],
+      "id": "cf4fa5db-4d78-42e9-8baf-ba2030f9208b",
+      "name": "Standardize output (**adjust fields**)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const platformName = \"aijobsnet\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1328,
+        2504
+      ],
+      "id": "34670cae-d4cd-4a69-8a20-e4e2319d9d8a",
+      "name": "add source"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NBCVFrfmAz4h6S1a",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NBCVFrfmAz4h6S1a",
+          "cachedResultName": "scrape_dedupe_upsert"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -1104,
+        2504
+      ],
+      "id": "f1e534f0-c887-46b9-9827-ccdd6fd9c900",
+      "name": "Call '03_dedupe_upsert'",
+      "retryOnFail": false,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+          "cachedResultName": "error_global"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -880,
+        3168
+      ],
+      "id": "14fc740c-4305-40ca-b524-d01ebaf0a18f",
+      "name": "Call 'error_global'"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "job_url",
+              "field2": "url"
+            }
+          ]
+        },
+        "joinMode": "keepNonMatches",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -4016,
+        2880
+      ],
+      "id": "42f5d590-7f0a-46b8-936f-968a70fbac15",
+      "name": "Keep non-dupes",
+      "executeOnce": false,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const processedItems = [];\n\nfor (const item of items) {\n    const htmlInput = item.json.data || \"\"; \n    const headersInput = item.json.headers || {};\n\n    // Micro-function 1: Extract the apply URL path and strip out the ID hash\n    const applyPathRegex = /href=\"(\\/job\\/([a-zA-Z0-9]+)\\/apply\\/)\"/;\n    const match = htmlInput.match(applyPathRegex);\n    let finalUrl = \"\";\n    let jobId = \"\";\n\n    if (match) {\n        if (match[1]) {\n            const baseUrl = \"https://aijobs.net\";\n            finalUrl = `${baseUrl}${match[1]}`;\n        }\n        if (match[2]) {\n            jobId = match[2];\n        }\n    }\n\n    // Micro-function 2: Extract and structure the set-cookie data\n    let cookieHeader = headersInput[\"set-cookie\"] || \"\";\n    let extractedCookie = \"\";\n\n    if (Array.isArray(cookieHeader)) {\n        extractedCookie = cookieHeader.join(\"; \");\n    } else if (typeof cookieHeader === \"string\") {\n        extractedCookie = cookieHeader;\n    }\n\n    // Micro-function 3: Extract the raw CSRF token value alone\n    let csrfTokenOnly = \"\";\n    const tokenMatch = extractedCookie.match(/csrftoken=([^;]+)/);\n    \n    if (tokenMatch && tokenMatch[1]) {\n        csrfTokenOnly = tokenMatch[1];\n    }\n\n    // Micro-function 4: Reconstruct Company Name from the structural URL link slug\n    let companyName = \"\";\n    const companySlugMatch = htmlInput.match(/href=\"\\/company\\/([a-zA-Z0-9-]+)-\\d+\\/\"/i);\n    if (companySlugMatch && companySlugMatch[1]) {\n        companyName = companySlugMatch[1]\n            .split(\"-\")\n            .map(word => word.charAt(0).toUpperCase() + word.slice(1))\n            .join(\" \");\n    }\n\n    // Micro-function 5: Pull Location from the HTML header Title Tag\n    let location = \"\";\n    const titleLocationMatch = htmlInput.match(/<title>[^<-]+-\\s*([^<]+)<\\/title>/i);\n    if (titleLocationMatch && titleLocationMatch[1]) {\n        location = titleLocationMatch[1].trim();\n    }\n\n    // Micro-function 6: Parse relative time string and calculate an ISO absolute timestamp\n    let publishedAtIso = null;\n    const publishedMatch = htmlInput.match(/Found\\s+([a-zA-Z0-9\\s]+?)(?=\\s*(?:\\n|<))/i);\n    \n    if (publishedMatch && publishedMatch[1]) {\n        const relativeStr = publishedMatch[1].trim().toLowerCase(); // e.g., \"15h ago\", \"1d ago\", \"2mo ago\"\n        const timeValueMatch = relativeStr.match(/^(\\d+)\\s*([a-z]+)/);\n        \n        if (timeValueMatch) {\n            const amount = parseInt(timeValueMatch[1], 10);\n            const unit = timeValueMatch[2];\n            const dateObj = new Date();\n            \n            if (unit.startsWith(\"h\")) {\n                dateObj.setHours(dateObj.getHours() - amount);\n            } else if (unit.startsWith(\"d\")) {\n                dateObj.setDate(dateObj.getDate() - amount);\n            } else if (unit.startsWith(\"m\")) {\n                dateObj.setMonth(dateObj.getMonth() - amount);\n            }\n            \n            publishedAtIso = dateObj.toISOString();\n        }\n    }\n    \n    // Fallback to current system execution time if extraction fails entirely\n    if (!publishedAtIso) {\n        publishedAtIso = new Date().toISOString();\n    }\n\n    processedItems.push({\n        json: {\n            id: jobId || null,\n            companyName: companyName || null,\n            location: location || null,\n            publishedAt: publishedAtIso || null,\n            applyUrl: finalUrl || null,\n            sessionCookie: extractedCookie || null,\n            csrfToken: csrfTokenOnly || null\n        }\n    });\n}\n\nreturn processedItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3120,
+        2832
+      ],
+      "id": "646d990d-33a1-44b3-9991-4ea77a127d92",
+      "name": "Parse apply url+cookie+info"
+    },
+    {
+      "parameters": {
+        "tableId": "job_leads",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "job_url",
+              "fieldValue": "={{ $('Is empty?').item.json.url }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "rejected_jina"
+            },
+            {
+              "fieldId": "source",
+              "fieldValue": "aijobsnet"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1776,
+        2928
+      ],
+      "id": "e3594bdb-8e53-4f6c-af19-6163b9dcabbc",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "42d851a0-6363-42d1-828a-2b43ec673f81",
+              "leftValue": "={{ $json.jobDescription }}",
+              "rightValue": "/(per month|\\/month|cancel anytime|pro subscription|paid pro|full access|credit cards accepted|billing period)/i",
+              "operator": {
+                "type": "string",
+                "operation": "notRegex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2000,
+        2832
+      ],
+      "id": "e5864db2-c53a-47da-93d6-2e9750bfb132",
+      "name": "Is not paywall?"
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "update running status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update running status": {
+      "main": [
+        [
+          {
+            "node": "GET AI engineer roles page 1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET AI engineer roles page 2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET AI engineer roles page 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "update running status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse HTML": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse HTML1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Parse HTML2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "GET AI engineer roles page 1": {
+      "main": [
+        [
+          {
+            "node": "Parse HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET AI engineer roles page 2": {
+      "main": [
+        [
+          {
+            "node": "Parse HTML1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET AI engineer roles page 3": {
+      "main": [
+        [
+          {
+            "node": "Parse HTML2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Filter positive and negative",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter positive and negative": {
+      "main": [
+        [
+          {
+            "node": "Check for dupes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "HTML parser job description",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTML parser job description1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTML parser job description2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch jina jd",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML parser job description1": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Payload parser job description": {
+      "main": [
+        [
+          {
+            "node": "Is not paywall?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch jina jd": {
+      "main": [
+        [
+          {
+            "node": "Payload parser job description",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "update success status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch raw job html",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch raw job html+cookie": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call 'error_global'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch raw job html": {
+      "main": [
+        [
+          {
+            "node": "Parse apply url+cookie+info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is empty?": {
+      "main": [
+        [
+          {
+            "node": "update success status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for dupes": {
+      "main": [
+        [
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML parser job description": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML parser job description2": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "Standardize output (**adjust fields**)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Standardize output (**adjust fields**)": {
+      "main": [
+        [
+          {
+            "node": "add source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add source": {
+      "main": [
+        [
+          {
+            "node": "Call '03_dedupe_upsert'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call '03_dedupe_upsert'": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call 'error_global'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep non-dupes": {
+      "main": [
+        [
+          {
+            "node": "Is empty?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse apply url+cookie+info": {
+      "main": [
+        [
+          {
+            "node": "Fetch raw job html+cookie",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is not paywall?": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'error_global'": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "Europe/Prague",
+    "executionOrder": "v1",
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg",
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {},
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-06-05T08:15:18.007+02:00",
+          "Readable date": "June 5th 2026, 8:15:18 am",
+          "Readable time": "8:15:18 am",
+          "Day of week": "Friday",
+          "Year": "2026",
+          "Month": "June",
+          "Day of month": "05",
+          "Hour": "08",
+          "Minute": "15",
+          "Second": "18",
+          "Timezone": "Europe/Prague (UTC+02:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "a7f2542e-6fa8-4dec-a84c-74908e33de9b",
+  "activeVersionId": "a7f2542e-6fa8-4dec-a84c-74908e33de9b",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-06-01T07:41:45.981Z",
+      "createdAt": "2026-06-01T07:41:45.981Z",
+      "role": "workflow:owner",
+      "workflowId": "Cr884axFy4iD9gIi",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-06-05T06:41:45.075Z",
+    "createdAt": "2026-06-05T06:41:44.150Z",
+    "versionId": "a7f2542e-6fa8-4dec-a84c-74908e33de9b",
+    "workflowId": "Cr884axFy4iD9gIi",
+    "nodes": [
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -5584,
+          2880
+        ],
+        "id": "eb8a93f0-6016-4a3b-99f9-e2e0205774b2",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "running",
+              "workflow_tag": "aijobsnet"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -5360,
+          2784
+        ],
+        "id": "e5aa603c-bd48-4b3b-9262-a37f7a504d2f",
+        "name": "update running status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 8,
+                "triggerAtMinute": 16
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -5584,
+          2688
+        ],
+        "id": "eae35b87-1b7c-4ce5-81d1-0e8d0887cb50",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "jsCode": "const htmlString = items[0].json.data || \"\";\n\nconst jobRegex = /<a class=\"[^\"]*stretched-link\"[^>]*href=\"([^\"]+)\"[^>]*>([\\s\\S]*?)<\\/a>/g;\n\nconst processedLeads = [];\nlet match;\n\nwhile ((match = jobRegex.exec(htmlString)) !== null) {\n    const urlPath = match[1].trim();\n    \n    const cleanTitle = match[2].replace(/\\s+/g, ' ').trim();\n    \n    processedLeads.push({\n        json: {\n            title: cleanTitle,\n            url: `https://aijobs.net${urlPath}`\n        }\n    });\n}\n\nreturn processedLeads;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -4912,
+          2592
+        ],
+        "id": "af5a7ba7-277d-4631-83a3-69b01c98b7c9",
+        "name": "Parse HTML"
+      },
+      {
+        "parameters": {
+          "jsCode": "const htmlString = items[0].json.data || \"\";\n\nconst jobRegex = /<a class=\"[^\"]*stretched-link\"[^>]*href=\"([^\"]+)\"[^>]*>([\\s\\S]*?)<\\/a>/g;\n\nconst processedLeads = [];\nlet match;\n\nwhile ((match = jobRegex.exec(htmlString)) !== null) {\n    const urlPath = match[1].trim();\n    \n    const cleanTitle = match[2].replace(/\\s+/g, ' ').trim();\n    \n    processedLeads.push({\n        json: {\n            title: cleanTitle,\n            url: `https://aijobs.net${urlPath}`\n        }\n    });\n}\n\n// Return data formatted properly for the next n8n node execution\nreturn processedLeads;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -4912,
+          2784
+        ],
+        "id": "7d858801-6ab5-46df-a0c5-26e271a0828c",
+        "name": "Parse HTML1"
+      },
+      {
+        "parameters": {
+          "jsCode": "const htmlString = items[0].json.data || \"\";\n\nconst jobRegex = /<a class=\"[^\"]*stretched-link\"[^>]*href=\"([^\"]+)\"[^>]*>([\\s\\S]*?)<\\/a>/g;\n\nconst processedLeads = [];\nlet match;\n\nwhile ((match = jobRegex.exec(htmlString)) !== null) {\n    const urlPath = match[1].trim();\n    \n    const cleanTitle = match[2].replace(/\\s+/g, ' ').trim();\n    \n    processedLeads.push({\n        json: {\n            title: cleanTitle,\n            url: `https://aijobs.net${urlPath}`\n        }\n    });\n}\n\n// Return data formatted properly for the next n8n node execution\nreturn processedLeads;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -4912,
+          2976
+        ],
+        "id": "4b47671f-a4b7-4195-a2ef-915d464d58de",
+        "name": "Parse HTML2"
+      },
+      {
+        "parameters": {
+          "numberInputs": 3
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -4688,
+          2864
+        ],
+        "id": "b0f0e601-60e7-423c-b86d-9b5db2c0a17a",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "url": "https://aijobs.net/jobs/role-ai-engineer/?page=1",
+          "options": {
+            "response": {
+              "response": {
+                "responseFormat": "text"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -5136,
+          2592
+        ],
+        "id": "6ea6bc6f-a5e5-444e-8bb7-be80ac2d8b4b",
+        "name": "GET AI engineer roles page 1"
+      },
+      {
+        "parameters": {
+          "url": "https://aijobs.net/jobs/role-ai-engineer/?page=2",
+          "options": {
+            "response": {
+              "response": {
+                "responseFormat": "text"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -5136,
+          2784
+        ],
+        "id": "4f237972-ad7a-434d-8f9a-8b111c824da9",
+        "name": "GET AI engineer roles page 2"
+      },
+      {
+        "parameters": {
+          "url": "https://aijobs.net/jobs/role-ai-engineer/?page=3",
+          "options": {
+            "response": {
+              "response": {
+                "responseFormat": "text"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -5136,
+          2976
+        ],
+        "id": "fdd806c2-7b11-4272-87e4-b9809dc7aa62",
+        "name": "GET AI engineer roles page 3"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
+                "leftValue": "={{ $json.title }}",
+                "rightValue": "\\b(ai|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n|solutions|consultant|ml-?ops|ai-?ops|orchestrat\\w+|integrations?)\\b",
+                "operator": {
+                  "type": "string",
+                  "operation": "regex"
+                }
+              },
+              {
+                "id": "6f924664-fa20-4947-af03-df2841af8012",
+                "leftValue": "={{ $json.title }}",
+                "rightValue": ".*(\\b(sales[- ]representative|assistant|manual|legal|qa[- ]engineer|qa[- ]automation|account[- ]manager|account[- ]executive|test[- ]automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react[- ]native|cloud|only|research|frontend|backend|forward|fde|fullstack|full[- ]stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp|intern)\\b).*",
+                "operator": {
+                  "type": "string",
+                  "operation": "notRegex"
+                }
+              },
+              {
+                "id": "3635173c-29a1-45e6-b7bf-29287af6b5bd",
+                "leftValue": "={{ $json.url }}",
+                "rightValue": "\\b(germany|berlin|munich|munchen|frankfurt|austria|vienna|switzerland|zurich|geneva|czech|czechia|prague|poland|warsaw|slovakia|bratislava|france|paris|puteaux|belgium|brussels|bruxelles|netherlands|amsterdam|eindhoven|luxembourg|norway|oslo|sweden|stockholm|goteborg|denmark|copenhagen|finland|helsinki|italy|milan|milano|roma|rome|portugal|lisbon|lisboa|spain|madrid|emea|europe|remote)\\b",
+                "operator": {
+                  "type": "string",
+                  "operation": "regex"
+                }
+              },
+              {
+                "id": "dd6e5294-494d-4e34-ba5b-06245c95d727",
+                "leftValue": "={{ $json.url }}",
+                "rightValue": "\\b(united-states|usa|us-market|india|hyderabad|pune|bangalore|australia|sydney|melbourne|canada|ontario|latam|brazil|argentina|singapore|vietnam|london|united-kingdom|uk|ireland|dublin)\\b",
+                "operator": {
+                  "type": "string",
+                  "operation": "notRegex"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {
+            "ignoreCase": true
+          }
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          -4464,
+          2880
+        ],
+        "id": "1c2d8789-a306-4a3a-a96c-379fb4c2ff73",
+        "name": "Filter positive and negative",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.data }}",
+                      "rightValue": "ashby",
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "id": "eae4b983-e0f5-4531-b41d-d2cacc77d3ec"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "ashby"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "deaea76f-d534-418f-a180-98372fccdfa5",
+                      "leftValue": "={{ $json.data }}",
+                      "rightValue": "greenhouse",
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "greenhouse"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "602c85e9-319e-487a-a508-c1e8fece0bc8",
+                      "leftValue": "={{ $json.data }}",
+                      "rightValue": "lever.co",
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "lever"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "c5503eaa-e52c-434a-b13d-896dbc158053",
+                      "leftValue": "={{ $json.data }}",
+                      "rightValue": "(ashby\ngreenhouse\nlever.co)",
+                      "operator": {
+                        "type": "string",
+                        "operation": "notRegex"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "other"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          -2672,
+          2584
+        ],
+        "id": "6d7981da-0ef0-4550-a872-14b3ccd06092",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const html = $input.item.json.data;\n\nconst greenhouseRegex = /class=\\\"job__description body\\\">([\\s\\S]*?)<div class=\\\"divider\\\"/;\nconst match = html.match(greenhouseRegex);\n\nlet jobDescription = \"\";\n\nif (match && match[1]) {\n    jobDescription = match[1];\n    \n    jobDescription = jobDescription\n        .replace(/<\\/p>/g, '\\n\\n')\n        .replace(/<\\/li>/g, '\\n')\n        .replace(/<[^>]*>?/gm, '') // Remove all remaining tags\n        .replace(/&nbsp;/g, ' ')   // Fix non-breaking spaces\n        .replace(/&amp;/g, '&');   // Fix ampersands\n}\n\nreturn {\n    jobDescription: jobDescription.trim()\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -2000,
+          2400
+        ],
+        "id": "fb8f56a1-42bd-44ef-ae31-cbdc72d52bba",
+        "name": "HTML parser job description1"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "job_leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "job_url",
+                "condition": "eq",
+                "keyValue": "={{ $('Is empty?').item.json.url }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "status",
+                "fieldValue": "failed_jina"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -2224,
+          3024
+        ],
+        "id": "497772fe-e64b-41a8-a40f-b829e6da6c5b",
+        "name": "Update a row",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const raw = $input.item.json.data || \"\"; \n\nreturn { \n    jobDescription: raw.split(\"Markdown Content:\")[1]?.trim() || raw \n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -2224,
+          2832
+        ],
+        "id": "1d7cfc99-a7c2-4f52-a25e-8106b17b9c4e",
+        "name": "Payload parser job description"
+      },
+      {
+        "parameters": {
+          "url": "=https://r.jina.ai/{{ $('Parse apply url+cookie+info').item.json.applyUrl }}",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "X-Set-Cookie",
+                "value": "=csrftoken={{ $('Parse apply url+cookie+info').item.json.csrfToken }}; domain=aijobs.net"
+              },
+              {
+                "name": "Accept",
+                "value": "text/plain"
+              }
+            ]
+          },
+          "options": {
+            "redirect": {
+              "redirect": {}
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -2448,
+          2928
+        ],
+        "id": "70d33523-8768-43bd-865c-442baa94c7e7",
+        "name": "Fetch jina jd",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "alwaysOutputData": false,
+        "credentials": {
+          "jinaAiApi": {
+            "id": "fLi72fy5jW9GoCUq",
+            "name": "Jina AI account"
+          },
+          "httpHeaderAuth": {
+            "id": "twQBaXk2I9XcVvG6",
+            "name": "Header Auth account: Jina"
+          }
+        },
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -3568,
+          3288
+        ],
+        "id": "998494a7-6721-49ed-a004-0f1f62f2fe1e",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "url": "={{ $json.applyUrl }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"
+              },
+              {
+                "name": "Accept-Language",
+                "value": "en-US,en;q=0.5"
+              },
+              {
+                "name": "Sec-Fetch-Mode",
+                "value": "navigate"
+              },
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+              },
+              {
+                "name": "Cookie",
+                "value": "={{ $json.sessionCookie }}"
+              }
+            ]
+          },
+          "options": {
+            "redirect": {
+              "redirect": {}
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -2896,
+          2832
+        ],
+        "id": "4a8637a5-681d-41cc-81de-cf6ff6ed84bd",
+        "name": "Fetch raw job html+cookie",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "url": "={{ $json.url }}",
+          "options": {
+            "response": {
+              "response": {
+                "fullResponse": true
+              }
+            },
+            "sendCredentialsOnCrossOriginRedirect": false
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -3344,
+          2832
+        ],
+        "id": "d3372220-3bb5-40ca-9a8f-69a2436a52e6",
+        "name": "Fetch raw job html",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "completed",
+              "last_success_at": "={{ $now.toISO() }}",
+              "workflow_tag": "aijobsnet"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -3344,
+          2616
+        ],
+        "id": "f2d5afd3-4a33-468f-8f22-41e9aec21733",
+        "name": "update success status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "58004939-129c-4399-aa16-66308a911a43",
+                "leftValue": "={{ $json.title }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "empty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -3792,
+          2880
+        ],
+        "id": "53ec19fe-1a97-45cc-b578-f5dcc9be44da",
+        "name": "Is empty?"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "job_leads",
+          "returnAll": true,
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "job_url",
+                "condition": "eq",
+                "keyValue": "={{ $json.url }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -4240,
+          2808
+        ],
+        "id": "517de186-634f-4f9d-b370-1200808a9fe0",
+        "name": "Check for dupes",
+        "alwaysOutputData": false,
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const rawData = $input.item.json.data;\n\nconst startMarker = '\"description\":\"';\nconst endMarker = '\",\"directApply\"';\n\nlet jobDescription = \"\";\n\nif (rawData.includes(startMarker) && rawData.includes(endMarker)) {\n    jobDescription = rawData.split(startMarker)[1].split(endMarker)[0];\n\n    jobDescription = jobDescription\n        .replace(/\\\\n/g, ' ')        // Remove newlines\n        .replace(/\\\\\"/g, '\"')        // Fix escaped quotes\n        .replace(/<[^>]*>/g, ' ')    // Remove all HTML tags (<p>, <strong>, etc.)\n        .replace(/&nbsp;/g, ' ')     // Fix spaces\n        .replace(/&amp;/g, '&')      // Fix ampersands\n        .replace(/\\s+/g, ' ')        // Collapse extra white space\n        .trim();\n}\n\nreturn {\n    jobDescription: jobDescription\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -2000,
+          2208
+        ],
+        "id": "8fdf9d56-7194-4259-98e8-56ea5788fb36",
+        "name": "HTML parser job description"
+      },
+      {
+        "parameters": {
+          "jsCode": "const html = $input.item.json.data || \"\";\nconst leverRegex = /<div[^>]*data-qa=\"job-description\"[^>]*>([\\s\\S]*?)<div[^>]*data-qa=\"btn-apply-bottom\"/i;\nlet match = html.match(leverRegex);\n\nif (match && match[1]) {\n    let cleanText = match[1];\n\n    // Remove HTML tags, replacing them with newlines for block elements\n    cleanText = cleanText.replace(/<(div|p|li|h3|h2)[^>]*>/gi, \"\\n\");\n    cleanText = cleanText.replace(/<[^>]*>/g, \"\");\n\n    // Clean up escaped HTML entities\n    cleanText = cleanText.replace(/&nbsp;/g, \" \")\n                         .replace(/&amp;/g, \"&\")\n                         .replace(/&lt;/g, \"<\")\n                         .replace(/&gt;/g, \">\");\n\n    // Remove excessive whitespace\n    cleanText = cleanText.replace(/\\n\\s*\\n/g, \"\\n\\n\").trim();\n\n    return { jobDescription: cleanText };\n}"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -2000,
+          2592
+        ],
+        "id": "b9745310-8e55-4968-8fa6-fb2d573b8d8c",
+        "name": "HTML parser job description2"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          -1776,
+          2504
+        ],
+        "id": "85ed5d88-9bfd-484e-b0b4-c8350bfe33dd",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
+                "name": "jobId",
+                "value": "={{ $('Parse apply url+cookie+info').item.json.id }}",
+                "type": "string"
+              },
+              {
+                "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
+                "name": "jobTitle",
+                "value": "={{ $('Is empty?').item.json.title }}",
+                "type": "string"
+              },
+              {
+                "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
+                "name": "jobUrl",
+                "value": "={{ $('Is empty?').item.json.url }}",
+                "type": "string"
+              },
+              {
+                "id": "a7609c01-4e31-43a0-940d-b97171f0123a",
+                "name": "companyName",
+                "value": "={{ $('Parse apply url+cookie+info').item.json.companyName }}",
+                "type": "string"
+              },
+              {
+                "id": "51e71c18-177a-4370-a63d-25f8001fce8e",
+                "name": "companyUrl",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "ce6bae6a-2e69-4671-b2d3-08f6ff27fd81",
+                "name": "companyLogo",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "0103b2e7-89df-48b2-a1dc-4b91932b8495",
+                "name": "publishedAt",
+                "value": "={{ $('Parse apply url+cookie+info').item.json.publishedAt }}",
+                "type": "string"
+              },
+              {
+                "id": "b8611d60-09ec-409e-a0c0-8a6d7da87ea0",
+                "name": "applyUrl",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "008246ee-3829-4a26-af95-544f914e1fe9",
+                "name": "location",
+                "value": "={{ $('Parse apply url+cookie+info').item.json.location }}",
+                "type": "string"
+              },
+              {
+                "id": "949e43c8-0db8-420e-a39d-6be73d8c5efc",
+                "name": "contractType",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "7e313d83-31bb-455f-83df-1c2bb8ef992d",
+                "name": "experienceLevel",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "30f4be42-bf3a-459d-bbb3-5000af3a21de",
+                "name": "jobDescription",
+                "value": "={{ $json.jobDescription }}",
+                "type": "string"
+              },
+              {
+                "id": "8a24969d-d6b7-49d3-8013-91bfa60e7b89",
+                "name": "salaryInfo",
+                "value": "[]",
+                "type": "array"
+              },
+              {
+                "id": "87782311-7ad5-4821-aea4-7d293c6b4f59",
+                "name": "posterFullName",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "160cbda5-0d12-4d1a-a654-13a3e1ad720f",
+                "name": "posterProfileUrl",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "1e0e0a25-7bb2-443e-be17-220d44d95d92",
+                "name": "sector",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "d7ecf8bd-46b7-414c-8862-41811f709f0a",
+                "name": "workMode",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "a43ad1be-2936-4dd3-ba10-fd613008347d",
+                "name": "employmentType",
+                "value": "=",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -1552,
+          2504
+        ],
+        "id": "cf4fa5db-4d78-42e9-8baf-ba2030f9208b",
+        "name": "Standardize output (**adjust fields**)"
+      },
+      {
+        "parameters": {
+          "jsCode": "const platformName = \"aijobsnet\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -1328,
+          2504
+        ],
+        "id": "34670cae-d4cd-4a69-8a20-e4e2319d9d8a",
+        "name": "add source"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "NBCVFrfmAz4h6S1a",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/NBCVFrfmAz4h6S1a",
+            "cachedResultName": "scrape_dedupe_upsert"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -1104,
+          2504
+        ],
+        "id": "f1e534f0-c887-46b9-9827-ccdd6fd9c900",
+        "name": "Call '03_dedupe_upsert'",
+        "retryOnFail": false,
+        "maxTries": 2,
+        "waitBetweenTries": 5000,
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+            "cachedResultName": "error_global"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -880,
+          3168
+        ],
+        "id": "14fc740c-4305-40ca-b524-d01ebaf0a18f",
+        "name": "Call 'error_global'"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "advanced": true,
+          "mergeByFields": {
+            "values": [
+              {
+                "field1": "job_url",
+                "field2": "url"
+              }
+            ]
+          },
+          "joinMode": "keepNonMatches",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -4016,
+          2880
+        ],
+        "id": "42f5d590-7f0a-46b8-936f-968a70fbac15",
+        "name": "Keep non-dupes",
+        "executeOnce": false,
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "jsCode": "const processedItems = [];\n\nfor (const item of items) {\n    const htmlInput = item.json.data || \"\"; \n    const headersInput = item.json.headers || {};\n\n    // Micro-function 1: Extract the apply URL path and strip out the ID hash\n    const applyPathRegex = /href=\"(\\/job\\/([a-zA-Z0-9]+)\\/apply\\/)\"/;\n    const match = htmlInput.match(applyPathRegex);\n    let finalUrl = \"\";\n    let jobId = \"\";\n\n    if (match) {\n        if (match[1]) {\n            const baseUrl = \"https://aijobs.net\";\n            finalUrl = `${baseUrl}${match[1]}`;\n        }\n        if (match[2]) {\n            jobId = match[2];\n        }\n    }\n\n    // Micro-function 2: Extract and structure the set-cookie data\n    let cookieHeader = headersInput[\"set-cookie\"] || \"\";\n    let extractedCookie = \"\";\n\n    if (Array.isArray(cookieHeader)) {\n        extractedCookie = cookieHeader.join(\"; \");\n    } else if (typeof cookieHeader === \"string\") {\n        extractedCookie = cookieHeader;\n    }\n\n    // Micro-function 3: Extract the raw CSRF token value alone\n    let csrfTokenOnly = \"\";\n    const tokenMatch = extractedCookie.match(/csrftoken=([^;]+)/);\n    \n    if (tokenMatch && tokenMatch[1]) {\n        csrfTokenOnly = tokenMatch[1];\n    }\n\n    // Micro-function 4: Reconstruct Company Name from the structural URL link slug\n    let companyName = \"\";\n    const companySlugMatch = htmlInput.match(/href=\"\\/company\\/([a-zA-Z0-9-]+)-\\d+\\/\"/i);\n    if (companySlugMatch && companySlugMatch[1]) {\n        companyName = companySlugMatch[1]\n            .split(\"-\")\n            .map(word => word.charAt(0).toUpperCase() + word.slice(1))\n            .join(\" \");\n    }\n\n    // Micro-function 5: Pull Location from the HTML header Title Tag\n    let location = \"\";\n    const titleLocationMatch = htmlInput.match(/<title>[^<-]+-\\s*([^<]+)<\\/title>/i);\n    if (titleLocationMatch && titleLocationMatch[1]) {\n        location = titleLocationMatch[1].trim();\n    }\n\n    // Micro-function 6: Parse relative time string and calculate an ISO absolute timestamp\n    let publishedAtIso = null;\n    const publishedMatch = htmlInput.match(/Found\\s+([a-zA-Z0-9\\s]+?)(?=\\s*(?:\\n|<))/i);\n    \n    if (publishedMatch && publishedMatch[1]) {\n        const relativeStr = publishedMatch[1].trim().toLowerCase(); // e.g., \"15h ago\", \"1d ago\", \"2mo ago\"\n        const timeValueMatch = relativeStr.match(/^(\\d+)\\s*([a-z]+)/);\n        \n        if (timeValueMatch) {\n            const amount = parseInt(timeValueMatch[1], 10);\n            const unit = timeValueMatch[2];\n            const dateObj = new Date();\n            \n            if (unit.startsWith(\"h\")) {\n                dateObj.setHours(dateObj.getHours() - amount);\n            } else if (unit.startsWith(\"d\")) {\n                dateObj.setDate(dateObj.getDate() - amount);\n            } else if (unit.startsWith(\"m\")) {\n                dateObj.setMonth(dateObj.getMonth() - amount);\n            }\n            \n            publishedAtIso = dateObj.toISOString();\n        }\n    }\n    \n    // Fallback to current system execution time if extraction fails entirely\n    if (!publishedAtIso) {\n        publishedAtIso = new Date().toISOString();\n    }\n\n    processedItems.push({\n        json: {\n            id: jobId || null,\n            companyName: companyName || null,\n            location: location || null,\n            publishedAt: publishedAtIso || null,\n            applyUrl: finalUrl || null,\n            sessionCookie: extractedCookie || null,\n            csrfToken: csrfTokenOnly || null\n        }\n    });\n}\n\nreturn processedItems;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -3120,
+          2832
+        ],
+        "id": "646d990d-33a1-44b3-9991-4ea77a127d92",
+        "name": "Parse apply url+cookie+info"
+      },
+      {
+        "parameters": {
+          "tableId": "job_leads",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "job_url",
+                "fieldValue": "={{ $('Is empty?').item.json.url }}"
+              },
+              {
+                "fieldId": "status",
+                "fieldValue": "rejected_jina"
+              },
+              {
+                "fieldId": "source",
+                "fieldValue": "aijobsnet"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -1776,
+          2928
+        ],
+        "id": "e3594bdb-8e53-4f6c-af19-6163b9dcabbc",
+        "name": "Create a row",
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "42d851a0-6363-42d1-828a-2b43ec673f81",
+                "leftValue": "={{ $json.jobDescription }}",
+                "rightValue": "/(per month|\\/month|cancel anytime|pro subscription|paid pro|full access|credit cards accepted|billing period)/i",
+                "operator": {
+                  "type": "string",
+                  "operation": "notRegex"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -2000,
+          2832
+        ],
+        "id": "e5864db2-c53a-47da-93d6-2e9750bfb132",
+        "name": "Is not paywall?"
+      }
+    ],
+    "connections": {
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "update running status",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update running status": {
+        "main": [
+          [
+            {
+              "node": "GET AI engineer roles page 1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "GET AI engineer roles page 2",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "GET AI engineer roles page 3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "update running status",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse HTML": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse HTML1": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Parse HTML2": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 2
+            }
+          ]
+        ]
+      },
+      "GET AI engineer roles page 1": {
+        "main": [
+          [
+            {
+              "node": "Parse HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GET AI engineer roles page 2": {
+        "main": [
+          [
+            {
+              "node": "Parse HTML1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GET AI engineer roles page 3": {
+        "main": [
+          [
+            {
+              "node": "Parse HTML2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Filter positive and negative",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter positive and negative": {
+        "main": [
+          [
+            {
+              "node": "Check for dupes",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "HTML parser job description",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "HTML parser job description1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "HTML parser job description2",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Fetch jina jd",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTML parser job description1": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Payload parser job description": {
+        "main": [
+          [
+            {
+              "node": "Is not paywall?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch jina jd": {
+        "main": [
+          [
+            {
+              "node": "Payload parser job description",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Update a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "update success status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Fetch raw job html",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch raw job html+cookie": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Call 'error_global'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch raw job html": {
+        "main": [
+          [
+            {
+              "node": "Parse apply url+cookie+info",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Is empty?": {
+        "main": [
+          [
+            {
+              "node": "update success status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check for dupes": {
+        "main": [
+          [
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTML parser job description": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTML parser job description2": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "No Operation, do nothing": {
+        "main": [
+          [
+            {
+              "node": "Standardize output (**adjust fields**)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Standardize output (**adjust fields**)": {
+        "main": [
+          [
+            {
+              "node": "add source",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "add source": {
+        "main": [
+          [
+            {
+              "node": "Call '03_dedupe_upsert'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call '03_dedupe_upsert'": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Call 'error_global'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Keep non-dupes": {
+        "main": [
+          [
+            {
+              "node": "Is empty?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse apply url+cookie+info": {
+        "main": [
+          [
+            {
+              "node": "Fetch raw job html+cookie",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create a row": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Is not paywall?": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Create a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'error_global'": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "d d",
+    "name": "Version a7f2542e",
+    "description": "",
+    "autosaved": false
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-06-04T07:10:33.776Z",
+      "createdAt": "2026-06-04T07:10:33.776Z",
+      "id": "xHvas2pcpfdaHBvg",
+      "name": "aijobsnet"
+    },
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-03-06T13:15:28.248Z",
+      "createdAt": "2026-01-22T12:40:37.040Z",
+      "id": "mcS1gLAfDII7yoGe",
+      "name": "scrape"
+    }
+  ]
+}
