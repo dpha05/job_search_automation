@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-12T06:36:59.480Z",
+  "updatedAt": "2026-06-18T07:26:31.451Z",
   "createdAt": "2026-03-06T12:22:31.762Z",
   "id": "7TRjT3YJDeAlSHqk",
   "name": "sync_status",
@@ -237,16 +237,6 @@
           },
           "conditions": [
             {
-              "id": "aeb4e402-08df-4193-9d14-6906bbd3bf05",
-              "leftValue": "={{$json}}",
-              "rightValue": "",
-              "operator": {
-                "type": "object",
-                "operation": "empty",
-                "singleValue": true
-              }
-            },
-            {
               "id": "3386fa3f-36f9-43c7-84ce-26a26496d820",
               "leftValue": "={{ $json.source }}",
               "rightValue": "",
@@ -257,7 +247,7 @@
               }
             },
             {
-              "id": "d10851bd-f386-425a-97fb-8ef466a69e08",
+              "id": "ea113397-2728-464f-a6a0-edf8a3fca44f",
               "leftValue": "={{ $json.source }}",
               "rightValue": "manual",
               "operator": {
@@ -278,7 +268,8 @@
         -128
       ],
       "id": "be2067ce-1161-4c31-81da-3b37d92a910f",
-      "name": "Is empty?"
+      "name": "Is empty?",
+      "alwaysOutputData": true
     },
     {
       "parameters": {
@@ -300,7 +291,7 @@
           "value": "dknMuvBL2PSXQfLG",
           "mode": "list",
           "cachedResultUrl": "/workflow/dknMuvBL2PSXQfLG",
-          "cachedResultName": "score_reject_nonENCZ"
+          "cachedResultName": "score_reject_title+nonENCZ"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -488,8 +479,8 @@
   },
   "meta": null,
   "pinData": {},
-  "versionId": "07e508ef-1440-45c8-a7c3-5739b94834c2",
-  "activeVersionId": "07e508ef-1440-45c8-a7c3-5739b94834c2",
+  "versionId": "ec99546e-1611-4a74-b98d-a42d335786fd",
+  "activeVersionId": "ec99546e-1611-4a74-b98d-a42d335786fd",
   "triggerCount": 1,
   "shared": [
     {
@@ -501,9 +492,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-12T06:37:00.651Z",
-    "createdAt": "2026-05-12T06:36:59.481Z",
-    "versionId": "07e508ef-1440-45c8-a7c3-5739b94834c2",
+    "updatedAt": "2026-06-18T07:26:33.050Z",
+    "createdAt": "2026-06-18T07:26:31.452Z",
+    "versionId": "ec99546e-1611-4a74-b98d-a42d335786fd",
     "workflowId": "7TRjT3YJDeAlSHqk",
     "nodes": [
       {
@@ -737,16 +728,6 @@
             },
             "conditions": [
               {
-                "id": "aeb4e402-08df-4193-9d14-6906bbd3bf05",
-                "leftValue": "={{$json}}",
-                "rightValue": "",
-                "operator": {
-                  "type": "object",
-                  "operation": "empty",
-                  "singleValue": true
-                }
-              },
-              {
                 "id": "3386fa3f-36f9-43c7-84ce-26a26496d820",
                 "leftValue": "={{ $json.source }}",
                 "rightValue": "",
@@ -757,7 +738,7 @@
                 }
               },
               {
-                "id": "d10851bd-f386-425a-97fb-8ef466a69e08",
+                "id": "ea113397-2728-464f-a6a0-edf8a3fca44f",
                 "leftValue": "={{ $json.source }}",
                 "rightValue": "manual",
                 "operator": {
@@ -778,7 +759,8 @@
           -128
         ],
         "id": "be2067ce-1161-4c31-81da-3b37d92a910f",
-        "name": "Is empty?"
+        "name": "Is empty?",
+        "alwaysOutputData": true
       },
       {
         "parameters": {
@@ -800,7 +782,7 @@
             "value": "dknMuvBL2PSXQfLG",
             "mode": "list",
             "cachedResultUrl": "/workflow/dknMuvBL2PSXQfLG",
-            "cachedResultName": "score_reject_nonENCZ"
+            "cachedResultName": "score_reject_title+nonENCZ"
           },
           "workflowInputs": {
             "mappingMode": "defineBelow",
@@ -973,7 +955,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 07e508ef",
+    "name": "Version ec99546e",
     "description": "",
     "autosaved": true
   },
