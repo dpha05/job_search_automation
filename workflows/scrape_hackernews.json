@@ -1,0 +1,1753 @@
+{
+  "updatedAt": "2026-06-17T06:38:55.078Z",
+  "createdAt": "2026-06-10T07:26:57.506Z",
+  "id": "ESquoktadz7dGI88",
+  "name": "scrape_hackernews",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -5584,
+        2840
+      ],
+      "id": "55189424-a1f5-4dad-925f-74061da3685d",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "running",
+            "workflow_tag": "hackernews"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -5360,
+        2744
+      ],
+      "id": "508b0cb8-d1ed-4688-b87e-66fd5c190ba0",
+      "name": "update running status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8,
+              "triggerAtMinute": 17
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -5584,
+        2648
+      ],
+      "id": "65e7aac2-1694-452a-9f38-b5180f512d43",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "const allItems = $input.all();\n\nconst processedItems = allItems.map(item => {\n  const rawText = item.json.text_block || '';\n  \n  // 1. Extract Unique Profile ID and URL\n  const urlMatch = rawText.match(/(https:\\/\\/news\\.ycombinator\\.com\\/user\\?id=([a-zA-Z0-9_-]+))/i);\n  const uniqueProfileUrl = urlMatch ? urlMatch[1] : `hn-fallback-${Math.random().toString(36).substr(2, 9)}`;\n  const userId = urlMatch ? urlMatch[2] : 'unknown';\n  \n  // 2. Extract Company Name\n  const companyMatch = rawText.match(/^([a-zA-Z0-9_-]+)\\s+\\[/);\n  const companyName = companyMatch ? companyMatch[1].trim() : userId;\n  \n  // 3. Extract Date Posted\n  const dateMatch = rawText.match(/\\](\\d{4}-\\d{2}-\\d{2})/);\n  const datePosted = dateMatch ? dateMatch[1] : '2026-06-01';\n  \n  // 4. Extract Job Description\n  const dateIndex = rawText.indexOf(datePosted);\n  let description = '';\n  if (dateIndex !== -1) {\n    description = rawText.substring(dateIndex + datePosted.length).trim();\n  } else {\n    description = rawText.replace(/^.*\\]\\d{4}-\\d{2}-\\d{2}/s, '').trim();\n  }\n  \n  // 5. Heuristic Job Title Extraction (Fixed for Length Fallbacks and Spaces)\n  const headerChunk = description.substring(0, 250).replace(/\\n/g, ' ');\n  let jobTitle = '';\n  \n  if (headerChunk.includes('|')) {\n    const parts = headerChunk.split('|');\n    jobTitle = parts[1] ? parts[1].trim() : parts[0].trim();\n    \n    let cleanCheck = jobTitle.replace(/remote|hybrid|full-time|fulltime|full\\s+time|contract|onsite|on-site/gi, '').trim();\n    \n    if ((cleanCheck.length < 3 || jobTitle.includes('[') || jobTitle.includes('http')) && parts[2]) {\n      jobTitle = parts[2].trim();\n    }\n  } else {\n    jobTitle = description.split('\\n')[0] || '';\n  }\n  \n  jobTitle = jobTitle.replace(/remote|hybrid|full-time|fulltime|full\\s+time|contract|onsite|on-site/gi, '').replace(/^[-\\s|]+|[-\\s|]+$/g, '').trim();\n  jobTitle = jobTitle.replace(/\\[http.*\\]/gi, '').replace(/https?:\\/\\/\\S+/gi, '').trim();\n  \n  if (jobTitle.length > 100 || jobTitle.length < 5) {\n    jobTitle = jobTitle.substring(0, 70).trim() || description.substring(0, 50).replace(/\\n/g, ' ').trim();\n  }\n  \n  // 6. Extract Email Contacts\n  const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9._-]+)/i;\n  const emailMatch = description.match(emailRegex);\n  const contactEmail = emailMatch ? emailMatch[1] : '';\n  \n  // 7. Extract Application URL with Domain and Truncation Exclusions\n  const urlRegex = /(https?:\\/\\/[^\\s\\]\\)\\\"\\'>]+)/gi;\n  const rawUrls = description.match(urlRegex) || [];\n  \n  const validUrls = rawUrls.map(url => url.replace(/[.,;)]$/, '')).filter(url => {\n    const lowUrl = url.toLowerCase();\n    return !lowUrl.includes('news.ycombinator.com') && \n           !lowUrl.includes('github.com') && \n           !lowUrl.includes('drive.google.com') && \n           !lowUrl.includes('twitter.com') &&\n           !lowUrl.includes('..'); \n  });\n  \n  let applyUrl = '';\n  \n  for (const url of validUrls) {\n    if (/apply|career|job|lever|greenhouse|ashby/i.test(url)) {\n      applyUrl = url;\n      break;\n    }\n  }\n  \n  if (!applyUrl && validUrls.length > 0) {\n    applyUrl = validUrls[0];\n  }\n  \n  if (!applyUrl && contactEmail) {\n    applyUrl = `mailto:${contactEmail}`;\n  }\n  \n  if (!applyUrl) {\n    applyUrl = 'https://hnhiring.com/locations/remote';\n  }\n  \n  return {\n    json: {\n      job_id_url: uniqueProfileUrl,\n      company_name: companyName,\n      posted_date: datePosted,\n      job_title: jobTitle || 'Unknown Title',\n      apply_url: applyUrl,\n      email: contactEmail,\n      description: description\n    }\n  };\n});\n\nreturn processedItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4464,
+        2744
+      ],
+      "id": "c3d841f9-3991-4e03-a2b1-a52c79a1765e",
+      "name": "Parse HTML"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -3344,
+        2840
+      ],
+      "id": "3aa90d58-fb7a-4407-9ee8-b72cb1c16efe",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "completed",
+            "last_success_at": "={{ $now.toISO() }}",
+            "workflow_tag": "hackernews"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3120,
+        2576
+      ],
+      "id": "3a2a2ce8-f675-47eb-911f-918c9ee35c9f",
+      "name": "update success status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "58004939-129c-4399-aa16-66308a911a43",
+              "leftValue": "={{ $json.job_title }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -3568,
+        2744
+      ],
+      "id": "1041745a-d993-4543-bff5-b0689b932b7e",
+      "name": "Is empty?"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "job_leads",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "external_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.job_id_url }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -4016,
+        2672
+      ],
+      "id": "e9489324-2572-49b3-952b-9a10d9365bd8",
+      "name": "Check for dupes",
+      "alwaysOutputData": false,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
+              "name": "jobId",
+              "value": "={{ $json.job_id_url }}",
+              "type": "string"
+            },
+            {
+              "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
+              "name": "jobTitle",
+              "value": "={{ $json.job_title }}",
+              "type": "string"
+            },
+            {
+              "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
+              "name": "jobUrl",
+              "value": "={{ $json.apply_url || $json.email || \"\" }}",
+              "type": "string"
+            },
+            {
+              "id": "a7609c01-4e31-43a0-940d-b97171f0123a",
+              "name": "companyName",
+              "value": "={{ $json.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "d4135602-1abb-43c0-9b0c-710ee6044263",
+              "name": "companyURL",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "ce6bae6a-2e69-4671-b2d3-08f6ff27fd81",
+              "name": "companyLogo",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "0103b2e7-89df-48b2-a1dc-4b91932b8495",
+              "name": "publishedAt",
+              "value": "={{ $json.posted_date }}",
+              "type": "string"
+            },
+            {
+              "id": "b8611d60-09ec-409e-a0c0-8a6d7da87ea0",
+              "name": "applyUrl",
+              "value": "={{$json.email}}",
+              "type": "string"
+            },
+            {
+              "id": "008246ee-3829-4a26-af95-544f914e1fe9",
+              "name": "location",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "949e43c8-0db8-420e-a39d-6be73d8c5efc",
+              "name": "contractType",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "7e313d83-31bb-455f-83df-1c2bb8ef992d",
+              "name": "experienceLevel",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "30f4be42-bf3a-459d-bbb3-5000af3a21de",
+              "name": "jobDescription",
+              "value": "={{ $json.description }}",
+              "type": "string"
+            },
+            {
+              "id": "8a24969d-d6b7-49d3-8013-91bfa60e7b89",
+              "name": "salaryInfo",
+              "value": "[]",
+              "type": "array"
+            },
+            {
+              "id": "87782311-7ad5-4821-aea4-7d293c6b4f59",
+              "name": "posterFullName",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "160cbda5-0d12-4d1a-a654-13a3e1ad720f",
+              "name": "posterProfileUrl",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "1e0e0a25-7bb2-443e-be17-220d44d95d92",
+              "name": "sector",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "d7ecf8bd-46b7-414c-8862-41811f709f0a",
+              "name": "workMode",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "a43ad1be-2936-4dd3-ba10-fd613008347d",
+              "name": "employmentType",
+              "value": "=",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3120,
+        2768
+      ],
+      "id": "5de290da-5025-490c-821a-c7087ca698ea",
+      "name": "Standardize output (**adjust fields**)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const platformName = \"hackernews\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2896,
+        2768
+      ],
+      "id": "3a0c9164-c91a-4c46-8b15-91bdd86ac006",
+      "name": "add source"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NBCVFrfmAz4h6S1a",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NBCVFrfmAz4h6S1a",
+          "cachedResultName": "scrape_dedupe_upsert"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -2672,
+        2864
+      ],
+      "id": "89a7d443-ae73-4766-96f8-995c57c4e70b",
+      "name": "Call '03_dedupe_upsert'",
+      "retryOnFail": false,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+          "cachedResultName": "error_global"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -2448,
+        2936
+      ],
+      "id": "a03df2dd-3f0b-4234-8b71-a42f00d7bce4",
+      "name": "Call 'error_global'"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "external_id",
+              "field2": "job_id_url"
+            }
+          ]
+        },
+        "joinMode": "keepNonMatches",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -3792,
+        2744
+      ],
+      "id": "2e7c2f16-1d47-4c08-968f-6e48fd47b157",
+      "name": "Keep non-dupes",
+      "executeOnce": false,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "cssSelector": ".job",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -4912,
+        2744
+      ],
+      "id": "08cd405f-9ac7-4202-b051-4483068041af",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "url": "https://hnhiring.com/locations/remote",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -5136,
+        2744
+      ],
+      "id": "8e253032-d47a-4125-80ee-05ec71147b80",
+      "name": "GET remote jobs"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check the primary data entry points from the HTML node\nconst inputData = $input.first().json;\nlet rawTextArray = null;\n\nif (Array.isArray(inputData)) {\n  rawTextArray = inputData;\n} else if (inputData && typeof inputData === 'object') {\n  // Target the first property key if n8n wrapped the array inside an object field\n  const firstKey = Object.keys(inputData)[0];\n  if (Array.isArray(inputData[firstKey])) {\n    rawTextArray = inputData[firstKey];\n  }\n}\n\n// Global structural validation fallback\nif (!Array.isArray(rawTextArray)) {\n  return [{ json: { error: \"Failed to locate array wrapper\", debug_received: typeof inputData } }];\n}\n\n// Map each plain text block into separate unique n8n items\nreturn rawTextArray.map(postText => {\n  return {\n    json: {\n      text_block: postText\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4688,
+        2744
+      ],
+      "id": "5cfb19a9-e5fe-4054-a8e8-b9215bb6e00d",
+      "name": "Split into items"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
+              "leftValue": "={{ $json.job_title }}",
+              "rightValue": "\\b(ai|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n|solutions|consultant|ml-?ops|ai-?ops|orchestrat\\w+|integrations?)\\b",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            },
+            {
+              "id": "6f924664-fa20-4947-af03-df2841af8012",
+              "leftValue": "={{ $json.job_title }}",
+              "rightValue": ".*(\\b(sales[- ]representative|assistant|manual|legal|qa[- ]engineer|qa[- ]automation|account[- ]manager|account[- ]executive|test[- ]automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react[- ]native|cloud|only|research|frontend|backend|forward|fde|fullstack|full[- ]stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp|intern)\\b).*",
+              "operator": {
+                "type": "string",
+                "operation": "notRegex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -4240,
+        2744
+      ],
+      "id": "117c3a2f-ab57-4a27-919d-015446a1cc33",
+      "name": "Filter positive and negative",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -2912,
+        2576
+      ],
+      "id": "3a7280a6-67ba-4524-85a8-5268c3496b38",
+      "name": "No Operation, do nothing"
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "update running status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update running status": {
+      "main": [
+        [
+          {
+            "node": "GET remote jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "update running status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse HTML": {
+      "main": [
+        [
+          {
+            "node": "Filter positive and negative",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "update success status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Standardize output (**adjust fields**)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is empty?": {
+      "main": [
+        [
+          {
+            "node": "update success status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for dupes": {
+      "main": [
+        [
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Standardize output (**adjust fields**)": {
+      "main": [
+        [
+          {
+            "node": "add source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add source": {
+      "main": [
+        [
+          {
+            "node": "Call '03_dedupe_upsert'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call '03_dedupe_upsert'": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call 'error_global'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep non-dupes": {
+      "main": [
+        [
+          {
+            "node": "Is empty?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'error_global'": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Split into items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET remote jobs": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split into items": {
+      "main": [
+        [
+          {
+            "node": "Parse HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter positive and negative": {
+      "main": [
+        [
+          {
+            "node": "Check for dupes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "update success status": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "Europe/Prague",
+    "executionOrder": "v1",
+    "errorWorkflow": "Zj1I7MhBC-OsOLt6D4Qyg",
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {},
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-06-05T08:15:18.007+02:00",
+          "Readable date": "June 5th 2026, 8:15:18 am",
+          "Readable time": "8:15:18 am",
+          "Day of week": "Friday",
+          "Year": "2026",
+          "Month": "June",
+          "Day of month": "05",
+          "Hour": "08",
+          "Minute": "15",
+          "Second": "18",
+          "Timezone": "Europe/Prague (UTC+02:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "6914ba2e-7251-4e4b-80f6-3ab313e76c2e",
+  "activeVersionId": "6914ba2e-7251-4e4b-80f6-3ab313e76c2e",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-06-10T07:26:57.506Z",
+      "createdAt": "2026-06-10T07:26:57.506Z",
+      "role": "workflow:owner",
+      "workflowId": "ESquoktadz7dGI88",
+      "projectId": "540BGLV3Iv8prOb0"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-06-17T06:38:17.027Z",
+    "createdAt": "2026-06-17T06:38:11.382Z",
+    "versionId": "6914ba2e-7251-4e4b-80f6-3ab313e76c2e",
+    "workflowId": "ESquoktadz7dGI88",
+    "nodes": [
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -5584,
+          2840
+        ],
+        "id": "55189424-a1f5-4dad-925f-74061da3685d",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "running",
+              "workflow_tag": "hackernews"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -5360,
+          2744
+        ],
+        "id": "508b0cb8-d1ed-4688-b87e-66fd5c190ba0",
+        "name": "update running status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 8,
+                "triggerAtMinute": 17
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -5584,
+          2648
+        ],
+        "id": "65e7aac2-1694-452a-9f38-b5180f512d43",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "jsCode": "const allItems = $input.all();\n\nconst processedItems = allItems.map(item => {\n  const rawText = item.json.text_block || '';\n  \n  // 1. Extract Unique Profile ID and URL\n  const urlMatch = rawText.match(/(https:\\/\\/news\\.ycombinator\\.com\\/user\\?id=([a-zA-Z0-9_-]+))/i);\n  const uniqueProfileUrl = urlMatch ? urlMatch[1] : `hn-fallback-${Math.random().toString(36).substr(2, 9)}`;\n  const userId = urlMatch ? urlMatch[2] : 'unknown';\n  \n  // 2. Extract Company Name\n  const companyMatch = rawText.match(/^([a-zA-Z0-9_-]+)\\s+\\[/);\n  const companyName = companyMatch ? companyMatch[1].trim() : userId;\n  \n  // 3. Extract Date Posted\n  const dateMatch = rawText.match(/\\](\\d{4}-\\d{2}-\\d{2})/);\n  const datePosted = dateMatch ? dateMatch[1] : '2026-06-01';\n  \n  // 4. Extract Job Description\n  const dateIndex = rawText.indexOf(datePosted);\n  let description = '';\n  if (dateIndex !== -1) {\n    description = rawText.substring(dateIndex + datePosted.length).trim();\n  } else {\n    description = rawText.replace(/^.*\\]\\d{4}-\\d{2}-\\d{2}/s, '').trim();\n  }\n  \n  // 5. Heuristic Job Title Extraction (Fixed for Length Fallbacks and Spaces)\n  const headerChunk = description.substring(0, 250).replace(/\\n/g, ' ');\n  let jobTitle = '';\n  \n  if (headerChunk.includes('|')) {\n    const parts = headerChunk.split('|');\n    jobTitle = parts[1] ? parts[1].trim() : parts[0].trim();\n    \n    let cleanCheck = jobTitle.replace(/remote|hybrid|full-time|fulltime|full\\s+time|contract|onsite|on-site/gi, '').trim();\n    \n    if ((cleanCheck.length < 3 || jobTitle.includes('[') || jobTitle.includes('http')) && parts[2]) {\n      jobTitle = parts[2].trim();\n    }\n  } else {\n    jobTitle = description.split('\\n')[0] || '';\n  }\n  \n  jobTitle = jobTitle.replace(/remote|hybrid|full-time|fulltime|full\\s+time|contract|onsite|on-site/gi, '').replace(/^[-\\s|]+|[-\\s|]+$/g, '').trim();\n  jobTitle = jobTitle.replace(/\\[http.*\\]/gi, '').replace(/https?:\\/\\/\\S+/gi, '').trim();\n  \n  if (jobTitle.length > 100 || jobTitle.length < 5) {\n    jobTitle = jobTitle.substring(0, 70).trim() || description.substring(0, 50).replace(/\\n/g, ' ').trim();\n  }\n  \n  // 6. Extract Email Contacts\n  const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9._-]+)/i;\n  const emailMatch = description.match(emailRegex);\n  const contactEmail = emailMatch ? emailMatch[1] : '';\n  \n  // 7. Extract Application URL with Domain and Truncation Exclusions\n  const urlRegex = /(https?:\\/\\/[^\\s\\]\\)\\\"\\'>]+)/gi;\n  const rawUrls = description.match(urlRegex) || [];\n  \n  const validUrls = rawUrls.map(url => url.replace(/[.,;)]$/, '')).filter(url => {\n    const lowUrl = url.toLowerCase();\n    return !lowUrl.includes('news.ycombinator.com') && \n           !lowUrl.includes('github.com') && \n           !lowUrl.includes('drive.google.com') && \n           !lowUrl.includes('twitter.com') &&\n           !lowUrl.includes('..'); \n  });\n  \n  let applyUrl = '';\n  \n  for (const url of validUrls) {\n    if (/apply|career|job|lever|greenhouse|ashby/i.test(url)) {\n      applyUrl = url;\n      break;\n    }\n  }\n  \n  if (!applyUrl && validUrls.length > 0) {\n    applyUrl = validUrls[0];\n  }\n  \n  if (!applyUrl && contactEmail) {\n    applyUrl = `mailto:${contactEmail}`;\n  }\n  \n  if (!applyUrl) {\n    applyUrl = 'https://hnhiring.com/locations/remote';\n  }\n  \n  return {\n    json: {\n      job_id_url: uniqueProfileUrl,\n      company_name: companyName,\n      posted_date: datePosted,\n      job_title: jobTitle || 'Unknown Title',\n      apply_url: applyUrl,\n      email: contactEmail,\n      description: description\n    }\n  };\n});\n\nreturn processedItems;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -4464,
+          2744
+        ],
+        "id": "c3d841f9-3991-4e03-a2b1-a52c79a1765e",
+        "name": "Parse HTML"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -3344,
+          2840
+        ],
+        "id": "3aa90d58-fb7a-4407-9ee8-b72cb1c16efe",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "completed",
+              "last_success_at": "={{ $now.toISO() }}",
+              "workflow_tag": "hackernews"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -3120,
+          2576
+        ],
+        "id": "3a2a2ce8-f675-47eb-911f-918c9ee35c9f",
+        "name": "update success status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "58004939-129c-4399-aa16-66308a911a43",
+                "leftValue": "={{ $json.job_title }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "empty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -3568,
+          2744
+        ],
+        "id": "1041745a-d993-4543-bff5-b0689b932b7e",
+        "name": "Is empty?"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "job_leads",
+          "returnAll": true,
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "external_id",
+                "condition": "eq",
+                "keyValue": "={{ $json.job_id_url }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -4016,
+          2672
+        ],
+        "id": "e9489324-2572-49b3-952b-9a10d9365bd8",
+        "name": "Check for dupes",
+        "alwaysOutputData": false,
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
+                "name": "jobId",
+                "value": "={{ $json.job_id_url }}",
+                "type": "string"
+              },
+              {
+                "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
+                "name": "jobTitle",
+                "value": "={{ $json.job_title }}",
+                "type": "string"
+              },
+              {
+                "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
+                "name": "jobUrl",
+                "value": "={{ $json.apply_url || $json.email || \"\" }}",
+                "type": "string"
+              },
+              {
+                "id": "a7609c01-4e31-43a0-940d-b97171f0123a",
+                "name": "companyName",
+                "value": "={{ $json.company_name }}",
+                "type": "string"
+              },
+              {
+                "id": "d4135602-1abb-43c0-9b0c-710ee6044263",
+                "name": "companyURL",
+                "value": "",
+                "type": "string"
+              },
+              {
+                "id": "ce6bae6a-2e69-4671-b2d3-08f6ff27fd81",
+                "name": "companyLogo",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "0103b2e7-89df-48b2-a1dc-4b91932b8495",
+                "name": "publishedAt",
+                "value": "={{ $json.posted_date }}",
+                "type": "string"
+              },
+              {
+                "id": "b8611d60-09ec-409e-a0c0-8a6d7da87ea0",
+                "name": "applyUrl",
+                "value": "={{$json.email}}",
+                "type": "string"
+              },
+              {
+                "id": "008246ee-3829-4a26-af95-544f914e1fe9",
+                "name": "location",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "949e43c8-0db8-420e-a39d-6be73d8c5efc",
+                "name": "contractType",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "7e313d83-31bb-455f-83df-1c2bb8ef992d",
+                "name": "experienceLevel",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "30f4be42-bf3a-459d-bbb3-5000af3a21de",
+                "name": "jobDescription",
+                "value": "={{ $json.description }}",
+                "type": "string"
+              },
+              {
+                "id": "8a24969d-d6b7-49d3-8013-91bfa60e7b89",
+                "name": "salaryInfo",
+                "value": "[]",
+                "type": "array"
+              },
+              {
+                "id": "87782311-7ad5-4821-aea4-7d293c6b4f59",
+                "name": "posterFullName",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "160cbda5-0d12-4d1a-a654-13a3e1ad720f",
+                "name": "posterProfileUrl",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "1e0e0a25-7bb2-443e-be17-220d44d95d92",
+                "name": "sector",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "d7ecf8bd-46b7-414c-8862-41811f709f0a",
+                "name": "workMode",
+                "value": "=",
+                "type": "string"
+              },
+              {
+                "id": "a43ad1be-2936-4dd3-ba10-fd613008347d",
+                "name": "employmentType",
+                "value": "=",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -3120,
+          2768
+        ],
+        "id": "5de290da-5025-490c-821a-c7087ca698ea",
+        "name": "Standardize output (**adjust fields**)"
+      },
+      {
+        "parameters": {
+          "jsCode": "const platformName = \"hackernews\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -2896,
+          2768
+        ],
+        "id": "3a0c9164-c91a-4c46-8b15-91bdd86ac006",
+        "name": "add source"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "NBCVFrfmAz4h6S1a",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/NBCVFrfmAz4h6S1a",
+            "cachedResultName": "scrape_dedupe_upsert"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -2672,
+          2864
+        ],
+        "id": "89a7d443-ae73-4766-96f8-995c57c4e70b",
+        "name": "Call '03_dedupe_upsert'",
+        "retryOnFail": false,
+        "maxTries": 2,
+        "waitBetweenTries": 5000,
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+            "cachedResultName": "error_global"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -2448,
+          2936
+        ],
+        "id": "a03df2dd-3f0b-4234-8b71-a42f00d7bce4",
+        "name": "Call 'error_global'"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "advanced": true,
+          "mergeByFields": {
+            "values": [
+              {
+                "field1": "external_id",
+                "field2": "job_id_url"
+              }
+            ]
+          },
+          "joinMode": "keepNonMatches",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -3792,
+          2744
+        ],
+        "id": "2e7c2f16-1d47-4c08-968f-6e48fd47b157",
+        "name": "Keep non-dupes",
+        "executeOnce": false,
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "operation": "extractHtmlContent",
+          "extractionValues": {
+            "values": [
+              {
+                "cssSelector": ".job",
+                "returnArray": true
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.html",
+        "typeVersion": 1.2,
+        "position": [
+          -4912,
+          2744
+        ],
+        "id": "08cd405f-9ac7-4202-b051-4483068041af",
+        "name": "HTML"
+      },
+      {
+        "parameters": {
+          "url": "https://hnhiring.com/locations/remote",
+          "options": {
+            "response": {
+              "response": {
+                "responseFormat": "text"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -5136,
+          2744
+        ],
+        "id": "8e253032-d47a-4125-80ee-05ec71147b80",
+        "name": "GET remote jobs"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Check the primary data entry points from the HTML node\nconst inputData = $input.first().json;\nlet rawTextArray = null;\n\nif (Array.isArray(inputData)) {\n  rawTextArray = inputData;\n} else if (inputData && typeof inputData === 'object') {\n  // Target the first property key if n8n wrapped the array inside an object field\n  const firstKey = Object.keys(inputData)[0];\n  if (Array.isArray(inputData[firstKey])) {\n    rawTextArray = inputData[firstKey];\n  }\n}\n\n// Global structural validation fallback\nif (!Array.isArray(rawTextArray)) {\n  return [{ json: { error: \"Failed to locate array wrapper\", debug_received: typeof inputData } }];\n}\n\n// Map each plain text block into separate unique n8n items\nreturn rawTextArray.map(postText => {\n  return {\n    json: {\n      text_block: postText\n    }\n  };\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -4688,
+          2744
+        ],
+        "id": "5cfb19a9-e5fe-4054-a8e8-b9215bb6e00d",
+        "name": "Split into items"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a047debf-f378-4320-9351-24cc1a8ebc1c",
+                "leftValue": "={{ $json.job_title }}",
+                "rightValue": "\\b(ai|gen-?ai|agent|workflow|automation|implementation|ops|platform|engineer|n8n|solutions|consultant|ml-?ops|ai-?ops|orchestrat\\w+|integrations?)\\b",
+                "operator": {
+                  "type": "string",
+                  "operation": "regex"
+                }
+              },
+              {
+                "id": "6f924664-fa20-4947-af03-df2841af8012",
+                "leftValue": "={{ $json.job_title }}",
+                "rightValue": ".*(\\b(sales[- ]representative|assistant|manual|legal|qa[- ]engineer|qa[- ]automation|account[- ]manager|account[- ]executive|test[- ]automation|lead|head|director|staff|principal|java|kotlin|swift|android|php|react[- ]native|cloud|only|research|frontend|backend|forward|fde|fullstack|full[- ]stack|junior|ruby|rust|acquisition|vedouci|reditel|asistent|obchod|akvizicni|seo|sdk|video|nlp|intern)\\b).*",
+                "operator": {
+                  "type": "string",
+                  "operation": "notRegex"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {
+            "ignoreCase": true
+          }
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          -4240,
+          2744
+        ],
+        "id": "117c3a2f-ab57-4a27-919d-015446a1cc33",
+        "name": "Filter positive and negative",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          -2912,
+          2576
+        ],
+        "id": "3a7280a6-67ba-4524-85a8-5268c3496b38",
+        "name": "No Operation, do nothing"
+      }
+    ],
+    "connections": {
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "update running status",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update running status": {
+        "main": [
+          [
+            {
+              "node": "GET remote jobs",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "update running status",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse HTML": {
+        "main": [
+          [
+            {
+              "node": "Filter positive and negative",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "update success status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Standardize output (**adjust fields**)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Is empty?": {
+        "main": [
+          [
+            {
+              "node": "update success status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check for dupes": {
+        "main": [
+          [
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Standardize output (**adjust fields**)": {
+        "main": [
+          [
+            {
+              "node": "add source",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "add source": {
+        "main": [
+          [
+            {
+              "node": "Call '03_dedupe_upsert'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call '03_dedupe_upsert'": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Call 'error_global'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Keep non-dupes": {
+        "main": [
+          [
+            {
+              "node": "Is empty?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'error_global'": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTML": {
+        "main": [
+          [
+            {
+              "node": "Split into items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GET remote jobs": {
+        "main": [
+          [
+            {
+              "node": "HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split into items": {
+        "main": [
+          [
+            {
+              "node": "Parse HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter positive and negative": {
+        "main": [
+          [
+            {
+              "node": "Check for dupes",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "update success status": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "d d",
+    "name": "Version 6914ba2e",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-06-17T06:38:51.491Z",
+      "createdAt": "2026-06-17T06:38:51.491Z",
+      "id": "ZE3N8uN36gDbnQre",
+      "name": "hackernews"
+    },
+    {
+      "updatedAt": "2026-02-25T07:33:28.018Z",
+      "createdAt": "2026-02-25T07:33:28.018Z",
+      "id": "IqRTP9BqhN0ja5Ww",
+      "name": "prod"
+    },
+    {
+      "updatedAt": "2026-03-06T13:15:28.248Z",
+      "createdAt": "2026-01-22T12:40:37.040Z",
+      "id": "mcS1gLAfDII7yoGe",
+      "name": "scrape"
+    }
+  ]
+}
