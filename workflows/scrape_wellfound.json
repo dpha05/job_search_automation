@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T07:05:17.227Z",
+  "updatedAt": "2026-06-10T07:24:09.160Z",
   "createdAt": "2026-03-06T14:30:07.748Z",
   "id": "lOb7HXMwQjy0xsI8",
   "name": "scrape_wellfound",
@@ -27,7 +27,8 @@
           "value": "https://console.apify.com/actors/jV4Y8h6j3AqVj5Qur/input",
           "mode": "url"
         },
-        "customBody": "={\n    \"compact\": false,\n    \"companyOnlyMode\": false,\n    \"descriptionFormat\": \"all\",\n    \"emitExpired\": false,\n    \"emitUnchanged\": false,\n    \"enrichCompany\": false,\n    \"enrichDetail\": false,\n    \"excludeEmptyFields\": false,\n    \"includeRunMetadata\": true,\n    \"incrementalMode\": false,\n    \"maxResults\": 25,\n    \"notifyOnlyChanges\": true,\n    \"proxyConfiguration\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ],\n        \"apifyProxyCountry\": \"US\"\n    },\n    \"remote\": true,\n    \"searchUrls\": [\n        \"https://wellfound.com/role/l/ai-engineer/prague\"\n    ],\n    \"skipReposts\": false,\n    \"visaSponsorship\": false\n}"
+        "customBody": "={\n    \"compact\": false,\n    \"companyOnlyMode\": false,\n    \"descriptionFormat\": \"all\",\n    \"emitExpired\": false,\n    \"emitUnchanged\": false,\n    \"enrichCompany\": false,\n    \"enrichDetail\": false,\n    \"excludeEmptyFields\": false,\n    \"includeRunMetadata\": true,\n    \"incrementalMode\": false,\n    \"maxResults\": 25,\n    \"notifyOnlyChanges\": true,\n    \"proxyConfiguration\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ],\n        \"apifyProxyCountry\": \"US\"\n    },\n    \"remote\": true,\n    \"searchUrls\": [\n        \"https://wellfound.com/role/l/ai-engineer/prague\"\n    ],\n    \"skipReposts\": false,\n    \"visaSponsorship\": false\n}",
+        "timeout": {}
       },
       "type": "@apify/n8n-nodes-apify.apify",
       "typeVersion": 1,
@@ -122,81 +123,6 @@
     },
     {
       "parameters": {
-        "operation": "upsert",
-        "schema": {
-          "__rl": true,
-          "mode": "list",
-          "value": "public"
-        },
-        "table": {
-          "__rl": true,
-          "value": "workflow_health",
-          "mode": "list",
-          "cachedResultName": "workflow_health"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "status": "completed",
-            "last_success_at": "={{ $now.toISO() }}",
-            "workflow_tag": "wellfound"
-          },
-          "matchingColumns": [
-            "workflow_tag"
-          ],
-          "schema": [
-            {
-              "id": "workflow_tag",
-              "displayName": "workflow_tag",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "last_success_at",
-              "displayName": "last_success_at",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": false,
-              "removed": false
-            },
-            {
-              "id": "status",
-              "displayName": "status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        -3984,
-        1952
-      ],
-      "id": "aafd028c-484e-4c36-8554-2ef3d9468b92",
-      "name": "update success status1",
-      "credentials": {
-        "postgres": {
-          "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres careerops"
-        }
-      }
-    },
-    {
-      "parameters": {
         "jsCode": "const platformName = \"wellfound\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
       },
       "type": "n8n-nodes-base.code",
@@ -215,13 +141,13 @@
             {
               "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
               "name": "jobId",
-              "value": "={{ $('Is empty?').item.json.id }}",
+              "value": "={{ $('Loop Over Items').item.json.id }}",
               "type": "string"
             },
             {
               "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
               "name": "jobTitle",
-              "value": "={{ $('Is empty?').item.json.title }}",
+              "value": "={{ $('Loop Over Items').item.json.title }}",
               "type": "string"
             },
             {
@@ -233,7 +159,7 @@
             {
               "id": "d7ac7ab9-4e9f-44e2-a188-a6f8cbbb580c",
               "name": "companyName",
-              "value": "={{ $('Is empty?').item.json.companyName }}",
+              "value": "={{ $('Loop Over Items').item.json.companyName }}",
               "type": "string"
             },
             {
@@ -456,6 +382,81 @@
       ],
       "id": "a0bd328d-1ab1-4fb8-ba1d-ddc52a206739",
       "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "completed",
+            "last_success_at": "={{ $now.toISO() }}",
+            "workflow_tag": "wellfound"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3984,
+        1952
+      ],
+      "id": "aafd028c-484e-4c36-8554-2ef3d9468b92",
+      "name": "update success status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
     }
   ],
   "connections": {
@@ -485,7 +486,7 @@
       "main": [
         [
           {
-            "node": "update success status1",
+            "node": "update success status",
             "type": "main",
             "index": 0
           }
@@ -493,17 +494,6 @@
         [
           {
             "node": "Loop Over Items",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "update success status1": {
-      "main": [
-        [
-          {
-            "node": "No Operation, do nothing",
             "type": "main",
             "index": 0
           }
@@ -536,7 +526,7 @@
       "main": [
         [
           {
-            "node": "update success status1",
+            "node": "update success status",
             "type": "main",
             "index": 0
           }
@@ -584,6 +574,17 @@
         [
           {
             "node": "update running status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update success status": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
             "type": "main",
             "index": 0
           }
@@ -1077,8 +1078,8 @@
       }
     ]
   },
-  "versionId": "1573c9d6-6400-4ac4-ae84-ce83b43e0d91",
-  "activeVersionId": "1573c9d6-6400-4ac4-ae84-ce83b43e0d91",
+  "versionId": "61ef3f47-2dea-4477-b538-cf2b4fa26988",
+  "activeVersionId": "61ef3f47-2dea-4477-b538-cf2b4fa26988",
   "triggerCount": 1,
   "shared": [
     {
@@ -1090,9 +1091,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-06-01T07:05:20.087Z",
-    "createdAt": "2026-06-01T07:05:06.928Z",
-    "versionId": "1573c9d6-6400-4ac4-ae84-ce83b43e0d91",
+    "updatedAt": "2026-06-10T07:24:10.332Z",
+    "createdAt": "2026-06-10T07:24:09.162Z",
+    "versionId": "61ef3f47-2dea-4477-b538-cf2b4fa26988",
     "workflowId": "lOb7HXMwQjy0xsI8",
     "nodes": [
       {
@@ -1116,7 +1117,8 @@
             "value": "https://console.apify.com/actors/jV4Y8h6j3AqVj5Qur/input",
             "mode": "url"
           },
-          "customBody": "={\n    \"compact\": false,\n    \"companyOnlyMode\": false,\n    \"descriptionFormat\": \"all\",\n    \"emitExpired\": false,\n    \"emitUnchanged\": false,\n    \"enrichCompany\": false,\n    \"enrichDetail\": false,\n    \"excludeEmptyFields\": false,\n    \"includeRunMetadata\": true,\n    \"incrementalMode\": false,\n    \"maxResults\": 25,\n    \"notifyOnlyChanges\": true,\n    \"proxyConfiguration\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ],\n        \"apifyProxyCountry\": \"US\"\n    },\n    \"remote\": true,\n    \"searchUrls\": [\n        \"https://wellfound.com/role/l/ai-engineer/prague\"\n    ],\n    \"skipReposts\": false,\n    \"visaSponsorship\": false\n}"
+          "customBody": "={\n    \"compact\": false,\n    \"companyOnlyMode\": false,\n    \"descriptionFormat\": \"all\",\n    \"emitExpired\": false,\n    \"emitUnchanged\": false,\n    \"enrichCompany\": false,\n    \"enrichDetail\": false,\n    \"excludeEmptyFields\": false,\n    \"includeRunMetadata\": true,\n    \"incrementalMode\": false,\n    \"maxResults\": 25,\n    \"notifyOnlyChanges\": true,\n    \"proxyConfiguration\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ],\n        \"apifyProxyCountry\": \"US\"\n    },\n    \"remote\": true,\n    \"searchUrls\": [\n        \"https://wellfound.com/role/l/ai-engineer/prague\"\n    ],\n    \"skipReposts\": false,\n    \"visaSponsorship\": false\n}",
+          "timeout": {}
         },
         "type": "@apify/n8n-nodes-apify.apify",
         "typeVersion": 1,
@@ -1211,81 +1213,6 @@
       },
       {
         "parameters": {
-          "operation": "upsert",
-          "schema": {
-            "__rl": true,
-            "mode": "list",
-            "value": "public"
-          },
-          "table": {
-            "__rl": true,
-            "value": "workflow_health",
-            "mode": "list",
-            "cachedResultName": "workflow_health"
-          },
-          "columns": {
-            "mappingMode": "defineBelow",
-            "value": {
-              "status": "completed",
-              "last_success_at": "={{ $now.toISO() }}",
-              "workflow_tag": "wellfound"
-            },
-            "matchingColumns": [
-              "workflow_tag"
-            ],
-            "schema": [
-              {
-                "id": "workflow_tag",
-                "displayName": "workflow_tag",
-                "required": true,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": true,
-                "removed": false
-              },
-              {
-                "id": "last_success_at",
-                "displayName": "last_success_at",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "dateTime",
-                "canBeUsedToMatch": false,
-                "removed": false
-              },
-              {
-                "id": "status",
-                "displayName": "status",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": false
-              }
-            ],
-            "attemptToConvertTypes": false,
-            "convertFieldsToString": false
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.postgres",
-        "typeVersion": 2.6,
-        "position": [
-          -3984,
-          1952
-        ],
-        "id": "aafd028c-484e-4c36-8554-2ef3d9468b92",
-        "name": "update success status1",
-        "credentials": {
-          "postgres": {
-            "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres careerops"
-          }
-        }
-      },
-      {
-        "parameters": {
           "jsCode": "const platformName = \"wellfound\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
         },
         "type": "n8n-nodes-base.code",
@@ -1304,13 +1231,13 @@
               {
                 "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
                 "name": "jobId",
-                "value": "={{ $('Is empty?').item.json.id }}",
+                "value": "={{ $('Loop Over Items').item.json.id }}",
                 "type": "string"
               },
               {
                 "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
                 "name": "jobTitle",
-                "value": "={{ $('Is empty?').item.json.title }}",
+                "value": "={{ $('Loop Over Items').item.json.title }}",
                 "type": "string"
               },
               {
@@ -1322,7 +1249,7 @@
               {
                 "id": "d7ac7ab9-4e9f-44e2-a188-a6f8cbbb580c",
                 "name": "companyName",
-                "value": "={{ $('Is empty?').item.json.companyName }}",
+                "value": "={{ $('Loop Over Items').item.json.companyName }}",
                 "type": "string"
               },
               {
@@ -1545,6 +1472,81 @@
         ],
         "id": "a0bd328d-1ab1-4fb8-ba1d-ddc52a206739",
         "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "completed",
+              "last_success_at": "={{ $now.toISO() }}",
+              "workflow_tag": "wellfound"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -3984,
+          1952
+        ],
+        "id": "aafd028c-484e-4c36-8554-2ef3d9468b92",
+        "name": "update success status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
       }
     ],
     "connections": {
@@ -1574,7 +1576,7 @@
         "main": [
           [
             {
-              "node": "update success status1",
+              "node": "update success status",
               "type": "main",
               "index": 0
             }
@@ -1582,17 +1584,6 @@
           [
             {
               "node": "Loop Over Items",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "update success status1": {
-        "main": [
-          [
-            {
-              "node": "No Operation, do nothing",
               "type": "main",
               "index": 0
             }
@@ -1625,7 +1616,7 @@
         "main": [
           [
             {
-              "node": "update success status1",
+              "node": "update success status",
               "type": "main",
               "index": 0
             }
@@ -1678,10 +1669,21 @@
             }
           ]
         ]
+      },
+      "update success status": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "d d",
-    "name": "Version 1573c9d6",
+    "name": "Version 61ef3f47",
     "description": "",
     "autosaved": true
   },
