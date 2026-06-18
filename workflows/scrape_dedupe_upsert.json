@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-19T07:28:10.856Z",
+  "updatedAt": "2026-06-18T06:53:24.948Z",
   "createdAt": "2026-01-23T07:30:24.776Z",
   "id": "NBCVFrfmAz4h6S1a",
   "name": "scrape_dedupe_upsert",
@@ -101,7 +101,7 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "job_url": "={{ $('When Executed by Another Workflow').item.json.jobUrl }}",
+            "job_url": "={{ $('When Executed by Another Workflow').item.json.jobUrl.replace(/\\(/g, '%28').replace(/\\)/g, '%29') }}",
             "published_at": "={{ $('When Executed by Another Workflow').item.json.publishedAt }}",
             "company_name": "={{ $('When Executed by Another Workflow').item.json.companyName }}",
             "job_title": "={{ $('When Executed by Another Workflow').item.json.jobTitle }}",
@@ -767,8 +767,8 @@
       }
     ]
   },
-  "versionId": "6bc77d1d-14e2-479f-b9c3-7959b92fc46a",
-  "activeVersionId": "6bc77d1d-14e2-479f-b9c3-7959b92fc46a",
+  "versionId": "2d903874-ff76-4e52-b086-5d748ac6b3fd",
+  "activeVersionId": "2d903874-ff76-4e52-b086-5d748ac6b3fd",
   "triggerCount": 0,
   "shared": [
     {
@@ -780,9 +780,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-19T07:28:11.721Z",
-    "createdAt": "2026-05-19T07:28:10.857Z",
-    "versionId": "6bc77d1d-14e2-479f-b9c3-7959b92fc46a",
+    "updatedAt": "2026-06-18T06:55:46.063Z",
+    "createdAt": "2026-06-18T06:53:24.949Z",
+    "versionId": "2d903874-ff76-4e52-b086-5d748ac6b3fd",
     "workflowId": "NBCVFrfmAz4h6S1a",
     "nodes": [
       {
@@ -880,7 +880,7 @@
           "columns": {
             "mappingMode": "defineBelow",
             "value": {
-              "job_url": "={{ $('When Executed by Another Workflow').item.json.jobUrl }}",
+              "job_url": "={{ $('When Executed by Another Workflow').item.json.jobUrl.replace(/\\(/g, '%28').replace(/\\)/g, '%29') }}",
               "published_at": "={{ $('When Executed by Another Workflow').item.json.publishedAt }}",
               "company_name": "={{ $('When Executed by Another Workflow').item.json.companyName }}",
               "job_title": "={{ $('When Executed by Another Workflow').item.json.jobTitle }}",
@@ -1504,9 +1504,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version 6bc77d1d",
+    "name": "Version 2d903874",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": [
     {
