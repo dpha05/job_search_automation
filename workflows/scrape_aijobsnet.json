@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-05T06:41:44.148Z",
+  "updatedAt": "2026-06-10T07:08:35.323Z",
   "createdAt": "2026-06-01T07:41:45.981Z",
   "id": "Cr884axFy4iD9gIi",
   "name": "scrape_aijobsnet",
@@ -396,7 +396,7 @@
       "typeVersion": 3.4,
       "position": [
         -2672,
-        2584
+        2592
       ],
       "id": "6d7981da-0ef0-4550-a872-14b3ccd06092",
       "name": "Switch"
@@ -523,7 +523,7 @@
       "typeVersion": 3,
       "position": [
         -3568,
-        3288
+        2896
       ],
       "id": "998494a7-6721-49ed-a004-0f1f62f2fe1e",
       "name": "Loop Over Items"
@@ -661,7 +661,7 @@
       "typeVersion": 2.6,
       "position": [
         -3344,
-        2616
+        2624
       ],
       "id": "f2d5afd3-4a33-468f-8f22-41e9aec21733",
       "name": "update success status",
@@ -725,7 +725,7 @@
       "typeVersion": 1,
       "position": [
         -4240,
-        2808
+        2816
       ],
       "id": "517de186-634f-4f9d-b370-1200808a9fe0",
       "name": "Check for dupes",
@@ -772,7 +772,7 @@
       "typeVersion": 1,
       "position": [
         -1776,
-        2504
+        2512
       ],
       "id": "85ed5d88-9bfd-484e-b0b4-c8350bfe33dd",
       "name": "No Operation, do nothing"
@@ -790,13 +790,13 @@
             {
               "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
               "name": "jobTitle",
-              "value": "={{ $('Is empty?').item.json.title }}",
+              "value": "={{ $('Loop Over Items').item.json.title }}",
               "type": "string"
             },
             {
               "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
               "name": "jobUrl",
-              "value": "={{ $('Is empty?').item.json.url }}",
+              "value": "={{ $('Loop Over Items').item.json.url }}",
               "type": "string"
             },
             {
@@ -897,7 +897,7 @@
       "typeVersion": 3.4,
       "position": [
         -1552,
-        2504
+        2512
       ],
       "id": "cf4fa5db-4d78-42e9-8baf-ba2030f9208b",
       "name": "Standardize output (**adjust fields**)"
@@ -910,7 +910,7 @@
       "typeVersion": 2,
       "position": [
         -1328,
-        2504
+        2512
       ],
       "id": "34670cae-d4cd-4a69-8a20-e4e2319d9d8a",
       "name": "add source"
@@ -938,8 +938,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -1104,
-        2504
+        -1120,
+        3344
       ],
       "id": "f1e534f0-c887-46b9-9827-ccdd6fd9c900",
       "name": "Call '03_dedupe_upsert'",
@@ -970,8 +970,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -880,
-        3168
+        -848,
+        3552
       ],
       "id": "14fc740c-4305-40ca-b524-d01ebaf0a18f",
       "name": "Call 'error_global'"
@@ -1552,8 +1552,8 @@
       }
     ]
   },
-  "versionId": "a7f2542e-6fa8-4dec-a84c-74908e33de9b",
-  "activeVersionId": "a7f2542e-6fa8-4dec-a84c-74908e33de9b",
+  "versionId": "c1dd7dad-a5c6-4bff-a966-09b10ed9620c",
+  "activeVersionId": "c1dd7dad-a5c6-4bff-a966-09b10ed9620c",
   "triggerCount": 1,
   "shared": [
     {
@@ -1565,9 +1565,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-06-05T06:41:45.075Z",
-    "createdAt": "2026-06-05T06:41:44.150Z",
-    "versionId": "a7f2542e-6fa8-4dec-a84c-74908e33de9b",
+    "updatedAt": "2026-06-10T07:08:48.569Z",
+    "createdAt": "2026-06-10T07:08:35.325Z",
+    "versionId": "c1dd7dad-a5c6-4bff-a966-09b10ed9620c",
     "workflowId": "Cr884axFy4iD9gIi",
     "nodes": [
       {
@@ -1960,7 +1960,7 @@
         "typeVersion": 3.4,
         "position": [
           -2672,
-          2584
+          2592
         ],
         "id": "6d7981da-0ef0-4550-a872-14b3ccd06092",
         "name": "Switch"
@@ -2087,7 +2087,7 @@
         "typeVersion": 3,
         "position": [
           -3568,
-          3288
+          2896
         ],
         "id": "998494a7-6721-49ed-a004-0f1f62f2fe1e",
         "name": "Loop Over Items"
@@ -2225,7 +2225,7 @@
         "typeVersion": 2.6,
         "position": [
           -3344,
-          2616
+          2624
         ],
         "id": "f2d5afd3-4a33-468f-8f22-41e9aec21733",
         "name": "update success status",
@@ -2289,7 +2289,7 @@
         "typeVersion": 1,
         "position": [
           -4240,
-          2808
+          2816
         ],
         "id": "517de186-634f-4f9d-b370-1200808a9fe0",
         "name": "Check for dupes",
@@ -2336,7 +2336,7 @@
         "typeVersion": 1,
         "position": [
           -1776,
-          2504
+          2512
         ],
         "id": "85ed5d88-9bfd-484e-b0b4-c8350bfe33dd",
         "name": "No Operation, do nothing"
@@ -2354,13 +2354,13 @@
               {
                 "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
                 "name": "jobTitle",
-                "value": "={{ $('Is empty?').item.json.title }}",
+                "value": "={{ $('Loop Over Items').item.json.title }}",
                 "type": "string"
               },
               {
                 "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
                 "name": "jobUrl",
-                "value": "={{ $('Is empty?').item.json.url }}",
+                "value": "={{ $('Loop Over Items').item.json.url }}",
                 "type": "string"
               },
               {
@@ -2461,7 +2461,7 @@
         "typeVersion": 3.4,
         "position": [
           -1552,
-          2504
+          2512
         ],
         "id": "cf4fa5db-4d78-42e9-8baf-ba2030f9208b",
         "name": "Standardize output (**adjust fields**)"
@@ -2474,7 +2474,7 @@
         "typeVersion": 2,
         "position": [
           -1328,
-          2504
+          2512
         ],
         "id": "34670cae-d4cd-4a69-8a20-e4e2319d9d8a",
         "name": "add source"
@@ -2502,8 +2502,8 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          -1104,
-          2504
+          -1120,
+          3344
         ],
         "id": "f1e534f0-c887-46b9-9827-ccdd6fd9c900",
         "name": "Call '03_dedupe_upsert'",
@@ -2534,8 +2534,8 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          -880,
-          3168
+          -848,
+          3552
         ],
         "id": "14fc740c-4305-40ca-b524-d01ebaf0a18f",
         "name": "Call 'error_global'"
@@ -3070,9 +3070,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version a7f2542e",
+    "name": "Version c1dd7dad",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": [
     {
