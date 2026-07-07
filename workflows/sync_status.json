@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-18T07:26:31.451Z",
+  "updatedAt": "2026-07-07T08:38:24.052Z",
   "createdAt": "2026-03-06T12:22:31.762Z",
   "id": "7TRjT3YJDeAlSHqk",
   "name": "sync_status",
@@ -94,8 +94,9 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "status": "running",
-            "workflow_tag": "sync_status"
+            "status": "processing",
+            "workflow_tag": "sync_status",
+            "last_run_at": "={{ $now }}"
           },
           "matchingColumns": [
             "workflow_tag"
@@ -129,6 +130,56 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "last_run_at",
+              "displayName": "last_run_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "scrape_count",
+              "displayName": "scrape_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "item_count",
+              "displayName": "item_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "loop_count",
+              "displayName": "loop_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
             }
           ],
           "attemptToConvertTypes": false,
@@ -168,7 +219,7 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "status": "completed",
+            "status": "success",
             "last_success_at": "={{ $now.toISO() }}",
             "workflow_tag": "sync_status"
           },
@@ -479,8 +530,8 @@
   },
   "meta": null,
   "pinData": {},
-  "versionId": "ec99546e-1611-4a74-b98d-a42d335786fd",
-  "activeVersionId": "ec99546e-1611-4a74-b98d-a42d335786fd",
+  "versionId": "99535af2-4610-4619-a852-79b9bd908b9d",
+  "activeVersionId": "99535af2-4610-4619-a852-79b9bd908b9d",
   "triggerCount": 1,
   "shared": [
     {
@@ -492,9 +543,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-06-18T07:26:33.050Z",
-    "createdAt": "2026-06-18T07:26:31.452Z",
-    "versionId": "ec99546e-1611-4a74-b98d-a42d335786fd",
+    "updatedAt": "2026-07-03T06:45:19.388Z",
+    "createdAt": "2026-07-03T06:45:13.331Z",
+    "versionId": "99535af2-4610-4619-a852-79b9bd908b9d",
     "workflowId": "7TRjT3YJDeAlSHqk",
     "nodes": [
       {
@@ -585,8 +636,9 @@
           "columns": {
             "mappingMode": "defineBelow",
             "value": {
-              "status": "running",
-              "workflow_tag": "sync_status"
+              "status": "processing",
+              "workflow_tag": "sync_status",
+              "last_run_at": "={{ $now }}"
             },
             "matchingColumns": [
               "workflow_tag"
@@ -620,6 +672,56 @@
                 "display": true,
                 "type": "string",
                 "canBeUsedToMatch": false
+              },
+              {
+                "id": "retry_count",
+                "displayName": "retry_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "last_run_at",
+                "displayName": "last_run_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "scrape_count",
+                "displayName": "scrape_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "item_count",
+                "displayName": "item_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "loop_count",
+                "displayName": "loop_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
               }
             ],
             "attemptToConvertTypes": false,
@@ -659,7 +761,7 @@
           "columns": {
             "mappingMode": "defineBelow",
             "value": {
-              "status": "completed",
+              "status": "success",
               "last_success_at": "={{ $now.toISO() }}",
               "workflow_tag": "sync_status"
             },
@@ -955,15 +1057,15 @@
       }
     },
     "authors": "d d",
-    "name": "Version ec99546e",
+    "name": "Version 99535af2",
     "description": "",
     "autosaved": true
   },
   "tags": [
     {
-      "updatedAt": "2026-03-06T08:25:58.891Z",
-      "createdAt": "2026-03-06T08:24:24.741Z",
-      "id": "Vy45AkYeBcQCdNen",
+      "updatedAt": "2026-07-07T08:38:03.912Z",
+      "createdAt": "2026-07-07T08:38:03.912Z",
+      "id": "krtR1gGr71HmuVCD",
       "name": "sync_status"
     },
     {
