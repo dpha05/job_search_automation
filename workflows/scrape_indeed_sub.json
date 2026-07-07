@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T07:05:54.356Z",
+  "updatedAt": "2026-07-02T07:23:20.572Z",
   "createdAt": "2026-05-28T06:42:53.441Z",
   "id": "BvCJELJG4Xv1E9mE",
   "name": "scrape_indeed_sub",
@@ -13,8 +13,8 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -5088,
-        1328
+        -6576,
+        256
       ],
       "id": "1ec832e7-cbc7-4bf5-ac89-01c3a1624da9",
       "name": "When Executed by Another Workflow"
@@ -28,21 +28,21 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -4416,
-        1424
+        -4112,
+        592
       ],
       "id": "af17a1df-6eb5-46bf-a78a-8ac7ed32e658",
       "name": "Loop Over Items"
     },
     {
       "parameters": {
-        "jsCode": "const platformName = \"indeed\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+        "jsCode": "const platformName = 'indeed_' + $('When Executed by Another Workflow').item.json.countryCode.toLowerCase().replace(/ /g, '_');\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -3968,
-        1424
+        -3664,
+        544
       ],
       "id": "c0d58030-6584-42ce-84e5-00809cbbc1b8",
       "name": "add source"
@@ -148,8 +148,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -4192,
-        1424
+        -3888,
+        544
       ],
       "id": "8ac963df-5663-4e35-88ed-0caa9e8b5963",
       "name": "Standardize output (**adjust fields**)"
@@ -177,8 +177,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -3744,
-        1520
+        -3440,
+        544
       ],
       "id": "1783c48e-a3fa-4213-ad9e-8bee9ba6da63",
       "name": "Call '03_dedupe_upsert'",
@@ -186,17 +186,6 @@
       "maxTries": 2,
       "waitBetweenTries": 5000,
       "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [
-        -4192,
-        1232
-      ],
-      "id": "19a230cd-580c-4f54-8792-fefb4b534284",
-      "name": "No Operation, do nothing"
     },
     {
       "parameters": {
@@ -220,8 +209,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -3520,
-        1520
+        -3216,
+        496
       ],
       "id": "d8662942-5d45-4ba6-ad63-3587b6e4f303",
       "name": "Call 'error_global'"
@@ -254,8 +243,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -4640,
-        1328
+        -4336,
+        496
       ],
       "id": "28867572-0110-44be-9208-5d76089a449c",
       "name": "Is empty?"
@@ -268,13 +257,13 @@
           "value": "https://console.apify.com/actors/TrtlecxAsNRbKl1na/input",
           "mode": "url"
         },
-        "customBody": "={\n    \"country\": \"{{ $json.countryCode }}\",\n    \"datePosted\": \"{{ $json.publishedAtString }}\",\n    \"limit\": 100,\n    \"location\": \"remote\",\n    \"title\": \"{{ $json.keywords }}\"\n}"
+        "customBody": "={\n    \"country\": \"{{ $('When Executed by Another Workflow').item.json.countryCode }}\",\n    \"datePosted\": \"{{ $('When Executed by Another Workflow').item.json.publishedAtString }}\",\n    \"limit\": 100,\n    \"location\": \"remote\",\n    \"title\": \"{{ $('When Executed by Another Workflow').item.json.keywords }}\"\n}"
       },
       "type": "@apify/n8n-nodes-apify.apify",
       "typeVersion": 1,
       "position": [
-        -4864,
-        1328
+        -5680,
+        176
       ],
       "id": "c00774f9-2d07-4d7a-846b-329425544e70",
       "name": "Scrape Indeed",
@@ -287,6 +276,706 @@
           "name": "Apify account 5"
         }
       }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "job_leads",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "=\"{{ $json.jobUrl }}\""
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -4784,
+        304
+      ],
+      "id": "d99fb081-84d0-4e13-8262-d6ec564ee7db",
+      "name": "Check for dupes",
+      "alwaysOutputData": false,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "job_url",
+              "field2": "jobUrl"
+            }
+          ]
+        },
+        "joinMode": "keepNonMatches",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -4560,
+        352
+      ],
+      "id": "49b959a4-d56a-4064-b8dc-520d8881e777",
+      "name": "Keep non-dupes",
+      "executeOnce": false,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "success",
+            "last_success_at": "={{ $now.toISO() }}",
+            "workflow_tag": "={{ 'indeed_' + $('When Executed by Another Workflow').item.json.countryCode.toLowerCase().replace(/ /g, '_') }}",
+            "loop_count": 0
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "last_run_at",
+              "displayName": "last_run_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "scrape_count",
+              "displayName": "scrape_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "item_count",
+              "displayName": "item_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "loop_count",
+              "displayName": "loop_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3888,
+        352
+      ],
+      "id": "822c78c4-3fc9-4e6e-a136-336e99ec7abd",
+      "name": "Update status and reset loop count",
+      "executeOnce": true,
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM public.scraper_payloads\nWHERE source = '{{ 'indeed_' + $json.countryCode.toLowerCase().replace(/ /g, '_') }}'\nAND created_at::date = CURRENT_DATE\nLIMIT 1;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -6352,
+        256
+      ],
+      "id": "77ad8aab-4e65-468b-853c-dd98166ed239",
+      "name": "Get temporary payload",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "workflow_tag": "={{ 'indeed_' + $('When Executed by Another Workflow').item.json.countryCode.toLowerCase().replace(/ /g, '_') }}",
+            "last_run_at": "={{ $now }}",
+            "scrape_count": 0,
+            "item_count": 0,
+            "loop_count": 0,
+            "status": "processing"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "last_run_at",
+              "displayName": "last_run_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "scrape_count",
+              "displayName": "scrape_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "item_count",
+              "displayName": "item_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "loop_count",
+              "displayName": "loop_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -5904,
+        176
+      ],
+      "id": "e6e0893d-5a11-40c2-838f-8061ef7ca59f",
+      "name": "Update status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "workflow_tag": "={{ 'indeed_' + $('When Executed by Another Workflow').item.json.countryCode.toLowerCase().replace(/ /g, '_') }}",
+            "status": "extracted",
+            "scrape_count": "={{ $('Scrape Indeed').all().length }}"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "last_run_at",
+              "displayName": "last_run_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "scrape_count",
+              "displayName": "scrape_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "item_count",
+              "displayName": "item_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "loop_count",
+              "displayName": "loop_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -5008,
+        128
+      ],
+      "id": "dce98696-5e2d-4875-a6f4-4bc32dd7a457",
+      "name": "Update status1",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -5456,
+        176
+      ],
+      "id": "409500a2-efe1-4081-bc3c-34bb2bca3819",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "tableId": "scraper_payloads",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "raw_json",
+              "fieldValue": "={{ $json.data }}"
+            },
+            {
+              "fieldId": "source",
+              "fieldValue": "={{ 'indeed_' + $('When Executed by Another Workflow').item.json.countryCode.toLowerCase().replace(/ /g, '_') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -5232,
+        176
+      ],
+      "id": "eef42e66-6b58-42d6-8acc-c99b80c448a7",
+      "name": "Upload temporary payload",
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "raw_json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -5008,
+        352
+      ],
+      "id": "8dcbd0ab-fe8c-4999-ba2c-f9934ea101e3",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "item_count": "={{ $input.all().length }}",
+            "workflow_tag": "={{ 'indeed_' + $('When Executed by Another Workflow').item.json.countryCode.toLowerCase().replace(/ /g, '_') }}"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "last_run_at",
+              "displayName": "last_run_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "scrape_count",
+              "displayName": "scrape_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "item_count",
+              "displayName": "item_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "loop_count",
+              "displayName": "loop_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -4336,
+        304
+      ],
+      "id": "01c9f4f4-79ec-4372-a5ac-a55918c16e4a",
+      "name": "Update item count",
+      "executeOnce": true,
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE public.workflow_health \nSET loop_count = loop_count + 1 \nWHERE workflow_tag = '{{ $json.source }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3216,
+        704
+      ],
+      "id": "402a7bf5-7e8a-4a5e-b9bc-9155b816d85c",
+      "name": "Increase loop count",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5634dbb9-8205-4220-a978-5fac80adb676",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "={{ new Date(new Date().setHours(8, 0, 0, 0)).toLocaleString('sv').replace(' ', 'T') + '+02:00' }}",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -6128,
+        256
+      ],
+      "id": "7cb56ec0-f06d-4851-9f71-deac5d66f79b",
+      "name": "Is empty?2"
     }
   ],
   "connections": {
@@ -294,7 +983,7 @@
       "main": [
         [
           {
-            "node": "Scrape Indeed",
+            "node": "Get temporary payload",
             "type": "main",
             "index": 0
           }
@@ -305,7 +994,7 @@
       "main": [
         [
           {
-            "node": "No Operation, do nothing",
+            "node": "Update status and reset loop count",
             "type": "main",
             "index": 0
           }
@@ -345,7 +1034,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items",
+            "node": "Increase loop count",
             "type": "main",
             "index": 0
           }
@@ -363,7 +1052,7 @@
       "main": [
         [
           {
-            "node": "No Operation, do nothing",
+            "node": "Update status and reset loop count",
             "type": "main",
             "index": 0
           }
@@ -381,7 +1070,128 @@
       "main": [
         [
           {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for dupes": {
+      "main": [
+        [
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep non-dupes": {
+      "main": [
+        [
+          {
             "node": "Is empty?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update item count",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get temporary payload": {
+      "main": [
+        [
+          {
+            "node": "Is empty?2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update status": {
+      "main": [
+        [
+          {
+            "node": "Scrape Indeed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Upload temporary payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload temporary payload": {
+      "main": [
+        [
+          {
+            "node": "Update status1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Check for dupes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Increase loop count": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is empty?2": {
+      "main": [
+        [
+          {
+            "node": "Update status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split Out",
             "type": "main",
             "index": 0
           }
@@ -410,8 +1220,8 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "country": "Germany",
-          "countryCode": "de",
+          "workflowId": "xgaJoQysb6pVTNeV",
+          "countryCode": "pl",
           "publishedAtString": "1",
           "keywords": [
             "AI engineer",
@@ -422,12 +1232,15 @@
             "MLOps",
             "Automation engineer"
           ]
+        },
+        "pairedItem": {
+          "item": 0
         }
       }
     ]
   },
-  "versionId": "589c0532-e54d-477d-82ee-a538dc31648c",
-  "activeVersionId": "589c0532-e54d-477d-82ee-a538dc31648c",
+  "versionId": "77ceb6ee-8d10-4f40-9502-11bfee7dc67a",
+  "activeVersionId": "77ceb6ee-8d10-4f40-9502-11bfee7dc67a",
   "triggerCount": 0,
   "shared": [
     {
@@ -439,9 +1252,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-06-01T07:05:56.235Z",
-    "createdAt": "2026-06-01T07:05:54.358Z",
-    "versionId": "589c0532-e54d-477d-82ee-a538dc31648c",
+    "updatedAt": "2026-07-02T07:23:21.569Z",
+    "createdAt": "2026-07-02T07:23:20.574Z",
+    "versionId": "77ceb6ee-8d10-4f40-9502-11bfee7dc67a",
     "workflowId": "BvCJELJG4Xv1E9mE",
     "nodes": [
       {
@@ -451,8 +1264,8 @@
         "type": "n8n-nodes-base.executeWorkflowTrigger",
         "typeVersion": 1.1,
         "position": [
-          -5088,
-          1328
+          -6576,
+          256
         ],
         "id": "1ec832e7-cbc7-4bf5-ac89-01c3a1624da9",
         "name": "When Executed by Another Workflow"
@@ -466,21 +1279,21 @@
         "type": "n8n-nodes-base.splitInBatches",
         "typeVersion": 3,
         "position": [
-          -4416,
-          1424
+          -4112,
+          592
         ],
         "id": "af17a1df-6eb5-46bf-a78a-8ac7ed32e658",
         "name": "Loop Over Items"
       },
       {
         "parameters": {
-          "jsCode": "const platformName = \"indeed\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+          "jsCode": "const platformName = 'indeed_' + $('When Executed by Another Workflow').item.json.countryCode.toLowerCase().replace(/ /g, '_');\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          -3968,
-          1424
+          -3664,
+          544
         ],
         "id": "c0d58030-6584-42ce-84e5-00809cbbc1b8",
         "name": "add source"
@@ -586,8 +1399,8 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          -4192,
-          1424
+          -3888,
+          544
         ],
         "id": "8ac963df-5663-4e35-88ed-0caa9e8b5963",
         "name": "Standardize output (**adjust fields**)"
@@ -615,8 +1428,8 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          -3744,
-          1520
+          -3440,
+          544
         ],
         "id": "1783c48e-a3fa-4213-ad9e-8bee9ba6da63",
         "name": "Call '03_dedupe_upsert'",
@@ -624,17 +1437,6 @@
         "maxTries": 2,
         "waitBetweenTries": 5000,
         "onError": "continueErrorOutput"
-      },
-      {
-        "parameters": {},
-        "type": "n8n-nodes-base.noOp",
-        "typeVersion": 1,
-        "position": [
-          -4192,
-          1232
-        ],
-        "id": "19a230cd-580c-4f54-8792-fefb4b534284",
-        "name": "No Operation, do nothing"
       },
       {
         "parameters": {
@@ -658,8 +1460,8 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          -3520,
-          1520
+          -3216,
+          496
         ],
         "id": "d8662942-5d45-4ba6-ad63-3587b6e4f303",
         "name": "Call 'error_global'"
@@ -692,8 +1494,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          -4640,
-          1328
+          -4336,
+          496
         ],
         "id": "28867572-0110-44be-9208-5d76089a449c",
         "name": "Is empty?"
@@ -706,13 +1508,13 @@
             "value": "https://console.apify.com/actors/TrtlecxAsNRbKl1na/input",
             "mode": "url"
           },
-          "customBody": "={\n    \"country\": \"{{ $json.countryCode }}\",\n    \"datePosted\": \"{{ $json.publishedAtString }}\",\n    \"limit\": 100,\n    \"location\": \"remote\",\n    \"title\": \"{{ $json.keywords }}\"\n}"
+          "customBody": "={\n    \"country\": \"{{ $('When Executed by Another Workflow').item.json.countryCode }}\",\n    \"datePosted\": \"{{ $('When Executed by Another Workflow').item.json.publishedAtString }}\",\n    \"limit\": 100,\n    \"location\": \"remote\",\n    \"title\": \"{{ $('When Executed by Another Workflow').item.json.keywords }}\"\n}"
         },
         "type": "@apify/n8n-nodes-apify.apify",
         "typeVersion": 1,
         "position": [
-          -4864,
-          1328
+          -5680,
+          176
         ],
         "id": "c00774f9-2d07-4d7a-846b-329425544e70",
         "name": "Scrape Indeed",
@@ -725,6 +1527,706 @@
             "name": "Apify account 5"
           }
         }
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "job_leads",
+          "returnAll": true,
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "job_url",
+                "condition": "eq",
+                "keyValue": "=\"{{ $json.jobUrl }}\""
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -4784,
+          304
+        ],
+        "id": "d99fb081-84d0-4e13-8262-d6ec564ee7db",
+        "name": "Check for dupes",
+        "alwaysOutputData": false,
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "advanced": true,
+          "mergeByFields": {
+            "values": [
+              {
+                "field1": "job_url",
+                "field2": "jobUrl"
+              }
+            ]
+          },
+          "joinMode": "keepNonMatches",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -4560,
+          352
+        ],
+        "id": "49b959a4-d56a-4064-b8dc-520d8881e777",
+        "name": "Keep non-dupes",
+        "executeOnce": false,
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "success",
+              "last_success_at": "={{ $now.toISO() }}",
+              "workflow_tag": "={{ 'indeed_' + $('When Executed by Another Workflow').item.json.countryCode.toLowerCase().replace(/ /g, '_') }}",
+              "loop_count": 0
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "retry_count",
+                "displayName": "retry_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "last_run_at",
+                "displayName": "last_run_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "scrape_count",
+                "displayName": "scrape_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "item_count",
+                "displayName": "item_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "loop_count",
+                "displayName": "loop_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -3888,
+          352
+        ],
+        "id": "822c78c4-3fc9-4e6e-a136-336e99ec7abd",
+        "name": "Update status and reset loop count",
+        "executeOnce": true,
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT * FROM public.scraper_payloads\nWHERE source = '{{ 'indeed_' + $json.countryCode.toLowerCase().replace(/ /g, '_') }}'\nAND created_at::date = CURRENT_DATE\nLIMIT 1;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -6352,
+          256
+        ],
+        "id": "77ad8aab-4e65-468b-853c-dd98166ed239",
+        "name": "Get temporary payload",
+        "alwaysOutputData": true,
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "workflow_tag": "={{ 'indeed_' + $('When Executed by Another Workflow').item.json.countryCode.toLowerCase().replace(/ /g, '_') }}",
+              "last_run_at": "={{ $now }}",
+              "scrape_count": 0,
+              "item_count": 0,
+              "loop_count": 0,
+              "status": "processing"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "retry_count",
+                "displayName": "retry_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "last_run_at",
+                "displayName": "last_run_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "scrape_count",
+                "displayName": "scrape_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "item_count",
+                "displayName": "item_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "loop_count",
+                "displayName": "loop_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -5904,
+          176
+        ],
+        "id": "e6e0893d-5a11-40c2-838f-8061ef7ca59f",
+        "name": "Update status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "workflow_tag": "={{ 'indeed_' + $('When Executed by Another Workflow').item.json.countryCode.toLowerCase().replace(/ /g, '_') }}",
+              "status": "extracted",
+              "scrape_count": "={{ $('Scrape Indeed').all().length }}"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "retry_count",
+                "displayName": "retry_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "last_run_at",
+                "displayName": "last_run_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "scrape_count",
+                "displayName": "scrape_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "item_count",
+                "displayName": "item_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "loop_count",
+                "displayName": "loop_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -5008,
+          128
+        ],
+        "id": "dce98696-5e2d-4875-a6f4-4bc32dd7a457",
+        "name": "Update status1",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          -5456,
+          176
+        ],
+        "id": "409500a2-efe1-4081-bc3c-34bb2bca3819",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "tableId": "scraper_payloads",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "raw_json",
+                "fieldValue": "={{ $json.data }}"
+              },
+              {
+                "fieldId": "source",
+                "fieldValue": "={{ 'indeed_' + $('When Executed by Another Workflow').item.json.countryCode.toLowerCase().replace(/ /g, '_') }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -5232,
+          176
+        ],
+        "id": "eef42e66-6b58-42d6-8acc-c99b80c448a7",
+        "name": "Upload temporary payload",
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "raw_json",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          -5008,
+          352
+        ],
+        "id": "8dcbd0ab-fe8c-4999-ba2c-f9934ea101e3",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "item_count": "={{ $input.all().length }}",
+              "workflow_tag": "={{ 'indeed_' + $('When Executed by Another Workflow').item.json.countryCode.toLowerCase().replace(/ /g, '_') }}"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "retry_count",
+                "displayName": "retry_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "last_run_at",
+                "displayName": "last_run_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "scrape_count",
+                "displayName": "scrape_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "item_count",
+                "displayName": "item_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "loop_count",
+                "displayName": "loop_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -4336,
+          304
+        ],
+        "id": "01c9f4f4-79ec-4372-a5ac-a55918c16e4a",
+        "name": "Update item count",
+        "executeOnce": true,
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "UPDATE public.workflow_health \nSET loop_count = loop_count + 1 \nWHERE workflow_tag = '{{ $json.source }}';",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -3216,
+          704
+        ],
+        "id": "402a7bf5-7e8a-4a5e-b9bc-9155b816d85c",
+        "name": "Increase loop count",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "5634dbb9-8205-4220-a978-5fac80adb676",
+                "leftValue": "={{ $json.id }}",
+                "rightValue": "={{ new Date(new Date().setHours(8, 0, 0, 0)).toLocaleString('sv').replace(' ', 'T') + '+02:00' }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "empty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -6128,
+          256
+        ],
+        "id": "7cb56ec0-f06d-4851-9f71-deac5d66f79b",
+        "name": "Is empty?2"
       }
     ],
     "connections": {
@@ -732,7 +2234,7 @@
         "main": [
           [
             {
-              "node": "Scrape Indeed",
+              "node": "Get temporary payload",
               "type": "main",
               "index": 0
             }
@@ -743,7 +2245,7 @@
         "main": [
           [
             {
-              "node": "No Operation, do nothing",
+              "node": "Update status and reset loop count",
               "type": "main",
               "index": 0
             }
@@ -783,7 +2285,7 @@
         "main": [
           [
             {
-              "node": "Loop Over Items",
+              "node": "Increase loop count",
               "type": "main",
               "index": 0
             }
@@ -801,7 +2303,7 @@
         "main": [
           [
             {
-              "node": "No Operation, do nothing",
+              "node": "Update status and reset loop count",
               "type": "main",
               "index": 0
             }
@@ -819,7 +2321,128 @@
         "main": [
           [
             {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check for dupes": {
+        "main": [
+          [
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Keep non-dupes": {
+        "main": [
+          [
+            {
               "node": "Is empty?",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Update item count",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get temporary payload": {
+        "main": [
+          [
+            {
+              "node": "Is empty?2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update status": {
+        "main": [
+          [
+            {
+              "node": "Scrape Indeed",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          [
+            {
+              "node": "Upload temporary payload",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Upload temporary payload": {
+        "main": [
+          [
+            {
+              "node": "Update status1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Check for dupes",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Increase loop count": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Is empty?2": {
+        "main": [
+          [
+            {
+              "node": "Update status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Split Out",
               "type": "main",
               "index": 0
             }
@@ -828,9 +2451,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version 589c0532",
+    "name": "Version 77ceb6ee",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": [
     {
