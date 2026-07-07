@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-10T07:24:09.160Z",
+  "updatedAt": "2026-06-30T06:01:03.151Z",
   "createdAt": "2026-03-06T14:30:07.748Z",
   "id": "lOb7HXMwQjy0xsI8",
   "name": "scrape_wellfound",
@@ -13,40 +13,11 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -5104,
-        2144
+        -5904,
+        2736
       ],
       "id": "746c2825-3da5-49ac-b21c-bf48633efc9d",
       "name": "When Executed by Another Workflow"
-    },
-    {
-      "parameters": {
-        "operation": "Run actor and get dataset",
-        "actorId": {
-          "__rl": true,
-          "value": "https://console.apify.com/actors/jV4Y8h6j3AqVj5Qur/input",
-          "mode": "url"
-        },
-        "customBody": "={\n    \"compact\": false,\n    \"companyOnlyMode\": false,\n    \"descriptionFormat\": \"all\",\n    \"emitExpired\": false,\n    \"emitUnchanged\": false,\n    \"enrichCompany\": false,\n    \"enrichDetail\": false,\n    \"excludeEmptyFields\": false,\n    \"includeRunMetadata\": true,\n    \"incrementalMode\": false,\n    \"maxResults\": 25,\n    \"notifyOnlyChanges\": true,\n    \"proxyConfiguration\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ],\n        \"apifyProxyCountry\": \"US\"\n    },\n    \"remote\": true,\n    \"searchUrls\": [\n        \"https://wellfound.com/role/l/ai-engineer/prague\"\n    ],\n    \"skipReposts\": false,\n    \"visaSponsorship\": false\n}",
-        "timeout": {}
-      },
-      "type": "@apify/n8n-nodes-apify.apify",
-      "typeVersion": 1,
-      "position": [
-        -4656,
-        2048
-      ],
-      "id": "f24e5dee-1a94-4489-ba14-69fc6d632fce",
-      "name": "Scrape Wellfound",
-      "executeOnce": false,
-      "retryOnFail": true,
-      "alwaysOutputData": true,
-      "credentials": {
-        "apifyApi": {
-          "id": "acP0zCzuvrjRGHER",
-          "name": "Apify account 5"
-        }
-      }
     },
     {
       "parameters": {
@@ -76,63 +47,734 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -4432,
-        2048
+        -3664,
+        2880
       ],
-      "id": "10e48940-9131-4cee-b21e-664ac012da4e",
+      "id": "2442eb8e-e1a7-4008-ade0-4cfbcb429f62",
+      "name": "Is empty?1"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "success",
+            "last_success_at": "={{ $now.toISO() }}",
+            "workflow_tag": "wellfound",
+            "loop_count": 0
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "last_run_at",
+              "displayName": "last_run_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "scrape_count",
+              "displayName": "scrape_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "item_count",
+              "displayName": "item_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "loop_count",
+              "displayName": "loop_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3216,
+        2736
+      ],
+      "id": "92bef96f-5e59-4104-954e-a7ce782861a5",
+      "name": "Update status and reset loop count",
+      "executeOnce": true,
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM public.scraper_payloads \nWHERE source = 'wellfound' \n  AND created_at::date = CURRENT_DATE \nLIMIT 1;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -5680,
+        2640
+      ],
+      "id": "2c7093fc-df85-417b-ae8f-26e8ac423edd",
+      "name": "Get temporary payload",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5634dbb9-8205-4220-a978-5fac80adb676",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "={{ new Date(new Date().setHours(8, 0, 0, 0)).toLocaleString('sv').replace(' ', 'T') + '+02:00' }}",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -5456,
+        2640
+      ],
+      "id": "eaaae915-2b16-4585-a9db-0ac787af345d",
       "name": "Is empty?"
     },
     {
       "parameters": {
-        "workflowId": {
+        "operation": "upsert",
+        "schema": {
           "__rl": true,
-          "value": "Zj1I7MhBC-OsOLt6D4Qyg",
           "mode": "list",
-          "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
-          "cachedResultName": "error_global"
+          "value": "public"
         },
-        "workflowInputs": {
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
           "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
+          "value": {
+            "status": "processing",
+            "workflow_tag": "wellfound",
+            "last_run_at": "={{ $now }}",
+            "scrape_count": 0,
+            "item_count": 0,
+            "loop_count": 0
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "last_run_at",
+              "displayName": "last_run_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "scrape_count",
+              "displayName": "scrape_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "item_count",
+              "displayName": "item_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "loop_count",
+              "displayName": "loop_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            }
+          ],
           "attemptToConvertTypes": false,
-          "convertFieldsToString": true
+          "convertFieldsToString": false
         },
         "options": {}
       },
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.3,
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
       "position": [
-        -3312,
-        2240
+        -5232,
+        2560
       ],
-      "id": "b5c6683b-264c-4f4f-ab4e-e864f5e8ff44",
-      "name": "Call 'error_global'"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [
-        -3760,
-        1952
-      ],
-      "id": "9ee192a7-889e-4606-9d14-4a658cc84676",
-      "name": "No Operation, do nothing"
+      "id": "9a831390-a32e-4e28-9fdc-18ca5f4c21ca",
+      "name": "Update status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
     },
     {
       "parameters": {
-        "jsCode": "const platformName = \"wellfound\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "workflow_tag": "wellfound",
+            "status": "extracted",
+            "scrape_count": "={{ $('Scrape Wellfound').all().length }}"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "last_run_at",
+              "displayName": "last_run_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "scrape_count",
+              "displayName": "scrape_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "item_count",
+              "displayName": "item_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "loop_count",
+              "displayName": "loop_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
       },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
       "position": [
-        -3760,
-        2144
+        -4336,
+        2512
       ],
-      "id": "0049c2c8-9e1c-42b7-8a3e-48decc96ce9f",
-      "name": "add source"
+      "id": "91887f87-ee99-40af-8813-72239c231a59",
+      "name": "Update status1",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "https://console.apify.com/actors/jV4Y8h6j3AqVj5Qur/input",
+          "mode": "url"
+        },
+        "customBody": "={\n    \"compact\": false,\n    \"companyOnlyMode\": false,\n    \"descriptionFormat\": \"all\",\n    \"emitExpired\": false,\n    \"emitUnchanged\": false,\n    \"enrichCompany\": false,\n    \"enrichDetail\": false,\n    \"excludeEmptyFields\": false,\n    \"includeRunMetadata\": true,\n    \"incrementalMode\": false,\n    \"maxResults\": 25,\n    \"notifyOnlyChanges\": true,\n    \"proxyConfiguration\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ],\n        \"apifyProxyCountry\": \"US\"\n    },\n    \"remote\": true,\n    \"searchUrls\": [\n        \"https://wellfound.com/role/l/ai-engineer/prague\"\n    ],\n    \"skipReposts\": false,\n    \"visaSponsorship\": false\n}",
+        "timeout": {}
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        -5008,
+        2560
+      ],
+      "id": "6dd5d73e-1db7-44ed-b7cb-5a38ef7927ff",
+      "name": "Scrape Wellfound",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "apifyApi": {
+          "id": "acP0zCzuvrjRGHER",
+          "name": "Apify account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -4784,
+        2560
+      ],
+      "id": "d821bc8c-8c92-4fcf-9073-73d83c617c73",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "tableId": "scraper_payloads",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "raw_json",
+              "fieldValue": "={{ $json.data }}"
+            },
+            {
+              "fieldId": "source",
+              "fieldValue": "wellfound"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -4560,
+        2560
+      ],
+      "id": "73aae735-df22-44c2-bd42-f8ab878c52bd",
+      "name": "Upload temporary payload",
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "raw_json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -4336,
+        2736
+      ],
+      "id": "19822156-bd37-4240-a0fa-ffe206d48046",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "job_leads",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "={{ $json.portalUrl }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -4112,
+        2688
+      ],
+      "id": "590fcebf-ad7e-4e2a-81c8-9a25314b16cd",
+      "name": "Check for dupes",
+      "alwaysOutputData": false,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "job_url",
+              "field2": "portalUrl"
+            }
+          ]
+        },
+        "joinMode": "keepNonMatches",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -3888,
+        2736
+      ],
+      "id": "630c13b0-1155-477f-9ef3-b04ead2a2a49",
+      "name": "Keep non-dupes",
+      "executeOnce": false,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "item_count": "={{ $input.all().length }}",
+            "workflow_tag": "=wellfound"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "last_run_at",
+              "displayName": "last_run_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "scrape_count",
+              "displayName": "scrape_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "item_count",
+              "displayName": "item_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "loop_count",
+              "displayName": "loop_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3664,
+        2688
+      ],
+      "id": "8623a5b2-3566-4524-8d24-6967b07542f0",
+      "name": "Update item count",
+      "executeOnce": true,
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -3440,
+        2976
+      ],
+      "id": "6bebd787-5cc1-43ff-8088-ebe53fbffc42",
+      "name": "Loop Over Items"
     },
     {
       "parameters": {
@@ -235,100 +877,24 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -3984,
-        2144
+        -3216,
+        2928
       ],
-      "id": "077613c7-be84-4b2b-9164-07a908f9e486",
+      "id": "69b32031-fac7-4809-a5fb-616ab4b326e6",
       "name": "Standardize output (**adjust fields**)"
     },
     {
       "parameters": {
-        "options": {
-          "reset": false
-        }
+        "jsCode": "const platformName = \"wellfound\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
       },
-      "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 3,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
-        -4208,
-        2144
+        -2992,
+        2928
       ],
-      "id": "e7e82eba-64ba-491e-b773-96e78606b203",
-      "name": "Loop Over Items"
-    },
-    {
-      "parameters": {
-        "operation": "upsert",
-        "schema": {
-          "__rl": true,
-          "mode": "list",
-          "value": "public"
-        },
-        "table": {
-          "__rl": true,
-          "value": "workflow_health",
-          "mode": "list",
-          "cachedResultName": "workflow_health"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "status": "running",
-            "workflow_tag": "wellfound"
-          },
-          "matchingColumns": [
-            "workflow_tag"
-          ],
-          "schema": [
-            {
-              "id": "workflow_tag",
-              "displayName": "workflow_tag",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "last_success_at",
-              "displayName": "last_success_at",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": false,
-              "removed": true
-            },
-            {
-              "id": "status",
-              "displayName": "status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        -4880,
-        2048
-      ],
-      "id": "897615bd-8328-47cc-93f4-22e272cea56b",
-      "name": "update running status",
-      "credentials": {
-        "postgres": {
-          "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres careerops"
-        }
-      }
+      "id": "92ae0b94-8a9f-4290-a249-b1922bbba5c7",
+      "name": "Add source"
     },
     {
       "parameters": {
@@ -353,15 +919,64 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -3536,
-        2240
+        -2768,
+        2928
       ],
-      "id": "6ff75ca3-f4e8-4965-82d8-5b47b7dc664f",
+      "id": "cf10e8bf-569e-4339-b02c-2276718f52c4",
       "name": "Call '03_dedupe_upsert'",
       "retryOnFail": false,
       "maxTries": 2,
       "waitBetweenTries": 5000,
       "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+          "cachedResultName": "error_global"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -2544,
+        2880
+      ],
+      "id": "c2127e3f-4a9d-4425-a0c0-e1e7e96d3c8f",
+      "name": "Call 'error_global'"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE public.workflow_health \nSET loop_count = loop_count + 1 \nWHERE workflow_tag = '{{ $json.source }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2544,
+        3088
+      ],
+      "id": "6dbfc704-024a-4b3f-89ca-5432866cdbce",
+      "name": "Increase loop count",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
     },
     {
       "parameters": {
@@ -377,86 +992,11 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.3,
       "position": [
-        -5104,
-        1952
+        -5904,
+        2544
       ],
-      "id": "a0bd328d-1ab1-4fb8-ba1d-ddc52a206739",
+      "id": "7a118dbe-e39d-472b-bcdf-b56e98d754ce",
       "name": "Schedule Trigger"
-    },
-    {
-      "parameters": {
-        "operation": "upsert",
-        "schema": {
-          "__rl": true,
-          "mode": "list",
-          "value": "public"
-        },
-        "table": {
-          "__rl": true,
-          "value": "workflow_health",
-          "mode": "list",
-          "cachedResultName": "workflow_health"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "status": "completed",
-            "last_success_at": "={{ $now.toISO() }}",
-            "workflow_tag": "wellfound"
-          },
-          "matchingColumns": [
-            "workflow_tag"
-          ],
-          "schema": [
-            {
-              "id": "workflow_tag",
-              "displayName": "workflow_tag",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "last_success_at",
-              "displayName": "last_success_at",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": false,
-              "removed": false
-            },
-            {
-              "id": "status",
-              "displayName": "status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        -3984,
-        1952
-      ],
-      "id": "aafd028c-484e-4c36-8554-2ef3d9468b92",
-      "name": "update success status",
-      "credentials": {
-        "postgres": {
-          "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres careerops"
-        }
-      }
     }
   ],
   "connections": {
@@ -464,14 +1004,37 @@
       "main": [
         [
           {
-            "node": "update running status",
+            "node": "Get temporary payload",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Scrape Wellfound": {
+    "Is empty?1": {
+      "main": [
+        [
+          {
+            "node": "Update status and reset loop count",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update status and reset loop count": {
+      "main": [
+        []
+      ]
+    },
+    "Get temporary payload": {
       "main": [
         [
           {
@@ -486,36 +1049,106 @@
       "main": [
         [
           {
-            "node": "update success status",
+            "node": "Update status",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Loop Over Items",
+            "node": "Split Out",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "add source": {
+    "Update status": {
       "main": [
         [
           {
-            "node": "Call '03_dedupe_upsert'",
+            "node": "Scrape Wellfound",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Standardize output (**adjust fields**)": {
+    "Scrape Wellfound": {
       "main": [
         [
           {
-            "node": "add source",
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Upload temporary payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload temporary payload": {
+      "main": [
+        [
+          {
+            "node": "Update status1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Check for dupes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Check for dupes": {
+      "main": [
+        [
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep non-dupes": {
+      "main": [
+        [
+          {
+            "node": "Update item count",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Is empty?1",
             "type": "main",
             "index": 0
           }
@@ -526,7 +1159,7 @@
       "main": [
         [
           {
-            "node": "update success status",
+            "node": "Update status and reset loop count",
             "type": "main",
             "index": 0
           }
@@ -540,11 +1173,22 @@
         ]
       ]
     },
-    "update running status": {
+    "Standardize output (**adjust fields**)": {
       "main": [
         [
           {
-            "node": "Scrape Wellfound",
+            "node": "Add source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add source": {
+      "main": [
+        [
+          {
+            "node": "Call '03_dedupe_upsert'",
             "type": "main",
             "index": 0
           }
@@ -555,7 +1199,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items",
+            "node": "Increase loop count",
             "type": "main",
             "index": 0
           }
@@ -569,22 +1213,22 @@
         ]
       ]
     },
-    "Schedule Trigger": {
+    "Increase loop count": {
       "main": [
         [
           {
-            "node": "update running status",
+            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "update success status": {
+    "Schedule Trigger": {
       "main": [
         [
           {
-            "node": "No Operation, do nothing",
+            "node": "Get temporary payload",
             "type": "main",
             "index": 0
           }
@@ -604,12 +1248,23 @@
   "staticData": {
     "node:Schedule Trigger": {
       "recurrenceRules": []
+    },
+    "node:Schedule Trigger1": {
+      "recurrenceRules": []
     }
   },
   "meta": {
     "templateCredsSetupCompleted": true
   },
   "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {},
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
     "Schedule Trigger": [
       {
         "json": {
@@ -626,460 +1281,10 @@
           "Timezone": "Europe/Prague (UTC+02:00)"
         }
       }
-    ],
-    "When Executed by Another Workflow": [
-      {
-        "json": {},
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ],
-    "Scrape Wellfound": [
-      {
-        "json": {
-          "id": "3278567",
-          "title": "Head of Engineering - AI Stack",
-          "slug": "head-of-engineering-ai-stack",
-          "portalUrl": "https://wellfound.com/jobs/3278567-head-of-engineering-ai-stack",
-          "detailUrl": "https://wellfound.com/jobs/3278567-head-of-engineering-ai-stack",
-          "compensation": "$60k – $120k CAD • 0.001% – 1.25%",
-          "salaryMin": 60000,
-          "salaryMax": 60000,
-          "salaryEquityMin": "0.001%",
-          "salaryEquityMax": "1.25%",
-          "description": "Could you be one of the Architects for the technical engine? that drives CityZeen’s mission and scales our platform to $100M ARR. \"This is the path to Head of Engineering — not just a spot on the org chart\".\n\nWhy You’ll Love Building at CityZeen\n- Regenerative finance on day one. Join a platform that’s “the regenerative Club Investment where middle class get amazing yields,” democratizing access to deals once reserved for the ultra-wealthy\n\n- Purpose-driven impact. Our mission is simple yet bold: “Members allocate capital to influence healthy living.” You’ll build the tech that underpins every investment, from blockchain transparency to data-driven insights.\n\n- Blank canvas, full autonomy. We’re working our pan-European FinTech licence—your architecture, your roadmap. No tech debt encumbrances, just the freedom to invent.\n\n- Global footprint. Main base in Paris with hubs in Toronto and Bogotá, you’ll lead a distributed team in English (plus two other languages, if you’d like). \n\nThe Impact You’ll Own - First 30 days\tthen next 6 Months\n• You don't start from zero, we have a product built, you start from there, to make it awesome.\n* Draft and validate a compliant, scalable architecture for Web3/LLM\n• Stand up CI/CD pipelines, cloud infrastructure, and security tooling.\n• Build new key modules: blockchain, LLM, security, member dashboard, API gateway, Agents.\n* You get hands on, You code, not just wait for a team, we want to see what you build no promises.\n\nNext 6-12 Months:\n• Lead the launch of V4/5 production platform—zero-downtime deployments, 99.9 % SLA.\n• Scale engineering from 0 to 6+ across backend, frontend, data, and AI-LLM teams.\n• Integrate Gen-AI/LLM features for investor insights and automated due diligence.\n• Drive cost-to-revenue ratio 25-40% % by optimizing cloud spend and pipelines.\n* You know we build V1 with less than $5K. You support our fundraising technical roadmap.\n\n**Stock options can be unlocked after a period of time, based on your first results.\n\nStages:\n* Phase A (Now): Technical Architect / Head of Engineering\nFocus on system design, building solid system on AI for operations, setting up LLM-AI Infra and security plus Blockchain stack almost done.\n* Phase B (Post-Series A/PMF): Promote to Head when managing 2 to 5+ engineers, raising major funding, and overseeing architecture/staffing.\n\nWhat You’ll Own\n- Technical Strategy and Architecture\n- Design a microservices-based stack (SaaS, Cloud, APIs) that powers real-time investment flows.\n- Lead blockchain integrations and Web3 tooling for transparent asset management.\n- Embed Gen-AI/LLM capabilities to automate portfolio analytics and customer support.\n\nSecurity and Compliance:\n- Own technical risk management: threat modeling, encryption key governance (no back-doors), and zero-trust access.\n- Collaborate with legal and finance to ensure GDPR, MiFID II, and PSD2 compliance.\n- Team Leadership and fits CityZeen culture (4S)\n- Recruit, mentor, and retain top engineers and AI Engineers.\n- Instill agile best practices, code review rigor, and a culture of psychological safety.\n\nBudget and technnical Partnerships:\n- Negotiate vendor contracts and cloud commitments—be a ruthless cost-killer without sacrificing speed.\n\n- Forge alliances with cloud providers, open-source foundations, and technical partners in FinTech and blockchain.\n\nWho You Are:\n- Seasoned technologist (8–15+ years). Senior engineering leadership in asset management, banking, or FinTech, with at least one major scale-up under your belt.\n\n- Full-stack mastery. Deep expertise in SaaS, Cloud (ICP/AWS/GCP), APIs, blockchain platforms, and Gen-AI/LLM integration.\n\n- Trusted communicator. Fluent in English plus two other languages \"not mandatory\" (French, Hindi, Portuguese, Spanish, etc.). Comfortable presenting to boards, regulators, and dev teams alike.\n\n- Emotionally intelligent leader. You build trust through transparency, empathy, and relentless follow-through. You are extremely careful on details, design (UX/UI) and care about our impact and reliability. \n\n- Compliance and security mindset. You understand that building financial systems means building trust—no shortcuts, no hidden keys. This is a KEY factor.\n\n- Budget hawk and deal-maker. You negotiate technical partnerships and vendor contracts like a CFO, always optimizing TCO.\n\nWhat You Get:\n* Significant equity + competitive salary. Early-stage option pool at seed-stage valuation.\nExecutive seat. Direct report to the CEO, VoC in every strategic conversation.\n\n* Mission and culture. Work with a diverse, purpose-driven team committed to sustainable finance and real-world impact.\n\n* Global flex. Hybrid-friendly in Paris, Toronto, or remote within CET/EST time zones.\n\nHow to Apply \n- Resume and GitHub/Portfolio: Highlight two systems or products you’ve built end-to-end.\n\n- Technical Blueprint: One-pager (diagram + bullets) outlining how you’d scale CityZeen’s platform to handle $100 M ARR—with a focus on clients and AI-driven insights.\n\nReady to engineer the future of regenerative finance? Click “Apply” — and let’s build something extraordinary. \n\nWe welcome and we have a Venture for top-engineers from Google, Amazon, Meta, Apple, or NeoBanks (Revolut, NuBank, FinTech Apps), Top Web3, AI, etc, if you ackwnoledge this a hands-on key position, not a giant corporation, so before to apply ponder your personal choice, to truly generate impact.\n\nAlternatives: \nTrack 1: A high-caliber, shorter-term contract / fractional CTO to help during licence and system design.\nTrack 2: Full-time founding-level engineer who takes the reins afterward, with the title evolving downstream.",
-          "descriptionHtml": null,
-          "descriptionMarkdown": "Could you be one of the Architects for the technical engine? that drives CityZeen’s mission and scales our platform to $100M ARR. \"This is the path to Head of Engineering — not just a spot on the org chart\".\n\nWhy You’ll Love Building at CityZeen\n- Regenerative finance on day one. Join a platform that’s “the regenerative Club Investment where middle class get amazing yields,” democratizing access to deals once reserved for the ultra-wealthy\n\n- Purpose-driven impact. Our mission is simple yet bold: “Members allocate capital to influence healthy living.” You’ll build the tech that underpins every investment, from blockchain transparency to data-driven insights.\n\n- Blank canvas, full autonomy. We’re working our pan-European FinTech licence—your architecture, your roadmap. No tech debt encumbrances, just the freedom to invent.\n\n- Global footprint. Main base in Paris with hubs in Toronto and Bogotá, you’ll lead a distributed team in English (plus two other languages, if you’d like). \n\nThe Impact You’ll Own - First 30 days\tthen next 6 Months\n• You don't start from zero, we have a product built, you start from there, to make it awesome.\n* Draft and validate a compliant, scalable architecture for Web3/LLM\n• Stand up CI/CD pipelines, cloud infrastructure, and security tooling.\n• Build new key modules: blockchain, LLM, security, member dashboard, API gateway, Agents.\n* You get hands on, You code, not just wait for a team, we want to see what you build no promises.\n\nNext 6-12 Months:\n• Lead the launch of V4/5 production platform—zero-downtime deployments, 99.9 % SLA.\n• Scale engineering from 0 to 6+ across backend, frontend, data, and AI-LLM teams.\n• Integrate Gen-AI/LLM features for investor insights and automated due diligence.\n• Drive cost-to-revenue ratio 25-40% % by optimizing cloud spend and pipelines.\n* You know we build V1 with less than $5K. You support our fundraising technical roadmap.\n\n**Stock options can be unlocked after a period of time, based on your first results.\n\nStages:\n* Phase A (Now): Technical Architect / Head of Engineering\nFocus on system design, building solid system on AI for operations, setting up LLM-AI Infra and security plus Blockchain stack almost done.\n* Phase B (Post-Series A/PMF): Promote to Head when managing 2 to 5+ engineers, raising major funding, and overseeing architecture/staffing.\n\nWhat You’ll Own\n- Technical Strategy and Architecture\n- Design a microservices-based stack (SaaS, Cloud, APIs) that powers real-time investment flows.\n- Lead blockchain integrations and Web3 tooling for transparent asset management.\n- Embed Gen-AI/LLM capabilities to automate portfolio analytics and customer support.\n\nSecurity and Compliance:\n- Own technical risk management: threat modeling, encryption key governance (no back-doors), and zero-trust access.\n- Collaborate with legal and finance to ensure GDPR, MiFID II, and PSD2 compliance.\n- Team Leadership and fits CityZeen culture (4S)\n- Recruit, mentor, and retain top engineers and AI Engineers.\n- Instill agile best practices, code review rigor, and a culture of psychological safety.\n\nBudget and technnical Partnerships:\n- Negotiate vendor contracts and cloud commitments—be a ruthless cost-killer without sacrificing speed.\n\n- Forge alliances with cloud providers, open-source foundations, and technical partners in FinTech and blockchain.\n\nWho You Are:\n- Seasoned technologist (8–15+ years). Senior engineering leadership in asset management, banking, or FinTech, with at least one major scale-up under your belt.\n\n- Full-stack mastery. Deep expertise in SaaS, Cloud (ICP/AWS/GCP), APIs, blockchain platforms, and Gen-AI/LLM integration.\n\n- Trusted communicator. Fluent in English plus two other languages \"not mandatory\" (French, Hindi, Portuguese, Spanish, etc.). Comfortable presenting to boards, regulators, and dev teams alike.\n\n- Emotionally intelligent leader. You build trust through transparency, empathy, and relentless follow-through. You are extremely careful on details, design (UX/UI) and care about our impact and reliability. \n\n- Compliance and security mindset. You understand that building financial systems means building trust—no shortcuts, no hidden keys. This is a KEY factor.\n\n- Budget hawk and deal-maker. You negotiate technical partnerships and vendor contracts like a CFO, always optimizing TCO.\n\nWhat You Get:\n* Significant equity + competitive salary. Early-stage option pool at seed-stage valuation.\nExecutive seat. Direct report to the CEO, VoC in every strategic conversation.\n\n* Mission and culture. Work with a diverse, purpose-driven team committed to sustainable finance and real-world impact.\n\n* Global flex. Hybrid-friendly in Paris, Toronto, or remote within CET/EST time zones.\n\nHow to Apply \n- Resume and GitHub/Portfolio: Highlight two systems or products you’ve built end-to-end.\n\n- Technical Blueprint: One-pager (diagram + bullets) outlining how you’d scale CityZeen’s platform to handle $100 M ARR—with a focus on clients and AI-driven insights.\n\nReady to engineer the future of regenerative finance? Click “Apply” — and let’s build something extraordinary. \n\nWe welcome and we have a Venture for top-engineers from Google, Amazon, Meta, Apple, or NeoBanks (Revolut, NuBank, FinTech Apps), Top Web3, AI, etc, if you ackwnoledge this a hands-on key position, not a giant corporation, so before to apply ponder your personal choice, to truly generate impact.\n\nAlternatives: \nTrack 1: A high-caliber, shorter-term contract / fractional CTO to help during licence and system design.\nTrack 2: Full-time founding-level engineer who takes the reins afterward, with the title evolving downstream.",
-          "jobType": "full-time",
-          "postedAt": "2026-05-19T16:38:15.000Z",
-          "locationNames": [
-            "Boston",
-            "Seattle",
-            "Texas",
-            "San Francisco",
-            "Vancouver",
-            "Toronto",
-            "Ottawa",
-            "Bucharest",
-            "Frankfurt",
-            "Calgary",
-            "Berlin",
-            "Waterloo",
-            "Edmonton",
-            "Munich",
-            "Prague",
-            "Budapest",
-            "Sofia",
-            "Kingston",
-            "Warsaw",
-            "Kitchener",
-            "Kraków",
-            "San Francisco Bay Area",
-            "Wrocław",
-            "Mexico City",
-            "Mexico City",
-            "Waterloo Regional Municipality",
-            "Paris",
-            "Berlin"
-          ],
-          "remote": true,
-          "remoteKind": "ONSITE_OR_REMOTE",
-          "wfhFlexible": false,
-          "acceptedRemoteLocations": [
-            "Brazil",
-            "Canada",
-            "Europe",
-            "India",
-            "United States",
-            "Germany",
-            "France",
-            "Romania",
-            "Poland",
-            "Czech Republic",
-            "Ukraine",
-            "Philippines",
-            "Colombia",
-            "Bulgaria",
-            "Vietnam",
-            "Mexico City",
-            "Latin America"
-          ],
-          "yearsExperienceMin": 9,
-          "yearsExperienceMax": null,
-          "atsSource": null,
-          "autoPosted": false,
-          "primaryRoleTitle": "Software Engineer",
-          "skills": [],
-          "visaSponsorship": null,
-          "companyId": "10499474",
-          "companySlug": "cityzeeninc",
-          "companyName": "CityZeen",
-          "companyLogo": "https://photos.wellfound.com/startups/i/10499474-4318e0080a4b16b160d706aea3faefb5-medium_jpg.jpg?buster=1744992315",
-          "companyTagline": "Build Wealth, Heal Earth",
-          "companySize": "SIZE_1_10",
-          "companyDescription": null,
-          "companyFoundedYear": null,
-          "companyLinkedIn": null,
-          "companyTwitter": null,
-          "companyFundingStage": null,
-          "companyTotalRaised": null,
-          "companyLastFundingDate": null,
-          "companyMarkets": [],
-          "companyFounders": [],
-          "salaryCurrency": null,
-          "salaryPeriod": null,
-          "companyWebsite": null,
-          "industry": null,
-          "directApply": null,
-          "datePosted": null,
-          "jobBenefits": null,
-          "jobAddressLocality": null,
-          "jobAddressRegion": null,
-          "jobAddressCountry": null,
-          "latitude": null,
-          "longitude": null,
-          "changeType": null,
-          "trackedHash": null,
-          "firstSeenAt": null,
-          "lastSeenAt": null,
-          "previousSeenAt": null,
-          "expiredAt": null,
-          "stateKey": null,
-          "isRepost": false,
-          "repostOfId": null,
-          "repostDetectedAt": null,
-          "matchedSearch": "url=https://wellfound.com/role/l/ai-engineer/prague",
-          "source": "wellfound",
-          "scrapedAt": "2026-06-01T06:58:59.772Z"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      },
-      {
-        "json": {
-          "id": "4231162",
-          "title": "IT Support Engineer",
-          "slug": "it-support-engineer",
-          "portalUrl": "https://wellfound.com/jobs/4231162-it-support-engineer",
-          "detailUrl": "https://wellfound.com/jobs/4231162-it-support-engineer",
-          "compensation": "",
-          "salaryMin": null,
-          "salaryMax": null,
-          "salaryEquityMin": null,
-          "salaryEquityMax": null,
-          "description": "At Similarweb, our global workforce is our greatest engine of innovation, and the IT Help Desk is the team that keeps that engine running at peak performance. We aren't looking for \"ticket takers\" - **we are seeking exceptionally skilled IT engineer** to help build a dynamic support team. **✨**\n\nYou’ll work closely with IT Engineers and the IT Operations Team to provide efficient, customer-focused support across a wide range of tools, including Google Workspace, Okta, and endpoint management platforms.\n\nThis role will be critical in supporting our company-wide **'AI in Motion' initiative.** The IT Helpdesk is responsible for enabling and governing the use of core AI tools like **Gemini** (for personal productivity in Google Workspace), **ChatGPT, Base44, and Claude,** while ensuring agent identity and security are managed through platforms like **Okta’s** identity framework.\n\n \n\n### **So, what will you be doing all day? 🚀**\n\n**End-User Support & Resolution**\n\n- Serve as the **primary point of contact for technical support through** a ticketing system, chat, and email, ensuring rapid and effective issue resolution.\n- Provide expert, hands-on, and remote troubleshooting for all end-user devices running **macOS and Windows** operating systems.\n- Resolve issues across a critical application stack, including **Google Workspace, Okta SSO/MFA, Microsoft 365**, and MDM platforms (Jamf, Kandji, Addigy, etc.).\n- Maintain network connectivity, hardware, peripherals, and **Audio/Video Conferencing** systems.\n\n \n\n**I****T Operations & Lifecycle Management**\n\n- Execute the **full employee lifecycle** for IT access: provisioning accounts, access, and devices for new hires, and securely managing offboarding processes.\n- Manage user identities, groups, and permissions within centralized systems like **Okta** to ensure least-privilege access.\n- Maintain a precise and up-to-date IT asset inventory, overseeing the complete lifecycle of laptops, accessories, and software licenses.\n\n \n\n**Process Improvement & Knowledge**\n\n- **Drive process improvements** and automation initiatives to enhance the efficiency and quality of IT service delivery.\n- Create and maintain high-quality internal IT documentation and knowledge base articles.\n- Collaborate with IT Engineering and Operations teams on projects to elevate the overall employee technology experience.\n\n \n\n### **Who you are: 🎯**\n\n- **2 - 4 years** of experience in IT support, helpdesk, or similar technical support role.\n- Strong **troubleshooting** skills in both **MacOS** and Windows environments.\n- Ideally hands-on experience with:\n\n  - Google Workspace administration\n  - Okta or other identity management tools\n  - Office 365 applications\n  - MDM solutions (Jamf, Kandji, Intune, etc.)\n\n- Familiarity with onboarding/offboarding workflows and lifecycle management.\n- **Excellent communication** and interpersonal skills, with a customer-first mindset.\n- Ability to work effectively across global teams and time zones.\n\n \n\n**Nice to have:**\n\n- CompTIA A+, Google Workspace Administrator, MCSA, or Okta Certified Professional certifications\n- Basic **scripting** knowledge (Bash, PowerShell, or Python)\n- Experience in a **cloud-first**, **SaaS-heavy**, and **ISO27001/SOC2-compliant** environment preferred.\n\n###  \n\n### Why you’ll love being a Similarwebber:\n\n- **Impact**😎: Work on a platform used by Google, eBay or Adidas.\n- **Innovation**🚀: Bring your ideas to life with full support.\n- **Hybrid work model**: 3 days in our office and 2 days working from home🏡.\n- **Our office**: Join us in our new office at DOCK IN (Palmovka) - stocked with snacks, drinks, and space to unwind.\n- **Great perks**: 5 weeks of vacation, an extra day off during your birthday month, 3 sick days and a multisport card 😎\n- **Top hardware**👩🏻‍💻: You'll work with a MacBook Pro M3, dual monitors, and electric standing desk.\n- **Team spirit**: We host team-building events, parties, weekly lunches, and happy hours throughout the year 🎉.\n- **Access to equity programs**💸: Join in the success of Similarweb by becoming a shareholder!\n- **Grow your career any way you choose:** Want to grow your career or explore new paths? With coaching, Career Week, and learning programs, we’ve got you covered. **🚀**\n\n \n\n*At Similarweb, we're changing how businesses engage with the digital world by uncovering everything that happens online. Our powerful platform and unique data empower over 4,300 customers—including industry leaders like Google, eBay, and Adidas—to make impactful decisions.*\n\n*Since going public on the New York Stock Exchange in 2021, we've continued to grow! *\n\n#LI-Hybrid\n\n",
-          "descriptionHtml": null,
-          "descriptionMarkdown": "At Similarweb, our global workforce is our greatest engine of innovation, and the IT Help Desk is the team that keeps that engine running at peak performance. We aren't looking for \"ticket takers\" - **we are seeking exceptionally skilled IT engineer** to help build a dynamic support team. **✨**\n\nYou’ll work closely with IT Engineers and the IT Operations Team to provide efficient, customer-focused support across a wide range of tools, including Google Workspace, Okta, and endpoint management platforms.\n\nThis role will be critical in supporting our company-wide **'AI in Motion' initiative.** The IT Helpdesk is responsible for enabling and governing the use of core AI tools like **Gemini** (for personal productivity in Google Workspace), **ChatGPT, Base44, and Claude,** while ensuring agent identity and security are managed through platforms like **Okta’s** identity framework.\n\n \n\n### **So, what will you be doing all day? 🚀**\n\n**End-User Support & Resolution**\n\n- Serve as the **primary point of contact for technical support through** a ticketing system, chat, and email, ensuring rapid and effective issue resolution.\n- Provide expert, hands-on, and remote troubleshooting for all end-user devices running **macOS and Windows** operating systems.\n- Resolve issues across a critical application stack, including **Google Workspace, Okta SSO/MFA, Microsoft 365**, and MDM platforms (Jamf, Kandji, Addigy, etc.).\n- Maintain network connectivity, hardware, peripherals, and **Audio/Video Conferencing** systems.\n\n \n\n**I****T Operations & Lifecycle Management**\n\n- Execute the **full employee lifecycle** for IT access: provisioning accounts, access, and devices for new hires, and securely managing offboarding processes.\n- Manage user identities, groups, and permissions within centralized systems like **Okta** to ensure least-privilege access.\n- Maintain a precise and up-to-date IT asset inventory, overseeing the complete lifecycle of laptops, accessories, and software licenses.\n\n \n\n**Process Improvement & Knowledge**\n\n- **Drive process improvements** and automation initiatives to enhance the efficiency and quality of IT service delivery.\n- Create and maintain high-quality internal IT documentation and knowledge base articles.\n- Collaborate with IT Engineering and Operations teams on projects to elevate the overall employee technology experience.\n\n \n\n### **Who you are: 🎯**\n\n- **2 - 4 years** of experience in IT support, helpdesk, or similar technical support role.\n- Strong **troubleshooting** skills in both **MacOS** and Windows environments.\n- Ideally hands-on experience with:\n\n  - Google Workspace administration\n  - Okta or other identity management tools\n  - Office 365 applications\n  - MDM solutions (Jamf, Kandji, Intune, etc.)\n\n- Familiarity with onboarding/offboarding workflows and lifecycle management.\n- **Excellent communication** and interpersonal skills, with a customer-first mindset.\n- Ability to work effectively across global teams and time zones.\n\n \n\n**Nice to have:**\n\n- CompTIA A+, Google Workspace Administrator, MCSA, or Okta Certified Professional certifications\n- Basic **scripting** knowledge (Bash, PowerShell, or Python)\n- Experience in a **cloud-first**, **SaaS-heavy**, and **ISO27001/SOC2-compliant** environment preferred.\n\n###  \n\n### Why you’ll love being a Similarwebber:\n\n- **Impact**😎: Work on a platform used by Google, eBay or Adidas.\n- **Innovation**🚀: Bring your ideas to life with full support.\n- **Hybrid work model**: 3 days in our office and 2 days working from home🏡.\n- **Our office**: Join us in our new office at DOCK IN (Palmovka) - stocked with snacks, drinks, and space to unwind.\n- **Great perks**: 5 weeks of vacation, an extra day off during your birthday month, 3 sick days and a multisport card 😎\n- **Top hardware**👩🏻‍💻: You'll work with a MacBook Pro M3, dual monitors, and electric standing desk.\n- **Team spirit**: We host team-building events, parties, weekly lunches, and happy hours throughout the year 🎉.\n- **Access to equity programs**💸: Join in the success of Similarweb by becoming a shareholder!\n- **Grow your career any way you choose:** Want to grow your career or explore new paths? With coaching, Career Week, and learning programs, we’ve got you covered. **🚀**\n\n \n\n*At Similarweb, we're changing how businesses engage with the digital world by uncovering everything that happens online. Our powerful platform and unique data empower over 4,300 customers—including industry leaders like Google, eBay, and Adidas—to make impactful decisions.*\n\n*Since going public on the New York Stock Exchange in 2021, we've continued to grow! *\n\n#LI-Hybrid\n\n",
-          "jobType": "full-time",
-          "postedAt": "2026-05-18T20:38:46.000Z",
-          "locationNames": [
-            "Prague"
-          ],
-          "remote": false,
-          "remoteKind": null,
-          "wfhFlexible": false,
-          "acceptedRemoteLocations": [],
-          "yearsExperienceMin": null,
-          "yearsExperienceMax": null,
-          "atsSource": "AtsIntegration::Greenhouse::Listing",
-          "autoPosted": false,
-          "primaryRoleTitle": "DevOps",
-          "skills": [],
-          "visaSponsorship": null,
-          "companyId": "7336044",
-          "companySlug": "similarweb-3",
-          "companyName": "Similarweb",
-          "companyLogo": "https://photos.wellfound.com/startups/i/7336044-a522cccaa3202f57d2571f5f3b5c588e-medium_jpg.jpg?buster=1589580088",
-          "companyTagline": "Global multi-device intelligence to understand, track and grow your digital market share",
-          "companySize": "SIZE_501_1000",
-          "companyDescription": null,
-          "companyFoundedYear": null,
-          "companyLinkedIn": null,
-          "companyTwitter": null,
-          "companyFundingStage": null,
-          "companyTotalRaised": null,
-          "companyLastFundingDate": null,
-          "companyMarkets": [],
-          "companyFounders": [],
-          "salaryCurrency": null,
-          "salaryPeriod": null,
-          "companyWebsite": null,
-          "industry": null,
-          "directApply": null,
-          "datePosted": null,
-          "jobBenefits": null,
-          "jobAddressLocality": null,
-          "jobAddressRegion": null,
-          "jobAddressCountry": null,
-          "latitude": null,
-          "longitude": null,
-          "changeType": null,
-          "trackedHash": null,
-          "firstSeenAt": null,
-          "lastSeenAt": null,
-          "previousSeenAt": null,
-          "expiredAt": null,
-          "stateKey": null,
-          "isRepost": false,
-          "repostOfId": null,
-          "repostDetectedAt": null,
-          "matchedSearch": "url=https://wellfound.com/role/l/ai-engineer/prague",
-          "source": "wellfound",
-          "scrapedAt": "2026-06-01T06:58:59.772Z"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      },
-      {
-        "json": {
-          "id": "4121877",
-          "title": "Junior Software Engineer",
-          "slug": "junior-software-engineer",
-          "portalUrl": "https://wellfound.com/jobs/4121877-junior-software-engineer",
-          "detailUrl": "https://wellfound.com/jobs/4121877-junior-software-engineer",
-          "compensation": "",
-          "salaryMin": null,
-          "salaryMax": null,
-          "salaryEquityMin": null,
-          "salaryEquityMax": null,
-          "description": "Writing software is your hobby. You want to team up with great people because that’s the best way to grow and learn. You want your work to make a positive impact in the world. You love the idea that your code can help combat global crime. Is this you? Then you will fit well in our team. \n\nWe are building cutting-edge solutions to create a safer world and stop money from ending up in the hands of criminals. Your work will allow our clients to identify and understand criminal, financial, and political risks, updating dynamically as new data becomes available from various sources (sanctions, watchlists, corporate registries, media, …).\n\n**As a Junior Software Engineer, you will:**\n\n- Collaborate on the design and build distributed data pipelines and the system around our Knowledge Graph to build and improve our next-generation anti-money laundering solution.\n- Work with our product manager(s) to understand and contribute to our goals, find a solution to reach them and prioritise accordingly.\n- Engage in the full product lifecycle, including ideation, design, and deployment and get code from initial requirements to deployed services in production (with help of our SRE teams).\n- Improve scalability, latency and throughput of our pipelines while keeping high standards in systems reliability and resilience.\n- Model data and design schemas to accommodate the needs of our Knowledge Graph and the whole data ecosystem.\n- Collaborate with squads and functions across the company to ensure the quality and impact of your designed solutions.\n- Be responsible for the quality of your code. Write tests, document, and take ownership of the systems that ensure the quality of our code.\n- Work with ML engineers to build and deploy new features for AI-powered components.\n- Actively learn, adopt best practices, identify space for improvement, contribute to our engineering culture and always strive for making us better.\n- Use AI-assisted development tools (like Claude Code or Gemini Code Assist) under guidance to improve your productivity and code quality.\n\n**Our Tech Stack:**\n\nThe data-driven nature of the role and the prominence of Python in the data and ML ecosystem means you will primarily work in Python and engineer data pipelines. Any relevant experience is going to be helpful but we believe that top engineers are able to learn quickly and adapt to new technologies so that we can innovate and react to the fast changing world. \n\n- Our technology stack is designed to run on public cloud architectures, notably AWS and GCP;\n- Python and Kotlin programming languages;\n- Spark, Databricks, Google Dataproc, Delta lakes for stream and big data processing;\n- Relational (Postgres), large scale NoSQL and graph databases and other distributed or cloud-based object stores;\n- Event-sourced model powered by Kafka for our communication bus;\n- Modern observability solutions (such as Datadog or Grafana);\n- Git, ArgoCD, Terraform, Kubernetes.\n\n**About you:**\n\nAs a Junior Software Engineer, you will have: \n\n- Strong sense of ownership and accountability (you are able to independently drive your work to the successful end and ask for help if needed).\n- Master degree in Computer Science, Engineering, or a related field, OR equivalent practical experience (approx 1-2 years of professional experience in relevant role).\n- Intermediate knowledge of one or more programming languages.\n- Experience with Python on a real-world project.\n- Experience with code versioning (Git).\n- Experience with key software engineering concepts like unit tests, databases.\n- At least basic experience with working in cloud environment (preferably GCP, AWS or Azure).\n- Ability to work effectively in a team and communicate clearly.\n\nNice to haves: \n\n- Experience working in a multi-disciplinary team of Data Scientists, ML Engineers, SREs and product managers.\n- Experience working with distributed computing.\n- Experience with a real-world production grade system(s) and its deployment.\n- Experience working with knowledge graphs or graph databases.\n- Experience with data analysis, relevant machine learning techniques and graph algorithms.\n- Experience with agile methodologies in software development.\n- Experience in development using Java or Kotlin.\n\n**What’s in it for you?**\n\n- Equity as we want you to have a part of what we are building.\n- Unlimited Time Off Policy - A work-life balance and focus on our well-being are critical to keeping us performing at our best.\n- We embrace a hybrid approach that requires employees to be in the office for two days a week. We strongly believe that this approach fosters collaboration and enables the building of meaningful relationships.\n- You will also get a new starter budget to kit out your home office.\n- Opportunity to work on innovative projects with smart-minded people keen to share their knowledge and continuously improve.\n- Annual learning budget (prorated based on start date) to drive your performance and career development.\n",
-          "descriptionHtml": null,
-          "descriptionMarkdown": "Writing software is your hobby. You want to team up with great people because that’s the best way to grow and learn. You want your work to make a positive impact in the world. You love the idea that your code can help combat global crime. Is this you? Then you will fit well in our team. \n\nWe are building cutting-edge solutions to create a safer world and stop money from ending up in the hands of criminals. Your work will allow our clients to identify and understand criminal, financial, and political risks, updating dynamically as new data becomes available from various sources (sanctions, watchlists, corporate registries, media, …).\n\n**As a Junior Software Engineer, you will:**\n\n- Collaborate on the design and build distributed data pipelines and the system around our Knowledge Graph to build and improve our next-generation anti-money laundering solution.\n- Work with our product manager(s) to understand and contribute to our goals, find a solution to reach them and prioritise accordingly.\n- Engage in the full product lifecycle, including ideation, design, and deployment and get code from initial requirements to deployed services in production (with help of our SRE teams).\n- Improve scalability, latency and throughput of our pipelines while keeping high standards in systems reliability and resilience.\n- Model data and design schemas to accommodate the needs of our Knowledge Graph and the whole data ecosystem.\n- Collaborate with squads and functions across the company to ensure the quality and impact of your designed solutions.\n- Be responsible for the quality of your code. Write tests, document, and take ownership of the systems that ensure the quality of our code.\n- Work with ML engineers to build and deploy new features for AI-powered components.\n- Actively learn, adopt best practices, identify space for improvement, contribute to our engineering culture and always strive for making us better.\n- Use AI-assisted development tools (like Claude Code or Gemini Code Assist) under guidance to improve your productivity and code quality.\n\n**Our Tech Stack:**\n\nThe data-driven nature of the role and the prominence of Python in the data and ML ecosystem means you will primarily work in Python and engineer data pipelines. Any relevant experience is going to be helpful but we believe that top engineers are able to learn quickly and adapt to new technologies so that we can innovate and react to the fast changing world. \n\n- Our technology stack is designed to run on public cloud architectures, notably AWS and GCP;\n- Python and Kotlin programming languages;\n- Spark, Databricks, Google Dataproc, Delta lakes for stream and big data processing;\n- Relational (Postgres), large scale NoSQL and graph databases and other distributed or cloud-based object stores;\n- Event-sourced model powered by Kafka for our communication bus;\n- Modern observability solutions (such as Datadog or Grafana);\n- Git, ArgoCD, Terraform, Kubernetes.\n\n**About you:**\n\nAs a Junior Software Engineer, you will have: \n\n- Strong sense of ownership and accountability (you are able to independently drive your work to the successful end and ask for help if needed).\n- Master degree in Computer Science, Engineering, or a related field, OR equivalent practical experience (approx 1-2 years of professional experience in relevant role).\n- Intermediate knowledge of one or more programming languages.\n- Experience with Python on a real-world project.\n- Experience with code versioning (Git).\n- Experience with key software engineering concepts like unit tests, databases.\n- At least basic experience with working in cloud environment (preferably GCP, AWS or Azure).\n- Ability to work effectively in a team and communicate clearly.\n\nNice to haves: \n\n- Experience working in a multi-disciplinary team of Data Scientists, ML Engineers, SREs and product managers.\n- Experience working with distributed computing.\n- Experience with a real-world production grade system(s) and its deployment.\n- Experience working with knowledge graphs or graph databases.\n- Experience with data analysis, relevant machine learning techniques and graph algorithms.\n- Experience with agile methodologies in software development.\n- Experience in development using Java or Kotlin.\n\n**What’s in it for you?**\n\n- Equity as we want you to have a part of what we are building.\n- Unlimited Time Off Policy - A work-life balance and focus on our well-being are critical to keeping us performing at our best.\n- We embrace a hybrid approach that requires employees to be in the office for two days a week. We strongly believe that this approach fosters collaboration and enables the building of meaningful relationships.\n- You will also get a new starter budget to kit out your home office.\n- Opportunity to work on innovative projects with smart-minded people keen to share their knowledge and continuously improve.\n- Annual learning budget (prorated based on start date) to drive your performance and career development.\n",
-          "jobType": "full-time",
-          "postedAt": "2026-04-21T20:59:31.000Z",
-          "locationNames": [
-            "Prague"
-          ],
-          "remote": false,
-          "remoteKind": null,
-          "wfhFlexible": false,
-          "acceptedRemoteLocations": [],
-          "yearsExperienceMin": null,
-          "yearsExperienceMax": null,
-          "atsSource": "AtsIntegration::Greenhouse::Listing",
-          "autoPosted": false,
-          "primaryRoleTitle": "Software Engineer",
-          "skills": [],
-          "visaSponsorship": null,
-          "companyId": "404648",
-          "companySlug": "comply-advantage",
-          "companyName": "ComplyAdvantage",
-          "companyLogo": "https://photos.wellfound.com/startups/i/404648-442c59abf6dad03d7d3550202db4b3f6-medium_jpg.jpg?buster=1596471171",
-          "companyTagline": "We're fixing anti-money laundering & compliance with smart tech and better data",
-          "companySize": "SIZE_501_1000",
-          "companyDescription": null,
-          "companyFoundedYear": null,
-          "companyLinkedIn": null,
-          "companyTwitter": null,
-          "companyFundingStage": null,
-          "companyTotalRaised": null,
-          "companyLastFundingDate": null,
-          "companyMarkets": [],
-          "companyFounders": [],
-          "salaryCurrency": null,
-          "salaryPeriod": null,
-          "companyWebsite": null,
-          "industry": null,
-          "directApply": null,
-          "datePosted": null,
-          "jobBenefits": null,
-          "jobAddressLocality": null,
-          "jobAddressRegion": null,
-          "jobAddressCountry": null,
-          "latitude": null,
-          "longitude": null,
-          "changeType": null,
-          "trackedHash": null,
-          "firstSeenAt": null,
-          "lastSeenAt": null,
-          "previousSeenAt": null,
-          "expiredAt": null,
-          "stateKey": null,
-          "isRepost": false,
-          "repostOfId": null,
-          "repostDetectedAt": null,
-          "matchedSearch": "url=https://wellfound.com/role/l/ai-engineer/prague",
-          "source": "wellfound",
-          "scrapedAt": "2026-06-01T06:58:59.772Z"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      },
-      {
-        "json": {
-          "id": "3090401",
-          "title": "Senior Frontend React Engineer",
-          "slug": "senior-frontend-react-engineer",
-          "portalUrl": "https://wellfound.com/jobs/3090401-senior-frontend-react-engineer",
-          "detailUrl": "https://wellfound.com/jobs/3090401-senior-frontend-react-engineer",
-          "compensation": "€90k – €110k • No equity",
-          "salaryMin": null,
-          "salaryMax": null,
-          "salaryEquityMin": null,
-          "salaryEquityMax": null,
-          "description": "Togal.AI – AI Infrastructure for Construction Intelligence\nRemote | Product-Focused | High Ownership\n\n### Position Overview\n\nTogal.AI builds AI-powered pre-construction intelligence software used by leading construction firms across the US and Australia. Our platform automatically detects, labels, and measures spaces and objects from architectural drawings, enabling faster and more accurate takeoffs and cost estimation.\n\nWe operate at the intersection of machine learning and modern web applications, building tools that allow users to interact with complex architectural data directly in the browser.\n\nOur Takeoff Editor processes large architectural drawings, overlays ML detections, and enables real-time interaction with spatial data.\n\nWe’re a focused, senior team building a product that customers rely on daily. No hype. No fluff. Just hard engineering problems with real users.\n\n### Your Role\n\nWe’re hiring a Senior Frontend React Engineer to take ownership of the product’s frontend architecture and user experience, including our Takeoff Editor and core workflows.\n\nThis role is primarily about building scalable, high-performance React applications that handle complex data and real user workflows. You’ll design and evolve the frontend architecture, ensuring the product remains fast, intuitive, and reliable as it scales.\n\nYou’ll work closely with backend and ML teams to bring complex data into the UI in a way that actually makes sense to users.\n\nThis is not a ticket-driven feature factory role.\nYou will influence architecture, product decisions, and how the system evolves.\n\n### What You Bring\n\n**** Frontend Architecture &amp; Product Development\n* Design and maintain scalable React applications handling large and complex datasets\n* Build robust UI systems for data-heavy workflows (annotation, measurement, editing)\n* Own state management, data flow, and application structure\n* Ensure responsiveness and performance under real-world usage conditions\n* Translate complex product requirements into clean, maintainable UI architecture\n* Collaborate closely with design and product to improve usability and workflows\n\n**** Performance &amp; User Experience\n* Optimize performance for large datasets and complex interactions\n* Ensure smooth user interactions (navigation, editing, real-time updates)\n* Identify and fix bottlenecks across the frontend stack\n* Build interfaces that remain stable and predictable under heavy usage\n\n**** Visualization (Supporting, not core)\n* Integrate and work with browser-based rendering tools (e.g. Three.js / WebGL) where needed\n* Support visualization of spatial data, overlays, and annotations\n* Collaborate on rendering strategies, without owning low-level graphics pipelines\n\n**** Backend Collaboration\n* Work with Node.js (TypeScript) APIs and GraphQL/REST services\n* Integrate ML-generated and spatial data into the UI\n* Contribute to API design decisions impacting frontend performance and usability\n* Help shape data contracts for real-time and high-volume interactions\n\n****Engineering Excellence\n* Maintain high standards for code quality, testing, and reliability\n* Improve automated testing (unit + integration)\n* Contribute to CI/CD pipelines (GitHub Actions)\n* Reduce technical debt and improve system clarity over time\n\n### About Togal.AI\n\nTogal.AI is an innovative, remote-first company specializing in analytical software powered by machine learning technology.\n\nSince our founding in 2019, we have been transforming the construction industry with software that automatically detects, labels, and measures project spaces and objects.\n\nOur platform allows construction teams to move from static drawings to intelligent, interactive spatial data, enabling faster and more accurate cost estimation.\n\nOur team brings together experienced developers, machine learning engineers, and construction experts to build tools that solve real-world problems.\n\n### What We’re Looking For\n\n**Technical Depth**\n* 6+ years building production-grade frontend applications\n* Strong expertise in React and modern frontend architecture\n* Experience building complex, data-heavy browser applications\n* Solid understanding of performance, state management, and scalability\n* Familiarity with Node.js / TypeScript APIs\n* Exposure to visualization tools (Three.js / WebGL) is a plus—not the focus\n\n**Systems Thinking**\n* You think in systems and architecture, not just components\n* You understand performance trade-offs in browser rendering\n* You’ve built tools or products with real user workflows\n* You can independently break down ambiguous problems into clean implementations\n\n**What Makes This Role Compelling**\n* Real product with paying enterprise customers\n* Hard frontend problems: large-scale rendering, spatial interaction, real-time visualization\n* High ownership in a small senior engineering team\n* Direct impact on how construction projects are estimated and executed\n* AI integrated into real workflows — not demo features\n* Remote-first with minimal meetings and strong engineering autonomy\n\n### What We Offer\n\n* Competitive salary and benefits\n* Fully remote work environment\n* High autonomy and engineering ownership\n* Minimal meetings and strong focus time",
-          "descriptionHtml": null,
-          "descriptionMarkdown": "Togal.AI – AI Infrastructure for Construction Intelligence\nRemote | Product-Focused | High Ownership\n\n### Position Overview\n\nTogal.AI builds AI-powered pre-construction intelligence software used by leading construction firms across the US and Australia. Our platform automatically detects, labels, and measures spaces and objects from architectural drawings, enabling faster and more accurate takeoffs and cost estimation.\n\nWe operate at the intersection of machine learning and modern web applications, building tools that allow users to interact with complex architectural data directly in the browser.\n\nOur Takeoff Editor processes large architectural drawings, overlays ML detections, and enables real-time interaction with spatial data.\n\nWe’re a focused, senior team building a product that customers rely on daily. No hype. No fluff. Just hard engineering problems with real users.\n\n### Your Role\n\nWe’re hiring a Senior Frontend React Engineer to take ownership of the product’s frontend architecture and user experience, including our Takeoff Editor and core workflows.\n\nThis role is primarily about building scalable, high-performance React applications that handle complex data and real user workflows. You’ll design and evolve the frontend architecture, ensuring the product remains fast, intuitive, and reliable as it scales.\n\nYou’ll work closely with backend and ML teams to bring complex data into the UI in a way that actually makes sense to users.\n\nThis is not a ticket-driven feature factory role.\nYou will influence architecture, product decisions, and how the system evolves.\n\n### What You Bring\n\n**** Frontend Architecture &amp; Product Development\n* Design and maintain scalable React applications handling large and complex datasets\n* Build robust UI systems for data-heavy workflows (annotation, measurement, editing)\n* Own state management, data flow, and application structure\n* Ensure responsiveness and performance under real-world usage conditions\n* Translate complex product requirements into clean, maintainable UI architecture\n* Collaborate closely with design and product to improve usability and workflows\n\n**** Performance &amp; User Experience\n* Optimize performance for large datasets and complex interactions\n* Ensure smooth user interactions (navigation, editing, real-time updates)\n* Identify and fix bottlenecks across the frontend stack\n* Build interfaces that remain stable and predictable under heavy usage\n\n**** Visualization (Supporting, not core)\n* Integrate and work with browser-based rendering tools (e.g. Three.js / WebGL) where needed\n* Support visualization of spatial data, overlays, and annotations\n* Collaborate on rendering strategies, without owning low-level graphics pipelines\n\n**** Backend Collaboration\n* Work with Node.js (TypeScript) APIs and GraphQL/REST services\n* Integrate ML-generated and spatial data into the UI\n* Contribute to API design decisions impacting frontend performance and usability\n* Help shape data contracts for real-time and high-volume interactions\n\n****Engineering Excellence\n* Maintain high standards for code quality, testing, and reliability\n* Improve automated testing (unit + integration)\n* Contribute to CI/CD pipelines (GitHub Actions)\n* Reduce technical debt and improve system clarity over time\n\n### About Togal.AI\n\nTogal.AI is an innovative, remote-first company specializing in analytical software powered by machine learning technology.\n\nSince our founding in 2019, we have been transforming the construction industry with software that automatically detects, labels, and measures project spaces and objects.\n\nOur platform allows construction teams to move from static drawings to intelligent, interactive spatial data, enabling faster and more accurate cost estimation.\n\nOur team brings together experienced developers, machine learning engineers, and construction experts to build tools that solve real-world problems.\n\n### What We’re Looking For\n\n**Technical Depth**\n* 6+ years building production-grade frontend applications\n* Strong expertise in React and modern frontend architecture\n* Experience building complex, data-heavy browser applications\n* Solid understanding of performance, state management, and scalability\n* Familiarity with Node.js / TypeScript APIs\n* Exposure to visualization tools (Three.js / WebGL) is a plus—not the focus\n\n**Systems Thinking**\n* You think in systems and architecture, not just components\n* You understand performance trade-offs in browser rendering\n* You’ve built tools or products with real user workflows\n* You can independently break down ambiguous problems into clean implementations\n\n**What Makes This Role Compelling**\n* Real product with paying enterprise customers\n* Hard frontend problems: large-scale rendering, spatial interaction, real-time visualization\n* High ownership in a small senior engineering team\n* Direct impact on how construction projects are estimated and executed\n* AI integrated into real workflows — not demo features\n* Remote-first with minimal meetings and strong engineering autonomy\n\n### What We Offer\n\n* Competitive salary and benefits\n* Fully remote work environment\n* High autonomy and engineering ownership\n* Minimal meetings and strong focus time",
-          "jobType": "full-time",
-          "postedAt": "2026-05-07T16:37:57.000Z",
-          "locationNames": [
-            "London",
-            "Bucharest",
-            "Berlin",
-            "Prague",
-            "Budapest",
-            "Lisbon",
-            "Warsaw",
-            "Bratislava",
-            "Tallinna linn",
-            "Madrid"
-          ],
-          "remote": true,
-          "remoteKind": "REMOTE",
-          "wfhFlexible": false,
-          "acceptedRemoteLocations": [
-            "Europe",
-            "Eastern Europe",
-            "Western Europe"
-          ],
-          "yearsExperienceMin": 5,
-          "yearsExperienceMax": null,
-          "atsSource": null,
-          "autoPosted": false,
-          "primaryRoleTitle": "Full-Stack Engineer",
-          "skills": [],
-          "visaSponsorship": null,
-          "companyId": "8531824",
-          "companySlug": "togal-ai",
-          "companyName": "Togal.ai",
-          "companyLogo": "https://photos.wellfound.com/startups/i/8531824-127871422e9f8931aa6f74f928fa3751-medium_jpg.jpg?buster=1632918292",
-          "companyTagline": "Construction Takeoff AI Software",
-          "companySize": "SIZE_11_50",
-          "companyDescription": null,
-          "companyFoundedYear": null,
-          "companyLinkedIn": null,
-          "companyTwitter": null,
-          "companyFundingStage": null,
-          "companyTotalRaised": null,
-          "companyLastFundingDate": null,
-          "companyMarkets": [],
-          "companyFounders": [],
-          "salaryCurrency": null,
-          "salaryPeriod": null,
-          "companyWebsite": null,
-          "industry": null,
-          "directApply": null,
-          "datePosted": null,
-          "jobBenefits": null,
-          "jobAddressLocality": null,
-          "jobAddressRegion": null,
-          "jobAddressCountry": null,
-          "latitude": null,
-          "longitude": null,
-          "changeType": null,
-          "trackedHash": null,
-          "firstSeenAt": null,
-          "lastSeenAt": null,
-          "previousSeenAt": null,
-          "expiredAt": null,
-          "stateKey": null,
-          "isRepost": false,
-          "repostOfId": null,
-          "repostDetectedAt": null,
-          "matchedSearch": "url=https://wellfound.com/role/l/ai-engineer/prague",
-          "source": "wellfound",
-          "scrapedAt": "2026-06-01T06:58:59.772Z"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      },
-      {
-        "json": {
-          "id": "3900584",
-          "title": "AI Benchmark Engineer | Native Language Specialist - Czech - Remote",
-          "slug": "ai-benchmark-engineer-native-language-specialist-czech-remote",
-          "portalUrl": "https://wellfound.com/jobs/3900584-ai-benchmark-engineer-native-language-specialist-czech-remote",
-          "detailUrl": "https://wellfound.com/jobs/3900584-ai-benchmark-engineer-native-language-specialist-czech-remote",
-          "compensation": "",
-          "salaryMin": null,
-          "salaryMax": null,
-          "salaryEquityMin": null,
-          "salaryEquityMax": null,
-          "description": "## **About The Opportunity**\n\nWe are building a rigorous, verifiable evaluation suite of Terminal-Bench tasks designed to test the limits of large language models on multilingual software challenges. Our goal is to measure multilingual robustness across prompt language effects, non-English data processing, and complex locale/encoding edge cases in terminal workflows.\n\nWe are seeking experienced native-speaking software engineers to design, build, and validate these benchmarks. You will create high-signal, high-quality tasks that genuinely test a model's ability to handle multilingual environments without relying on English translation crutches.\n\n**Note this is a remote, freelance opportunity**\n\n## **What You’ll Deliver** \n\n- Task Engineering: Evaluating Coding Agents.\n- Asset Creation: Build realistic task environments using datasets and files in your native language. *Crucially, these assets must remain in the target language to genuinely measure multilingual handling.*\n- Prompting & Translation: finding failure points where AI does not work, in your native language\n- Implementation & Verification: Support the development of robust solutions (reference implementations) and write highly reliable, deterministic verifier scripts (using rubric-based judging only when strictly necessary).\n- Calibration & Execution: Analyze execution logs and calibrate task difficulty (Easy to Very Hard) using standard Terminal-Bench run configurations against various model tiers (Haiku, Sonnet, Opus).\n- Quality Assurance: Participate in a rigorous, 4-layer human quality control process (creation, human review, calibration review, and audit) alongside automated LLM-based checks to ensure fairness, grammatical accuracy, and benchmark integrity.\n\n## **Qualifications** \n\n- **Experience:** 5+ years of industry experience in software engineering.\n- **Background:** Proven track record at leading technology companies and/or graduation from top-tier engineering universities.\n- **Language:** Native or near-native fluency, with a deep understanding of its grammar, register, and phrasing rules. High English proficiency.\n- **Technical Stack:** Strong proficiency in Python, standard shell scripting, and data processing.\n- **Workflow:** Extensive experience with Terminal/CLI-based development workflows and a working familiarity with coding agents.\n- **Domain Expertise:** Deep technical understanding of multilingual text processing pitfalls, including:\n\n  - Encoding/decoding robustness and Unicode normalization.\n  - Locale-dependent conventions (collation, casing, non-Gregorian dates).\n  - Text I/O, toolchain interoperability, and safe string operations.\n  - *(For specific languages)* Bidirectional/RTL handling, font fallbacks, and rendering/typography in UI or artifacts.\n\n## **Why Collaborate with Lilt?** \n\n- **Your schedule, your rules.** As an independent contractor, work when you want, as much or as little as you want. No fixed hours, no check-ins, no micromanaging.\n- **Get paid quickly and fairly.** We respect your time and your expertise. Competitive rates, prompt payments, no chasing invoices.\n- **Work on projects that actually matter**. Contribute to cutting-edge AI and language technology that is shaping how humans and machines communicate.\n- **Be part of something bigger.** Join a global community of linguists, subject matter experts, and language professionals who are advancing human knowledge together.\n- **Grow without limits.** As a Lilt contractor you get access to diverse, innovative projects that expand your portfolio and sharpen your skills across industries and domains.\n- **Have fun doing what you love.** Bring your language skills to life on projects that are as interesting as they are impactful.We are building a rigorous, verifiable evaluation suite of Terminal-Bench tasks designed to test the limits of large language models on multilingual software challenges. Our goal is to measure multilingual robustness across prompt language effects, non-English data processing, and complex locale/encoding edge cases in terminal workflows.\n\n## **How to join our expert community**\n\n1 - Submit your application including an updated copy of your CV in English\n\n2 - Next, complete a GenAI assessment to evaluate your skills\n\n3 - Finalize onboarding and profile set-up in our system, and become eligible for Applied AI projects.\n\n**AI is changing how the world communicates — and LILT is leading that transformation.**\n\nLILT's mission is to make the world's information available to everyone, no matter the language they speak. Join our global community who thrive on innovation and excellence. Our collective knowledge, uniqueness, and skills deliver multilingual AI and human-verified services to Enterprises, Governments, and AI Developers around the world.\n\nEarn money. Have fun. Advance human knowledge. Work on diverse projects from anywhere, any time you want. Get paid quickly and fairly, and build your professional network in a supportive community—all through a streamlined application process tailored to your expertise.\n\n*Information collected and processed as part of your application process, including any job applications you choose to submit, is subject to LILT's Privacy Policy at* [*https://lilt.com/legal/privacy*](https://lilt.com/legal/privacy)*.*\n\n*At LILT, we are committed to a fair, inclusive, and transparent hiring process. As part of our recruitment efforts, we may use artificial intelligence (AI) and automated tools to assist in the evaluation of applications, including résumé screening, assessment scoring, and interview analysis. These tools are designed to support human decision-making and help us identify qualified candidates efficiently and objectively. All final hiring decisions are made by people. If you have any concerns, require accommodations, or would like to opt-out of the use of AI in our hiring process, please let us know at recruiting@lilt.com.*\n\n*LILT is an equal opportunity employer. We extend equal opportunity to all individuals without regard to an individual’s race, religion, color, national origin, ancestry, sex, sexual orientation, gender identity, age, physical or mental disability, medical condition, genetic characteristics, veteran or marital status, pregnancy, or any other classification protected by applicable local, state or federal laws. We are committed to the principles of fair employment and the elimination of all discriminatory practices.*\n\n",
-          "descriptionHtml": null,
-          "descriptionMarkdown": "## **About The Opportunity**\n\nWe are building a rigorous, verifiable evaluation suite of Terminal-Bench tasks designed to test the limits of large language models on multilingual software challenges. Our goal is to measure multilingual robustness across prompt language effects, non-English data processing, and complex locale/encoding edge cases in terminal workflows.\n\nWe are seeking experienced native-speaking software engineers to design, build, and validate these benchmarks. You will create high-signal, high-quality tasks that genuinely test a model's ability to handle multilingual environments without relying on English translation crutches.\n\n**Note this is a remote, freelance opportunity**\n\n## **What You’ll Deliver** \n\n- Task Engineering: Evaluating Coding Agents.\n- Asset Creation: Build realistic task environments using datasets and files in your native language. *Crucially, these assets must remain in the target language to genuinely measure multilingual handling.*\n- Prompting & Translation: finding failure points where AI does not work, in your native language\n- Implementation & Verification: Support the development of robust solutions (reference implementations) and write highly reliable, deterministic verifier scripts (using rubric-based judging only when strictly necessary).\n- Calibration & Execution: Analyze execution logs and calibrate task difficulty (Easy to Very Hard) using standard Terminal-Bench run configurations against various model tiers (Haiku, Sonnet, Opus).\n- Quality Assurance: Participate in a rigorous, 4-layer human quality control process (creation, human review, calibration review, and audit) alongside automated LLM-based checks to ensure fairness, grammatical accuracy, and benchmark integrity.\n\n## **Qualifications** \n\n- **Experience:** 5+ years of industry experience in software engineering.\n- **Background:** Proven track record at leading technology companies and/or graduation from top-tier engineering universities.\n- **Language:** Native or near-native fluency, with a deep understanding of its grammar, register, and phrasing rules. High English proficiency.\n- **Technical Stack:** Strong proficiency in Python, standard shell scripting, and data processing.\n- **Workflow:** Extensive experience with Terminal/CLI-based development workflows and a working familiarity with coding agents.\n- **Domain Expertise:** Deep technical understanding of multilingual text processing pitfalls, including:\n\n  - Encoding/decoding robustness and Unicode normalization.\n  - Locale-dependent conventions (collation, casing, non-Gregorian dates).\n  - Text I/O, toolchain interoperability, and safe string operations.\n  - *(For specific languages)* Bidirectional/RTL handling, font fallbacks, and rendering/typography in UI or artifacts.\n\n## **Why Collaborate with Lilt?** \n\n- **Your schedule, your rules.** As an independent contractor, work when you want, as much or as little as you want. No fixed hours, no check-ins, no micromanaging.\n- **Get paid quickly and fairly.** We respect your time and your expertise. Competitive rates, prompt payments, no chasing invoices.\n- **Work on projects that actually matter**. Contribute to cutting-edge AI and language technology that is shaping how humans and machines communicate.\n- **Be part of something bigger.** Join a global community of linguists, subject matter experts, and language professionals who are advancing human knowledge together.\n- **Grow without limits.** As a Lilt contractor you get access to diverse, innovative projects that expand your portfolio and sharpen your skills across industries and domains.\n- **Have fun doing what you love.** Bring your language skills to life on projects that are as interesting as they are impactful.We are building a rigorous, verifiable evaluation suite of Terminal-Bench tasks designed to test the limits of large language models on multilingual software challenges. Our goal is to measure multilingual robustness across prompt language effects, non-English data processing, and complex locale/encoding edge cases in terminal workflows.\n\n## **How to join our expert community**\n\n1 - Submit your application including an updated copy of your CV in English\n\n2 - Next, complete a GenAI assessment to evaluate your skills\n\n3 - Finalize onboarding and profile set-up in our system, and become eligible for Applied AI projects.\n\n**AI is changing how the world communicates — and LILT is leading that transformation.**\n\nLILT's mission is to make the world's information available to everyone, no matter the language they speak. Join our global community who thrive on innovation and excellence. Our collective knowledge, uniqueness, and skills deliver multilingual AI and human-verified services to Enterprises, Governments, and AI Developers around the world.\n\nEarn money. Have fun. Advance human knowledge. Work on diverse projects from anywhere, any time you want. Get paid quickly and fairly, and build your professional network in a supportive community—all through a streamlined application process tailored to your expertise.\n\n*Information collected and processed as part of your application process, including any job applications you choose to submit, is subject to LILT's Privacy Policy at* [*https://lilt.com/legal/privacy*](https://lilt.com/legal/privacy)*.*\n\n*At LILT, we are committed to a fair, inclusive, and transparent hiring process. As part of our recruitment efforts, we may use artificial intelligence (AI) and automated tools to assist in the evaluation of applications, including résumé screening, assessment scoring, and interview analysis. These tools are designed to support human decision-making and help us identify qualified candidates efficiently and objectively. All final hiring decisions are made by people. If you have any concerns, require accommodations, or would like to opt-out of the use of AI in our hiring process, please let us know at recruiting@lilt.com.*\n\n*LILT is an equal opportunity employer. We extend equal opportunity to all individuals without regard to an individual’s race, religion, color, national origin, ancestry, sex, sexual orientation, gender identity, age, physical or mental disability, medical condition, genetic characteristics, veteran or marital status, pregnancy, or any other classification protected by applicable local, state or federal laws. We are committed to the principles of fair employment and the elimination of all discriminatory practices.*\n\n",
-          "jobType": "contract",
-          "postedAt": "2026-02-23T12:27:02.000Z",
-          "locationNames": [
-            "Prague"
-          ],
-          "remote": true,
-          "remoteKind": null,
-          "wfhFlexible": false,
-          "acceptedRemoteLocations": [
-            "Czech Republic"
-          ],
-          "yearsExperienceMin": null,
-          "yearsExperienceMax": null,
-          "atsSource": "AtsIntegration::Ashby::Listing",
-          "autoPosted": false,
-          "primaryRoleTitle": "Software Engineer",
-          "skills": [],
-          "visaSponsorship": null,
-          "companyId": "642092",
-          "companySlug": "lilt",
-          "companyName": "LILT",
-          "companyLogo": "https://photos.wellfound.com/startups/i/642092-ddca6ce79b9cdf7dcbaf273529bbe0f7-medium_jpg.jpg?buster=1675847265",
-          "companyTagline": "LILT powers the global experience across every step of the customer journey",
-          "companySize": "SIZE_51_200",
-          "companyDescription": null,
-          "companyFoundedYear": null,
-          "companyLinkedIn": null,
-          "companyTwitter": null,
-          "companyFundingStage": null,
-          "companyTotalRaised": null,
-          "companyLastFundingDate": null,
-          "companyMarkets": [],
-          "companyFounders": [],
-          "salaryCurrency": null,
-          "salaryPeriod": null,
-          "companyWebsite": null,
-          "industry": null,
-          "directApply": null,
-          "datePosted": null,
-          "jobBenefits": null,
-          "jobAddressLocality": null,
-          "jobAddressRegion": null,
-          "jobAddressCountry": null,
-          "latitude": null,
-          "longitude": null,
-          "changeType": null,
-          "trackedHash": null,
-          "firstSeenAt": null,
-          "lastSeenAt": null,
-          "previousSeenAt": null,
-          "expiredAt": null,
-          "stateKey": null,
-          "isRepost": false,
-          "repostOfId": null,
-          "repostDetectedAt": null,
-          "matchedSearch": "url=https://wellfound.com/role/l/ai-engineer/prague",
-          "source": "wellfound",
-          "scrapedAt": "2026-06-01T06:58:59.772Z"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
     ]
   },
-  "versionId": "61ef3f47-2dea-4477-b538-cf2b4fa26988",
-  "activeVersionId": "61ef3f47-2dea-4477-b538-cf2b4fa26988",
+  "versionId": "fccb1426-f4c9-4e88-b7bd-9f622f134f41",
+  "activeVersionId": "fccb1426-f4c9-4e88-b7bd-9f622f134f41",
   "triggerCount": 1,
   "shared": [
     {
@@ -1091,9 +1296,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-06-10T07:24:10.332Z",
-    "createdAt": "2026-06-10T07:24:09.162Z",
-    "versionId": "61ef3f47-2dea-4477-b538-cf2b4fa26988",
+    "updatedAt": "2026-06-30T06:01:04.141Z",
+    "createdAt": "2026-06-30T06:01:03.152Z",
+    "versionId": "fccb1426-f4c9-4e88-b7bd-9f622f134f41",
     "workflowId": "lOb7HXMwQjy0xsI8",
     "nodes": [
       {
@@ -1103,40 +1308,11 @@
         "type": "n8n-nodes-base.executeWorkflowTrigger",
         "typeVersion": 1.1,
         "position": [
-          -5104,
-          2144
+          -5904,
+          2736
         ],
         "id": "746c2825-3da5-49ac-b21c-bf48633efc9d",
         "name": "When Executed by Another Workflow"
-      },
-      {
-        "parameters": {
-          "operation": "Run actor and get dataset",
-          "actorId": {
-            "__rl": true,
-            "value": "https://console.apify.com/actors/jV4Y8h6j3AqVj5Qur/input",
-            "mode": "url"
-          },
-          "customBody": "={\n    \"compact\": false,\n    \"companyOnlyMode\": false,\n    \"descriptionFormat\": \"all\",\n    \"emitExpired\": false,\n    \"emitUnchanged\": false,\n    \"enrichCompany\": false,\n    \"enrichDetail\": false,\n    \"excludeEmptyFields\": false,\n    \"includeRunMetadata\": true,\n    \"incrementalMode\": false,\n    \"maxResults\": 25,\n    \"notifyOnlyChanges\": true,\n    \"proxyConfiguration\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ],\n        \"apifyProxyCountry\": \"US\"\n    },\n    \"remote\": true,\n    \"searchUrls\": [\n        \"https://wellfound.com/role/l/ai-engineer/prague\"\n    ],\n    \"skipReposts\": false,\n    \"visaSponsorship\": false\n}",
-          "timeout": {}
-        },
-        "type": "@apify/n8n-nodes-apify.apify",
-        "typeVersion": 1,
-        "position": [
-          -4656,
-          2048
-        ],
-        "id": "f24e5dee-1a94-4489-ba14-69fc6d632fce",
-        "name": "Scrape Wellfound",
-        "executeOnce": false,
-        "retryOnFail": true,
-        "alwaysOutputData": true,
-        "credentials": {
-          "apifyApi": {
-            "id": "acP0zCzuvrjRGHER",
-            "name": "Apify account 5"
-          }
-        }
       },
       {
         "parameters": {
@@ -1166,63 +1342,734 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          -4432,
-          2048
+          -3664,
+          2880
         ],
-        "id": "10e48940-9131-4cee-b21e-664ac012da4e",
+        "id": "2442eb8e-e1a7-4008-ade0-4cfbcb429f62",
+        "name": "Is empty?1"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "success",
+              "last_success_at": "={{ $now.toISO() }}",
+              "workflow_tag": "wellfound",
+              "loop_count": 0
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "retry_count",
+                "displayName": "retry_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "last_run_at",
+                "displayName": "last_run_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "scrape_count",
+                "displayName": "scrape_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "item_count",
+                "displayName": "item_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "loop_count",
+                "displayName": "loop_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -3216,
+          2736
+        ],
+        "id": "92bef96f-5e59-4104-954e-a7ce782861a5",
+        "name": "Update status and reset loop count",
+        "executeOnce": true,
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT * FROM public.scraper_payloads \nWHERE source = 'wellfound' \n  AND created_at::date = CURRENT_DATE \nLIMIT 1;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -5680,
+          2640
+        ],
+        "id": "2c7093fc-df85-417b-ae8f-26e8ac423edd",
+        "name": "Get temporary payload",
+        "alwaysOutputData": true,
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "5634dbb9-8205-4220-a978-5fac80adb676",
+                "leftValue": "={{ $json.id }}",
+                "rightValue": "={{ new Date(new Date().setHours(8, 0, 0, 0)).toLocaleString('sv').replace(' ', 'T') + '+02:00' }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "empty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -5456,
+          2640
+        ],
+        "id": "eaaae915-2b16-4585-a9db-0ac787af345d",
         "name": "Is empty?"
       },
       {
         "parameters": {
-          "workflowId": {
+          "operation": "upsert",
+          "schema": {
             "__rl": true,
-            "value": "Zj1I7MhBC-OsOLt6D4Qyg",
             "mode": "list",
-            "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
-            "cachedResultName": "error_global"
+            "value": "public"
           },
-          "workflowInputs": {
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
             "mappingMode": "defineBelow",
-            "value": {},
-            "matchingColumns": [],
-            "schema": [],
+            "value": {
+              "status": "processing",
+              "workflow_tag": "wellfound",
+              "last_run_at": "={{ $now }}",
+              "scrape_count": 0,
+              "item_count": 0,
+              "loop_count": 0
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "retry_count",
+                "displayName": "retry_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "last_run_at",
+                "displayName": "last_run_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "scrape_count",
+                "displayName": "scrape_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "item_count",
+                "displayName": "item_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "loop_count",
+                "displayName": "loop_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              }
+            ],
             "attemptToConvertTypes": false,
-            "convertFieldsToString": true
+            "convertFieldsToString": false
           },
           "options": {}
         },
-        "type": "n8n-nodes-base.executeWorkflow",
-        "typeVersion": 1.3,
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
         "position": [
-          -3312,
-          2240
+          -5232,
+          2560
         ],
-        "id": "b5c6683b-264c-4f4f-ab4e-e864f5e8ff44",
-        "name": "Call 'error_global'"
-      },
-      {
-        "parameters": {},
-        "type": "n8n-nodes-base.noOp",
-        "typeVersion": 1,
-        "position": [
-          -3760,
-          1952
-        ],
-        "id": "9ee192a7-889e-4606-9d14-4a658cc84676",
-        "name": "No Operation, do nothing"
+        "id": "9a831390-a32e-4e28-9fdc-18ca5f4c21ca",
+        "name": "Update status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
       },
       {
         "parameters": {
-          "jsCode": "const platformName = \"wellfound\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "workflow_tag": "wellfound",
+              "status": "extracted",
+              "scrape_count": "={{ $('Scrape Wellfound').all().length }}"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "retry_count",
+                "displayName": "retry_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "last_run_at",
+                "displayName": "last_run_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "scrape_count",
+                "displayName": "scrape_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "item_count",
+                "displayName": "item_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "loop_count",
+                "displayName": "loop_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
         },
-        "type": "n8n-nodes-base.code",
-        "typeVersion": 2,
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
         "position": [
-          -3760,
-          2144
+          -4336,
+          2512
         ],
-        "id": "0049c2c8-9e1c-42b7-8a3e-48decc96ce9f",
-        "name": "add source"
+        "id": "91887f87-ee99-40af-8813-72239c231a59",
+        "name": "Update status1",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "Run actor and get dataset",
+          "actorId": {
+            "__rl": true,
+            "value": "https://console.apify.com/actors/jV4Y8h6j3AqVj5Qur/input",
+            "mode": "url"
+          },
+          "customBody": "={\n    \"compact\": false,\n    \"companyOnlyMode\": false,\n    \"descriptionFormat\": \"all\",\n    \"emitExpired\": false,\n    \"emitUnchanged\": false,\n    \"enrichCompany\": false,\n    \"enrichDetail\": false,\n    \"excludeEmptyFields\": false,\n    \"includeRunMetadata\": true,\n    \"incrementalMode\": false,\n    \"maxResults\": 25,\n    \"notifyOnlyChanges\": true,\n    \"proxyConfiguration\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ],\n        \"apifyProxyCountry\": \"US\"\n    },\n    \"remote\": true,\n    \"searchUrls\": [\n        \"https://wellfound.com/role/l/ai-engineer/prague\"\n    ],\n    \"skipReposts\": false,\n    \"visaSponsorship\": false\n}",
+          "timeout": {}
+        },
+        "type": "@apify/n8n-nodes-apify.apify",
+        "typeVersion": 1,
+        "position": [
+          -5008,
+          2560
+        ],
+        "id": "6dd5d73e-1db7-44ed-b7cb-5a38ef7927ff",
+        "name": "Scrape Wellfound",
+        "executeOnce": false,
+        "retryOnFail": true,
+        "alwaysOutputData": true,
+        "credentials": {
+          "apifyApi": {
+            "id": "acP0zCzuvrjRGHER",
+            "name": "Apify account 5"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          -4784,
+          2560
+        ],
+        "id": "d821bc8c-8c92-4fcf-9073-73d83c617c73",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "tableId": "scraper_payloads",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "raw_json",
+                "fieldValue": "={{ $json.data }}"
+              },
+              {
+                "fieldId": "source",
+                "fieldValue": "wellfound"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -4560,
+          2560
+        ],
+        "id": "73aae735-df22-44c2-bd42-f8ab878c52bd",
+        "name": "Upload temporary payload",
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "raw_json",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          -4336,
+          2736
+        ],
+        "id": "19822156-bd37-4240-a0fa-ffe206d48046",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "job_leads",
+          "returnAll": true,
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "job_url",
+                "condition": "eq",
+                "keyValue": "={{ $json.portalUrl }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -4112,
+          2688
+        ],
+        "id": "590fcebf-ad7e-4e2a-81c8-9a25314b16cd",
+        "name": "Check for dupes",
+        "alwaysOutputData": false,
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "advanced": true,
+          "mergeByFields": {
+            "values": [
+              {
+                "field1": "job_url",
+                "field2": "portalUrl"
+              }
+            ]
+          },
+          "joinMode": "keepNonMatches",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -3888,
+          2736
+        ],
+        "id": "630c13b0-1155-477f-9ef3-b04ead2a2a49",
+        "name": "Keep non-dupes",
+        "executeOnce": false,
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "item_count": "={{ $input.all().length }}",
+              "workflow_tag": "=wellfound"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "retry_count",
+                "displayName": "retry_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "last_run_at",
+                "displayName": "last_run_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "scrape_count",
+                "displayName": "scrape_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "item_count",
+                "displayName": "item_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "loop_count",
+                "displayName": "loop_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -3664,
+          2688
+        ],
+        "id": "8623a5b2-3566-4524-8d24-6967b07542f0",
+        "name": "Update item count",
+        "executeOnce": true,
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {
+            "reset": false
+          }
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -3440,
+          2976
+        ],
+        "id": "6bebd787-5cc1-43ff-8088-ebe53fbffc42",
+        "name": "Loop Over Items"
       },
       {
         "parameters": {
@@ -1325,100 +2172,24 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          -3984,
-          2144
+          -3216,
+          2928
         ],
-        "id": "077613c7-be84-4b2b-9164-07a908f9e486",
+        "id": "69b32031-fac7-4809-a5fb-616ab4b326e6",
         "name": "Standardize output (**adjust fields**)"
       },
       {
         "parameters": {
-          "options": {
-            "reset": false
-          }
+          "jsCode": "const platformName = \"wellfound\";\n\nfor (const item of $input.all()) {\n  item.json.source = platformName;\n}\n\nreturn $input.all();"
         },
-        "type": "n8n-nodes-base.splitInBatches",
-        "typeVersion": 3,
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
         "position": [
-          -4208,
-          2144
+          -2992,
+          2928
         ],
-        "id": "e7e82eba-64ba-491e-b773-96e78606b203",
-        "name": "Loop Over Items"
-      },
-      {
-        "parameters": {
-          "operation": "upsert",
-          "schema": {
-            "__rl": true,
-            "mode": "list",
-            "value": "public"
-          },
-          "table": {
-            "__rl": true,
-            "value": "workflow_health",
-            "mode": "list",
-            "cachedResultName": "workflow_health"
-          },
-          "columns": {
-            "mappingMode": "defineBelow",
-            "value": {
-              "status": "running",
-              "workflow_tag": "wellfound"
-            },
-            "matchingColumns": [
-              "workflow_tag"
-            ],
-            "schema": [
-              {
-                "id": "workflow_tag",
-                "displayName": "workflow_tag",
-                "required": true,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": true,
-                "removed": false
-              },
-              {
-                "id": "last_success_at",
-                "displayName": "last_success_at",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "dateTime",
-                "canBeUsedToMatch": false,
-                "removed": true
-              },
-              {
-                "id": "status",
-                "displayName": "status",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": false
-              }
-            ],
-            "attemptToConvertTypes": false,
-            "convertFieldsToString": false
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.postgres",
-        "typeVersion": 2.6,
-        "position": [
-          -4880,
-          2048
-        ],
-        "id": "897615bd-8328-47cc-93f4-22e272cea56b",
-        "name": "update running status",
-        "credentials": {
-          "postgres": {
-            "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres careerops"
-          }
-        }
+        "id": "92ae0b94-8a9f-4290-a249-b1922bbba5c7",
+        "name": "Add source"
       },
       {
         "parameters": {
@@ -1443,15 +2214,64 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          -3536,
-          2240
+          -2768,
+          2928
         ],
-        "id": "6ff75ca3-f4e8-4965-82d8-5b47b7dc664f",
+        "id": "cf10e8bf-569e-4339-b02c-2276718f52c4",
         "name": "Call '03_dedupe_upsert'",
         "retryOnFail": false,
         "maxTries": 2,
         "waitBetweenTries": 5000,
         "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+            "cachedResultName": "error_global"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -2544,
+          2880
+        ],
+        "id": "c2127e3f-4a9d-4425-a0c0-e1e7e96d3c8f",
+        "name": "Call 'error_global'"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "UPDATE public.workflow_health \nSET loop_count = loop_count + 1 \nWHERE workflow_tag = '{{ $json.source }}';",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -2544,
+          3088
+        ],
+        "id": "6dbfc704-024a-4b3f-89ca-5432866cdbce",
+        "name": "Increase loop count",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
       },
       {
         "parameters": {
@@ -1467,86 +2287,11 @@
         "type": "n8n-nodes-base.scheduleTrigger",
         "typeVersion": 1.3,
         "position": [
-          -5104,
-          1952
+          -5904,
+          2544
         ],
-        "id": "a0bd328d-1ab1-4fb8-ba1d-ddc52a206739",
+        "id": "7a118dbe-e39d-472b-bcdf-b56e98d754ce",
         "name": "Schedule Trigger"
-      },
-      {
-        "parameters": {
-          "operation": "upsert",
-          "schema": {
-            "__rl": true,
-            "mode": "list",
-            "value": "public"
-          },
-          "table": {
-            "__rl": true,
-            "value": "workflow_health",
-            "mode": "list",
-            "cachedResultName": "workflow_health"
-          },
-          "columns": {
-            "mappingMode": "defineBelow",
-            "value": {
-              "status": "completed",
-              "last_success_at": "={{ $now.toISO() }}",
-              "workflow_tag": "wellfound"
-            },
-            "matchingColumns": [
-              "workflow_tag"
-            ],
-            "schema": [
-              {
-                "id": "workflow_tag",
-                "displayName": "workflow_tag",
-                "required": true,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": true,
-                "removed": false
-              },
-              {
-                "id": "last_success_at",
-                "displayName": "last_success_at",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "dateTime",
-                "canBeUsedToMatch": false,
-                "removed": false
-              },
-              {
-                "id": "status",
-                "displayName": "status",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": false
-              }
-            ],
-            "attemptToConvertTypes": false,
-            "convertFieldsToString": false
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.postgres",
-        "typeVersion": 2.6,
-        "position": [
-          -3984,
-          1952
-        ],
-        "id": "aafd028c-484e-4c36-8554-2ef3d9468b92",
-        "name": "update success status",
-        "credentials": {
-          "postgres": {
-            "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres careerops"
-          }
-        }
       }
     ],
     "connections": {
@@ -1554,14 +2299,37 @@
         "main": [
           [
             {
-              "node": "update running status",
+              "node": "Get temporary payload",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "Scrape Wellfound": {
+      "Is empty?1": {
+        "main": [
+          [
+            {
+              "node": "Update status and reset loop count",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update status and reset loop count": {
+        "main": [
+          []
+        ]
+      },
+      "Get temporary payload": {
         "main": [
           [
             {
@@ -1576,36 +2344,106 @@
         "main": [
           [
             {
-              "node": "update success status",
+              "node": "Update status",
               "type": "main",
               "index": 0
             }
           ],
           [
             {
-              "node": "Loop Over Items",
+              "node": "Split Out",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "add source": {
+      "Update status": {
         "main": [
           [
             {
-              "node": "Call '03_dedupe_upsert'",
+              "node": "Scrape Wellfound",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "Standardize output (**adjust fields**)": {
+      "Scrape Wellfound": {
         "main": [
           [
             {
-              "node": "add source",
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          [
+            {
+              "node": "Upload temporary payload",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Upload temporary payload": {
+        "main": [
+          [
+            {
+              "node": "Update status1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Check for dupes",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Check for dupes": {
+        "main": [
+          [
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Keep non-dupes": {
+        "main": [
+          [
+            {
+              "node": "Update item count",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Is empty?1",
               "type": "main",
               "index": 0
             }
@@ -1616,7 +2454,7 @@
         "main": [
           [
             {
-              "node": "update success status",
+              "node": "Update status and reset loop count",
               "type": "main",
               "index": 0
             }
@@ -1630,11 +2468,22 @@
           ]
         ]
       },
-      "update running status": {
+      "Standardize output (**adjust fields**)": {
         "main": [
           [
             {
-              "node": "Scrape Wellfound",
+              "node": "Add source",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Add source": {
+        "main": [
+          [
+            {
+              "node": "Call '03_dedupe_upsert'",
               "type": "main",
               "index": 0
             }
@@ -1645,7 +2494,7 @@
         "main": [
           [
             {
-              "node": "Loop Over Items",
+              "node": "Increase loop count",
               "type": "main",
               "index": 0
             }
@@ -1659,22 +2508,22 @@
           ]
         ]
       },
-      "Schedule Trigger": {
+      "Increase loop count": {
         "main": [
           [
             {
-              "node": "update running status",
+              "node": "Loop Over Items",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "update success status": {
+      "Schedule Trigger": {
         "main": [
           [
             {
-              "node": "No Operation, do nothing",
+              "node": "Get temporary payload",
               "type": "main",
               "index": 0
             }
@@ -1683,9 +2532,9 @@
       }
     },
     "authors": "d d",
-    "name": "Version 61ef3f47",
+    "name": "Version fccb1426",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": [
     {
