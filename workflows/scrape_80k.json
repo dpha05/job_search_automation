@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-27T08:03:01.563Z",
+  "updatedAt": "2026-07-03T06:38:52.544Z",
   "createdAt": "2026-03-30T13:48:44.213Z",
   "id": "bwoDzWtxf2Y9ZtCQ",
   "name": "scrape_80k",
@@ -137,86 +137,11 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2272,
+        2048,
         -1504
       ],
       "id": "704793fc-0e45-4921-a6d9-8a895c376a72",
       "name": "add source"
-    },
-    {
-      "parameters": {
-        "operation": "upsert",
-        "schema": {
-          "__rl": true,
-          "mode": "list",
-          "value": "public"
-        },
-        "table": {
-          "__rl": true,
-          "value": "workflow_health",
-          "mode": "list",
-          "cachedResultName": "workflow_health"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "status": "completed",
-            "last_success_at": "={{ $now.toISO() }}",
-            "workflow_tag": "80k"
-          },
-          "matchingColumns": [
-            "workflow_tag"
-          ],
-          "schema": [
-            {
-              "id": "workflow_tag",
-              "displayName": "workflow_tag",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "last_success_at",
-              "displayName": "last_success_at",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": false,
-              "removed": false
-            },
-            {
-              "id": "status",
-              "displayName": "status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        1152,
-        -1600
-      ],
-      "id": "5a4ba7d4-6420-4fd7-9084-51376a660f37",
-      "name": "update success status",
-      "credentials": {
-        "postgres": {
-          "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres careerops"
-        }
-      }
     },
     {
       "parameters": {
@@ -241,7 +166,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        2496,
+        2272,
         -1312
       ],
       "id": "3945e3a3-a43b-4b73-9aab-7370c0975001",
@@ -250,17 +175,6 @@
       "maxTries": 2,
       "waitBetweenTries": 5000,
       "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [
-        1376,
-        -1600
-      ],
-      "id": "90b3d972-ae9a-4cd2-a958-25262b27db38",
-      "name": "No Operation, do nothing"
     },
     {
       "parameters": {
@@ -334,80 +248,6 @@
     },
     {
       "parameters": {
-        "operation": "upsert",
-        "schema": {
-          "__rl": true,
-          "mode": "list",
-          "value": "public"
-        },
-        "table": {
-          "__rl": true,
-          "value": "workflow_health",
-          "mode": "list",
-          "cachedResultName": "workflow_health"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "status": "running",
-            "workflow_tag": "80k"
-          },
-          "matchingColumns": [
-            "workflow_tag"
-          ],
-          "schema": [
-            {
-              "id": "workflow_tag",
-              "displayName": "workflow_tag",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "last_success_at",
-              "displayName": "last_success_at",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": false,
-              "removed": true
-            },
-            {
-              "id": "status",
-              "displayName": "status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        -640,
-        -1504
-      ],
-      "id": "a7f0ec3e-4039-4d9e-9f98-cb903e39f4e8",
-      "name": "update running status",
-      "credentials": {
-        "postgres": {
-          "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres careerops"
-        }
-      }
-    },
-    {
-      "parameters": {
         "amount": 1
       },
       "type": "n8n-nodes-base.wait",
@@ -419,17 +259,6 @@
       "id": "23474274-ed91-49b9-a46e-fc0d661166fc",
       "name": "Wait",
       "webhookId": "93f681b6-5fdb-4c8f-85b9-7b87cb49452f"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [
-        1824,
-        -1504
-      ],
-      "id": "8794bb7b-160b-4268-b133-d188a9574979",
-      "name": "No Operation, do nothing1"
     },
     {
       "parameters": {
@@ -617,7 +446,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2048,
+        1824,
         -1504
       ],
       "id": "2f4baaf6-2c30-4ae9-98c6-640820d49ea3",
@@ -690,11 +519,211 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        2720,
-        -1232
+        2496,
+        -1312
       ],
       "id": "270c6975-014a-446f-b17a-0c7ff796c9ff",
       "name": "Call 'error_global'"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "processing",
+            "workflow_tag": "80k",
+            "last_run_at": "={{ $now }}"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "last_run_at",
+              "displayName": "last_run_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "scrape_count",
+              "displayName": "scrape_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "item_count",
+              "displayName": "item_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "loop_count",
+              "displayName": "loop_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -640,
+        -1504
+      ],
+      "id": "a7f0ec3e-4039-4d9e-9f98-cb903e39f4e8",
+      "name": "update status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "success",
+            "last_success_at": "={{ $now.toISO() }}",
+            "workflow_tag": "80k"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1152,
+        -1600
+      ],
+      "id": "5a4ba7d4-6420-4fd7-9084-51376a660f37",
+      "name": "update status1",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
     }
   ],
   "connections": {
@@ -746,7 +775,7 @@
       "main": [
         [
           {
-            "node": "update success status",
+            "node": "update status1",
             "type": "main",
             "index": 0
           }
@@ -789,17 +818,6 @@
         ]
       ]
     },
-    "update success status": {
-      "main": [
-        [
-          {
-            "node": "No Operation, do nothing",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Jina fetch job text": {
       "main": [
         [
@@ -822,18 +840,7 @@
       "main": [
         [
           {
-            "node": "No Operation, do nothing1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "update running status": {
-      "main": [
-        [
-          {
-            "node": "Scrape url ai",
+            "node": "Standardize output (**adjust fields**)1",
             "type": "main",
             "index": 0
           }
@@ -851,22 +858,11 @@
         ]
       ]
     },
-    "No Operation, do nothing1": {
-      "main": [
-        [
-          {
-            "node": "Standardize output (**adjust fields**)1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Schedule Trigger": {
       "main": [
         [
           {
-            "node": "update running status",
+            "node": "update status",
             "type": "main",
             "index": 0
           }
@@ -877,7 +873,7 @@
       "main": [
         [
           {
-            "node": "update success status",
+            "node": "update status1",
             "type": "main",
             "index": 0
           }
@@ -895,7 +891,7 @@
       "main": [
         [
           {
-            "node": "update running status",
+            "node": "update status",
             "type": "main",
             "index": 0
           }
@@ -928,6 +924,22 @@
           }
         ]
       ]
+    },
+    "update status": {
+      "main": [
+        [
+          {
+            "node": "Scrape url ai",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update status1": {
+      "main": [
+        []
+      ]
     }
   },
   "settings": {
@@ -959,8 +971,8 @@
       }
     ]
   },
-  "versionId": "3a937341-03b1-4a40-b163-af9c03772147",
-  "activeVersionId": "3a937341-03b1-4a40-b163-af9c03772147",
+  "versionId": "2e0d9969-e2e7-46a5-beca-3d554cd54e54",
+  "activeVersionId": "2e0d9969-e2e7-46a5-beca-3d554cd54e54",
   "triggerCount": 1,
   "shared": [
     {
@@ -972,9 +984,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-27T08:03:03.100Z",
-    "createdAt": "2026-05-27T08:03:01.565Z",
-    "versionId": "3a937341-03b1-4a40-b163-af9c03772147",
+    "updatedAt": "2026-07-03T06:38:54.566Z",
+    "createdAt": "2026-07-03T06:38:52.545Z",
+    "versionId": "2e0d9969-e2e7-46a5-beca-3d554cd54e54",
     "workflowId": "bwoDzWtxf2Y9ZtCQ",
     "nodes": [
       {
@@ -1108,86 +1120,11 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          2272,
+          2048,
           -1504
         ],
         "id": "704793fc-0e45-4921-a6d9-8a895c376a72",
         "name": "add source"
-      },
-      {
-        "parameters": {
-          "operation": "upsert",
-          "schema": {
-            "__rl": true,
-            "mode": "list",
-            "value": "public"
-          },
-          "table": {
-            "__rl": true,
-            "value": "workflow_health",
-            "mode": "list",
-            "cachedResultName": "workflow_health"
-          },
-          "columns": {
-            "mappingMode": "defineBelow",
-            "value": {
-              "status": "completed",
-              "last_success_at": "={{ $now.toISO() }}",
-              "workflow_tag": "80k"
-            },
-            "matchingColumns": [
-              "workflow_tag"
-            ],
-            "schema": [
-              {
-                "id": "workflow_tag",
-                "displayName": "workflow_tag",
-                "required": true,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": true,
-                "removed": false
-              },
-              {
-                "id": "last_success_at",
-                "displayName": "last_success_at",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "dateTime",
-                "canBeUsedToMatch": false,
-                "removed": false
-              },
-              {
-                "id": "status",
-                "displayName": "status",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": false
-              }
-            ],
-            "attemptToConvertTypes": false,
-            "convertFieldsToString": false
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.postgres",
-        "typeVersion": 2.6,
-        "position": [
-          1152,
-          -1600
-        ],
-        "id": "5a4ba7d4-6420-4fd7-9084-51376a660f37",
-        "name": "update success status",
-        "credentials": {
-          "postgres": {
-            "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres careerops"
-          }
-        }
       },
       {
         "parameters": {
@@ -1212,7 +1149,7 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          2496,
+          2272,
           -1312
         ],
         "id": "3945e3a3-a43b-4b73-9aab-7370c0975001",
@@ -1221,17 +1158,6 @@
         "maxTries": 2,
         "waitBetweenTries": 5000,
         "onError": "continueErrorOutput"
-      },
-      {
-        "parameters": {},
-        "type": "n8n-nodes-base.noOp",
-        "typeVersion": 1,
-        "position": [
-          1376,
-          -1600
-        ],
-        "id": "90b3d972-ae9a-4cd2-a958-25262b27db38",
-        "name": "No Operation, do nothing"
       },
       {
         "parameters": {
@@ -1305,80 +1231,6 @@
       },
       {
         "parameters": {
-          "operation": "upsert",
-          "schema": {
-            "__rl": true,
-            "mode": "list",
-            "value": "public"
-          },
-          "table": {
-            "__rl": true,
-            "value": "workflow_health",
-            "mode": "list",
-            "cachedResultName": "workflow_health"
-          },
-          "columns": {
-            "mappingMode": "defineBelow",
-            "value": {
-              "status": "running",
-              "workflow_tag": "80k"
-            },
-            "matchingColumns": [
-              "workflow_tag"
-            ],
-            "schema": [
-              {
-                "id": "workflow_tag",
-                "displayName": "workflow_tag",
-                "required": true,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": true,
-                "removed": false
-              },
-              {
-                "id": "last_success_at",
-                "displayName": "last_success_at",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "dateTime",
-                "canBeUsedToMatch": false,
-                "removed": true
-              },
-              {
-                "id": "status",
-                "displayName": "status",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": false
-              }
-            ],
-            "attemptToConvertTypes": false,
-            "convertFieldsToString": false
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.postgres",
-        "typeVersion": 2.6,
-        "position": [
-          -640,
-          -1504
-        ],
-        "id": "a7f0ec3e-4039-4d9e-9f98-cb903e39f4e8",
-        "name": "update running status",
-        "credentials": {
-          "postgres": {
-            "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres careerops"
-          }
-        }
-      },
-      {
-        "parameters": {
           "amount": 1
         },
         "type": "n8n-nodes-base.wait",
@@ -1390,17 +1242,6 @@
         "id": "23474274-ed91-49b9-a46e-fc0d661166fc",
         "name": "Wait",
         "webhookId": "93f681b6-5fdb-4c8f-85b9-7b87cb49452f"
-      },
-      {
-        "parameters": {},
-        "type": "n8n-nodes-base.noOp",
-        "typeVersion": 1,
-        "position": [
-          1824,
-          -1504
-        ],
-        "id": "8794bb7b-160b-4268-b133-d188a9574979",
-        "name": "No Operation, do nothing1"
       },
       {
         "parameters": {
@@ -1588,7 +1429,7 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          2048,
+          1824,
           -1504
         ],
         "id": "2f4baaf6-2c30-4ae9-98c6-640820d49ea3",
@@ -1661,11 +1502,211 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          2720,
-          -1232
+          2496,
+          -1312
         ],
         "id": "270c6975-014a-446f-b17a-0c7ff796c9ff",
         "name": "Call 'error_global'"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "processing",
+              "workflow_tag": "80k",
+              "last_run_at": "={{ $now }}"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "retry_count",
+                "displayName": "retry_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "last_run_at",
+                "displayName": "last_run_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "scrape_count",
+                "displayName": "scrape_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "item_count",
+                "displayName": "item_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "loop_count",
+                "displayName": "loop_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -640,
+          -1504
+        ],
+        "id": "a7f0ec3e-4039-4d9e-9f98-cb903e39f4e8",
+        "name": "update status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "success",
+              "last_success_at": "={{ $now.toISO() }}",
+              "workflow_tag": "80k"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          1152,
+          -1600
+        ],
+        "id": "5a4ba7d4-6420-4fd7-9084-51376a660f37",
+        "name": "update status1",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
       }
     ],
     "connections": {
@@ -1717,7 +1758,7 @@
         "main": [
           [
             {
-              "node": "update success status",
+              "node": "update status1",
               "type": "main",
               "index": 0
             }
@@ -1760,17 +1801,6 @@
           ]
         ]
       },
-      "update success status": {
-        "main": [
-          [
-            {
-              "node": "No Operation, do nothing",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
       "Jina fetch job text": {
         "main": [
           [
@@ -1793,18 +1823,7 @@
         "main": [
           [
             {
-              "node": "No Operation, do nothing1",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "update running status": {
-        "main": [
-          [
-            {
-              "node": "Scrape url ai",
+              "node": "Standardize output (**adjust fields**)1",
               "type": "main",
               "index": 0
             }
@@ -1822,22 +1841,11 @@
           ]
         ]
       },
-      "No Operation, do nothing1": {
-        "main": [
-          [
-            {
-              "node": "Standardize output (**adjust fields**)1",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
       "Schedule Trigger": {
         "main": [
           [
             {
-              "node": "update running status",
+              "node": "update status",
               "type": "main",
               "index": 0
             }
@@ -1848,7 +1856,7 @@
         "main": [
           [
             {
-              "node": "update success status",
+              "node": "update status1",
               "type": "main",
               "index": 0
             }
@@ -1866,7 +1874,7 @@
         "main": [
           [
             {
-              "node": "update running status",
+              "node": "update status",
               "type": "main",
               "index": 0
             }
@@ -1899,10 +1907,26 @@
             }
           ]
         ]
+      },
+      "update status": {
+        "main": [
+          [
+            {
+              "node": "Scrape url ai",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update status1": {
+        "main": [
+          []
+        ]
       }
     },
     "authors": "d d",
-    "name": "Version 3a937341",
+    "name": "Version 2e0d9969",
     "description": "",
     "autosaved": true
   },
