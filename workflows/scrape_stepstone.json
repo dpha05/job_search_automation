@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-01T06:56:45.689Z",
+  "updatedAt": "2026-06-30T06:19:17.569Z",
   "createdAt": "2026-05-29T07:16:32.036Z",
   "id": "8KTpxZipjRPoZRgp",
   "name": "scrape_stepstone",
@@ -20,160 +20,11 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.3,
       "position": [
-        -7232,
-        1584
+        -8960,
+        1448
       ],
       "id": "23b01381-76c7-428d-9348-a9eabd236070",
       "name": "Schedule Trigger"
-    },
-    {
-      "parameters": {
-        "operation": "upsert",
-        "schema": {
-          "__rl": true,
-          "mode": "list",
-          "value": "public"
-        },
-        "table": {
-          "__rl": true,
-          "value": "workflow_health",
-          "mode": "list",
-          "cachedResultName": "workflow_health"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "status": "running",
-            "workflow_tag": "stepstone"
-          },
-          "matchingColumns": [
-            "workflow_tag"
-          ],
-          "schema": [
-            {
-              "id": "workflow_tag",
-              "displayName": "workflow_tag",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "last_success_at",
-              "displayName": "last_success_at",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": false,
-              "removed": true
-            },
-            {
-              "id": "status",
-              "displayName": "status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        -7008,
-        1680
-      ],
-      "id": "f0351506-6014-45f6-846e-18f2c383053b",
-      "name": "update running status",
-      "credentials": {
-        "postgres": {
-          "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres careerops"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "upsert",
-        "schema": {
-          "__rl": true,
-          "mode": "list",
-          "value": "public"
-        },
-        "table": {
-          "__rl": true,
-          "value": "workflow_health",
-          "mode": "list",
-          "cachedResultName": "workflow_health"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "status": "completed",
-            "last_success_at": "={{ $now.toISO() }}",
-            "workflow_tag": "stepstone"
-          },
-          "matchingColumns": [
-            "workflow_tag"
-          ],
-          "schema": [
-            {
-              "id": "workflow_tag",
-              "displayName": "workflow_tag",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "last_success_at",
-              "displayName": "last_success_at",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": false,
-              "removed": false
-            },
-            {
-              "id": "status",
-              "displayName": "status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        -6064,
-        1520
-      ],
-      "id": "dc5f6961-feb4-4bcd-af95-a6fd269c388b",
-      "name": "update success status",
-      "credentials": {
-        "postgres": {
-          "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres careerops"
-        }
-      }
     },
     {
       "parameters": {
@@ -182,8 +33,8 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -7232,
-        1776
+        -8960,
+        1640
       ],
       "id": "3c3e32a9-b9b1-4dc3-8ecf-b86acc50b48e",
       "name": "When Executed by Another Workflow"
@@ -195,8 +46,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5216,
-        1680
+        -5376,
+        1736
       ],
       "id": "cbe9012b-749a-4385-b739-3b57812c119a",
       "name": "add source"
@@ -208,31 +59,31 @@
             {
               "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
               "name": "jobId",
-              "value": "={{ $('Is empty?').item.json.id }}",
+              "value": "={{ $('Loop Over Items').item.json.id }}",
               "type": "string"
             },
             {
               "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
               "name": "jobTitle",
-              "value": "={{ $('Is empty?').item.json.title }}",
+              "value": "={{ $('Loop Over Items').item.json.title }}",
               "type": "string"
             },
             {
               "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
               "name": "jobUrl",
-              "value": "=https://www.stepstone.de{{ $('Is empty?').item.json.url }}",
+              "value": "=https://www.stepstone.de{{ $('Loop Over Items').item.json.url }}",
               "type": "string"
             },
             {
               "id": "d7ac7ab9-4e9f-44e2-a188-a6f8cbbb580c",
               "name": "companyName",
-              "value": "={{ $('Is empty?').item.json.companyName }}",
+              "value": "={{ $('Loop Over Items').item.json.companyName }}",
               "type": "string"
             },
             {
               "id": "51e71c18-177a-4370-a63d-25f8001fce8e",
               "name": "companyUrl",
-              "value": "={{ $('Is empty?').item.json.companyUrl }}",
+              "value": "={{ $('Loop Over Items').item.json.companyUrl }}",
               "type": "string"
             },
             {
@@ -244,7 +95,7 @@
             {
               "id": "0103b2e7-89df-48b2-a1dc-4b91932b8495",
               "name": "publishedAt",
-              "value": "={{ $('Is empty?').item.json.datePosted }}",
+              "value": "={{ $('Loop Over Items').item.json.datePosted }}",
               "type": "string"
             },
             {
@@ -256,7 +107,7 @@
             {
               "id": "008246ee-3829-4a26-af95-544f914e1fe9",
               "name": "location",
-              "value": "={{ $('Is empty?').item.json.location }}",
+              "value": "={{ $('Loop Over Items').item.json.location }}",
               "type": "string"
             },
             {
@@ -302,8 +153,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -5440,
-        1680
+        -5600,
+        1736
       ],
       "id": "4a0030c1-09af-49c7-837e-ab030d758d85",
       "name": "Standardize output (**adjust fields**)"
@@ -331,8 +182,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -4992,
-        1904
+        -5152,
+        1736
       ],
       "id": "f6f94430-ed85-4b83-9373-952f00555007",
       "name": "Call '03_dedupe_upsert'",
@@ -340,6 +191,714 @@
       "maxTries": 2,
       "waitBetweenTries": 5000,
       "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "https://console.apify.com/actors/pIVhuvHZkW2Llfjrr/input",
+          "mode": "url"
+        },
+        "customBody": "={\n    \"category\": \"verwaltung\",\n    \"includeRelatedJobs\": false,\n    \"maxItems\": 100,\n    \"proxy\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ]\n    },\n    \"startUrls\": [\n        {\n            \"url\": \"https://www.stepstone.de/work/full-time/ai-engineerai-agentmlopsai-consultantai-solutionsn8n/in-europe?whereType=autosuggest&radius=30&action=facet_selected%3bage%3bage_7&q=%28ai+engineer%29%2c%28ai+agent%29%2c%28mlops%29%2c%28ai+consultant%29%2c%28ai+solutions%29%2c%28n8n%29&ag=age_7&fdl=en&wfh=1&searchOrigin=Resultlist_top-search\"\n        }\n    ]\n}",
+        "timeout": {}
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        -8064,
+        1472
+      ],
+      "id": "5b350fb1-589a-4c2b-9dfa-8eb25481ffc2",
+      "name": "Scrape stepstone",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "apifyApi": {
+          "id": "acP0zCzuvrjRGHER",
+          "name": "Apify account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/https://www.stepstone.de{{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -6048,
+        1832
+      ],
+      "id": "c72aaa44-ed2c-4664-b61a-e98de41cc8cc",
+      "name": "Jina fetch job text",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "job_leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_url",
+              "condition": "eq",
+              "keyValue": "=https://www.stepstone.de{{ $('Is empty?1').item.json.url }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "failed_jina"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -5824,
+        1928
+      ],
+      "id": "49464c40-031d-4dec-8b5a-22184e5ab1ea",
+      "name": "Update a row",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const raw = $input.item.json.data || \"\"; \n\nreturn { \n    jobDescription: raw.split(\"Markdown Content:\")[1]?.trim() || raw \n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5824,
+        1736
+      ],
+      "id": "cd0acc74-61d7-494c-b810-9b0f1050f635",
+      "name": "Payload parser job description"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -6272,
+        1832
+      ],
+      "id": "b06a51fd-2382-4720-af24-c08301426e34",
+      "name": "Wait",
+      "webhookId": "0ea4137f-7603-4c4f-a8fd-ae89ebd7721b"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+          "cachedResultName": "error_global"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -4928,
+        1688
+      ],
+      "id": "e3bd1eab-f923-4df8-8f09-3ae9d72a13ea",
+      "name": "Call 'error_global'"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -6496,
+        1880
+      ],
+      "id": "8d55d99b-6a52-4f2d-a259-f7870c6de7b3",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "job_leads",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "published_at",
+              "condition": "eq",
+              "keyValue": "={{ $json.datePosted }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -7168,
+        1592
+      ],
+      "id": "f1063d30-16d8-4b24-8948-e6b1e63698ca",
+      "name": "Check for dupes",
+      "alwaysOutputData": false,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "published_at",
+              "field2": "datePosted"
+            }
+          ]
+        },
+        "joinMode": "keepNonMatches",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -6944,
+        1640
+      ],
+      "id": "412767c8-7ae5-4683-84ae-166a5ca67d15",
+      "name": "Keep non-dupes",
+      "executeOnce": false,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "raw_json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -7392,
+        1640
+      ],
+      "id": "c039d64a-62bd-4e7a-840c-4fc1b1d60d40",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM public.scraper_payloads \nWHERE source = 'stepstone' \n  AND created_at::date = CURRENT_DATE \nLIMIT 1;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -8736,
+        1544
+      ],
+      "id": "1f47fe66-097a-47b2-bd63-89682c930d6d",
+      "name": "Get temporary payload",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5634dbb9-8205-4220-a978-5fac80adb676",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "={{ new Date(new Date().setHours(8, 0, 0, 0)).toLocaleString('sv').replace(' ', 'T') + '+02:00' }}",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -8512,
+        1544
+      ],
+      "id": "8c36c311-deb5-4366-9705-633ff8118549",
+      "name": "Is empty?"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "processing",
+            "workflow_tag": "stepstone",
+            "last_run_at": "={{ $now }}",
+            "scrape_count": 0,
+            "item_count": 0,
+            "loop_count": 0
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "last_run_at",
+              "displayName": "last_run_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "scrape_count",
+              "displayName": "scrape_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "item_count",
+              "displayName": "item_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "loop_count",
+              "displayName": "loop_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -8288,
+        1472
+      ],
+      "id": "62eb3c65-54ef-4e9c-ab89-493d6c114342",
+      "name": "Update status",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -7840,
+        1472
+      ],
+      "id": "a17d618d-091d-4bd9-88b2-77e916b1bc64",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "tableId": "scraper_payloads",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "raw_json",
+              "fieldValue": "={{ $json.data }}"
+            },
+            {
+              "fieldId": "source",
+              "fieldValue": "stepstone"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -7616,
+        1472
+      ],
+      "id": "68c2fea4-da15-4997-be53-2c8d92972169",
+      "name": "Upload temporary payload",
+      "credentials": {
+        "supabaseApi": {
+          "id": "qB1TBV7vyX50RGhp",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "workflow_tag": "stepstone",
+            "status": "extracted",
+            "scrape_count": "={{ $('Scrape stepstone').all().length }}"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "last_run_at",
+              "displayName": "last_run_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "scrape_count",
+              "displayName": "scrape_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "item_count",
+              "displayName": "item_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "loop_count",
+              "displayName": "loop_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -7392,
+        1424
+      ],
+      "id": "ff61940f-13b6-4055-acb9-e4cd7e2f6d20",
+      "name": "Update status1",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "item_count": "={{ $input.all().length }}",
+            "workflow_tag": "=stepstone"
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "last_run_at",
+              "displayName": "last_run_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "scrape_count",
+              "displayName": "scrape_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "item_count",
+              "displayName": "item_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "loop_count",
+              "displayName": "loop_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -6720,
+        1592
+      ],
+      "id": "86a75fd9-af61-490f-a0a8-fdb84340e747",
+      "name": "Update item count",
+      "executeOnce": true,
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
     },
     {
       "parameters": {
@@ -369,177 +928,159 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -6560,
-        1680
+        -6720,
+        1784
       ],
       "id": "aa0223b7-ed33-47c9-80f2-67bba3a6e9eb",
-      "name": "Is empty?"
+      "name": "Is empty?1"
     },
     {
       "parameters": {
-        "operation": "Run actor and get dataset",
-        "actorId": {
+        "operation": "upsert",
+        "schema": {
           "__rl": true,
-          "value": "https://console.apify.com/actors/pIVhuvHZkW2Llfjrr/input",
-          "mode": "url"
-        },
-        "customBody": "={\n    \"category\": \"verwaltung\",\n    \"includeRelatedJobs\": false,\n    \"maxItems\": 100,\n    \"proxy\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ]\n    },\n    \"startUrls\": [\n        {\n            \"url\": \"https://www.stepstone.de/work/full-time/ai-engineerai-agentmlopsai-consultantai-solutionsn8n/in-europe?whereType=autosuggest&radius=30&action=facet_selected%3bage%3bage_7&q=%28ai+engineer%29%2c%28ai+agent%29%2c%28mlops%29%2c%28ai+consultant%29%2c%28ai+solutions%29%2c%28n8n%29&ag=age_7&fdl=en&wfh=1&searchOrigin=Resultlist_top-search\"\n        }\n    ]\n}"
-      },
-      "type": "@apify/n8n-nodes-apify.apify",
-      "typeVersion": 1,
-      "position": [
-        -6784,
-        1680
-      ],
-      "id": "5b350fb1-589a-4c2b-9dfa-8eb25481ffc2",
-      "name": "Scrape stepstone",
-      "executeOnce": false,
-      "retryOnFail": true,
-      "alwaysOutputData": true,
-      "credentials": {
-        "apifyApi": {
-          "id": "acP0zCzuvrjRGHER",
-          "name": "Apify account 5"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "url": "=https://r.jina.ai/https://www.stepstone.de{{ $json.url }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        -5888,
-        1824
-      ],
-      "id": "c72aaa44-ed2c-4664-b61a-e98de41cc8cc",
-      "name": "Jina fetch job text",
-      "retryOnFail": true,
-      "waitBetweenTries": 5000,
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "operation": "update",
-        "tableId": "job_leads",
-        "filters": {
-          "conditions": [
-            {
-              "keyName": "job_url",
-              "condition": "eq",
-              "keyValue": "=https://www.stepstone.de{{ $('Is empty?').item.json.url }}"
-            }
-          ]
-        },
-        "fieldsUi": {
-          "fieldValues": [
-            {
-              "fieldId": "status",
-              "fieldValue": "failed_jina"
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.supabase",
-      "typeVersion": 1,
-      "position": [
-        -5664,
-        1872
-      ],
-      "id": "49464c40-031d-4dec-8b5a-22184e5ab1ea",
-      "name": "Update a row",
-      "retryOnFail": true,
-      "waitBetweenTries": 5000,
-      "credentials": {
-        "supabaseApi": {
-          "id": "qB1TBV7vyX50RGhp",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "mode": "runOnceForEachItem",
-        "jsCode": "const raw = $input.item.json.data || \"\"; \n\nreturn { \n    jobDescription: raw.split(\"Markdown Content:\")[1]?.trim() || raw \n};"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -5664,
-        1680
-      ],
-      "id": "cd0acc74-61d7-494c-b810-9b0f1050f635",
-      "name": "Payload parser job description"
-    },
-    {
-      "parameters": {
-        "amount": 1
-      },
-      "type": "n8n-nodes-base.wait",
-      "typeVersion": 1.1,
-      "position": [
-        -6112,
-        1824
-      ],
-      "id": "b06a51fd-2382-4720-af24-c08301426e34",
-      "name": "Wait",
-      "webhookId": "0ea4137f-7603-4c4f-a8fd-ae89ebd7721b"
-    },
-    {
-      "parameters": {
-        "workflowId": {
-          "__rl": true,
-          "value": "Zj1I7MhBC-OsOLt6D4Qyg",
           "mode": "list",
-          "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
-          "cachedResultName": "error_global"
+          "value": "public"
         },
-        "workflowInputs": {
+        "table": {
+          "__rl": true,
+          "value": "workflow_health",
+          "mode": "list",
+          "cachedResultName": "workflow_health"
+        },
+        "columns": {
           "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
+          "value": {
+            "status": "success",
+            "last_success_at": "={{ $now.toISO() }}",
+            "workflow_tag": "stepstone",
+            "loop_count": 0
+          },
+          "matchingColumns": [
+            "workflow_tag"
+          ],
+          "schema": [
+            {
+              "id": "workflow_tag",
+              "displayName": "workflow_tag",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "retry_count",
+              "displayName": "retry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "last_run_at",
+              "displayName": "last_run_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "scrape_count",
+              "displayName": "scrape_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "item_count",
+              "displayName": "item_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "loop_count",
+              "displayName": "loop_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            }
+          ],
           "attemptToConvertTypes": false,
-          "convertFieldsToString": true
+          "convertFieldsToString": false
         },
         "options": {}
       },
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.3,
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
       "position": [
-        -4768,
-        1904
+        -6272,
+        1640
       ],
-      "id": "e3bd1eab-f923-4df8-8f09-3ae9d72a13ea",
-      "name": "Call 'error_global'"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [
-        -5840,
-        1520
-      ],
-      "id": "d51ae933-4b4b-4cc9-a611-533d366a7a45",
-      "name": "No Operation, do nothing"
+      "id": "c29f544a-df40-4549-8793-3ba975e863fa",
+      "name": "Update status and reset loop count",
+      "executeOnce": true,
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
     },
     {
       "parameters": {
-        "options": {
-          "reset": false
-        }
+        "operation": "executeQuery",
+        "query": "UPDATE public.workflow_health \nSET loop_count = loop_count + 1 \nWHERE workflow_tag = '{{ $json.source }}';",
+        "options": {}
       },
-      "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 3,
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
       "position": [
-        -6336,
-        1776
+        -4928,
+        2024
       ],
-      "id": "8d55d99b-6a52-4f2d-a259-f7870c6de7b3",
-      "name": "Loop Over Items"
+      "id": "0e0116fd-9dbd-4b07-aecf-04e5b35f8a9e",
+      "name": "Increase loop count",
+      "credentials": {
+        "postgres": {
+          "id": "wub5gbhgKNBgMsXa",
+          "name": "Postgres careerops"
+        }
+      }
     }
   ],
   "connections": {
@@ -547,29 +1088,7 @@
       "main": [
         [
           {
-            "node": "update running status",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "update running status": {
-      "main": [
-        [
-          {
-            "node": "Scrape stepstone",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "update success status": {
-      "main": [
-        [
-          {
-            "node": "No Operation, do nothing",
+            "node": "Get temporary payload",
             "type": "main",
             "index": 0
           }
@@ -580,7 +1099,7 @@
       "main": [
         [
           {
-            "node": "update running status",
+            "node": "Get temporary payload",
             "type": "main",
             "index": 0
           }
@@ -613,7 +1132,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items",
+            "node": "Increase loop count",
             "type": "main",
             "index": 0
           }
@@ -627,29 +1146,11 @@
         ]
       ]
     },
-    "Is empty?": {
-      "main": [
-        [
-          {
-            "node": "update success status",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Loop Over Items",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Scrape stepstone": {
       "main": [
         [
           {
-            "node": "Is empty?",
+            "node": "Aggregate",
             "type": "main",
             "index": 0
           }
@@ -700,7 +1201,7 @@
       "main": [
         [
           {
-            "node": "update success status",
+            "node": "Update status and reset loop count",
             "type": "main",
             "index": 0
           }
@@ -708,6 +1209,145 @@
         [
           {
             "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for dupes": {
+      "main": [
+        [
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep non-dupes": {
+      "main": [
+        [
+          {
+            "node": "Is empty?1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update item count",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Check for dupes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Keep non-dupes",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get temporary payload": {
+      "main": [
+        [
+          {
+            "node": "Is empty?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is empty?": {
+      "main": [
+        [
+          {
+            "node": "Update status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update status": {
+      "main": [
+        [
+          {
+            "node": "Scrape stepstone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Upload temporary payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload temporary payload": {
+      "main": [
+        [
+          {
+            "node": "Update status1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is empty?1": {
+      "main": [
+        [
+          {
+            "node": "Update status and reset loop count",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Increase loop count": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
@@ -935,8 +1575,8 @@
       }
     ]
   },
-  "versionId": "f5da0a16-2783-43ec-9710-7d7f5c23d37e",
-  "activeVersionId": "f5da0a16-2783-43ec-9710-7d7f5c23d37e",
+  "versionId": "c0ea50eb-8174-4475-a7b8-428bd9a1ac8e",
+  "activeVersionId": "c0ea50eb-8174-4475-a7b8-428bd9a1ac8e",
   "triggerCount": 1,
   "shared": [
     {
@@ -948,9 +1588,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-06-01T06:56:47.810Z",
-    "createdAt": "2026-06-01T06:56:45.691Z",
-    "versionId": "f5da0a16-2783-43ec-9710-7d7f5c23d37e",
+    "updatedAt": "2026-06-30T06:19:19.106Z",
+    "createdAt": "2026-06-30T06:19:17.570Z",
+    "versionId": "c0ea50eb-8174-4475-a7b8-428bd9a1ac8e",
     "workflowId": "8KTpxZipjRPoZRgp",
     "nodes": [
       {
@@ -967,160 +1607,11 @@
         "type": "n8n-nodes-base.scheduleTrigger",
         "typeVersion": 1.3,
         "position": [
-          -7232,
-          1584
+          -8960,
+          1448
         ],
         "id": "23b01381-76c7-428d-9348-a9eabd236070",
         "name": "Schedule Trigger"
-      },
-      {
-        "parameters": {
-          "operation": "upsert",
-          "schema": {
-            "__rl": true,
-            "mode": "list",
-            "value": "public"
-          },
-          "table": {
-            "__rl": true,
-            "value": "workflow_health",
-            "mode": "list",
-            "cachedResultName": "workflow_health"
-          },
-          "columns": {
-            "mappingMode": "defineBelow",
-            "value": {
-              "status": "running",
-              "workflow_tag": "stepstone"
-            },
-            "matchingColumns": [
-              "workflow_tag"
-            ],
-            "schema": [
-              {
-                "id": "workflow_tag",
-                "displayName": "workflow_tag",
-                "required": true,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": true,
-                "removed": false
-              },
-              {
-                "id": "last_success_at",
-                "displayName": "last_success_at",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "dateTime",
-                "canBeUsedToMatch": false,
-                "removed": true
-              },
-              {
-                "id": "status",
-                "displayName": "status",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": false
-              }
-            ],
-            "attemptToConvertTypes": false,
-            "convertFieldsToString": false
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.postgres",
-        "typeVersion": 2.6,
-        "position": [
-          -7008,
-          1680
-        ],
-        "id": "f0351506-6014-45f6-846e-18f2c383053b",
-        "name": "update running status",
-        "credentials": {
-          "postgres": {
-            "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres careerops"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "operation": "upsert",
-          "schema": {
-            "__rl": true,
-            "mode": "list",
-            "value": "public"
-          },
-          "table": {
-            "__rl": true,
-            "value": "workflow_health",
-            "mode": "list",
-            "cachedResultName": "workflow_health"
-          },
-          "columns": {
-            "mappingMode": "defineBelow",
-            "value": {
-              "status": "completed",
-              "last_success_at": "={{ $now.toISO() }}",
-              "workflow_tag": "stepstone"
-            },
-            "matchingColumns": [
-              "workflow_tag"
-            ],
-            "schema": [
-              {
-                "id": "workflow_tag",
-                "displayName": "workflow_tag",
-                "required": true,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": true,
-                "removed": false
-              },
-              {
-                "id": "last_success_at",
-                "displayName": "last_success_at",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "dateTime",
-                "canBeUsedToMatch": false,
-                "removed": false
-              },
-              {
-                "id": "status",
-                "displayName": "status",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": false
-              }
-            ],
-            "attemptToConvertTypes": false,
-            "convertFieldsToString": false
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.postgres",
-        "typeVersion": 2.6,
-        "position": [
-          -6064,
-          1520
-        ],
-        "id": "dc5f6961-feb4-4bcd-af95-a6fd269c388b",
-        "name": "update success status",
-        "credentials": {
-          "postgres": {
-            "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres careerops"
-          }
-        }
       },
       {
         "parameters": {
@@ -1129,8 +1620,8 @@
         "type": "n8n-nodes-base.executeWorkflowTrigger",
         "typeVersion": 1.1,
         "position": [
-          -7232,
-          1776
+          -8960,
+          1640
         ],
         "id": "3c3e32a9-b9b1-4dc3-8ecf-b86acc50b48e",
         "name": "When Executed by Another Workflow"
@@ -1142,8 +1633,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          -5216,
-          1680
+          -5376,
+          1736
         ],
         "id": "cbe9012b-749a-4385-b739-3b57812c119a",
         "name": "add source"
@@ -1155,31 +1646,31 @@
               {
                 "id": "1c6d132b-3f2c-404c-8fd7-73b4ab25a7ae",
                 "name": "jobId",
-                "value": "={{ $('Is empty?').item.json.id }}",
+                "value": "={{ $('Loop Over Items').item.json.id }}",
                 "type": "string"
               },
               {
                 "id": "b023034d-a04b-4058-ab2f-1ad1827889b4",
                 "name": "jobTitle",
-                "value": "={{ $('Is empty?').item.json.title }}",
+                "value": "={{ $('Loop Over Items').item.json.title }}",
                 "type": "string"
               },
               {
                 "id": "a85671e1-aa23-4ba4-94dd-a88998e26b96",
                 "name": "jobUrl",
-                "value": "=https://www.stepstone.de{{ $('Is empty?').item.json.url }}",
+                "value": "=https://www.stepstone.de{{ $('Loop Over Items').item.json.url }}",
                 "type": "string"
               },
               {
                 "id": "d7ac7ab9-4e9f-44e2-a188-a6f8cbbb580c",
                 "name": "companyName",
-                "value": "={{ $('Is empty?').item.json.companyName }}",
+                "value": "={{ $('Loop Over Items').item.json.companyName }}",
                 "type": "string"
               },
               {
                 "id": "51e71c18-177a-4370-a63d-25f8001fce8e",
                 "name": "companyUrl",
-                "value": "={{ $('Is empty?').item.json.companyUrl }}",
+                "value": "={{ $('Loop Over Items').item.json.companyUrl }}",
                 "type": "string"
               },
               {
@@ -1191,7 +1682,7 @@
               {
                 "id": "0103b2e7-89df-48b2-a1dc-4b91932b8495",
                 "name": "publishedAt",
-                "value": "={{ $('Is empty?').item.json.datePosted }}",
+                "value": "={{ $('Loop Over Items').item.json.datePosted }}",
                 "type": "string"
               },
               {
@@ -1203,7 +1694,7 @@
               {
                 "id": "008246ee-3829-4a26-af95-544f914e1fe9",
                 "name": "location",
-                "value": "={{ $('Is empty?').item.json.location }}",
+                "value": "={{ $('Loop Over Items').item.json.location }}",
                 "type": "string"
               },
               {
@@ -1249,8 +1740,8 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          -5440,
-          1680
+          -5600,
+          1736
         ],
         "id": "4a0030c1-09af-49c7-837e-ab030d758d85",
         "name": "Standardize output (**adjust fields**)"
@@ -1278,8 +1769,8 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          -4992,
-          1904
+          -5152,
+          1736
         ],
         "id": "f6f94430-ed85-4b83-9373-952f00555007",
         "name": "Call '03_dedupe_upsert'",
@@ -1287,6 +1778,714 @@
         "maxTries": 2,
         "waitBetweenTries": 5000,
         "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "operation": "Run actor and get dataset",
+          "actorId": {
+            "__rl": true,
+            "value": "https://console.apify.com/actors/pIVhuvHZkW2Llfjrr/input",
+            "mode": "url"
+          },
+          "customBody": "={\n    \"category\": \"verwaltung\",\n    \"includeRelatedJobs\": false,\n    \"maxItems\": 100,\n    \"proxy\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ]\n    },\n    \"startUrls\": [\n        {\n            \"url\": \"https://www.stepstone.de/work/full-time/ai-engineerai-agentmlopsai-consultantai-solutionsn8n/in-europe?whereType=autosuggest&radius=30&action=facet_selected%3bage%3bage_7&q=%28ai+engineer%29%2c%28ai+agent%29%2c%28mlops%29%2c%28ai+consultant%29%2c%28ai+solutions%29%2c%28n8n%29&ag=age_7&fdl=en&wfh=1&searchOrigin=Resultlist_top-search\"\n        }\n    ]\n}",
+          "timeout": {}
+        },
+        "type": "@apify/n8n-nodes-apify.apify",
+        "typeVersion": 1,
+        "position": [
+          -8064,
+          1472
+        ],
+        "id": "5b350fb1-589a-4c2b-9dfa-8eb25481ffc2",
+        "name": "Scrape stepstone",
+        "executeOnce": false,
+        "retryOnFail": true,
+        "alwaysOutputData": true,
+        "credentials": {
+          "apifyApi": {
+            "id": "acP0zCzuvrjRGHER",
+            "name": "Apify account 5"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "url": "=https://r.jina.ai/https://www.stepstone.de{{ $json.url }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -6048,
+          1832
+        ],
+        "id": "c72aaa44-ed2c-4664-b61a-e98de41cc8cc",
+        "name": "Jina fetch job text",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "job_leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "job_url",
+                "condition": "eq",
+                "keyValue": "=https://www.stepstone.de{{ $('Is empty?1').item.json.url }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "status",
+                "fieldValue": "failed_jina"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -5824,
+          1928
+        ],
+        "id": "49464c40-031d-4dec-8b5a-22184e5ab1ea",
+        "name": "Update a row",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const raw = $input.item.json.data || \"\"; \n\nreturn { \n    jobDescription: raw.split(\"Markdown Content:\")[1]?.trim() || raw \n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -5824,
+          1736
+        ],
+        "id": "cd0acc74-61d7-494c-b810-9b0f1050f635",
+        "name": "Payload parser job description"
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          -6272,
+          1832
+        ],
+        "id": "b06a51fd-2382-4720-af24-c08301426e34",
+        "name": "Wait",
+        "webhookId": "0ea4137f-7603-4c4f-a8fd-ae89ebd7721b"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "Zj1I7MhBC-OsOLt6D4Qyg",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
+            "cachedResultName": "error_global"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -4928,
+          1688
+        ],
+        "id": "e3bd1eab-f923-4df8-8f09-3ae9d72a13ea",
+        "name": "Call 'error_global'"
+      },
+      {
+        "parameters": {
+          "options": {
+            "reset": false
+          }
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -6496,
+          1880
+        ],
+        "id": "8d55d99b-6a52-4f2d-a259-f7870c6de7b3",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "job_leads",
+          "returnAll": true,
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "published_at",
+                "condition": "eq",
+                "keyValue": "={{ $json.datePosted }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -7168,
+          1592
+        ],
+        "id": "f1063d30-16d8-4b24-8948-e6b1e63698ca",
+        "name": "Check for dupes",
+        "alwaysOutputData": false,
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "advanced": true,
+          "mergeByFields": {
+            "values": [
+              {
+                "field1": "published_at",
+                "field2": "datePosted"
+              }
+            ]
+          },
+          "joinMode": "keepNonMatches",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -6944,
+          1640
+        ],
+        "id": "412767c8-7ae5-4683-84ae-166a5ca67d15",
+        "name": "Keep non-dupes",
+        "executeOnce": false,
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "raw_json",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          -7392,
+          1640
+        ],
+        "id": "c039d64a-62bd-4e7a-840c-4fc1b1d60d40",
+        "name": "Split Out1"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT * FROM public.scraper_payloads \nWHERE source = 'stepstone' \n  AND created_at::date = CURRENT_DATE \nLIMIT 1;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -8736,
+          1544
+        ],
+        "id": "1f47fe66-097a-47b2-bd63-89682c930d6d",
+        "name": "Get temporary payload",
+        "alwaysOutputData": true,
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "5634dbb9-8205-4220-a978-5fac80adb676",
+                "leftValue": "={{ $json.id }}",
+                "rightValue": "={{ new Date(new Date().setHours(8, 0, 0, 0)).toLocaleString('sv').replace(' ', 'T') + '+02:00' }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "empty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -8512,
+          1544
+        ],
+        "id": "8c36c311-deb5-4366-9705-633ff8118549",
+        "name": "Is empty?"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "processing",
+              "workflow_tag": "stepstone",
+              "last_run_at": "={{ $now }}",
+              "scrape_count": 0,
+              "item_count": 0,
+              "loop_count": 0
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "retry_count",
+                "displayName": "retry_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "last_run_at",
+                "displayName": "last_run_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "scrape_count",
+                "displayName": "scrape_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "item_count",
+                "displayName": "item_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "loop_count",
+                "displayName": "loop_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -8288,
+          1472
+        ],
+        "id": "62eb3c65-54ef-4e9c-ab89-493d6c114342",
+        "name": "Update status",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          -7840,
+          1472
+        ],
+        "id": "a17d618d-091d-4bd9-88b2-77e916b1bc64",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "tableId": "scraper_payloads",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "raw_json",
+                "fieldValue": "={{ $json.data }}"
+              },
+              {
+                "fieldId": "source",
+                "fieldValue": "stepstone"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -7616,
+          1472
+        ],
+        "id": "68c2fea4-da15-4997-be53-2c8d92972169",
+        "name": "Upload temporary payload",
+        "credentials": {
+          "supabaseApi": {
+            "id": "qB1TBV7vyX50RGhp",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "workflow_tag": "stepstone",
+              "status": "extracted",
+              "scrape_count": "={{ $('Scrape stepstone').all().length }}"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "retry_count",
+                "displayName": "retry_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "last_run_at",
+                "displayName": "last_run_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "scrape_count",
+                "displayName": "scrape_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "item_count",
+                "displayName": "item_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "loop_count",
+                "displayName": "loop_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -7392,
+          1424
+        ],
+        "id": "ff61940f-13b6-4055-acb9-e4cd7e2f6d20",
+        "name": "Update status1",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "item_count": "={{ $input.all().length }}",
+              "workflow_tag": "=stepstone"
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "retry_count",
+                "displayName": "retry_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "last_run_at",
+                "displayName": "last_run_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "scrape_count",
+                "displayName": "scrape_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "item_count",
+                "displayName": "item_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "loop_count",
+                "displayName": "loop_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -6720,
+          1592
+        ],
+        "id": "86a75fd9-af61-490f-a0a8-fdb84340e747",
+        "name": "Update item count",
+        "executeOnce": true,
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
       },
       {
         "parameters": {
@@ -1316,177 +2515,159 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          -6560,
-          1680
+          -6720,
+          1784
         ],
         "id": "aa0223b7-ed33-47c9-80f2-67bba3a6e9eb",
-        "name": "Is empty?"
+        "name": "Is empty?1"
       },
       {
         "parameters": {
-          "operation": "Run actor and get dataset",
-          "actorId": {
+          "operation": "upsert",
+          "schema": {
             "__rl": true,
-            "value": "https://console.apify.com/actors/pIVhuvHZkW2Llfjrr/input",
-            "mode": "url"
-          },
-          "customBody": "={\n    \"category\": \"verwaltung\",\n    \"includeRelatedJobs\": false,\n    \"maxItems\": 100,\n    \"proxy\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ]\n    },\n    \"startUrls\": [\n        {\n            \"url\": \"https://www.stepstone.de/work/full-time/ai-engineerai-agentmlopsai-consultantai-solutionsn8n/in-europe?whereType=autosuggest&radius=30&action=facet_selected%3bage%3bage_7&q=%28ai+engineer%29%2c%28ai+agent%29%2c%28mlops%29%2c%28ai+consultant%29%2c%28ai+solutions%29%2c%28n8n%29&ag=age_7&fdl=en&wfh=1&searchOrigin=Resultlist_top-search\"\n        }\n    ]\n}"
-        },
-        "type": "@apify/n8n-nodes-apify.apify",
-        "typeVersion": 1,
-        "position": [
-          -6784,
-          1680
-        ],
-        "id": "5b350fb1-589a-4c2b-9dfa-8eb25481ffc2",
-        "name": "Scrape stepstone",
-        "executeOnce": false,
-        "retryOnFail": true,
-        "alwaysOutputData": true,
-        "credentials": {
-          "apifyApi": {
-            "id": "acP0zCzuvrjRGHER",
-            "name": "Apify account 5"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "url": "=https://r.jina.ai/https://www.stepstone.de{{ $json.url }}",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.3,
-        "position": [
-          -5888,
-          1824
-        ],
-        "id": "c72aaa44-ed2c-4664-b61a-e98de41cc8cc",
-        "name": "Jina fetch job text",
-        "retryOnFail": true,
-        "waitBetweenTries": 5000,
-        "onError": "continueErrorOutput"
-      },
-      {
-        "parameters": {
-          "operation": "update",
-          "tableId": "job_leads",
-          "filters": {
-            "conditions": [
-              {
-                "keyName": "job_url",
-                "condition": "eq",
-                "keyValue": "=https://www.stepstone.de{{ $('Is empty?').item.json.url }}"
-              }
-            ]
-          },
-          "fieldsUi": {
-            "fieldValues": [
-              {
-                "fieldId": "status",
-                "fieldValue": "failed_jina"
-              }
-            ]
-          }
-        },
-        "type": "n8n-nodes-base.supabase",
-        "typeVersion": 1,
-        "position": [
-          -5664,
-          1872
-        ],
-        "id": "49464c40-031d-4dec-8b5a-22184e5ab1ea",
-        "name": "Update a row",
-        "retryOnFail": true,
-        "waitBetweenTries": 5000,
-        "credentials": {
-          "supabaseApi": {
-            "id": "qB1TBV7vyX50RGhp",
-            "name": "Supabase account"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "mode": "runOnceForEachItem",
-          "jsCode": "const raw = $input.item.json.data || \"\"; \n\nreturn { \n    jobDescription: raw.split(\"Markdown Content:\")[1]?.trim() || raw \n};"
-        },
-        "type": "n8n-nodes-base.code",
-        "typeVersion": 2,
-        "position": [
-          -5664,
-          1680
-        ],
-        "id": "cd0acc74-61d7-494c-b810-9b0f1050f635",
-        "name": "Payload parser job description"
-      },
-      {
-        "parameters": {
-          "amount": 1
-        },
-        "type": "n8n-nodes-base.wait",
-        "typeVersion": 1.1,
-        "position": [
-          -6112,
-          1824
-        ],
-        "id": "b06a51fd-2382-4720-af24-c08301426e34",
-        "name": "Wait",
-        "webhookId": "0ea4137f-7603-4c4f-a8fd-ae89ebd7721b"
-      },
-      {
-        "parameters": {
-          "workflowId": {
-            "__rl": true,
-            "value": "Zj1I7MhBC-OsOLt6D4Qyg",
             "mode": "list",
-            "cachedResultUrl": "/workflow/Zj1I7MhBC-OsOLt6D4Qyg",
-            "cachedResultName": "error_global"
+            "value": "public"
           },
-          "workflowInputs": {
+          "table": {
+            "__rl": true,
+            "value": "workflow_health",
+            "mode": "list",
+            "cachedResultName": "workflow_health"
+          },
+          "columns": {
             "mappingMode": "defineBelow",
-            "value": {},
-            "matchingColumns": [],
-            "schema": [],
+            "value": {
+              "status": "success",
+              "last_success_at": "={{ $now.toISO() }}",
+              "workflow_tag": "stepstone",
+              "loop_count": 0
+            },
+            "matchingColumns": [
+              "workflow_tag"
+            ],
+            "schema": [
+              {
+                "id": "workflow_tag",
+                "displayName": "workflow_tag",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "retry_count",
+                "displayName": "retry_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "last_run_at",
+                "displayName": "last_run_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "scrape_count",
+                "displayName": "scrape_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "item_count",
+                "displayName": "item_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "loop_count",
+                "displayName": "loop_count",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              }
+            ],
             "attemptToConvertTypes": false,
-            "convertFieldsToString": true
+            "convertFieldsToString": false
           },
           "options": {}
         },
-        "type": "n8n-nodes-base.executeWorkflow",
-        "typeVersion": 1.3,
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
         "position": [
-          -4768,
-          1904
+          -6272,
+          1640
         ],
-        "id": "e3bd1eab-f923-4df8-8f09-3ae9d72a13ea",
-        "name": "Call 'error_global'"
-      },
-      {
-        "parameters": {},
-        "type": "n8n-nodes-base.noOp",
-        "typeVersion": 1,
-        "position": [
-          -5840,
-          1520
-        ],
-        "id": "d51ae933-4b4b-4cc9-a611-533d366a7a45",
-        "name": "No Operation, do nothing"
+        "id": "c29f544a-df40-4549-8793-3ba975e863fa",
+        "name": "Update status and reset loop count",
+        "executeOnce": true,
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
       },
       {
         "parameters": {
-          "options": {
-            "reset": false
-          }
+          "operation": "executeQuery",
+          "query": "UPDATE public.workflow_health \nSET loop_count = loop_count + 1 \nWHERE workflow_tag = '{{ $json.source }}';",
+          "options": {}
         },
-        "type": "n8n-nodes-base.splitInBatches",
-        "typeVersion": 3,
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
         "position": [
-          -6336,
-          1776
+          -4928,
+          2024
         ],
-        "id": "8d55d99b-6a52-4f2d-a259-f7870c6de7b3",
-        "name": "Loop Over Items"
+        "id": "0e0116fd-9dbd-4b07-aecf-04e5b35f8a9e",
+        "name": "Increase loop count",
+        "credentials": {
+          "postgres": {
+            "id": "wub5gbhgKNBgMsXa",
+            "name": "Postgres careerops"
+          }
+        }
       }
     ],
     "connections": {
@@ -1494,29 +2675,7 @@
         "main": [
           [
             {
-              "node": "update running status",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "update running status": {
-        "main": [
-          [
-            {
-              "node": "Scrape stepstone",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "update success status": {
-        "main": [
-          [
-            {
-              "node": "No Operation, do nothing",
+              "node": "Get temporary payload",
               "type": "main",
               "index": 0
             }
@@ -1527,7 +2686,7 @@
         "main": [
           [
             {
-              "node": "update running status",
+              "node": "Get temporary payload",
               "type": "main",
               "index": 0
             }
@@ -1560,7 +2719,7 @@
         "main": [
           [
             {
-              "node": "Loop Over Items",
+              "node": "Increase loop count",
               "type": "main",
               "index": 0
             }
@@ -1574,29 +2733,11 @@
           ]
         ]
       },
-      "Is empty?": {
-        "main": [
-          [
-            {
-              "node": "update success status",
-              "type": "main",
-              "index": 0
-            }
-          ],
-          [
-            {
-              "node": "Loop Over Items",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
       "Scrape stepstone": {
         "main": [
           [
             {
-              "node": "Is empty?",
+              "node": "Aggregate",
               "type": "main",
               "index": 0
             }
@@ -1647,7 +2788,7 @@
         "main": [
           [
             {
-              "node": "update success status",
+              "node": "Update status and reset loop count",
               "type": "main",
               "index": 0
             }
@@ -1660,10 +2801,149 @@
             }
           ]
         ]
+      },
+      "Check for dupes": {
+        "main": [
+          [
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Keep non-dupes": {
+        "main": [
+          [
+            {
+              "node": "Is empty?1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Update item count",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out1": {
+        "main": [
+          [
+            {
+              "node": "Check for dupes",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Keep non-dupes",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Get temporary payload": {
+        "main": [
+          [
+            {
+              "node": "Is empty?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Is empty?": {
+        "main": [
+          [
+            {
+              "node": "Update status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Split Out1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update status": {
+        "main": [
+          [
+            {
+              "node": "Scrape stepstone",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          [
+            {
+              "node": "Upload temporary payload",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Upload temporary payload": {
+        "main": [
+          [
+            {
+              "node": "Update status1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Split Out1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Is empty?1": {
+        "main": [
+          [
+            {
+              "node": "Update status and reset loop count",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Increase loop count": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "d d",
-    "name": "Version f5da0a16",
+    "name": "Version c0ea50eb",
     "description": "",
     "autosaved": true
   },
