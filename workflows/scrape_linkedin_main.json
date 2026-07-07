@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-25T08:08:03.800Z",
+  "updatedAt": "2026-07-03T07:26:24.640Z",
   "createdAt": "2026-04-09T05:08:27.839Z",
   "id": "kcE1S4NAllBaR6zT",
   "name": "scrape_linkedin_main",
@@ -20,173 +20,24 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.3,
       "position": [
-        -5824,
-        1088
+        -5840,
+        1056
       ],
       "id": "3e4e6bd9-eef5-450b-96a0-4fe2c9df6c6a",
       "name": "Schedule Trigger"
     },
     {
       "parameters": {
-        "jsCode": "const today = new Date().getDay();\nlet publishedAtString = \"r86400\"; \n\nif (today === 1) { \n  publishedAtString = \"r259200\"; \n}\n\nreturn {\n  publishedAtString\n};"
+        "jsCode": "const countries = $input.all(); // \n\nconst today = new Date().getDay();\nlet publishedAtString = \"r86400\"; \n\nif (today === 1) { \n  publishedAtString = \"r259200\"; \n}\n\nreturn countries.map(item => ({\n  ...item.json,\n  publishedAtString\n}));"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5376,
-        1248
+        -5392,
+        1168
       ],
       "id": "f35d26d4-4c86-4131-9c4e-b14134a06ac7",
       "name": "Calculate Time Range"
-    },
-    {
-      "parameters": {
-        "operation": "upsert",
-        "schema": {
-          "__rl": true,
-          "mode": "list",
-          "value": "public"
-        },
-        "table": {
-          "__rl": true,
-          "value": "workflow_health",
-          "mode": "list",
-          "cachedResultName": "workflow_health"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "status": "running",
-            "workflow_tag": "linkedin"
-          },
-          "matchingColumns": [
-            "workflow_tag"
-          ],
-          "schema": [
-            {
-              "id": "workflow_tag",
-              "displayName": "workflow_tag",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "last_success_at",
-              "displayName": "last_success_at",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": false,
-              "removed": true
-            },
-            {
-              "id": "status",
-              "displayName": "status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        -5600,
-        1248
-      ],
-      "id": "1c4e68da-592d-4157-b2ee-b96dd9ced3d0",
-      "name": "update running status",
-      "credentials": {
-        "postgres": {
-          "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres careerops"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "upsert",
-        "schema": {
-          "__rl": true,
-          "mode": "list",
-          "value": "public"
-        },
-        "table": {
-          "__rl": true,
-          "value": "workflow_health",
-          "mode": "list",
-          "cachedResultName": "workflow_health"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "status": "completed",
-            "last_success_at": "={{ $now.toISO() }}",
-            "workflow_tag": "linkedin"
-          },
-          "matchingColumns": [
-            "workflow_tag"
-          ],
-          "schema": [
-            {
-              "id": "workflow_tag",
-              "displayName": "workflow_tag",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "last_success_at",
-              "displayName": "last_success_at",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": false,
-              "removed": false
-            },
-            {
-              "id": "status",
-              "displayName": "status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        -4480,
-        1056
-      ],
-      "id": "cdb39fce-3e40-400d-a4e9-d3c183793a2b",
-      "name": "update success status",
-      "credentials": {
-        "postgres": {
-          "id": "wub5gbhgKNBgMsXa",
-          "name": "Postgres careerops"
-        }
-      }
     },
     {
       "parameters": {
@@ -195,8 +46,8 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -5824,
-        1328
+        -5840,
+        1248
       ],
       "id": "b3313d69-daed-48f5-aa82-6ded7c21825f",
       "name": "When Executed by Another Workflow"
@@ -223,24 +74,11 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -4032,
-        1360
+        -4272,
+        1248
       ],
       "id": "4fdb6852-0b85-4638-beee-d3642ebbbe34",
       "name": "Call 'error_global'"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 3,
-      "position": [
-        -4704,
-        1248
-      ],
-      "id": "94253bcb-cf6e-47ec-9732-ad2a0d3410c6",
-      "name": "Loop Over Items1"
     },
     {
       "parameters": {
@@ -265,8 +103,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -4256,
-        1328
+        -4496,
+        1248
       ],
       "id": "3d0b2029-b3db-4e9a-bc72-c65d99b964ce",
       "name": "Call 'scrape_linkedin_sub'",
@@ -280,8 +118,8 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        -4256,
-        1056
+        -4720,
+        976
       ],
       "id": "b74ea470-6274-434f-97d4-5922df071351",
       "name": "No Operation, do nothing"
@@ -294,8 +132,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4928,
-        1248
+        -5168,
+        1168
       ],
       "id": "52e519f0-9f73-438f-984e-4f69993761e2",
       "name": "Set Keywords"
@@ -308,39 +146,41 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4480,
-        1248
+        -4720,
+        1168
       ],
       "id": "c215ee19-34b5-453f-804c-7373650ae864",
       "name": "Build URL"
     },
     {
       "parameters": {
-        "jsCode": "const timeRange = $input.first().json;\n\nconst countries = [\n\n  { country: \"Germany\", geoId: \"101282230\", group: \"Account_1\" },\n  { country: \"Austria\", geoId: \"103883259\", group: \"Account_1\" },\n  { country: \"Switzerland\", geoId: \"106693272\", group: \"Account_1\" },\n\n  { country: \"Czechia\", geoId: \"104508036\", group: \"Account_2\" },\n  { country: \"Slovakia\", geoId: \"106131491\", group: \"Account_2\" },\n  { country: \"Poland\", geoId: \"105072130\", group: \"Account_2\" },\n\n  { country: \"Sweden\", geoId: \"105117694\", group: \"Account_3\" },\n  { country: \"Norway\", geoId: \"103819153\", group: \"Account_3\" },\n  { country: \"Denmark\", geoId: \"104514075\", group: \"Account_3\" },\n  { country: \"Finland\", geoId: \"100456013\", group: \"Account_3\" },\n\n\n  { country: \"France\", geoId: \"105015875\", group: \"Account_4\" },\n  { country: \"Netherlands\", geoId: \"102890719\", group: \"Account_4\" },\n  { country: \"Belgium\", geoId: \"100565514\", group: \"Account_4\" },\n  { country: \"Luxembourg\", geoId: \"104042105\", group: \"Account_4\" }\n];\n\nreturn countries.map(c => ({\n  ...c,\n  ...timeRange\n}));"
+        "jsCode": "const countries = [\n\n  { country: \"Germany\", geoId: \"101282230\", group: \"Account_1\" },\n  { country: \"Austria\", geoId: \"103883259\", group: \"Account_1\" },\n  { country: \"Switzerland\", geoId: \"106693272\", group: \"Account_1\" },\n\n  { country: \"Czechia\", geoId: \"104508036\", group: \"Account_2\" },\n  { country: \"Slovakia\", geoId: \"106131491\", group: \"Account_2\" },\n  { country: \"Poland\", geoId: \"105072130\", group: \"Account_2\" },\n\n  { country: \"Sweden\", geoId: \"105117694\", group: \"Account_3\" },\n  { country: \"Norway\", geoId: \"103819153\", group: \"Account_3\" },\n  { country: \"Denmark\", geoId: \"104514075\", group: \"Account_3\" },\n  { country: \"Finland\", geoId: \"100456013\", group: \"Account_3\" },\n\n\n  { country: \"France\", geoId: \"105015875\", group: \"Account_4\" },\n  { country: \"Netherlands\", geoId: \"102890719\", group: \"Account_4\" },\n  { country: \"Belgium\", geoId: \"100565514\", group: \"Account_4\" },\n  { country: \"Luxembourg\", geoId: \"104042105\", group: \"Account_4\" }\n];\n\nlet incomingData = {};\ntry {\n  incomingData = $input.item.json;\n} catch (e) {\n}\n\nif (incomingData && incomingData.country) {\n  const targetCountry = countries.find(c => c.country.toLowerCase() === incomingData.country.toLowerCase());\n  \n  if (targetCountry) {\n    return [ { json: { ...targetCountry } } ];\n  }\n}\n\nreturn countries.map(c => ({\n  ...c\n}));"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5152,
-        1248
+        -5616,
+        1168
       ],
       "id": "0fd03770-5f6a-4bd3-a04e-5072b817f3a2",
       "name": "Set Location and Accounts"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -4944,
+        1168
+      ],
+      "id": "94253bcb-cf6e-47ec-9732-ad2a0d3410c6",
+      "name": "Loop Over Items"
     }
   ],
   "connections": {
     "Schedule Trigger": {
-      "main": [
-        [
-          {
-            "node": "update running status",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Calculate Time Range": {
       "main": [
         [
           {
@@ -351,22 +191,11 @@
         ]
       ]
     },
-    "update running status": {
+    "Calculate Time Range": {
       "main": [
         [
           {
-            "node": "Calculate Time Range",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "update success status": {
-      "main": [
-        [
-          {
-            "node": "No Operation, do nothing",
+            "node": "Set Keywords",
             "type": "main",
             "index": 0
           }
@@ -377,25 +206,7 @@
       "main": [
         [
           {
-            "node": "update running status",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Loop Over Items1": {
-      "main": [
-        [
-          {
-            "node": "update success status",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Build URL",
+            "node": "Set Location and Accounts",
             "type": "main",
             "index": 0
           }
@@ -406,7 +217,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items1",
+            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
@@ -424,7 +235,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items1",
+            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
@@ -446,7 +257,25 @@
       "main": [
         [
           {
-            "node": "Set Keywords",
+            "node": "Calculate Time Range",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build URL",
             "type": "main",
             "index": 0
           }
@@ -471,30 +300,9 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {
-    "Schedule Trigger": [
-      {
-        "json": {
-          "timestamp": "2026-04-24T08:49:12.349+02:00",
-          "Readable date": "April 24th 2026, 8:49:12 am",
-          "Readable time": "8:49:12 am",
-          "Day of week": "Friday",
-          "Year": "2026",
-          "Month": "April",
-          "Day of month": "24",
-          "Hour": "08",
-          "Minute": "49",
-          "Second": "12",
-          "Timezone": "Europe/Prague (UTC+02:00)"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ]
-  },
-  "versionId": "3d6d20a6-74a5-45c4-88f4-8843e6323506",
-  "activeVersionId": "3d6d20a6-74a5-45c4-88f4-8843e6323506",
+  "pinData": {},
+  "versionId": "78a6293c-3176-4ad0-94c7-3388c11dbda5",
+  "activeVersionId": "78a6293c-3176-4ad0-94c7-3388c11dbda5",
   "triggerCount": 1,
   "shared": [
     {
@@ -506,9 +314,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-05-25T08:08:11.729Z",
-    "createdAt": "2026-05-25T08:08:03.801Z",
-    "versionId": "3d6d20a6-74a5-45c4-88f4-8843e6323506",
+    "updatedAt": "2026-07-03T07:26:27.119Z",
+    "createdAt": "2026-07-03T07:26:14.316Z",
+    "versionId": "78a6293c-3176-4ad0-94c7-3388c11dbda5",
     "workflowId": "kcE1S4NAllBaR6zT",
     "nodes": [
       {
@@ -525,173 +333,24 @@
         "type": "n8n-nodes-base.scheduleTrigger",
         "typeVersion": 1.3,
         "position": [
-          -5824,
-          1088
+          -5840,
+          1056
         ],
         "id": "3e4e6bd9-eef5-450b-96a0-4fe2c9df6c6a",
         "name": "Schedule Trigger"
       },
       {
         "parameters": {
-          "jsCode": "const today = new Date().getDay();\nlet publishedAtString = \"r86400\"; \n\nif (today === 1) { \n  publishedAtString = \"r259200\"; \n}\n\nreturn {\n  publishedAtString\n};"
+          "jsCode": "const countries = $input.all(); // \n\nconst today = new Date().getDay();\nlet publishedAtString = \"r86400\"; \n\nif (today === 1) { \n  publishedAtString = \"r259200\"; \n}\n\nreturn countries.map(item => ({\n  ...item.json,\n  publishedAtString\n}));"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          -5376,
-          1248
+          -5392,
+          1168
         ],
         "id": "f35d26d4-4c86-4131-9c4e-b14134a06ac7",
         "name": "Calculate Time Range"
-      },
-      {
-        "parameters": {
-          "operation": "upsert",
-          "schema": {
-            "__rl": true,
-            "mode": "list",
-            "value": "public"
-          },
-          "table": {
-            "__rl": true,
-            "value": "workflow_health",
-            "mode": "list",
-            "cachedResultName": "workflow_health"
-          },
-          "columns": {
-            "mappingMode": "defineBelow",
-            "value": {
-              "status": "running",
-              "workflow_tag": "linkedin"
-            },
-            "matchingColumns": [
-              "workflow_tag"
-            ],
-            "schema": [
-              {
-                "id": "workflow_tag",
-                "displayName": "workflow_tag",
-                "required": true,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": true,
-                "removed": false
-              },
-              {
-                "id": "last_success_at",
-                "displayName": "last_success_at",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "dateTime",
-                "canBeUsedToMatch": false,
-                "removed": true
-              },
-              {
-                "id": "status",
-                "displayName": "status",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": false
-              }
-            ],
-            "attemptToConvertTypes": false,
-            "convertFieldsToString": false
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.postgres",
-        "typeVersion": 2.6,
-        "position": [
-          -5600,
-          1248
-        ],
-        "id": "1c4e68da-592d-4157-b2ee-b96dd9ced3d0",
-        "name": "update running status",
-        "credentials": {
-          "postgres": {
-            "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres careerops"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "operation": "upsert",
-          "schema": {
-            "__rl": true,
-            "mode": "list",
-            "value": "public"
-          },
-          "table": {
-            "__rl": true,
-            "value": "workflow_health",
-            "mode": "list",
-            "cachedResultName": "workflow_health"
-          },
-          "columns": {
-            "mappingMode": "defineBelow",
-            "value": {
-              "status": "completed",
-              "last_success_at": "={{ $now.toISO() }}",
-              "workflow_tag": "linkedin"
-            },
-            "matchingColumns": [
-              "workflow_tag"
-            ],
-            "schema": [
-              {
-                "id": "workflow_tag",
-                "displayName": "workflow_tag",
-                "required": true,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": true,
-                "removed": false
-              },
-              {
-                "id": "last_success_at",
-                "displayName": "last_success_at",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "dateTime",
-                "canBeUsedToMatch": false,
-                "removed": false
-              },
-              {
-                "id": "status",
-                "displayName": "status",
-                "required": false,
-                "defaultMatch": false,
-                "display": true,
-                "type": "string",
-                "canBeUsedToMatch": false
-              }
-            ],
-            "attemptToConvertTypes": false,
-            "convertFieldsToString": false
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.postgres",
-        "typeVersion": 2.6,
-        "position": [
-          -4480,
-          1056
-        ],
-        "id": "cdb39fce-3e40-400d-a4e9-d3c183793a2b",
-        "name": "update success status",
-        "credentials": {
-          "postgres": {
-            "id": "wub5gbhgKNBgMsXa",
-            "name": "Postgres careerops"
-          }
-        }
       },
       {
         "parameters": {
@@ -700,8 +359,8 @@
         "type": "n8n-nodes-base.executeWorkflowTrigger",
         "typeVersion": 1.1,
         "position": [
-          -5824,
-          1328
+          -5840,
+          1248
         ],
         "id": "b3313d69-daed-48f5-aa82-6ded7c21825f",
         "name": "When Executed by Another Workflow"
@@ -728,24 +387,11 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          -4032,
-          1360
+          -4272,
+          1248
         ],
         "id": "4fdb6852-0b85-4638-beee-d3642ebbbe34",
         "name": "Call 'error_global'"
-      },
-      {
-        "parameters": {
-          "options": {}
-        },
-        "type": "n8n-nodes-base.splitInBatches",
-        "typeVersion": 3,
-        "position": [
-          -4704,
-          1248
-        ],
-        "id": "94253bcb-cf6e-47ec-9732-ad2a0d3410c6",
-        "name": "Loop Over Items1"
       },
       {
         "parameters": {
@@ -770,8 +416,8 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          -4256,
-          1328
+          -4496,
+          1248
         ],
         "id": "3d0b2029-b3db-4e9a-bc72-c65d99b964ce",
         "name": "Call 'scrape_linkedin_sub'",
@@ -785,8 +431,8 @@
         "type": "n8n-nodes-base.noOp",
         "typeVersion": 1,
         "position": [
-          -4256,
-          1056
+          -4720,
+          976
         ],
         "id": "b74ea470-6274-434f-97d4-5922df071351",
         "name": "No Operation, do nothing"
@@ -799,8 +445,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          -4928,
-          1248
+          -5168,
+          1168
         ],
         "id": "52e519f0-9f73-438f-984e-4f69993761e2",
         "name": "Set Keywords"
@@ -813,39 +459,41 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          -4480,
-          1248
+          -4720,
+          1168
         ],
         "id": "c215ee19-34b5-453f-804c-7373650ae864",
         "name": "Build URL"
       },
       {
         "parameters": {
-          "jsCode": "const timeRange = $input.first().json;\n\nconst countries = [\n\n  { country: \"Germany\", geoId: \"101282230\", group: \"Account_1\" },\n  { country: \"Austria\", geoId: \"103883259\", group: \"Account_1\" },\n  { country: \"Switzerland\", geoId: \"106693272\", group: \"Account_1\" },\n\n  { country: \"Czechia\", geoId: \"104508036\", group: \"Account_2\" },\n  { country: \"Slovakia\", geoId: \"106131491\", group: \"Account_2\" },\n  { country: \"Poland\", geoId: \"105072130\", group: \"Account_2\" },\n\n  { country: \"Sweden\", geoId: \"105117694\", group: \"Account_3\" },\n  { country: \"Norway\", geoId: \"103819153\", group: \"Account_3\" },\n  { country: \"Denmark\", geoId: \"104514075\", group: \"Account_3\" },\n  { country: \"Finland\", geoId: \"100456013\", group: \"Account_3\" },\n\n\n  { country: \"France\", geoId: \"105015875\", group: \"Account_4\" },\n  { country: \"Netherlands\", geoId: \"102890719\", group: \"Account_4\" },\n  { country: \"Belgium\", geoId: \"100565514\", group: \"Account_4\" },\n  { country: \"Luxembourg\", geoId: \"104042105\", group: \"Account_4\" }\n];\n\nreturn countries.map(c => ({\n  ...c,\n  ...timeRange\n}));"
+          "jsCode": "const countries = [\n\n  { country: \"Germany\", geoId: \"101282230\", group: \"Account_1\" },\n  { country: \"Austria\", geoId: \"103883259\", group: \"Account_1\" },\n  { country: \"Switzerland\", geoId: \"106693272\", group: \"Account_1\" },\n\n  { country: \"Czechia\", geoId: \"104508036\", group: \"Account_2\" },\n  { country: \"Slovakia\", geoId: \"106131491\", group: \"Account_2\" },\n  { country: \"Poland\", geoId: \"105072130\", group: \"Account_2\" },\n\n  { country: \"Sweden\", geoId: \"105117694\", group: \"Account_3\" },\n  { country: \"Norway\", geoId: \"103819153\", group: \"Account_3\" },\n  { country: \"Denmark\", geoId: \"104514075\", group: \"Account_3\" },\n  { country: \"Finland\", geoId: \"100456013\", group: \"Account_3\" },\n\n\n  { country: \"France\", geoId: \"105015875\", group: \"Account_4\" },\n  { country: \"Netherlands\", geoId: \"102890719\", group: \"Account_4\" },\n  { country: \"Belgium\", geoId: \"100565514\", group: \"Account_4\" },\n  { country: \"Luxembourg\", geoId: \"104042105\", group: \"Account_4\" }\n];\n\nlet incomingData = {};\ntry {\n  incomingData = $input.item.json;\n} catch (e) {\n}\n\nif (incomingData && incomingData.country) {\n  const targetCountry = countries.find(c => c.country.toLowerCase() === incomingData.country.toLowerCase());\n  \n  if (targetCountry) {\n    return [ { json: { ...targetCountry } } ];\n  }\n}\n\nreturn countries.map(c => ({\n  ...c\n}));"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          -5152,
-          1248
+          -5616,
+          1168
         ],
         "id": "0fd03770-5f6a-4bd3-a04e-5072b817f3a2",
         "name": "Set Location and Accounts"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -4944,
+          1168
+        ],
+        "id": "94253bcb-cf6e-47ec-9732-ad2a0d3410c6",
+        "name": "Loop Over Items"
       }
     ],
     "connections": {
       "Schedule Trigger": {
-        "main": [
-          [
-            {
-              "node": "update running status",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Calculate Time Range": {
         "main": [
           [
             {
@@ -856,22 +504,11 @@
           ]
         ]
       },
-      "update running status": {
+      "Calculate Time Range": {
         "main": [
           [
             {
-              "node": "Calculate Time Range",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "update success status": {
-        "main": [
-          [
-            {
-              "node": "No Operation, do nothing",
+              "node": "Set Keywords",
               "type": "main",
               "index": 0
             }
@@ -882,25 +519,7 @@
         "main": [
           [
             {
-              "node": "update running status",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Loop Over Items1": {
-        "main": [
-          [
-            {
-              "node": "update success status",
-              "type": "main",
-              "index": 0
-            }
-          ],
-          [
-            {
-              "node": "Build URL",
+              "node": "Set Location and Accounts",
               "type": "main",
               "index": 0
             }
@@ -911,7 +530,7 @@
         "main": [
           [
             {
-              "node": "Loop Over Items1",
+              "node": "Loop Over Items",
               "type": "main",
               "index": 0
             }
@@ -929,7 +548,7 @@
         "main": [
           [
             {
-              "node": "Loop Over Items1",
+              "node": "Loop Over Items",
               "type": "main",
               "index": 0
             }
@@ -951,7 +570,25 @@
         "main": [
           [
             {
-              "node": "Set Keywords",
+              "node": "Calculate Time Range",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Build URL",
               "type": "main",
               "index": 0
             }
@@ -960,7 +597,7 @@
       }
     },
     "authors": "d d",
-    "name": "Version 3d6d20a6",
+    "name": "Version 78a6293c",
     "description": "",
     "autosaved": true
   },
